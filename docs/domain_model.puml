@@ -1,0 +1,68 @@
+@startuml
+
+skinparam linetype ortho
+skinparam Shadowing False
+
+skinparam class {
+    BackgroundColor<<>> Moccasin
+    BackgroundColor<<value object>> Azure
+    BackgroundColor<<Event>> MediumAquaMarine
+    BackgroundColor<<Service>> SkyBlue
+    ArrowColor DarkSlateGrey
+}
+
+skinparam package {
+    BackgroundColor PowderBlue
+    packageLayout grid
+    packageColumn 2
+}
+
+'LIGACOES DENTRO DO AGREGADO FICAM DENTRO DO PACKAGE
+'LIGACOES ENTRE AGREGADOS FICAM NO FINAL DO FICHEIRO DEPOIS DOS PACKAGES
+
+    class Building{
+    }
+    class Elevator{
+    }
+
+    class Floor{
+    }
+    class Connection{
+    }
+    class Room{
+    }
+
+
+    class Robot{
+        - id
+        - marca
+        - n_serie
+    }
+    class RobotType{
+    }
+    note left: in order to fulfill the client's needs,\ncurrently there will be 2 types of robots:\nRobisep and Droneisep, but it can scale as needed
+    class TaskType{
+    }
+    note left: in order to fulfill the client's needs,\ncurrently there will be 2 types of tasks:\nSurveillance and deliveries, but it can scale as needed
+
+    'ROBOTS
+    Robot "*" --> "1" RobotType
+
+    RobotType "1" --> "1..*" TaskType: can execute
+    Robot "1" <-- "1" Task: executed by
+    TaskType "1" <-- "*" Task
+
+
+    'Buildings
+    Building "1" --> "1..*" Floor
+    Floor "2" <-- "1" Elevator
+    Connection "1" ---> "2" Floor : connects
+    Floor "1" ---> "0..*" Room
+
+    class Coordinates{
+
+    }
+
+
+@enduml
+
