@@ -1,6 +1,5 @@
-
-import { IDomainEvent } from "./IDomainEvent";
+import { IDomainEvent } from './IDomainEvent'
 
 export interface IHandle<IDomainEvent> {
-  setupSubscriptions(): void;
+    setupSubscriptions(): void
 }

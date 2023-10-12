@@ -1,4 +1,3 @@
+import { UniqueEntityID } from '../../../../UniqueEntityID'
 
-import { UniqueEntityID } from "../../../../UniqueEntityID";
-
-export const MockJobAggregateRootId = new UniqueEntityID('999');
+export const MockJobAggregateRootId = new UniqueEntityID('999')
