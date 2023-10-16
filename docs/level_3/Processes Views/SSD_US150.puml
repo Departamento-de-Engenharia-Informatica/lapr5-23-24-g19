@@ -1,0 +1,49 @@
+@startuml
+autonumber
+
+'Single Page Application(SPA)
+participant "SPA UI" as ui
+participant "MDR" as mdr
+participant "Routes" as r
+participant "Controller" as ctrl
+participant "Building" as b
+participant "Repository" as repo
+participant "MDV" as mdv
+participant "Planning" as plg
+
+
+ui -> mdr: post(/building)
+activate ui
+activate mdr
+mdr -> r : post
+
+
+activate r
+r -> ctrl : createNewBuilding
+activate ctrl
+ctrl -> ctrl : Receives requested body \nand validates it
+ctrl --> b **: creates building
+activate b
+b -> repo: saves building
+
+activate repo
+deactivate repo
+deactivate b
+
+ctrl --> r : return next
+
+deactivate ctrl
+
+r --> mdr : status 201
+deactivate r
+
+mdr --> ui: display success message
+
+deactivate mdr
+deactivate ui
+
+
+
+
+
+@enduml
