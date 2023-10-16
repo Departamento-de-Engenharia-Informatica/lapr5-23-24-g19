@@ -1,0 +1,22 @@
+@startuml
+autonumber
+
+actor "Administrator" as admin
+participant "<<system(C4)>>\nSystem RobDroneGo" as sys
+participant "<<system>>\nfilesystem"
+
+
+activate admin
+admin -> sys : Starts building creation
+
+activate sys
+sys --> admin : Requests data(code, name, description)
+deactivate sys
+
+admin -> sys: Inserts requested data(code, name, description)
+activate sys
+sys --> admin : Message: building created / error in data inserted
+deactivate sys
+
+
+@enduml
