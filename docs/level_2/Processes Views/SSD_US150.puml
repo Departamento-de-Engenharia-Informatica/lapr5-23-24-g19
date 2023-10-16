@@ -1,0 +1,28 @@
+@startuml
+autonumber
+
+'Single Page Application(SPA)
+participant "SPA UI" as ui
+participant "MDR" as mdr
+participant "MDV" as mdv
+participant "Planning" as plg
+
+
+ui -> mdr: post(/building)
+activate ui
+
+
+activate mdr
+mdr -> mdr: Handles request body,\ncreates building and\nsaves it to DB
+
+mdr --> ui: response status
+deactivate mdr
+
+
+deactivate ui
+
+
+
+
+
+@enduml
