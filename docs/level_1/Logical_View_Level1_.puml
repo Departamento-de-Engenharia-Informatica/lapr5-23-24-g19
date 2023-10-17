@@ -1,0 +1,34 @@
+
+@startuml
+
+
+
+
+skinparam component {
+    FontSize 30
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+    ArrowFontColor #777777
+
+}
+
+interface api
+component [<<system>>\nRobDroneGo] as comp
+
+
+comp - api
+
+
+
+
+
+@enduml
+
+
+
+@enduml

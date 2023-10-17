@@ -7,4 +7,5 @@ In higher levels, we will be able to see a greater level of granularity.
 
 
 --------------------------------
+![Logical View](Logical_View_Level1_.svg)
 ![Logical View](Logical_View_Level1.png)
