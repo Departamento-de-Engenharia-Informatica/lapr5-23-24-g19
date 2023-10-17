@@ -1,21 +1,19 @@
 @startuml
 autonumber
 
-actor "Administrator" as admin
-participant "<<system(C4)>>\nSystem RobDroneGo" as sys
-participant "<<system>>\nfilesystem"
+actor "??" as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
 
-
-activate admin
-admin -> sys : Starts building creation
+activate actor
+actor -> sys : Starts building creation
 
 activate sys
-sys --> admin : Requests data(code, name, description)
+sys --> actor : Requests data(code, name, description)
 deactivate sys
 
-admin -> sys: Inserts requested data(code, name, description)
+actor -> sys: Inserts requested data(code, name, description)
 activate sys
-sys --> admin : Message: building created / error in data inserted
+sys --> actor : Message: building created / error in data inserted
 deactivate sys
 
 
