@@ -1,0 +1,16 @@
+@startuml
+autonumber
+
+actor "??" as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+activate actor
+    actor -> sys: Inserts requested data(code, name, description)
+
+    activate sys
+    sys --> actor : Message: building created / error in data inserted
+    deactivate sys
+deactivate actor
+
+
+@enduml
