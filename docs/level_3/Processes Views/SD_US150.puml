@@ -1,49 +1,57 @@
 @startuml
 autonumber
 
-'Single Page Application(SPA)
-participant "SPA UI" as ui
-participant "MDR" as mdr
-participant "Routes" as r
+participant "??" as ui
+
+participant "MD" as mdr
+participant "Route" as r
 participant "Controller" as ctrl
+participant "Service" as svc
+
 participant "Building" as b
+participant "Mapper" as map
+participant "DTO" as dto
+
 participant "Repository" as repo
-participant "MDV" as mdv
-participant "Planning" as plg
 
 
-ui -> mdr: post(/building)
-activate ui
-activate mdr
-mdr -> r : post
+'activate ui
+ui --> mdr: post(/building)
+    activate mdr
+    mdr -> r : post(/building)
 
+    activate r
+        r -> ctrl : createBuilding()
+            activate ctrl
+                ctrl -> svc : createBuilding()
+                activate svc
+                    svc -> b : create()
+                    activate b
+                    deactivate b
 
-activate r
-r -> ctrl : createNewBuilding
-activate ctrl
-ctrl -> ctrl : Receives requested body \nand validates it
-ctrl --> b **: creates building
-activate b
-b -> repo: saves building
+                    svc -> repo : save()
+                    activate repo
+                    deactivate repo
 
-activate repo
-deactivate repo
-deactivate b
+                    svc -> map : toDTO()
+                    activate map
+                        map --> dto : create()
+                        activate dto
+                        deactivate dto
+                        map --> svc : dto
+                    deactivate map
 
-ctrl --> r : return next
+                    svc --> ctrl : dto
+                deactivate svc
 
-deactivate ctrl
+                ctrl --> r : dto (201)
+            deactivate ctrl
 
-r --> mdr : status 201
-deactivate r
+        r --> mdr : dto (201)
+        deactivate r
 
-mdr --> ui: display success message
-
-deactivate mdr
-deactivate ui
-
-
-
-
+    mdr --> ui: dto (201)
+    deactivate mdr
+'deactivate ui
 
 @enduml
