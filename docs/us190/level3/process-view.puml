@@ -1,0 +1,58 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+participant "MD" as mdr
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Floor" as b
+participant "Mapper" as map
+participant "DTO" as dto
+
+participant "Repository" as repo
+
+
+'activate ui
+ui --> mdr: post(/floor)
+    activate mdr
+    mdr -> r : post(/floor)
+
+    activate r
+        r -> ctrl : createFloor()
+            activate ctrl
+                ctrl -> svc : createFloor()
+                activate svc
+                    note right: validate if building\nis valid
+                    svc -> b : create()
+                    activate b
+                    deactivate b
+
+                    svc -> repo : save()
+                    activate repo
+                    deactivate repo
+
+                    svc -> map : toDTO()
+                    activate map
+                        map --> dto : create()
+                        activate dto
+                        deactivate dto
+                        map --> svc : dto
+                    deactivate map
+
+                    svc --> ctrl : dto
+                deactivate svc
+
+                ctrl --> r : dto (201)
+            deactivate ctrl
+
+        r --> mdr : dto (201)
+    deactivate r
+
+    mdr --> ui: dto (201)
+    deactivate mdr
+'deactivate ui
+
+@enduml
