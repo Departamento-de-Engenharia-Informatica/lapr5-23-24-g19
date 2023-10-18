@@ -1,0 +1,17 @@
+@startuml
+autonumber
+
+participant "??" as ui
+participant "MD" as mdr
+
+activate ui
+
+ui -> mdr: post(/floor)
+activate mdr
+    mdr -> mdr: save()
+    mdr --> ui: operation result
+deactivate mdr
+
+deactivate ui
+
+@enduml
