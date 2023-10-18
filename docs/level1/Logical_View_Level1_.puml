@@ -1,8 +1,4 @@
-
 @startuml
-
-
-
 
 skinparam component {
     FontSize 30
@@ -14,21 +10,11 @@ skinparam component {
     ArrowFontName Impact
     ArrowColor #FF6655
     ArrowFontColor #777777
-
 }
 
 interface api
 component [<<system>>\nRobDroneGo] as comp
 
-
 comp - api
-
-
-
-
-
-@enduml
-
-
 
 @enduml
