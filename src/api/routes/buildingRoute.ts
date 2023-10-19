@@ -19,6 +19,10 @@ export default (app: Router) => {
                 code: Joi.string().required(),
                 name: Joi.string(),
                 description: Joi.string(),
+                maxFloorDimensions: Joi.object({
+                    length: Joi.number().integer().required(),
+                    width: Joi.number().integer().required(),
+                })
             }),
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next),

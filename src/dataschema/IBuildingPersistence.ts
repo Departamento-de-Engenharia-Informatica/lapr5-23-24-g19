@@ -3,4 +3,6 @@ export interface IBuildingPersistence {
     code: string
     name: string
     description: string
+    maxFloorLength: number
+    maxFloorWidth: number
 }

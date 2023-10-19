@@ -12,7 +12,6 @@ export default class BuildingRepo implements IBuildingRepo {
 
     constructor(
         @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
-        @Inject('logger') private logger,
     ) {}
 
     private createBaseQuery(): any {
@@ -46,6 +45,11 @@ export default class BuildingRepo implements IBuildingRepo {
                 buildingDocument.code = building.code
                 buildingDocument.name = building.name
                 buildingDocument.description = building.description
+
+                const { length, width } = building.maxFloorDimensions
+                buildingDocument.maxFloorLength = length
+                buildingDocument.maxFloorWidth = width
+
                 await buildingDocument.save()
 
                 return building

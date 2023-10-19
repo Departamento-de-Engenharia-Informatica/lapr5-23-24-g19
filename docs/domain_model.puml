@@ -21,6 +21,10 @@ skinparam package {
 'LIGACOES ENTRE AGREGADOS FICAM NO FINAL DO FICHEIRO DEPOIS DOS PACKAGES
 
     class Building{
+        - code
+        - name
+        - description
+        - maxFloorDimensions
     }
     class Elevator{
     }

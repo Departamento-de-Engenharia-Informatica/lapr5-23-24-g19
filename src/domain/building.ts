@@ -7,16 +7,24 @@ import { BuildingId } from './buildingId'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { Guard } from '../core/logic/Guard'
 
+type Dimensions = { length: number, width: number }
+
 interface BuildingProps {
-    // código do edificio é obrigatório, no máximo 5 caracteres,letras e digitos, podendo conter espaços no meio
+    // max 5 alphanumeric+spaces chars
     code: string
 
-    //nome do edificio é opcional, no máximo 50 caracteres alfanuméricos
-    name: string
+    // max 50 alphanumeric characters
+    name?: string
 
-    //breve descrição,opcional, com o máximo de 255 caracteres
-    description: string
+    // max 255 chars
+    description?: string
+
+    maxFloorDimensions: Dimensions
 }
+
+const codeRegex = /^[A-Za-z ]{1,5}$/
+const maxNameLength = 50
+const maxDescriptionLength = 255
 
 export class Building extends AggregateRoot<BuildingProps> {
     get id(): UniqueEntityID {
@@ -39,8 +47,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         return this.props.description
     }
 
-    set name(value: string) {
-        this.props.name = value
+    get maxFloorDimensions() : Dimensions {
+        return { ...this.props.maxFloorDimensions }
     }
 
     private constructor(props: BuildingProps, id?: UniqueEntityID) {
@@ -48,21 +56,28 @@ export class Building extends AggregateRoot<BuildingProps> {
     }
 
     public static create(buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
-        const codeRegex = /^[A-Za-z][A-Za-z0-9 ]{,4}$/
-        const code = buildingDTO.code
+        const code = buildingDTO.code.trim()
         const name = buildingDTO.name
         const description = buildingDTO.description
 
         if (!codeRegex.test(code)) {
-            return Result.fail<Building>('Code of the building doesnt follow client specifications')
+            return Result.fail<Building>(
+                'Code must contain at most 5 characters, letters and numbers, ' +
+                'possibly with spaces in-between'
+            )
         }
 
-        if (!!name === false || name.length > 50) {
-            return Result.fail<Building>('Name of the building doesnt follow client specifications')
+
+        if (!!name === false || name.length > maxNameLength) {
+            return Result.fail<Building>(
+                `The name of the building must have at most ${maxNameLength} characters`
+            )
         }
 
-        if (!!description === false || description.length > 255) {
-            return Result.fail<Building>('Description of the building doesnt follow client specifications')
+        if (!!description === false || description.length > maxDescriptionLength) {
+            return Result.fail<Building>(
+                `The Description must be at most ${maxDescriptionLength} characters`
+            )
         }
 
         const guardedProps = [

@@ -10,6 +10,7 @@ export class BuildingMap extends Mapper<Building> {
             code: building.code,
             name: building.name,
             description: building.description,
+            maxFloorDimensions: building.maxFloorDimensions
         } as IBuildingDTO
     }
 
@@ -19,6 +20,10 @@ export class BuildingMap extends Mapper<Building> {
                 code: raw.code,
                 name: raw.name,
                 description: raw.description,
+                maxFloorDimensions: {
+                    length: raw.maxFloorLength,
+                    width: raw.maxFloorWidth,
+                }
             },
             new UniqueEntityID(raw.domainId),
         )
@@ -32,13 +37,13 @@ export class BuildingMap extends Mapper<Building> {
     }
 
     public static toPersistence(building: Building): any {
-        const a = {
+        return {
             domainId: building.id.toString(),
             code: building.code,
             name: building.name,
             description: building.description,
+            maxFloorLength: building.maxFloorDimensions.length,
+            maxFloorWidth: building.maxFloorDimensions.width,
         }
-
-        return a
     }
 }
