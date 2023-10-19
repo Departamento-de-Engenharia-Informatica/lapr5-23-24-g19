@@ -7,7 +7,7 @@ import { BuildingId } from './buildingId'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { Guard } from '../core/logic/Guard'
 
-type Dimensions = { length: number, width: number }
+type Dimensions = { length: number; width: number }
 
 interface BuildingProps {
     // max 5 alphanumeric+spaces chars
@@ -47,7 +47,7 @@ export class Building extends AggregateRoot<BuildingProps> {
         return this.props.description
     }
 
-    get maxFloorDimensions() : Dimensions {
+    get maxFloorDimensions(): Dimensions {
         return { ...this.props.maxFloorDimensions }
     }
 
@@ -62,22 +62,16 @@ export class Building extends AggregateRoot<BuildingProps> {
 
         if (!codeRegex.test(code)) {
             return Result.fail<Building>(
-                'Code must contain at most 5 characters, letters and numbers, ' +
-                'possibly with spaces in-between'
+                'Code must contain at most 5 characters, letters and numbers, ' + 'possibly with spaces in-between',
             )
         }
 
-
         if (!!name === false || name.length > maxNameLength) {
-            return Result.fail<Building>(
-                `The name of the building must have at most ${maxNameLength} characters`
-            )
+            return Result.fail<Building>(`The name of the building must have at most ${maxNameLength} characters`)
         }
 
         if (!!description === false || description.length > maxDescriptionLength) {
-            return Result.fail<Building>(
-                `The Description must be at most ${maxDescriptionLength} characters`
-            )
+            return Result.fail<Building>(`The Description must be at most ${maxDescriptionLength} characters`)
         }
 
         const guardedProps = [

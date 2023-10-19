@@ -10,7 +10,7 @@ export class BuildingMap extends Mapper<Building> {
             code: building.code,
             name: building.name,
             description: building.description,
-            maxFloorDimensions: building.maxFloorDimensions
+            maxFloorDimensions: building.maxFloorDimensions,
         } as IBuildingDTO
     }
 
@@ -23,7 +23,7 @@ export class BuildingMap extends Mapper<Building> {
                 maxFloorDimensions: {
                     length: raw.maxFloorLength,
                     width: raw.maxFloorWidth,
-                }
+                },
             },
             new UniqueEntityID(raw.domainId),
         )
