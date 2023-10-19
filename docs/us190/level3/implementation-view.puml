@@ -1,0 +1,72 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+        }
+
+        package "Persistence" {
+        }
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+            }
+
+            package "ImplControllers" {
+            }
+        }
+
+        package "Repositories" {
+        }
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+            }
+
+            package "ImplAppServices" {
+            }
+
+            package "IRepositories" {
+            }
+        }
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+        }
+
+        package "Value Objects" {
+        }
+
+        package "Services" {
+        }
+    }
+    "Routes" .down.> "IControllers"
+    "ImplControllers" .up.|> "IControllers"
+    "ImplControllers" .down.> "IAppServices"
+    "ImplAppServices" .left.|> "IAppServices"
+    "ImplAppServices" .right.> "IRepositories"
+    "ImplAppServices" .down.> "Aggregates"
+    "ImplAppServices" .down.> "Value Objects"
+    "ImplAppServices" .down.> "Services"
+    "Repositories" .up.> "Persistence"
+    "Repositories" .down.|> "IRepositories"
+}
+
+@enduml
+
