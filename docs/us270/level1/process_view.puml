@@ -5,7 +5,7 @@ actor "??" as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: Inserts requested data(code,coordinates)
+    actor -> sys: Inserts requested data(code,building,floors covered)
 
     activate sys
     sys --> actor : Message: elevator created / error in data inserted

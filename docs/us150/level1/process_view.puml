@@ -5,7 +5,7 @@ actor "??" as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: Inserts requested data(code, name, description)
+    actor -> sys: Inserts requested data(code, name, description, maxFloorDimensions)
 
     activate sys
     sys --> actor : Message: building created / error in data inserted

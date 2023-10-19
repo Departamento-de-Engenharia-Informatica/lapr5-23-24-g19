@@ -55,8 +55,7 @@ component system {
     [Application Service] -- "Model API"
     [Domain Model (DDD)] -up- "Model API"
 }
-"MDR API" -- port1
-note left: makes available
+"MD API" -- port1
 
 @enduml
 
