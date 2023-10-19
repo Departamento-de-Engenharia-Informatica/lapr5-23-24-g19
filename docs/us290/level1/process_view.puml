@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "??" as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+activate actor
+    actor -> sys: Starts by asking the list of buildings
+
+    activate sys
+
+    sys --> actor: Display list of buildings
+    deactivate sys
+
+    actor -> sys: Chooses building
+    activate sys
+
+
+    sys --> actor : Message: list of elevators in building
+    deactivate sys
+deactivate actor
+
+
+@enduml

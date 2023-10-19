@@ -1,4 +1,4 @@
-# US 270 - Create Elevator - Level 3
+# US 270 - List Elevators inside building - Level 3
 
 ### 1. User Story Description
 
