@@ -1,8 +1,8 @@
-# US 150 - Create building - Level 3
+# US 270 - Create building - Level 3
 
 ### 1. User Story Description
 
-As an administrator, I intend to create a building.
+As an administrator, I intend to create an elevator inside the building.
 
 ### 2. Customer Specifications and Clarifications
 
