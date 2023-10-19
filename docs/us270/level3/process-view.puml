@@ -1,0 +1,58 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+participant "MD" as mdr
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Elevator" as e
+participant "Mapper" as map
+participant "DTO" as dto
+
+participant "Repository" as repo
+
+
+'activate ui
+ui --> mdr: post(/elevator)
+    activate mdr
+    mdr -> r : post(/elevator)
+
+    activate r
+        r -> ctrl : createElevator()
+            activate ctrl
+                ctrl -> svc : createElevator()
+                activate svc
+                    note right: validate if building\nis valid,and if floor is valid?
+                    svc -> e : create()
+                    activate e
+                    deactivate e
+
+                    svc -> repo : save()
+                    activate repo
+                    deactivate repo
+
+                    svc -> map : toDTO()
+                    activate map
+                        map --> dto : create()
+                        activate dto
+                        deactivate dto
+                        map --> svc : dto
+                    deactivate map
+
+                    svc --> ctrl : dto
+                deactivate svc
+
+                ctrl --> r : dto (201)
+            deactivate ctrl
+
+        r --> mdr : dto (201)
+        deactivate r
+
+    mdr --> ui: dto (201)
+    deactivate mdr
+'deactivate ui
+
+@enduml
