@@ -24,3 +24,7 @@ pnpm-lock.yaml
 
 # Windows
 Thumbs.db
+
+# Other
+
+docs/**/*.png
