@@ -6,13 +6,10 @@ participant "MD" as mdr
 
 
 activate ui
-
-ui -> mdr: post(/building)
-activate mdr
-    mdr -> mdr: save()
-    mdr --> ui: operation result
-deactivate mdr
-
+    ui -> mdr: POST /buildings
+    activate mdr
+        mdr --> ui: building created/error
+    deactivate mdr
 deactivate ui
 
 @enduml
