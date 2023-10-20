@@ -1,14 +1,18 @@
 @startuml
 autonumber
 
-actor "??" as actor
+actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: Inserts requested data(code,building,floors covered)
+    actor -> sys: POST /building/{id}/floors
 
     activate sys
-    sys --> actor : Message: elevator created / error in data inserted
+    alt building not created
+        sys --> actor : 422: Unprocessable Content
+    else building created successfully
+        sys --> actor : 201: Created
+    end
     deactivate sys
 deactivate actor
 

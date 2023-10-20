@@ -1,0 +1,129 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteElevator
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerCreateElevator
+            }
+
+            package "ImplControllers" {
+                class ControllerCreateElevator
+            }
+            ControllerCreateElevator -up-|> IControllerCreateElevator
+        }
+
+        package "Repositories" {
+            class RepoBuilding
+            class RepoFloor
+            class RepoElevator
+        }
+
+        RepoBuilding .up.> DBDriver
+        RepoFloor .up.> DBDriver
+        RepoElevator .up.> DBDriver
+
+        RouteElevator ....> IControllerCreateElevator
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceElevator
+            }
+
+            package "ImplAppServices" {
+                class AppServiceElevator
+            }
+
+            AppServiceElevator --|> IAppServiceElevator
+
+            package "IRepositories" {
+                interface IRepoBuilding
+                interface IRepoFloor
+                interface IRepoElevator
+            }
+
+            RepoBuilding --|> IRepoBuilding
+            RepoFloor --|> IRepoFloor
+            RepoElevator --|> IRepoElevator
+        }
+
+        ControllerCreateElevator ..> IAppServiceElevator
+
+        AppServiceElevator .up.> IRepoBuilding
+        AppServiceElevator .up.> IRepoFloor
+        AppServiceElevator .up.> IRepoElevator
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+
+            package "Elevator" as a_elevator {
+                entity Elevator <<root>> <<entity>>
+            }
+
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        package "Value Objects" {
+            package "Elevator" as vo_elevator {
+                class Code
+                class Brand
+                class Model
+                class SeriesNumber
+                class Description
+
+            }
+        }
+
+
+        Elevator "1" --> "1" Code
+        Elevator "1" --> "1" Brand
+        Elevator "1" --> "1" Model
+        Elevator "1" --> "1" SeriesNumber
+        Elevator "1" --> "1" Description
+
+        Elevator "*" -left-> "1" Building
+        Elevator "1" -right-> "*" Floor
+
+
+        AppServiceElevator ..> Elevator
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+
