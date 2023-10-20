@@ -2,8 +2,8 @@ import { Service, Inject } from 'typedi'
 import { Document, Model } from 'mongoose'
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
 import IBuildingRepo from '../services/IRepos/IBuildingRepo'
-import { Building } from '../domain/building'
-import { BuildingId } from '../domain/buildingId'
+import { Building } from '../domain/building/building'
+import { BuildingId } from '../domain/building/buildingId'
 import { BuildingMap } from '../mappers/BuildingMap'
 
 @Service()

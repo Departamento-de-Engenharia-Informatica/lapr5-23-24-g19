@@ -1,11 +1,11 @@
-import { AggregateRoot } from '../core/domain/AggregateRoot'
-import { UniqueEntityID } from '../core/domain/UniqueEntityID'
+import { AggregateRoot } from '../../core/domain/AggregateRoot'
+import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 
-import { Result } from '../core/logic/Result'
+import { Result } from '../../core/logic/Result'
 import { BuildingId } from './buildingId'
 
-import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { Guard } from '../core/logic/Guard'
+import { IBuildingDTO } from '../../dto/IBuildingDTO'
+import { Guard } from '../../core/logic/Guard'
 
 type Dimensions = { length: number; width: number }
 

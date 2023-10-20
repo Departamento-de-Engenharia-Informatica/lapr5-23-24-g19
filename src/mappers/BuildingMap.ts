@@ -1,6 +1,6 @@
 import { Mapper } from '../core/infra/Mapper'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { Building } from '../domain/building'
+import { Building } from '../domain/building/building'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 
 export class BuildingMap extends Mapper<Building> {

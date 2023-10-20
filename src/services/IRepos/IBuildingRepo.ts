@@ -1,6 +1,6 @@
 import { Repo } from '../../core/infra/Repo'
-import { Building } from '../../domain/building'
-import { BuildingId } from '../../domain/buildingId'
+import { Building } from '../../domain/building/building'
+import { BuildingId } from '../../domain/building/buildingId'
 
 export default interface IBuildingRepo extends Repo<Building> {
     save(building: Building): Promise<Building>

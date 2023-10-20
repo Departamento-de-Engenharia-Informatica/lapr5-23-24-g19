@@ -1,7 +1,7 @@
 import { Service, Inject } from 'typedi'
 import config from '../../config'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { Building } from '../domain/building'
+import { Building } from '../domain/building/building'
 import IBuildingRepo from '../services/IRepos/IBuildingRepo'
 import IBuildingService from './IServices/IBuildingService'
 import { Result } from '../core/logic/Result'
