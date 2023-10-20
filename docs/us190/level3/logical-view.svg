@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="741px" preserveAspectRatio="none" style="width:404px;height:741px;background:#000000;" version="1.1" viewBox="0 0 404 741" width="404px" zoomAndPan="magnify"><defs/><g><rect fill="#021A22" height="1" style="stroke:#021A22;stroke-width:1.0;" width="1" x="0" y="0"/><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="116" x="5" y="17">PlantUML 1.2022.7</text><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="4" x="5" y="31.1328"> </text><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="380" x="5" y="45.2656">&lt;b&gt;This version of PlantUML is 424 days old, so you should</text><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="390" x="5" y="59.3984">&lt;b&gt;consider upgrading from https://plantuml.com/download</text><rect fill="#33FF02" height="21.4883" style="stroke:#33FF02;stroke-width:1.0;" width="324" x="5" y="69.5313"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="165" x="6" y="84.5313">[From string (line 37) ]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="105.0195"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="74" x="5" y="121.5078">@startuml</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="137.9961"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="171" x="5" y="154.4844">skinparam component {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="84" x="25" y="170.9727">FontSize 16</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="298" x="25" y="187.4609">BackgroundColor&lt;&lt;Apache&gt;&gt; LightCoral</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="247" x="25" y="203.9492">BorderColor&lt;&lt;Apache&gt;&gt; #FF6655</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="131" x="25" y="220.4375">FontName Courier</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="129" x="25" y="236.9258">BorderColor black</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="170" x="25" y="253.4141">ArrowFontName Impact</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="148" x="25" y="269.9023">ArrowColor #FF6655</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="182" x="25" y="286.3906">ArrowFontColor #777777</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="302.8789">}</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="319.3672"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="335.8555"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="147" x="5" y="352.3438">component system {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="304" x="25" y="368.832">package "Frameworks and Drivers Layer" {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67" x="45" y="385.3203">[Routing]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="92" x="45" y="401.8086">[Persistence]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="25" y="418.2969">}</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="434.7852"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="268" x="25" y="451.2734">package "Interface Adapters Layers" {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="83" x="45" y="467.7617">[Controller]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="88" x="45" y="484.25">[Repository]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="25" y="500.7383">}</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="517.2266"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="281" x="25" y="533.7148">package "Application Business Rules" {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="147" x="45" y="550.2031">[Application Service]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="25" y="566.6914">}</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="583.1797"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="272" x="25" y="599.668">package "Enterprise Business Rules" {</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="163" x="45" y="616.1563">[Domain Model (DDD)]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="25" y="632.6445">}</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="649.1328"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="131" x="25" y="665.6211">portin " " as port1</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="682.1094"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="134" x="25" y="698.5977">[Routing] -- port1</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" text-decoration="wavy underline" textLength="248" x="25" y="715.0859">[Persistence] --( "Data Model API"</text><text fill="#FF0000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="94" x="10" y="731.5742">Syntax Error?</text><!--MD5=[3ae313085d67ee58b5940dd3a3f54db9]
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    ArrowFontName Impact
+    ArrowColor #FF6655
+    ArrowFontColor #777777
+}
+
+
+component system {
+    package "Frameworks and Drivers Layer" {
+        [Routing]
+        [Persistence]
+    }
+
+    package "Interface Adapters Layers" {
+        [Controller]
+        [Repository]
+    }
+
+    package "Application Business Rules" {
+        [Application Service]
+    }
+
+    package "Enterprise Business Rules" {
+        [Domain Model (DDD)]
+    }
+
+    portin " " as port1
+
+    [Routing] - - port1
+    [Persistence] - -( "Data Model API"
+    [Persistence] - - "Persistence API"
+
+    [Controller] -up- "Controller API"
+    [Routing] -down-( "Controller API"
+
+    [Repository] -up- "Data Model API"
+    [Repository] -up-( "Persistence API"
+
+    [Controller] -down-( "App Service API"
+    [Controller] -down-( "DTO API"
+
+    "DTO API" -left- [DTO]
+
+    [Application Service] -up- "App Service API"
+    [Application Service] -up- "DTO API"
+    [Repository] - - "Repo API"
+    [Application Service] -up-( "Repo API"
+
+    [Repository] -down-( "Model API"
+    [Application Service] - -( "Model API"
+    [Domain Model (DDD)] -up- "Model API"
+
+}
+"MDR API" - - port1
+note left: makes available
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 18:01:30 WEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: PT
+--></g></svg>

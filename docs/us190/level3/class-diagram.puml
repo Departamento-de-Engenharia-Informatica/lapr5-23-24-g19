@@ -51,14 +51,14 @@ package system {
     package "Application Services" {
         package "App Services" {
             package "IAppServices" {
-                interface IAppServiceCreateFloor
+                interface IAppServiceFloor
             }
 
             package "ImplAppServices" {
-                class AppServiceCreateFloor
+                class AppServiceFloor
             }
 
-            AppServiceCreateFloor --|> IAppServiceCreateFloor
+            AppServiceFloor --|> IAppServiceFloor
 
             package "IRepositories" {
                 interface IRepoBuilding
@@ -69,10 +69,10 @@ package system {
             RepoFloor --|> IRepoFloor
         }
 
-        ControllerCreateFloor ..> IAppServiceCreateFloor
+        ControllerCreateFloor ..> IAppServiceFloor
 
-        AppServiceCreateFloor .up.> IRepoBuilding
-        AppServiceCreateFloor .up.> IRepoFloor
+        AppServiceFloor .up.> IRepoBuilding
+        AppServiceFloor .up.> IRepoFloor
     }
 
     package "Entities/Core/Domain" {
@@ -97,7 +97,7 @@ package system {
         Floor "1" --> "1" FloorDescription
         Floor "1" --> "1" FloorNumber
 
-        AppServiceCreateFloor ..> Floor
+        AppServiceFloor ..> Floor
 
         'package "Services" {
         '}

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1384px" preserveAspectRatio="none" style="width:1666px;height:1384px;background:#FFFFFF;" version="1.1" viewBox="0 0 1666 1384" width="1666px" zoomAndPan="magnify"><defs/><g><!--MD5=[8ae77ada6169822435c3d3bcb01b6727]
+cluster system--><g id="cluster_system"><path d="M8.5,6 L61.5,6 A3.75,3.75 0 0 1 64,8.5 L71,28.4883 L1656.5,28.4883 A2.5,2.5 0 0 1 1659,30.9883 L1659,1374.5 A2.5,2.5 0 0 1 1656.5,1377 L8.5,1377 A2.5,2.5 0 0 1 6,1374.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="71" y1="28.4883" y2="28.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="52" x="10" y="21.5352">system</text></g><!--MD5=[9ddaf8ee8bcae11a9a9232f969198262]
+cluster Infrastructure--><g id="cluster_Infrastructure"><path d="M328.5,49 L428.5,49 A3.75,3.75 0 0 1 431,51.5 L438,71.4883 L788.5,71.4883 A2.5,2.5 0 0 1 791,73.9883 L791,212.5 A2.5,2.5 0 0 1 788.5,215 L328.5,215 A2.5,2.5 0 0 1 326,212.5 L326,51.5 A2.5,2.5 0 0 1 328.5,49 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="326" x2="438" y1="71.4883" y2="71.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="99" x="330" y="64.5352">Infrastructure</text></g><!--MD5=[a216f63574981a7e4cf6939ecabe907e]
+cluster Routes--><g id="cluster_Routes"><path d="M629.5,92 L680.5,92 A3.75,3.75 0 0 1 683,94.5 L690,114.4883 L764.5,114.4883 A2.5,2.5 0 0 1 767,116.9883 L767,188.5 A2.5,2.5 0 0 1 764.5,191 L629.5,191 A2.5,2.5 0 0 1 627,188.5 L627,94.5 A2.5,2.5 0 0 1 629.5,92 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="627" x2="690" y1="114.4883" y2="114.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="50" x="631" y="107.5352">Routes</text></g><!--MD5=[bc6b40dadbf86ab6a0c8405a467a48af]
+cluster Persistence--><g id="cluster_Persistence"><path d="M352.5,92 L435.5,92 A3.75,3.75 0 0 1 438,94.5 L445,114.4883 L600.5,114.4883 A2.5,2.5 0 0 1 603,116.9883 L603,188.5 A2.5,2.5 0 0 1 600.5,191 L352.5,191 A2.5,2.5 0 0 1 350,188.5 L350,94.5 A2.5,2.5 0 0 1 352.5,92 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="350" x2="445" y1="114.4883" y2="114.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="82" x="354" y="107.5352">Persistence</text></g><!--MD5=[5a2c09c7a25dd2d50c87c8f70ce7edbd]
+cluster Interface Adapters--><g id="cluster_Interface Adapters"><path d="M32.5,239 L165.5,239 A3.75,3.75 0 0 1 168,241.5 L175,261.4883 L658.5,261.4883 A2.5,2.5 0 0 1 661,263.9883 L661,678.5 A2.5,2.5 0 0 1 658.5,681 L32.5,681 A2.5,2.5 0 0 1 30,678.5 L30,241.5 A2.5,2.5 0 0 1 32.5,239 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="175" y1="261.4883" y2="261.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="132" x="34" y="254.5352">Interface Adapters</text></g><!--MD5=[ed1d20ea533a2a0e7df5ba3c35e56ced]
+cluster Controllers--><g id="cluster_Controllers"><path d="M56.5,282 L138.5,282 A3.75,3.75 0 0 1 141,284.5 L148,304.4883 L317.5,304.4883 A2.5,2.5 0 0 1 320,306.9883 L320,654.5 A2.5,2.5 0 0 1 317.5,657 L56.5,657 A2.5,2.5 0 0 1 54,654.5 L54,284.5 A2.5,2.5 0 0 1 56.5,282 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="54" x2="148" y1="304.4883" y2="304.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="81" x="58" y="297.5352">Controllers</text></g><!--MD5=[a586f4574d5da7816902f7c2c52e4d7e]
+cluster IControllers--><g id="cluster_IControllers"><path d="M80.5,325 L167.5,325 A3.75,3.75 0 0 1 170,327.5 L177,347.4883 L293.5,347.4883 A2.5,2.5 0 0 1 296,349.9883 L296,421.5 A2.5,2.5 0 0 1 293.5,424 L80.5,424 A2.5,2.5 0 0 1 78,421.5 L78,327.5 A2.5,2.5 0 0 1 80.5,325 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="78" x2="177" y1="347.4883" y2="347.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="86" x="82" y="340.5352">IControllers</text></g><!--MD5=[27ed90d9465f0353e74d51bada279079]
+cluster ImplControllers--><g id="cluster_ImplControllers"><path d="M81.5,534 L196.5,534 A3.75,3.75 0 0 1 199,536.5 L206,556.4883 L292.5,556.4883 A2.5,2.5 0 0 1 295,558.9883 L295,630.5 A2.5,2.5 0 0 1 292.5,633 L81.5,633 A2.5,2.5 0 0 1 79,630.5 L79,536.5 A2.5,2.5 0 0 1 81.5,534 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="79" x2="206" y1="556.4883" y2="556.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="114" x="83" y="549.5352">ImplControllers</text></g><!--MD5=[600c2d25b6889bd4e9f6b335204b22ae]
+cluster Repositories--><g id="cluster_Repositories"><path d="M346.5,325 L438.5,325 A3.75,3.75 0 0 1 441,327.5 L448,347.4883 L634.5,347.4883 A2.5,2.5 0 0 1 637,349.9883 L637,421.5 A2.5,2.5 0 0 1 634.5,424 L346.5,424 A2.5,2.5 0 0 1 344,421.5 L344,327.5 A2.5,2.5 0 0 1 346.5,325 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="344" x2="448" y1="347.4883" y2="347.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="91" x="348" y="340.5352">Repositories</text></g><!--MD5=[d13fcb855108a23cf11211063221295a]
+cluster Application Services--><g id="cluster_Application Services"><path d="M687.5,448 L833.5,448 A3.75,3.75 0 0 1 836,450.5 L843,470.4883 L1079.5,470.4883 A2.5,2.5 0 0 1 1082,472.9883 L1082,1089.5 A2.5,2.5 0 0 1 1079.5,1092 L687.5,1092 A2.5,2.5 0 0 1 685,1089.5 L685,450.5 A2.5,2.5 0 0 1 687.5,448 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="685" x2="843" y1="470.4883" y2="470.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="145" x="689" y="463.5352">Application Services</text></g><!--MD5=[244535090d6108ff57cf34fc63487b8d]
+cluster App Services--><g id="cluster_App Services"><path d="M711.5,491 L803.5,491 A3.75,3.75 0 0 1 806,493.5 L813,513.4883 L1055.5,513.4883 A2.5,2.5 0 0 1 1058,515.9883 L1058,1065.5 A2.5,2.5 0 0 1 1055.5,1068 L711.5,1068 A2.5,2.5 0 0 1 709,1065.5 L709,493.5 A2.5,2.5 0 0 1 711.5,491 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="709" x2="813" y1="513.4883" y2="513.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="91" x="713" y="506.5352">App Services</text></g><!--MD5=[f93fb75c318d43233c555a3c876e2280]
+cluster IAppServices--><g id="cluster_IAppServices"><path d="M795.5,945 L887.5,945 A3.75,3.75 0 0 1 890,947.5 L897,967.4883 L970.5,967.4883 A2.5,2.5 0 0 1 973,969.9883 L973,1041.5 A2.5,2.5 0 0 1 970.5,1044 L795.5,1044 A2.5,2.5 0 0 1 793,1041.5 L793,947.5 A2.5,2.5 0 0 1 795.5,945 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="793" x2="897" y1="967.4883" y2="967.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="91" x="797" y="960.5352">IAppServices</text></g><!--MD5=[4129c280e7de2778a98c6cdd1ef51982]
+cluster ImplAppServices--><g id="cluster_ImplAppServices"><path d="M828.5,705 L948.5,705 A3.75,3.75 0 0 1 951,707.5 L958,727.4883 L999.5,727.4883 A2.5,2.5 0 0 1 1002,729.9883 L1002,801.5 A2.5,2.5 0 0 1 999.5,804 L828.5,804 A2.5,2.5 0 0 1 826,801.5 L826,707.5 A2.5,2.5 0 0 1 828.5,705 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="826" x2="958" y1="727.4883" y2="727.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="119" x="830" y="720.5352">ImplAppServices</text></g><!--MD5=[cfd36637bb936e9020c8cdf2f8264c78]
+cluster IRepositories--><g id="cluster_IRepositories"><path d="M735.5,534 L832.5,534 A3.75,3.75 0 0 1 835,536.5 L842,556.4883 L1031.5,556.4883 A2.5,2.5 0 0 1 1034,558.9883 L1034,630.5 A2.5,2.5 0 0 1 1031.5,633 L735.5,633 A2.5,2.5 0 0 1 733,630.5 L733,536.5 A2.5,2.5 0 0 1 735.5,534 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="733" x2="842" y1="556.4883" y2="556.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="96" x="737" y="549.5352">IRepositories</text></g><!--MD5=[eccf9336c2fcf13201cf91926ab8c439]
+cluster Entities/Core/Domain--><g id="cluster_Entities/Core/Domain"><path d="M1108.5,828 L1269.5,828 A3.75,3.75 0 0 1 1272,830.5 L1279,850.4883 L1632.5,850.4883 A2.5,2.5 0 0 1 1635,852.9883 L1635,1350.5 A2.5,2.5 0 0 1 1632.5,1353 L1108.5,1353 A2.5,2.5 0 0 1 1106,1350.5 L1106,830.5 A2.5,2.5 0 0 1 1108.5,828 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1106" x2="1279" y1="850.4883" y2="850.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="160" x="1110" y="843.5352">Entities/Core/Domain</text></g><!--MD5=[bbb32bc7acafd57c620f668f86b05660]
+cluster Aggregates--><g id="cluster_Aggregates"><path d="M1158.5,871 L1240.5,871 A3.75,3.75 0 0 1 1243,873.5 L1250,893.4883 L1545.5,893.4883 A2.5,2.5 0 0 1 1548,895.9883 L1548,1096.5 A2.5,2.5 0 0 1 1545.5,1099 L1158.5,1099 A2.5,2.5 0 0 1 1156,1096.5 L1156,873.5 A2.5,2.5 0 0 1 1158.5,871 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1156" x2="1250" y1="893.4883" y2="893.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="81" x="1160" y="886.5352">Aggregates</text></g><!--MD5=[98bfc525ac6a52bb8ef708f4ea99ed6d]
+cluster a_building--><g id="cluster_a_building"><path d="M1358.5,914 L1419.5,914 A3.75,3.75 0 0 1 1422,916.5 L1429,936.4883 L1521.5,936.4883 A2.5,2.5 0 0 1 1524,938.9883 L1524,1072.5 A2.5,2.5 0 0 1 1521.5,1075 L1358.5,1075 A2.5,2.5 0 0 1 1356,1072.5 L1356,916.5 A2.5,2.5 0 0 1 1358.5,914 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1356" x2="1429" y1="936.4883" y2="936.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="60" x="1360" y="929.5352">Building</text></g><!--MD5=[b615b39514a5d9a0e7e5174e8d382238]
+cluster a_floor--><g id="cluster_a_floor"><path d="M1182.5,914 L1220.5,914 A3.75,3.75 0 0 1 1223,916.5 L1230,936.4883 L1329.5,936.4883 A2.5,2.5 0 0 1 1332,938.9883 L1332,1072.5 A2.5,2.5 0 0 1 1329.5,1075 L1182.5,1075 A2.5,2.5 0 0 1 1180,1072.5 L1180,916.5 A2.5,2.5 0 0 1 1182.5,914 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1180" x2="1230" y1="936.4883" y2="936.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="37" x="1184" y="929.5352">Floor</text></g><!--MD5=[54f4c80610dbcc019aec53e235a3f005]
+cluster Value Objects--><g id="cluster_Value Objects"><path d="M1132.5,1123 L1233.5,1123 A3.75,3.75 0 0 1 1236,1125.5 L1243,1145.4883 L1608.5,1145.4883 A2.5,2.5 0 0 1 1611,1147.9883 L1611,1326.5 A2.5,2.5 0 0 1 1608.5,1329 L1132.5,1329 A2.5,2.5 0 0 1 1130,1326.5 L1130,1125.5 A2.5,2.5 0 0 1 1132.5,1123 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1130" x2="1243" y1="1145.4883" y2="1145.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="100" x="1134" y="1138.5352">Value Objects</text></g><!--MD5=[f42733fe1a5bf23af039e27456e181f5]
+cluster vo_floor--><g id="cluster_vo_floor"><path d="M1156.5,1166 L1194.5,1166 A3.75,3.75 0 0 1 1197,1168.5 L1204,1188.4883 L1584.5,1188.4883 A2.5,2.5 0 0 1 1587,1190.9883 L1587,1302.5 A2.5,2.5 0 0 1 1584.5,1305 L1156.5,1305 A2.5,2.5 0 0 1 1154,1302.5 L1154,1168.5 A2.5,2.5 0 0 1 1156.5,1166 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1154" x2="1204" y1="1188.4883" y2="1188.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="37" x="1158" y="1181.5352">Floor</text></g><!--MD5=[602b36983efe50fd80803aec81a83ad4]
+class RouteFloor--><g id="elem_RouteFloor"><rect codeLine="16" fill="#F1F1F1" height="48" id="RouteFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="108" x="643" y="127"/><ellipse cx="658" cy="143" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M660.4731,149.1431 Q659.8921,149.4419 659.2529,149.5913 Q658.6138,149.7407 657.9082,149.7407 Q655.4014,149.7407 654.0815,148.0889 Q652.7617,146.437 652.7617,143.3159 Q652.7617,140.1865 654.0815,138.5347 Q655.4014,136.8828 657.9082,136.8828 Q658.6138,136.8828 659.2612,137.0322 Q659.9087,137.1816 660.4731,137.4805 L660.4731,140.2031 Q659.8423,139.6221 659.2488,139.3523 Q658.6553,139.0825 658.0244,139.0825 Q656.6797,139.0825 655.9949,140.1492 Q655.3101,141.2158 655.3101,143.3159 Q655.3101,145.4077 655.9949,146.4744 Q656.6797,147.541 658.0244,147.541 Q658.6553,147.541 659.2488,147.2712 Q659.8423,147.0015 660.4731,146.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="672" y="148.291">RouteFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="644" x2="750" y1="159" y2="159"/><line style="stroke:#181818;stroke-width:0.5;" x1="644" x2="750" y1="167" y2="167"/></g><!--MD5=[f0b49c7b12fe939e64518e40a77c3b4f]
+class IDBDriver--><g id="elem_IDBDriver"><rect codeLine="20" fill="#F1F1F1" height="48" id="IDBDriver" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="95" x="492.5" y="127"/><ellipse cx="507.5" cy="143" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M503.9277,139.2651 L503.9277,137.1069 L511.3071,137.1069 L511.3071,139.2651 L508.8418,139.2651 L508.8418,147.3418 L511.3071,147.3418 L511.3071,149.5 L503.9277,149.5 L503.9277,147.3418 L506.3931,147.3418 L506.3931,139.2651 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="63" x="521.5" y="148.291">IDBDriver</text><line style="stroke:#181818;stroke-width:0.5;" x1="493.5" x2="586.5" y1="159" y2="159"/><line style="stroke:#181818;stroke-width:0.5;" x1="493.5" x2="586.5" y1="167" y2="167"/></g><!--MD5=[24b75e600e5f5058c96fe662b30e2fdd]
+class DBDriver--><g id="elem_DBDriver"><rect codeLine="21" fill="#F1F1F1" height="48" id="DBDriver" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="91" x="366.5" y="127"/><ellipse cx="381.5" cy="143" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M383.9731,149.1431 Q383.3921,149.4419 382.7529,149.5913 Q382.1138,149.7407 381.4082,149.7407 Q378.9014,149.7407 377.5815,148.0889 Q376.2617,146.437 376.2617,143.3159 Q376.2617,140.1865 377.5815,138.5347 Q378.9014,136.8828 381.4082,136.8828 Q382.1138,136.8828 382.7612,137.0322 Q383.4087,137.1816 383.9731,137.4805 L383.9731,140.2031 Q383.3423,139.6221 382.7488,139.3523 Q382.1553,139.0825 381.5244,139.0825 Q380.1797,139.0825 379.4949,140.1492 Q378.8101,141.2158 378.8101,143.3159 Q378.8101,145.4077 379.4949,146.4744 Q380.1797,147.541 381.5244,147.541 Q382.1553,147.541 382.7488,147.2712 Q383.3423,147.0015 383.9731,146.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="395.5" y="148.291">DBDriver</text><line style="stroke:#181818;stroke-width:0.5;" x1="367.5" x2="456.5" y1="159" y2="159"/><line style="stroke:#181818;stroke-width:0.5;" x1="367.5" x2="456.5" y1="167" y2="167"/></g><!--MD5=[7502b8fdd1fee79c0c36faf9c29d86d2]
+class IControllerCreateFloor--><g id="elem_IControllerCreateFloor"><rect codeLine="30" fill="#F1F1F1" height="48" id="IControllerCreateFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="187" x="93.5" y="360"/><ellipse cx="108.5" cy="376" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M104.9277,372.2651 L104.9277,370.1069 L112.3071,370.1069 L112.3071,372.2651 L109.8418,372.2651 L109.8418,380.3418 L112.3071,380.3418 L112.3071,382.5 L104.9277,382.5 L104.9277,380.3418 L107.3931,380.3418 L107.3931,372.2651 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="155" x="122.5" y="381.291">IControllerCreateFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="94.5" x2="279.5" y1="392" y2="392"/><line style="stroke:#181818;stroke-width:0.5;" x1="94.5" x2="279.5" y1="400" y2="400"/></g><!--MD5=[6ede21374e2a56a36486b835fe060212]
+class ControllerCreateFloor--><g id="elem_ControllerCreateFloor"><rect codeLine="34" fill="#F1F1F1" height="48" id="ControllerCreateFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="183" x="95.5" y="569"/><ellipse cx="110.5" cy="585" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M112.9731,591.1431 Q112.3921,591.4419 111.7529,591.5913 Q111.1138,591.7407 110.4082,591.7407 Q107.9014,591.7407 106.5815,590.0889 Q105.2617,588.437 105.2617,585.3159 Q105.2617,582.1865 106.5815,580.5347 Q107.9014,578.8828 110.4082,578.8828 Q111.1138,578.8828 111.7612,579.0322 Q112.4087,579.1816 112.9731,579.4805 L112.9731,582.2031 Q112.3423,581.6221 111.7488,581.3523 Q111.1553,581.0825 110.5244,581.0825 Q109.1797,581.0825 108.4949,582.1492 Q107.8101,583.2158 107.8101,585.3159 Q107.8101,587.4077 108.4949,588.4744 Q109.1797,589.541 110.5244,589.541 Q111.1553,589.541 111.7488,589.2712 Q112.3423,589.0015 112.9731,588.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151" x="124.5" y="590.291">ControllerCreateFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="96.5" x2="277.5" y1="601" y2="601"/><line style="stroke:#181818;stroke-width:0.5;" x1="96.5" x2="277.5" y1="609" y2="609"/></g><!--MD5=[79dbbc22c93d84db57b53763a577e6b6]
+class RepoBuilding--><g id="elem_RepoBuilding"><rect codeLine="40" fill="#F1F1F1" height="48" id="RepoBuilding" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="123" x="498.5" y="360"/><ellipse cx="513.5" cy="376" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M515.9731,382.1431 Q515.3921,382.4419 514.7529,382.5913 Q514.1138,382.7407 513.4082,382.7407 Q510.9014,382.7407 509.5815,381.0889 Q508.2617,379.437 508.2617,376.3159 Q508.2617,373.1865 509.5815,371.5347 Q510.9014,369.8828 513.4082,369.8828 Q514.1138,369.8828 514.7612,370.0322 Q515.4087,370.1816 515.9731,370.4805 L515.9731,373.2031 Q515.3423,372.6221 514.7488,372.3523 Q514.1553,372.0825 513.5244,372.0825 Q512.1797,372.0825 511.4949,373.1492 Q510.8101,374.2158 510.8101,376.3159 Q510.8101,378.4077 511.4949,379.4744 Q512.1797,380.541 513.5244,380.541 Q514.1553,380.541 514.7488,380.2712 Q515.3423,380.0015 515.9731,379.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="527.5" y="381.291">RepoBuilding</text><line style="stroke:#181818;stroke-width:0.5;" x1="499.5" x2="620.5" y1="392" y2="392"/><line style="stroke:#181818;stroke-width:0.5;" x1="499.5" x2="620.5" y1="400" y2="400"/></g><!--MD5=[f917ab49128227ce77a3c761941c6edb]
+class RepoFloor--><g id="elem_RepoFloor"><rect codeLine="41" fill="#F1F1F1" height="48" id="RepoFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="103" x="360.5" y="360"/><ellipse cx="375.5" cy="376" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M377.9731,382.1431 Q377.3921,382.4419 376.7529,382.5913 Q376.1138,382.7407 375.4082,382.7407 Q372.9014,382.7407 371.5815,381.0889 Q370.2617,379.437 370.2617,376.3159 Q370.2617,373.1865 371.5815,371.5347 Q372.9014,369.8828 375.4082,369.8828 Q376.1138,369.8828 376.7612,370.0322 Q377.4087,370.1816 377.9731,370.4805 L377.9731,373.2031 Q377.3423,372.6221 376.7488,372.3523 Q376.1553,372.0825 375.5244,372.0825 Q374.1797,372.0825 373.4949,373.1492 Q372.8101,374.2158 372.8101,376.3159 Q372.8101,378.4077 373.4949,379.4744 Q374.1797,380.541 375.5244,380.541 Q376.1553,380.541 376.7488,380.2712 Q377.3423,380.0015 377.9731,379.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="389.5" y="381.291">RepoFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="361.5" x2="462.5" y1="392" y2="392"/><line style="stroke:#181818;stroke-width:0.5;" x1="361.5" x2="462.5" y1="400" y2="400"/></g><!--MD5=[f431e90ae0a3fb8039747d1af6cdbf4d]
+class IAppServiceFloor--><g id="elem_IAppServiceFloor"><rect codeLine="53" fill="#F1F1F1" height="48" id="IAppServiceFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148" x="809" y="980"/><ellipse cx="824" cy="996" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M820.4277,992.2651 L820.4277,990.1069 L827.8071,990.1069 L827.8071,992.2651 L825.3418,992.2651 L825.3418,1000.3418 L827.8071,1000.3418 L827.8071,1002.5 L820.4277,1002.5 L820.4277,1000.3418 L822.8931,1000.3418 L822.8931,992.2651 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="116" x="838" y="1001.291">IAppServiceFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="810" x2="956" y1="1012" y2="1012"/><line style="stroke:#181818;stroke-width:0.5;" x1="810" x2="956" y1="1020" y2="1020"/></g><!--MD5=[332e6cada458a6588d71a956745b42d5]
+class AppServiceFloor--><g id="elem_AppServiceFloor"><rect codeLine="57" fill="#F1F1F1" height="48" id="AppServiceFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="144" x="842" y="740"/><ellipse cx="857" cy="756" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M859.4731,762.1431 Q858.8921,762.4419 858.2529,762.5913 Q857.6138,762.7407 856.9082,762.7407 Q854.4014,762.7407 853.0815,761.0889 Q851.7617,759.437 851.7617,756.3159 Q851.7617,753.1865 853.0815,751.5347 Q854.4014,749.8828 856.9082,749.8828 Q857.6138,749.8828 858.2612,750.0322 Q858.9087,750.1816 859.4731,750.4805 L859.4731,753.2031 Q858.8423,752.6221 858.2488,752.3523 Q857.6553,752.0825 857.0244,752.0825 Q855.6797,752.0825 854.9949,753.1492 Q854.3101,754.2158 854.3101,756.3159 Q854.3101,758.4077 854.9949,759.4744 Q855.6797,760.541 857.0244,760.541 Q857.6553,760.541 858.2488,760.2712 Q858.8423,760.0015 859.4731,759.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="871" y="761.291">AppServiceFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="843" x2="985" y1="772" y2="772"/><line style="stroke:#181818;stroke-width:0.5;" x1="843" x2="985" y1="780" y2="780"/></g><!--MD5=[9bb0d641227a3ba7bc4ad261fa27966e]
+class IRepoBuilding--><g id="elem_IRepoBuilding"><rect codeLine="63" fill="#F1F1F1" height="48" id="IRepoBuilding" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="127" x="890.5" y="569"/><ellipse cx="905.5" cy="585" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M901.9277,581.2651 L901.9277,579.1069 L909.3071,579.1069 L909.3071,581.2651 L906.8418,581.2651 L906.8418,589.3418 L909.3071,589.3418 L909.3071,591.5 L901.9277,591.5 L901.9277,589.3418 L904.3931,589.3418 L904.3931,581.2651 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="95" x="919.5" y="590.291">IRepoBuilding</text><line style="stroke:#181818;stroke-width:0.5;" x1="891.5" x2="1016.5" y1="601" y2="601"/><line style="stroke:#181818;stroke-width:0.5;" x1="891.5" x2="1016.5" y1="609" y2="609"/></g><!--MD5=[f9d4d5822c73507ff46e9d9bd93ea337]
+class IRepoFloor--><g id="elem_IRepoFloor"><rect codeLine="64" fill="#F1F1F1" height="48" id="IRepoFloor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="107" x="748.5" y="569"/><ellipse cx="763.5" cy="585" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M759.9277,581.2651 L759.9277,579.1069 L767.3071,579.1069 L767.3071,581.2651 L764.8418,581.2651 L764.8418,589.3418 L767.3071,589.3418 L767.3071,591.5 L759.9277,591.5 L759.9277,589.3418 L762.3931,589.3418 L762.3931,581.2651 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="75" x="777.5" y="590.291">IRepoFloor</text><line style="stroke:#181818;stroke-width:0.5;" x1="749.5" x2="854.5" y1="601" y2="601"/><line style="stroke:#181818;stroke-width:0.5;" x1="749.5" x2="854.5" y1="609" y2="609"/></g><!--MD5=[8560f289a30852a9f75d64e53f926853]
+class Building--><g id="elem_Building"><rect codeLine="80" fill="#F1F1F1" height="70.7539" id="Building" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="88" x="1396" y="969"/><ellipse cx="1411" cy="996.377" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1414.6143,1002.877 L1406.8945,1002.877 L1406.8945,990.4839 L1414.6143,990.4839 L1414.6143,992.6421 L1409.3433,992.6421 L1409.3433,995.3149 L1414.1162,995.3149 L1414.1162,997.4731 L1409.3433,997.4731 L1409.3433,1000.7188 L1414.6143,1000.7188 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="35" x="1435.5" y="985.6016">«root»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="43" x="1431.5" y="999.7344">«entity»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="56" x="1425" y="1015.8008">Building</text><line style="stroke:#181818;stroke-width:0.5;" x1="1397" x2="1483" y1="1023.7539" y2="1023.7539"/><line style="stroke:#181818;stroke-width:0.5;" x1="1397" x2="1483" y1="1031.7539" y2="1031.7539"/></g><!--MD5=[b098efa4dd65edfeebe973e4edec7c36]
+class Floor--><g id="elem_Floor"><rect codeLine="84" fill="#F1F1F1" height="70.7539" id="Floor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="71" x="1220.5" y="969"/><ellipse cx="1235.5" cy="996.377" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1239.1143,1002.877 L1231.3945,1002.877 L1231.3945,990.4839 L1239.1143,990.4839 L1239.1143,992.6421 L1233.8433,992.6421 L1233.8433,995.3149 L1238.6162,995.3149 L1238.6162,997.4731 L1233.8433,997.4731 L1233.8433,1000.7188 L1239.1143,1000.7188 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="35" x="1251.5" y="985.6016">«root»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="43" x="1247.5" y="999.7344">«entity»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1251" y="1015.8008">Floor</text><line style="stroke:#181818;stroke-width:0.5;" x1="1221.5" x2="1290.5" y1="1023.7539" y2="1023.7539"/><line style="stroke:#181818;stroke-width:0.5;" x1="1221.5" x2="1290.5" y1="1031.7539" y2="1031.7539"/></g><!--MD5=[29dff31a8712e2b8af2d5bbde5d24905]
+class FloorDescription--><g id="elem_FloorDescription"><rect codeLine="90" fill="#F1F1F1" height="48" id="FloorDescription" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146" x="1401" y="1221"/><ellipse cx="1416" cy="1237" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1418.4731,1243.1431 Q1417.8921,1243.4419 1417.2529,1243.5913 Q1416.6138,1243.7407 1415.9082,1243.7407 Q1413.4014,1243.7407 1412.0815,1242.0889 Q1410.7617,1240.437 1410.7617,1237.3159 Q1410.7617,1234.1865 1412.0815,1232.5347 Q1413.4014,1230.8828 1415.9082,1230.8828 Q1416.6138,1230.8828 1417.2612,1231.0322 Q1417.9087,1231.1816 1418.4731,1231.4805 L1418.4731,1234.2031 Q1417.8423,1233.6221 1417.2488,1233.3523 Q1416.6553,1233.0825 1416.0244,1233.0825 Q1414.6797,1233.0825 1413.9949,1234.1492 Q1413.3101,1235.2158 1413.3101,1237.3159 Q1413.3101,1239.4077 1413.9949,1240.4744 Q1414.6797,1241.541 1416.0244,1241.541 Q1416.6553,1241.541 1417.2488,1241.2712 Q1417.8423,1241.0015 1418.4731,1240.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="1430" y="1242.291">FloorDescription</text><line style="stroke:#181818;stroke-width:0.5;" x1="1402" x2="1546" y1="1253" y2="1253"/><line style="stroke:#181818;stroke-width:0.5;" x1="1402" x2="1546" y1="1261" y2="1261"/></g><!--MD5=[940c1653322ced0a3252fe0b7ecc9473]
+class FloorNumber--><g id="elem_FloorNumber"><rect codeLine="91" fill="#F1F1F1" height="48" id="FloorNumber" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="123" x="1194.5" y="1221"/><ellipse cx="1209.5" cy="1237" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1211.9731,1243.1431 Q1211.3921,1243.4419 1210.7529,1243.5913 Q1210.1138,1243.7407 1209.4082,1243.7407 Q1206.9014,1243.7407 1205.5815,1242.0889 Q1204.2617,1240.437 1204.2617,1237.3159 Q1204.2617,1234.1865 1205.5815,1232.5347 Q1206.9014,1230.8828 1209.4082,1230.8828 Q1210.1138,1230.8828 1210.7612,1231.0322 Q1211.4087,1231.1816 1211.9731,1231.4805 L1211.9731,1234.2031 Q1211.3423,1233.6221 1210.7488,1233.3523 Q1210.1553,1233.0825 1209.5244,1233.0825 Q1208.1797,1233.0825 1207.4949,1234.1492 Q1206.8101,1235.2158 1206.8101,1237.3159 Q1206.8101,1239.4077 1207.4949,1240.4744 Q1208.1797,1241.541 1209.5244,1241.541 Q1210.1553,1241.541 1210.7488,1241.2712 Q1211.3423,1241.0015 1211.9731,1240.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="1223.5" y="1242.291">FloorNumber</text><line style="stroke:#181818;stroke-width:0.5;" x1="1195.5" x2="1316.5" y1="1253" y2="1253"/><line style="stroke:#181818;stroke-width:0.5;" x1="1195.5" x2="1316.5" y1="1261" y2="1261"/></g><!--MD5=[58556940af3c456057df429f3037a377]
+link DBDriver to IDBDriver--><g id="link_DBDriver_IDBDriver"><path codeLine="24" d="M458,151 C462.28,151 466.57,151 470.85,151 " fill="none" id="DBDriver-to-IDBDriver" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="none" points="470.76,144,490.76,151,470.76,158,470.76,144" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[40c9b4388dc49028870fcc5b66a02a17]
+reverse link IControllerCreateFloor to ControllerCreateFloor--><g id="link_IControllerCreateFloor_ControllerCreateFloor"><path codeLine="36" d="M187,429.71 C187,472.43 187,535.16 187,568.74 " fill="none" id="IControllerCreateFloor-backto-ControllerCreateFloor" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="none" points="180,429.86,187,409.86,194,429.86,180,429.86" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[a32a59c760120d027c8b90bc4066604b]
+reverse link DBDriver to RepoBuilding--><g id="link_DBDriver_RepoBuilding"><path codeLine="44" d="M437.52,179.79 C454.08,198.09 473.86,220.53 481,231 C510.24,273.87 536.33,328.92 549.97,359.63 " fill="none" id="DBDriver-backto-RepoBuilding" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="434.41,176.36,437.5151,185.7066,437.7776,180.0558,443.4284,180.3184,434.41,176.36" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[391117eace6d76a829a259054d2414e2]
+reverse link DBDriver to RepoFloor--><g id="link_DBDriver_RepoFloor"><path codeLine="45" d="M412,181.69 C412,228.17 412,317.19 412,359.52 " fill="none" id="DBDriver-backto-RepoFloor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="412,176.93,408,185.93,412,181.93,416,185.93,412,176.93" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[4758f7ef2b67ff128042fa3e99542151]
+link RouteFloor to IControllerCreateFloor--><g id="link_RouteFloor_IControllerCreateFloor"><path codeLine="47" d="M674.72,175.26 C657.05,191.97 630.78,213.21 603,223 C575.85,232.57 370.52,219.79 344,231 C283.05,256.77 232.27,317.99 206.1,354.38 " fill="none" id="RouteFloor-to-IControllerCreateFloor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="203.3,358.33,211.7711,353.3061,206.194,354.2527,205.2474,348.6756,203.3,358.33" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[b8565338ef5643746f50f0badaf97c42]
+link AppServiceFloor to IAppServiceFloor--><g id="link_AppServiceFloor_IAppServiceFloor"><path codeLine="60" d="M910.97,788.25 C905.84,827.62 895.37,908.03 888.79,958.51 " fill="none" id="AppServiceFloor-to-IAppServiceFloor" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="none" points="895.76,959.22,886.24,978.15,881.88,957.41,895.76,959.22" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[ec16758c8f814eca9414b81be3ae32e9]
+link RepoBuilding to IRepoBuilding--><g id="link_RepoBuilding_IRepoBuilding"><path codeLine="67" d="M621.76,389.46 C701.25,396.27 833.81,411.57 873,440 C909.11,466.19 930.64,513.48 942.32,548.37 " fill="none" id="RepoBuilding-to-IRepoBuilding" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="none" points="948.94,546.07,948.06,567.24,935.54,550.14,948.94,546.07" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[9eb33e589586884cc3fcb6689e1844fe]
+link RepoFloor to IRepoFloor--><g id="link_RepoFloor_IRepoFloor"><path codeLine="68" d="M444.4,408.4 C455.76,416.25 468.75,424.82 481,432 C564.25,480.8 664.34,529.15 730.37,559.71 " fill="none" id="RepoFloor-to-IRepoFloor" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="none" points="733.09,553.26,748.34,567.97,727.25,565.98,733.09,553.26" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[11b2e00b52ab36d6533630a876f4e82d]
+link ControllerCreateFloor to IAppServiceFloor--><g id="link_ControllerCreateFloor_IAppServiceFloor"><path codeLine="71" d="M226.92,617.46 C347.88,688.54 709.88,901.27 837.7,976.38 " fill="none" id="ControllerCreateFloor-to-IAppServiceFloor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="841.94,978.87,836.2095,970.8599,837.63,976.3355,832.1543,977.756,841.94,978.87" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[5dc2187c91c9baa5f7156d821d27c5d2]
+reverse link IRepoBuilding to AppServiceFloor--><g id="link_IRepoBuilding_AppServiceFloor"><path codeLine="73" d="M947.04,623.43 C939.22,656.46 926.69,709.4 919.51,739.7 " fill="none" id="IRepoBuilding-backto-AppServiceFloor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="948.09,618.97,942.1183,626.8019,946.9345,623.8346,949.9018,628.6508,948.09,618.97" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[ee2880ad6a293dd7c97b13e02c5a4a72]
+reverse link IRepoFloor to AppServiceFloor--><g id="link_IRepoFloor_AppServiceFloor"><path codeLine="74" d="M820.96,622.61 C842.81,655.58 878.31,709.15 898.56,739.7 " fill="none" id="IRepoFloor-backto-AppServiceFloor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="818.41,618.76,820.0356,628.4738,821.167,622.9312,826.7096,624.0626,818.41,618.76" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[9bd558bda1c2c091fafbb27e99354104]
+link Floor to Building--><g id="link_Floor_Building"><path codeLine="95" d="M1291.23,1004 C1317.62,1004 1354.61,1004 1384.98,1004 " fill="none" id="Floor-to-Building" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="#FF6655" points="1394.75,1004,1385.75,1000,1389.75,1004,1385.75,1008,1394.75,1004" style="stroke:#FF6655;stroke-width:1.0;"/><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="4" x="1299.4836" y="999.3675">*</text><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="5" x="1383.0235" y="1000.7875">1</text></g><!--MD5=[b1ba0c0dc7633d77dfabb987b50a6cb3]
+link Floor to FloorDescription--><g id="link_Floor_FloorDescription"><path codeLine="96" d="M1288.23,1038.99 C1308.65,1060.62 1335.53,1089.31 1359,1115 C1390.63,1149.61 1426.49,1190.04 1449.64,1216.28 " fill="none" id="Floor-to-FloorDescription" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="#FF6655" points="1452.81,1219.88,1449.8761,1210.4783,1449.5104,1216.1233,1443.8654,1215.7576,1452.81,1219.88" style="stroke:#FF6655;stroke-width:1.0;"/><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="5" x="1299.2099" y="1051.9077">1</text><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="5" x="1442.4284" y="1210.3881">1</text></g><!--MD5=[f33cea89eda072a9c5969d1984ef8ef8]
+link Floor to FloorNumber--><g id="link_Floor_FloorNumber"><path codeLine="97" d="M1256,1038.99 C1256,1086.16 1256,1170.65 1256,1215 " fill="none" id="Floor-to-FloorNumber" style="stroke:#FF6655;stroke-width:1.0;"/><polygon fill="#FF6655" points="1256,1219.73,1260,1210.73,1256,1214.73,1252,1210.73,1256,1219.73" style="stroke:#FF6655;stroke-width:1.0;"/><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="5" x="1248.8125" y="1061.2029">1</text><text fill="#000000" font-family="Impact" font-size="13" lengthAdjust="spacing" textLength="5" x="1250.2656" y="1210.3104">1</text></g><!--MD5=[9b782cf80e0da88b429c449e67469320]
+link AppServiceFloor to Floor--><g id="link_AppServiceFloor_Floor"><path codeLine="99" d="M947.73,788.47 C1011.04,832.53 1147.43,927.45 1215.56,974.86 " fill="none" id="AppServiceFloor-to-Floor" style="stroke:#FF6655;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#FF6655" points="1219.5,977.6,1214.3832,969.1846,1215.3911,974.751,1209.8248,975.7589,1219.5,977.6" style="stroke:#FF6655;stroke-width:1.0;"/></g><!--MD5=[0c725304df449f72a928faa55afeec43]
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteFloor
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerCreateFloor
+            }
+
+            package "ImplControllers" {
+                class ControllerCreateFloor
+            }
+            ControllerCreateFloor -up-|> IControllerCreateFloor
+        }
+
+        package "Repositories" {
+            class RepoBuilding
+            class RepoFloor
+        }
+
+        RepoBuilding .up.> DBDriver
+        RepoFloor .up.> DBDriver
+
+        RouteFloor ..> IControllerCreateFloor
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceFloor
+            }
+
+            package "ImplAppServices" {
+                class AppServiceFloor
+            }
+
+            AppServiceFloor - -|> IAppServiceFloor
+
+            package "IRepositories" {
+                interface IRepoBuilding
+                interface IRepoFloor
+            }
+
+            RepoBuilding - -|> IRepoBuilding
+            RepoFloor - -|> IRepoFloor
+        }
+
+        ControllerCreateFloor ..> IAppServiceFloor
+
+        AppServiceFloor .up.> IRepoBuilding
+        AppServiceFloor .up.> IRepoFloor
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        package "Value Objects" {
+            package "Floor" as vo_floor {
+                class FloorDescription
+                class FloorNumber
+            }
+        }
+
+        Floor "*" -right-> "1" Building
+        Floor "1" - -> "1" FloorDescription
+        Floor "1" - -> "1" FloorNumber
+
+        AppServiceFloor ..> Floor
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteFloor
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerCreateFloor
+            }
+
+            package "ImplControllers" {
+                class ControllerCreateFloor
+            }
+            ControllerCreateFloor -up-|> IControllerCreateFloor
+        }
+
+        package "Repositories" {
+            class RepoBuilding
+            class RepoFloor
+        }
+
+        RepoBuilding .up.> DBDriver
+        RepoFloor .up.> DBDriver
+
+        RouteFloor ..> IControllerCreateFloor
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceFloor
+            }
+
+            package "ImplAppServices" {
+                class AppServiceFloor
+            }
+
+            AppServiceFloor - -|> IAppServiceFloor
+
+            package "IRepositories" {
+                interface IRepoBuilding
+                interface IRepoFloor
+            }
+
+            RepoBuilding - -|> IRepoBuilding
+            RepoFloor - -|> IRepoFloor
+        }
+
+        ControllerCreateFloor ..> IAppServiceFloor
+
+        AppServiceFloor .up.> IRepoBuilding
+        AppServiceFloor .up.> IRepoFloor
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        package "Value Objects" {
+            package "Floor" as vo_floor {
+                class FloorDescription
+                class FloorNumber
+            }
+        }
+
+        Floor "*" -right-> "1" Building
+        Floor "1" - -> "1" FloorDescription
+        Floor "1" - -> "1" FloorNumber
+
+        AppServiceFloor ..> Floor
+
+    }
+}
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 18:01:30 WEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: PT
+--></g></svg>
