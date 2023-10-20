@@ -1,16 +1,14 @@
 @startuml
 autonumber
 
-actor "??" as actor
+actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-activate actor
-    actor -> sys: Inserts requested data(code, name, description, maxFloorDimensions)
+actor -> sys: POST /buildings
 
-    activate sys
-    sys --> actor : Message: building created / error in data inserted
-    deactivate sys
-deactivate actor
+activate sys
+sys --> actor : building created / error in data
+deactivate sys
 
 
 @enduml
