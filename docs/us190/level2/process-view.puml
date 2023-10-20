@@ -1,17 +1,22 @@
 @startuml
 autonumber
 
-participant "??" as ui
+actor " " as actor
+box "RobDroneIsep"
 participant "MD" as mdr
 
-activate ui
+activate actor
 
-ui -> mdr: post(/floor)
-activate mdr
-    mdr -> mdr: save()
-    mdr --> ui: operation result
-deactivate mdr
+    actor -> mdr: POST /floor
 
-deactivate ui
+    activate mdr
+    alt building not found
+        mdr --> actor : 412: Precondition Failed
+    else floor created successfully
+        mdr --> actor : 201: Created
+    end
+    deactivate mdr
+
+deactivate actor
 
 @enduml

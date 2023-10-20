@@ -1,14 +1,18 @@
 @startuml
 autonumber
 
-actor "??" as actor
+actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: Inserts requested data(code, name, description)
+    actor -> sys: POST /floor
 
     activate sys
-    sys --> actor : Message: floor created / error in data inserted
+    alt building not found
+        sys --> actor : 412: Precondition Failed
+    else floor created successfully
+        sys --> actor : 201: Created
+    end
     deactivate sys
 deactivate actor
 
