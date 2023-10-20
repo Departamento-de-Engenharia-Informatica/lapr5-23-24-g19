@@ -16,6 +16,6 @@ package "<<system>>\nRobDroneGo" {
     [Master Data]
 }
 
-api -left- [Master Data]
+API -left- [Master Data]
 
 @enduml
