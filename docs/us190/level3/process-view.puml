@@ -19,7 +19,7 @@ database "Repository" as repo
 end box
 
 'activate ui
-ui --> r: post(/floor)
+ui --> r: post(/building/{id}/floors)
     activate r
         r -> ctrl : createFloor()
         activate ctrl

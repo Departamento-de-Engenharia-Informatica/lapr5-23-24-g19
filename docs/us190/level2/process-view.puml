@@ -2,12 +2,12 @@
 autonumber
 
 actor " " as actor
-box "RobDroneIsep"
+box "RobDroneGo"
 participant "MD" as mdr
 
 activate actor
 
-    actor -> mdr: POST /floor
+    actor -> mdr: POST /building/{id}/floors
 
     activate mdr
     alt building not found
