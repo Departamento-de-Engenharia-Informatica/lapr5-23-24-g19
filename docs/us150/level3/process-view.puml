@@ -2,43 +2,51 @@
 autonumber
 
 participant "??" as ui
+mainframe MD
+box "Back-End" #LightBlue
 
-participant "MD" as mdr
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
 
-participant "Building" as b
+participant "building:\nBuilding" as b
 participant "Mapper" as map
-participant "DTO" as dto
-
-participant "Repository" as repo
-
+participant "dto:\nDTO" as dto
+end box
+box "Database"
+database "Repository" as repo
+end box
 
 'activate ui
-ui --> mdr: post(/building)
-    activate mdr
-    mdr -> r : post(/building)
+ui --> r: post(/building)
 
     activate r
         r -> ctrl : createBuilding()
             activate ctrl
                 ctrl -> svc : createBuilding()
                 activate svc
-                    svc -> b : create()
-                    activate b
-                    deactivate b
 
-                    svc -> repo : save()
+                    svc --> b **: create()
+                    activate b
+
+
+                    alt building not created
+                        svc --> ctrl : error
+                        deactivate b
+                        ctrl --> r : error (422)
+                        r --> ui : 422: Unprocessable Content
+                    else building created successfully
+                    svc -> repo : save(building)
                     activate repo
                     deactivate repo
 
-                    svc -> map : toDTO()
+                    svc -> map : toDTO(building)
                     activate map
-                        map --> dto : create()
+                        map --> dto **: create(building)
                         activate dto
-                        deactivate dto
+
                         map --> svc : dto
+                        deactivate dto
                     deactivate map
 
                     svc --> ctrl : dto
@@ -47,11 +55,12 @@ ui --> mdr: post(/building)
                 ctrl --> r : dto (201)
             deactivate ctrl
 
-        r --> mdr : dto (201)
-        deactivate r
 
-    mdr --> ui: dto (201)
-    deactivate mdr
+
+
+    r --> ui: Created
+deactivate r
+    end
 'deactivate ui
 
 @enduml

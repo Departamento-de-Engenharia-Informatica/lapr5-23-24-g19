@@ -4,11 +4,17 @@ autonumber
 actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-actor -> sys: POST /buildings
+activate actor
+    actor -> sys: POST /building
 
-activate sys
-sys --> actor : building created / error in data
-deactivate sys
+    activate sys
+    alt building not created
+        sys --> actor : 422: Unprocessable Content
+    else building created successfully
+        sys --> actor : 201: Created
+    end
+    deactivate sys
+deactivate actor
 
 
 @enduml

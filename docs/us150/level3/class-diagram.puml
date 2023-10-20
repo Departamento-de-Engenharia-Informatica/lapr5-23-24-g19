@@ -1,0 +1,112 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteBuilding
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerCreateBuilding
+            }
+
+            package "ImplControllers" {
+                class ControllerCreateBuilding
+            }
+            ControllerCreateBuilding -up-|> IControllerCreateBuilding
+        }
+
+        package "Repositories" {
+            class RepoBuilding
+
+        }
+
+        RepoBuilding .up.> DBDriver
+
+
+        RouteBuilding ..> IControllerCreateBuilding
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceBuilding
+            }
+
+            package "ImplAppServices" {
+                class AppServiceBuilding
+            }
+
+            AppServiceBuilding --|> IAppServiceBuilding
+
+            package "IRepositories" {
+                interface IRepoBuilding
+
+            }
+
+            RepoBuilding --|> IRepoBuilding
+
+        }
+
+        ControllerCreateBuilding ..> IAppServiceBuilding
+
+        AppServiceBuilding .up.> IRepoBuilding
+
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+
+
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+        }
+
+
+
+        package "Value Objects" {
+            package "Building" as vo_building {
+                class Code
+                class Name
+                class Description
+                class Dimension
+            }
+        }
+
+
+        Building "1" --> "1" Code
+        Building "1" --> "1" Name
+        Building "1" --> "1" Description
+        Building "1" --> "1" Dimension
+
+        AppServiceBuilding ..> Building
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+
