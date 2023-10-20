@@ -1,0 +1,57 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+    ArrowFontColor #777777
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+        }
+
+        package "Persistence" {
+        }
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+        }
+
+        package "Repositories" {
+        }
+    }
+
+    package "Application Services" {
+        package "App Services" {
+        }
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+        }
+
+        package "Value Objects" {
+        }
+
+        package "Services" {
+        }
+    }
+    "Routes" ..> "Controllers"
+    "Controllers" ..> "App Services"
+    "App Services" ..> "Aggregates"
+    "App Services" ..> "Value Objects"
+    "App Services" ..> "Services"
+    "Repositories" ..|> "App Services"
+    "Repositories" ..> "Persistence"
+}
+
+@enduml
+
