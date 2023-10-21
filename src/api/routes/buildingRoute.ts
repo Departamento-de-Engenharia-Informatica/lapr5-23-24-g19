@@ -3,8 +3,7 @@ import { celebrate, Joi } from 'celebrate'
 import { Container } from 'typedi'
 
 import IBuildingController from '../../controllers/IControllers/IBuildingController'
-/* FIXME: NAPOLEEEEEEEEEEEEEEES */
-// import IFloorController from '../../controllers/IControllers/IFloorController'
+import IFloorController from '../../controllers/IControllers/IFloorController'
 
 import config from '../../../config'
 
@@ -14,8 +13,7 @@ export default (app: Router) => {
     app.use('/buildings', route)
 
     const buildingController = Container.get(config.controllers.building.name) as IBuildingController
-    /* FIXME: NAPOLEEEEEEEEEEEEEEES */
-    // const floorController = Container.get(config.controllers.floor.name) as IFloorController
+    const floorController = Container.get(config.controllers.floor.name) as IFloorController
 
     route.post(
         '',
@@ -35,14 +33,14 @@ export default (app: Router) => {
 
     )
 
-    // route.post(
-    //     '/:id/floors',
-    //     celebrate({
-    //         body: Joi.object({
-    //             floorNumber: Joi.number().integer().required(),
-    //             description: Joi.string(),
-    //         }),
-    //     }),
-    //     (req, res, next) => floorController.createFloor(req, res, next),
-    // )
+    route.post(
+        '/:id/floors',
+        celebrate({
+            body: Joi.object({
+                floorNumber: Joi.number().integer().required(),
+                description: Joi.string(),
+            }),
+        }),
+        (req, res, next) => floorController.createFloor(req, res, next),
+    )
 }

@@ -1,5 +1,5 @@
 export interface IFloorDTO {
-    buildingId: string
+    buildingCode: string
     floorNumber: number
     description?: string
 }

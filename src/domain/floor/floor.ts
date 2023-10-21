@@ -2,12 +2,12 @@ import { AggregateRoot } from '../../core/domain/AggregateRoot'
 import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 
 import { Result } from '../../core/logic/Result'
+import { Guard } from '../../core/logic/Guard'
 import { FloorNumber } from './floorNumber'
 
 import { IFloorDTO } from '../../dto/IFloorDTO'
-import { Building } from '../building/building'
+import Building from '../building/building'
 import { Description } from '../description'
-import { FloorId } from './floorId'
 
 interface FloorProps {
     building: Building
@@ -18,10 +18,6 @@ interface FloorProps {
 export class Floor extends AggregateRoot<FloorProps> {
     get id(): UniqueEntityID {
         return this._id
-    }
-
-    get FloorId(): FloorId {
-        return FloorId.caller(this.id)
     }
 
     get building(): Building {
@@ -40,20 +36,17 @@ export class Floor extends AggregateRoot<FloorProps> {
         super(props, id)
     }
 
-    public static create(floorDTO: IFloorDTO, building: Building, id?: UniqueEntityID): Result<Floor> {
-        try {
-            const floor = new Floor(
-                {
-                    building,
-                    floorNumber: FloorNumber.create(floorDTO.floorNumber).getValue(),
-                    description: floorDTO.description ? Description.create(floorDTO.description).getValue() : undefined,
-                },
-                id,
-            )
+    public static create(dto: FloorProps, id?: UniqueEntityID): Result<Floor> {
+            const guardResult = Guard.againstNullOrUndefinedBulk([
+                { argument: dto.floorNumber, argumentName: 'floorNumber' },
+                { argument: dto.description, argumentName: 'buildingDescription' },
+                { argument: dto.building, argumentName: 'building' },
+            ])
+        if (!guardResult.succeeded) {
+            return Result.fail<Floor>(guardResult.message)
+        }else{
+            return Result.ok<Floor>(new Floor({ ...dto }, id))
 
-            return Result.ok<Floor>(floor)
-        } catch (e) {
-            return Result.fail<Floor>(e.message)
         }
     }
 }

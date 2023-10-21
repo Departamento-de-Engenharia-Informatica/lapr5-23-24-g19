@@ -49,11 +49,10 @@ export default {
             name: 'BuildingController',
             path: '../controllers/buildingController',
         },
-        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
-        // floor: {
-        //     name: 'FloorController',
-        //     path: '../controllers/floorController'
-        // },
+        floor: {
+            name: 'FloorController',
+            path: '../controllers/floorController'
+        },
     },
 
     repos: {
@@ -70,10 +69,10 @@ export default {
             path: '../repos/buildingRepo',
         },
         /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
-        // floor: {
-        //     name: 'FloorRepo',
-        //     path: '../repos/floorRepo'
-        // },
+        floor: {
+            name: 'FloorRepo',
+            path: '../repos/floorRepo'
+        },
     },
 
     schemas: {
@@ -90,10 +89,10 @@ export default {
             schema: '../persistence/schemas/buildingSchema',
         },
         /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
-        // floor: {
-        //     name: 'FloorSchema',
-        //     path: '../persistence/schemas/floorSchema'
-        // },
+        floor: {
+            name: 'floorSchema',
+            schema: '../persistence/schemas/floorSchema'
+        },
     },
 
     services: {
@@ -106,9 +105,9 @@ export default {
             path: '../services/buildingService',
         },
         /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
-        // floor: {
-        //     name: 'FloorService',
-        //     path: '../services/floorService'
-        // },
+        floor: {
+            name: 'FloorService',
+            path: '../services/floorService'
+        },
     },
 }
