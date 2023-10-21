@@ -1,17 +1,27 @@
 @startuml
 autonumber
 
-participant "??" as ui
+actor " " as actor
+box "RobDroneGo"
 participant "MD" as mdr
 
-activate ui
+activate actor
+    actor -> mdr: POST /building/{id}/floors/{ids}/elevator
 
-ui -> mdr: post(/elevator)
-activate mdr
-    mdr -> mdr: save()
-    mdr --> ui: operation result
-deactivate mdr
+    activate mdr
+    alt building not found
+        mdr --> actor : 412: Precondition Failed
+    else floor not found
+        mdr --> actor : 412: Precondition Failed
+    else elevator not created
+        mdr --> actor : 422: Unprocessable Content
+    else elevator created successfully
+        mdr --> actor : 201: Created
 
-deactivate ui
+    end
+    deactivate mdr
+deactivate actor
+
 
 @enduml
+
