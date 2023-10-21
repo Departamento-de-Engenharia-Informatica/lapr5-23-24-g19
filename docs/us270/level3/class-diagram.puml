@@ -108,14 +108,14 @@ package system {
         }
 
 
-        Elevator "1" --> "1" Code
-        Elevator "1" --> "1" Brand
-        Elevator "1" --> "1" Model
-        Elevator "1" --> "1" SeriesNumber
-        Elevator "1" --> "1" Description
+        Elevator --> "1" Code
+        Elevator --> "1" Brand
+        Elevator --> "1" Model
+        Elevator --> "1" SeriesNumber
+        Elevator --> "1" Description
 
-        Elevator "*" -left-> "1" Building
-        Elevator "1" -right-> "*" Floor
+        Elevator -left-> "1" Building
+        Elevator "1" -up-> "*" Floor
 
 
         AppServiceElevator ..> Elevator

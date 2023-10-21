@@ -18,8 +18,7 @@ box "Database"
 database "Repository" as repo
 end box
 
-'activate ui
-ui --> r: post (/building/{id}/floors/{ids}/elevator)
+ui --> r: post (/buildings/{id}/elevator)
     activate r
         r -> ctrl : createElevator()
         activate ctrl
@@ -29,40 +28,38 @@ ui --> r: post (/building/{id}/floors/{ids}/elevator)
                 activate repo
                 deactivate repo
 
-
                 alt building not found
-
                     svc --> ctrl : error
                     ctrl --> r : error (412)
                     r --> ui : 412: Precondition Failed
+                else building found
+                    svc -> repo: allExist(floors)
 
-                else verifies if floors exist
-
-                    svc -> repo: existFloors(listFloorIds)
                     activate repo
                     deactivate repo
 
-                    alt floor not found
+                    alt floor(s) not found
                         svc --> ctrl : error
                         ctrl --> r : error (412)
                         r --> ui : 412: Precondition Failed
-
-                    else elevator creation
+                    else floors found
                         svc --> elevator** : create()
-                        activate elevator
 
+                        activate elevator
+                        deactivate elevator
 
                         alt elevator not created
                             svc --> ctrl : error
-                            deactivate elevator
                             ctrl --> r : error (422)
-                             r --> ui : 422: Unprocessable Content
+                            r --> ui : 422: Unprocessable Content
 
                         else elevator created successfully
                             svc -> repo : save(elevator)
+
                             activate repo
-                            svc -> map : toDTO(elevator)
+                                svc -> map : toDTO(elevator)
                             deactivate repo
+
                             activate map
                                 map --> dto** : create(elevator)
                                 activate dto
@@ -73,15 +70,11 @@ ui --> r: post (/building/{id}/floors/{ids}/elevator)
                             svc --> ctrl : dto
                             ctrl --> r : dto (201)
                             r --> ui : 201: Created
-
                         end
                     end
                 end
-
             deactivate svc
         deactivate ctrl
     deactivate r
-
-'deactivate ui
 
 @enduml
