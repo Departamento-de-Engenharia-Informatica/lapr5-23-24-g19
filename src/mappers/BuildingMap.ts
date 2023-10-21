@@ -11,12 +11,13 @@ import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 
 export class BuildingMap extends Mapper<Building> {
     public static toDTO(building: Building): IBuildingDTO {
+        const { length, width } = building.maxFloorDimensions
         return {
             code: building.code.value,
             name: building.name.value,
             description: building.description.value,
-            maxFloorDimensions: building.maxFloorDimensions,
-        } as IBuildingDTO
+            maxFloorDimensions: { length, width },
+        }
     }
 
     public static async toDomain(raw: any): Promise<Building> {
@@ -24,8 +25,7 @@ export class BuildingMap extends Mapper<Building> {
         const name = Name.create(raw.name).getValue()
         const description = Description.create(raw.description).getValue()
 
-        const { width, length } = raw.maxFloorDimensions
-        const maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
+        const maxFloorDimensions = MaxFloorDimensions.create(raw.maxFloorLength, raw.maxFloorWidth).getValue()
 
         const result = Building.create(
             { code, name, description, maxFloorDimensions },
@@ -43,9 +43,9 @@ export class BuildingMap extends Mapper<Building> {
     public static toPersistence(building: Building): any {
         return {
             domainId: building.id.toString(),
-            code: building.code,
-            name: building.name,
-            description: building.description,
+            code: building.code.value,
+            name: building.name.value,
+            description: building.description.value,
             maxFloorLength: building.maxFloorDimensions.length,
             maxFloorWidth: building.maxFloorDimensions.width,
         }
