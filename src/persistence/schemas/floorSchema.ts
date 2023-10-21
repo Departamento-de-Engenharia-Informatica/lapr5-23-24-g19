@@ -12,14 +12,12 @@ const Floor = new mongoose.Schema(
         floorNumber: {
             type: String,
             required:true,
-            unique: true,
             index: true,
         },
 
         buildingCode: {
             type: String,
             required:true,
-            unique: true,
             index: true,
         },
 
@@ -30,5 +28,7 @@ const Floor = new mongoose.Schema(
     },
     { timestamps: true },
 )
+
+Floor.index({ floorNumber: 1, buildingCode: 1 }, { unique: true })
 
 export default mongoose.model<IFloorPersistence & mongoose.Document>('Floor', Floor)

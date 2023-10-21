@@ -34,12 +34,6 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>(("Floor not created"));
             }
 
-            if(await this.floorRepo.exists(floorOrError.getValue())){
-                console.log("Floor already exists")
-            }else{
-                console.log("Floor does not exist")
-            }
-
             await this.floorRepo.save(floorOrError.getValue())
 
             const floorDTOResult = FloorMap.toDTO(floorOrError.getValue()) as IFloorDTO
