@@ -45,11 +45,15 @@ export default {
             name: 'RoleController',
             path: '../controllers/roleController',
         },
-
         building: {
             name: 'BuildingController',
             path: '../controllers/buildingController',
         },
+        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
+        // floor: {
+        //     name: 'FloorController',
+        //     path: '../controllers/floorController'
+        // },
     },
 
     repos: {
@@ -65,6 +69,31 @@ export default {
             name: 'BuildingRepo',
             path: '../repos/buildingRepo',
         },
+        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
+        // floor: {
+        //     name: 'FloorRepo',
+        //     path: '../repos/floorRepo'
+        // },
+    },
+
+    schemas: {
+        user: {
+            name: 'userSchema',
+            schema: '../persistence/schemas/userSchema',
+        },
+        role: {
+            name: 'roleSchema',
+            schema: '../persistence/schemas/roleSchema',
+        },
+        building: {
+            name: 'buildingSchema',
+            schema: '../persistence/schemas/buildingSchema',
+        },
+        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
+        // floor: {
+        //     name: 'FloorSchema',
+        //     path: '../persistence/schemas/floorSchema'
+        // },
     },
 
     services: {
@@ -76,5 +105,10 @@ export default {
             name: 'BuildingService',
             path: '../services/buildingService',
         },
+        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
+        // floor: {
+        //     name: 'FloorService',
+        //     path: '../services/floorService'
+        // },
     },
 }
