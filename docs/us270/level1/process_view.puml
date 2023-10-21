@@ -5,13 +5,18 @@ actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: POST /building/{id}/floors
+    actor -> sys: POST /building/{id}/floors/{ids}/elevator
 
     activate sys
-    alt building not created
+    alt building not found
+        sys --> actor : 412: Precondition Failed
+    else floor not found
+        sys --> actor : 412: Precondition Failed
+    else elevator not created
         sys --> actor : 422: Unprocessable Content
-    else building created successfully
+    else elevator created successfully
         sys --> actor : 201: Created
+
     end
     deactivate sys
 deactivate actor
