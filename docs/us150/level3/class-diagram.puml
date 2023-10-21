@@ -88,18 +88,18 @@ package system {
 
         package "Value Objects" {
             package "Building" as vo_building {
-                class Code
-                class Name
-                class Description
-                class Dimension
+                class BuildingCode
+                class BuildingName
+                class BuildingDescription
+                class BuildingDimensions
             }
         }
 
 
-        Building "1" --> "1" Code
-        Building "1" --> "1" Name
-        Building "1" --> "1" Description
-        Building "1" --> "1" Dimension
+        Building "1" --> "1" BuildingCode
+        Building "1" --> "1" BuildingName
+        Building "1" --> "1" BuildingDescription
+        Building "1" --> "1" BuildingDimensions
 
         AppServiceBuilding ..> Building
 
