@@ -3,56 +3,85 @@ autonumber
 
 participant "??" as ui
 
-participant "MD" as mdr
+mainframe MD
+box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
 
-participant "Elevator" as e
+participant "elevator:\nElevator" as elevator
 participant "Mapper" as map
-participant "DTO" as dto
+participant "dto:\nDTO" as dto
+end box
 
-participant "Repository" as repo
-
+box "Database"
+database "Repository" as repo
+end box
 
 'activate ui
-ui --> mdr: post(/elevator)
-    activate mdr
-    mdr -> r : post(/elevator)
-
+ui --> r: post (/building/{id}/floors/{ids}/elevator)
     activate r
         r -> ctrl : createElevator()
-            activate ctrl
-                ctrl -> svc : createElevator()
-                activate svc
-                    note right: validate if building\nis valid,and if floor is valid?
-                    svc -> e : create()
-                    activate e
-                    deactivate e
+        activate ctrl
+            ctrl -> svc : createElevator()
+            activate svc
+                svc -> repo : exists(buildingId)
+                activate repo
+                deactivate repo
 
-                    svc -> repo : save()
+
+                alt building not found
+
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    r --> ui : 412: Precondition Failed
+
+                else verifies if floors exist
+
+                    svc -> repo: existFloors(listFloorIds)
                     activate repo
                     deactivate repo
 
-                    svc -> map : toDTO()
-                    activate map
-                        map --> dto : create()
-                        activate dto
-                        deactivate dto
-                        map --> svc : dto
-                    deactivate map
+                    alt floor not found
+                        svc --> ctrl : error
+                        ctrl --> r : error (412)
+                        r --> ui : 412: Precondition Failed
 
-                    svc --> ctrl : dto
-                deactivate svc
+                    else elevator creation
+                        svc --> elevator** : create()
+                        activate elevator
 
-                ctrl --> r : dto (201)
-            deactivate ctrl
 
-        r --> mdr : dto (201)
-        deactivate r
+                        alt elevator not created
+                            svc --> ctrl : error
+                            deactivate elevator
+                            ctrl --> r : error (422)
+                             r --> ui : 422: Unprocessable Content
 
-    mdr --> ui: dto (201)
-    deactivate mdr
+                        else elevator created successfully
+                            svc -> repo : save(elevator)
+                            activate repo
+                            svc -> map : toDTO(elevator)
+                            deactivate repo
+                            activate map
+                                map --> dto** : create(elevator)
+                                activate dto
+                                    map --> svc : dto
+                                deactivate dto
+                            deactivate map
+
+                            svc --> ctrl : dto
+                            ctrl --> r : dto (201)
+                            r --> ui : 201: Created
+
+                        end
+                    end
+                end
+
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
 'deactivate ui
 
 @enduml
