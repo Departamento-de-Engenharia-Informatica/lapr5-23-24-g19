@@ -1,39 +1,43 @@
 import { Mapper } from '../core/infra/Mapper'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { Building } from '../domain/building/building'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
+
+import Building from '../domain/building/building'
+
+import { BuildingCode as Code } from '../domain/building/buildingCode'
+import { BuildingName as Name } from '../domain/building/buildingName'
+import { Description } from '../domain/description'
+import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 
 export class BuildingMap extends Mapper<Building> {
     public static toDTO(building: Building): IBuildingDTO {
         return {
-            //id: building.id.toString(),
-            code: building.code,
-            name: building.name,
-            description: building.description,
+            code: building.code.value,
+            name: building.name.value,
+            description: building.description.value,
             maxFloorDimensions: building.maxFloorDimensions,
         } as IBuildingDTO
     }
 
     public static async toDomain(raw: any): Promise<Building> {
-        const buildingOrError = Building.create(
-            {
-                code: raw.code,
-                name: raw.name,
-                description: raw.description,
-                maxFloorDimensions: {
-                    length: raw.maxFloorLength,
-                    width: raw.maxFloorWidth,
-                },
-            },
+        const code = Code.create(raw.code).getValue()
+        const name = Name.create(raw.name).getValue()
+        const description = Description.create(raw.description).getValue()
+
+        const { width, length } = raw.maxFloorDimensions
+        const maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
+
+        const result = Building.create(
+            { code, name, description, maxFloorDimensions },
             new UniqueEntityID(raw.domainId),
         )
 
-        if (buildingOrError.isFailure) {
-            console.log(buildingOrError.error)
+        if (result.isFailure) {
+            console.log(result.error)
             return null
         }
 
-        return buildingOrError.isSuccess ? buildingOrError.getValue() : null
+        return result.getValue()
     }
 
     public static toPersistence(building: Building): any {

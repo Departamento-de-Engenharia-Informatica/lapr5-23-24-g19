@@ -10,16 +10,16 @@ import { Result } from '../core/logic/Result'
 
 @Service()
 export default class BuildingController implements IBuildingController {
-    constructor(@Inject(config.services.building.name) private buildingServiceInstance: IBuildingService) {}
+    constructor(@Inject(config.services.building.name) private service: IBuildingService) {}
 
     public async createBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const buildingOrError = (await this.buildingServiceInstance.createBuilding(
+            const buildingOrError = (await this.service.createBuilding(
                 req.body as IBuildingDTO,
             )) as Result<IBuildingDTO>
 
             if (buildingOrError.isFailure) {
-                return res.status(402).send()
+                return res.status(422).send()
             }
 
             const buildingDTO = buildingOrError.getValue()

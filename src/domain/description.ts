@@ -21,11 +21,11 @@ export class Description extends ValueObject<DescriptionProps> {
         const guardResult = Guard.againstNullOrUndefined(description, 'description')
 
         if (!guardResult.succeeded) {
-            return Result.fail<Description>(guardResult.message)
+            return Result.fail(guardResult.message)
         } else if (description.length > MAX_LENGTH) {
-            return Result.fail<Description>('Description should have less than 250 characters')
+            return Result.fail('Description should have less than 250 characters')
         }
 
-        return Result.ok<Description>(new Description({ value: description }))
+        return Result.ok(new Description({ value: description }))
     }
 }

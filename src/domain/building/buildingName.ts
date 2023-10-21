@@ -1,26 +1,27 @@
 import { ValueObject } from '../../core/domain/ValueObject'
 import { Result } from '../../core/logic/Result'
 
-interface BuildingNameProps {
-    value: string
+interface Props {
+    name: string
 }
 
-const maxNameLength = 50
+const maxLength = 50
 
-export class BuildingName extends ValueObject<BuildingNameProps> {
+export class BuildingName extends ValueObject<Props> {
     get value(): string {
-        return this.props.value
+        return this.props.name
     }
 
-    private constructor(props: BuildingNameProps) {
+    private constructor(props: Props) {
         super(props)
     }
 
-    public static create(name: string): Result<BuildingName> {
-        if (!!name === false || name.length > maxNameLength) {
-            return Result.fail<BuildingName>(`The name of the building must have at most ${maxNameLength} characters`)
+    public static create(name?: string): Result<BuildingName> {
+        name = name ?? ''
+        if (name.length > maxLength) {
+            return Result.fail(`The name of the building must have at most ${maxLength} characters`)
         } else {
-            return Result.ok<BuildingName>(new BuildingName({ value: name }))
+            return Result.ok(new BuildingName({ name }))
         }
     }
 }

@@ -2,18 +2,18 @@ import { ValueObject } from '../../core/domain/ValueObject'
 import { Result } from '../../core/logic/Result'
 import { Guard } from '../../core/logic/Guard'
 
-interface BuildingCodeProps {
+interface Props {
     value: string
 }
 
 const codeRegex = /^[A-Za-z ]{1,5}$/
 
-export class BuildingCode extends ValueObject<BuildingCodeProps> {
+export class BuildingCode extends ValueObject<Props> {
     get value(): string {
         return this.props.value
     }
 
-    private constructor(props: BuildingCodeProps) {
+    private constructor(props: Props) {
         super(props)
     }
 
@@ -21,15 +21,16 @@ export class BuildingCode extends ValueObject<BuildingCodeProps> {
         const guardResult = Guard.againstNullOrUndefined(code, 'code')
 
         if (!guardResult.succeeded) {
-            return Result.fail<BuildingCode>(guardResult.message)
+            return Result.fail(guardResult.message)
         }
+        code = code.trim()
 
-        if (!codeRegex.test(code.trim())) {
-            return Result.fail<BuildingCode>(
+        if (!codeRegex.test(code)) {
+            return Result.fail(
                 'Code must contain at most 5 characters, letters and numbers, ' + 'possibly with spaces in-between',
             )
         } else {
-            return Result.ok<BuildingCode>(new BuildingCode({ value: code }))
+            return Result.ok(new BuildingCode({ value: code }))
         }
     }
 }

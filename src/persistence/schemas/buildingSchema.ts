@@ -11,7 +11,7 @@ const Building = new mongoose.Schema(
 
         code: {
             type: String,
-            required: [true, 'Please enter a building code'],
+            required: true,
             unique: true,
             index: true,
         },
@@ -19,24 +19,15 @@ const Building = new mongoose.Schema(
         name: {
             type: String,
             required: false,
-            index: true,
         },
 
         description: {
             type: String,
             required: false,
-            index: true,
         },
 
-        maxFloorLength: {
-            type: Number,
-            index: true,
-        },
-
-        maxFloorWidth: {
-            type: Number,
-            index: true,
-        },
+        maxFloorLength: Number,
+        maxFloorWidth: Number,
     },
     { timestamps: true },
 )
