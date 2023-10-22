@@ -18,7 +18,7 @@ box "Database"
 database "Repository" as repo
 end box
 
-ui --> r: post (/buildings/{id}/elevator)
+ui --> r: post (/buildings/{id}/elevators)
     activate r
         r -> ctrl : createElevator()
         activate ctrl

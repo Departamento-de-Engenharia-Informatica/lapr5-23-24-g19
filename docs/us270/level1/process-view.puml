@@ -5,7 +5,7 @@ actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: POST /buildings/{id}/elevator
+    actor -> sys: POST /buildings/{id}/elevators
     activate sys
 
     alt building not found
@@ -17,7 +17,7 @@ activate actor
     else elevator created successfully
         sys --> actor : 201: Created
     end
-    
+
     deactivate sys
 deactivate actor
 
