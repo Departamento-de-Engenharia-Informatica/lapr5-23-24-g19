@@ -8,7 +8,7 @@ import { BuildingId } from './buildingId'
 
 import { BuildingName as Name } from './buildingName'
 import { BuildingCode as Code } from './buildingCode'
-import { Description } from '../description'
+import { BuildingDescription as Description } from './description'
 import { MaxFloorDimensions } from './maxFloorDimensions'
 
 interface BuildingProps {

@@ -12,7 +12,7 @@ import { IBuildingEditDTO } from '../dto/IBuildingEditDTO'
 import Building  from '../domain/building/building'
 import { BuildingCode } from '../domain/building/buildingCode'
 import { BuildingName } from '../domain/building/buildingName'
-import { Description as BuildingDescription, Description } from '../domain/description'
+import { BuildingDescription } from '../domain/building/description'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 
 @Service()
@@ -64,7 +64,7 @@ export default class BuildingService implements IBuildingService {
     public async getBuildings(): Promise<Result<IBuildingDTO[]>> {
         try {
             const buildings = await this.buildingRepo.findAll();
-        
+
             if (buildings.length === 0) {
                 return Result.fail('Buildings not found');
             } else {
@@ -89,12 +89,12 @@ export default class BuildingService implements IBuildingService {
                 return Result.fail('Building not found')
             }
 
-            //TODO: optimize 
+            //TODO: optimize
             if(dto.name){
                 building.name = BuildingName.create(dto.name).getValue();
             }
             if(dto.description){
-                building.description = Description.create(dto.description).getValue();
+                building.description = BuildingDescription.create(dto.description).getValue();
             }
 
             if(dto.maxFloorDimensions){
@@ -112,8 +112,8 @@ export default class BuildingService implements IBuildingService {
                 }else{
                     width = building.maxFloorDimensions.width
                 }
-                
-                building.maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()                
+
+                building.maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
             }
 
             const buildingRes = await this.buildingRepo.save(building)

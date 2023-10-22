@@ -6,7 +6,7 @@ import Building from '../domain/building/building'
 
 import { BuildingCode as Code } from '../domain/building/buildingCode'
 import { BuildingName as Name } from '../domain/building/buildingName'
-import { Description } from '../domain/description'
+import { BuildingDescription as Description } from '../domain/building/description'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 
 export class BuildingMap extends Mapper<Building> {
