@@ -98,20 +98,20 @@ package system {
 
         package "Value Objects" {
             package "Elevator" as vo_elevator {
-                class Code
+                class Identifier
                 class Brand
                 class Model
-                class SeriesNumber
+                class SerialNumber
                 class Description
 
             }
         }
 
 
-        Elevator --> "1" Code
+        Elevator --> "1" Identifier
         Elevator --> "1" Brand
         Elevator --> "1" Model
-        Elevator --> "1" SeriesNumber
+        Elevator --> "1" SerialNumber
         Elevator --> "1" Description
 
         Elevator -left-> "1" Building
