@@ -5,4 +5,5 @@ import { BuildingCode } from '../../domain/building/buildingCode'
 export default interface IBuildingRepo extends Repo<Building> {
     save(building: Building): Promise<Building>
     findByCode(code: BuildingCode): Promise<Building>
+    findAll(): Promise<Building[]>
 }

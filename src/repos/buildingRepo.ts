@@ -29,29 +29,31 @@ export default class BuildingRepo implements IBuildingRepo {
     }
 
     public async save(building: Building): Promise<Building> {
-        const query = { domainId: building.id.toString() }
+        const query = { code: building.code.value }
 
         const buildingDocument = await this.buildingSchema.findOne(query)
 
         try {
-            // if (buildingDocument === null) {
-            const rawBuilding: any = BuildingMap.toPersistence(building)
-            const buildingCreated = await this.buildingSchema.create(rawBuilding)
+            if (buildingDocument === null) {
+                console.log("Building document null", building.id)
+                const rawBuilding: any = BuildingMap.toPersistence(building)
+                const buildingCreated = await this.buildingSchema.create(rawBuilding)
 
-            return BuildingMap.toDomain(buildingCreated)
-            // } else {
-            //     buildingDocument.code = building.code
-            //     buildingDocument.name = building.name
-            //     buildingDocument.description = building.description
+                return BuildingMap.toDomain(buildingCreated)
+            } else {
+                console.log("Building document not null", building.id.toString())
+                buildingDocument.code = building.code.value
+                buildingDocument.name = building.name.value
+                buildingDocument.description = building.description.value
 
-            //     const { length, width } = building.maxFloorDimensions
-            //     buildingDocument.maxFloorLength = length
-            //     buildingDocument.maxFloorWidth = width
+                const { length, width } = building.maxFloorDimensions
+                buildingDocument.maxFloorLength = length
+                buildingDocument.maxFloorWidth = width
 
-            //     await buildingDocument.save()
+                await buildingDocument.save()
 
-            //     return building
-            // }
+                return building
+            }
         } catch (err) {
             throw err
         }
@@ -66,4 +68,14 @@ export default class BuildingRepo implements IBuildingRepo {
             return null
         }
     }
+
+    public async findAll(): Promise<Building[]> {
+        const records = await this.buildingSchema.find();
+        
+        if (records.length === 0) {
+          return []; // Return an empty array when there are no records
+        }
+        const buildingList = await Promise.all(records.map(record => BuildingMap.toDomain(record)));
+        return buildingList;
+      }
 }

@@ -19,6 +19,7 @@ interface BuildingProps {
 }
 
 export default class Building extends AggregateRoot<BuildingProps> {
+    building: Result<Name>
     get id(): UniqueEntityID {
         return this._id
     }
@@ -34,13 +35,24 @@ export default class Building extends AggregateRoot<BuildingProps> {
     get name(): Name {
         return this.props.name
     }
+    set name(newName: Name){
+        this.props.name = newName
+    }
 
     get description(): Description {
         return this.props.description
     }
 
+    set description( newDescription: Description){
+        this.props.description= newDescription
+    }
+
     get maxFloorDimensions(): MaxFloorDimensions {
         return this.props.maxFloorDimensions
+    }
+
+    set maxFloorDimensions(newDimensions: MaxFloorDimensions){
+        this.props.maxFloorDimensions= newDimensions
     }
 
     private constructor(props: BuildingProps, id?: UniqueEntityID) {

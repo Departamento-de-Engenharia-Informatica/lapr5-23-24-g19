@@ -43,4 +43,39 @@ export default (app: Router) => {
         }),
         (req, res, next) => floorController.createFloor(req, res, next),
     )
+
+    route.patch(
+        '/:id',
+        celebrate({
+            body: Joi.object({
+                name: Joi.string(),
+                description: Joi.string(),
+                maxFloorDimensions: Joi.object({
+                    length: Joi.number().integer(),
+                    width: Joi.number().integer(),
+                }),
+            }),
+        }),
+        (req, res, next) => buildingController.patchBuilding(req, res, next),
+    )
+
+    route.put(
+        '/:id',
+        celebrate({
+            body: Joi.object({
+                name: Joi.string(),
+                description: Joi.string(),
+                maxFloorDimensions: Joi.object({
+                    length: Joi.number().integer().required(),
+                    width: Joi.number().integer().required(),
+                }),
+            }),
+        }),
+        (req, res, next) => buildingController.editBuilding(req, res, next),
+    )
+    route.get(
+        '',
+        (req, res, next) => buildingController.getBuildings(req, res, next),
+    )
+    
 }

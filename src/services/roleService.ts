@@ -48,7 +48,7 @@ export default class RoleService implements IRoleService {
     public async updateRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>> {
         try {
             const role = await this.roleRepo.findByDomainId(roleDTO.id)
-
+            
             if (role === null) {
                 return Result.fail<IRoleDTO>('Role not found')
             } else {
