@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="268px" preserveAspectRatio="none" style="width:247px;height:268px;background:#FFFFFF;" version="1.1" viewBox="0 0 247 268" width="247px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="116.8906" style="stroke:#181818;stroke-width:1.0;" width="10" x="151" y="87.5703"/><rect fill="none" height="94.8906" style="stroke:#000000;stroke-width:1.5;" width="237" x="3" y="102.5703"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="156" x2="156" y1="55.2188" y2="214.4609"/><rect fill="#E2E2F0" height="49.2188" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148" x="82" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="118" y="26.5332">&lt;&lt;system&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134" x="89" y="44.1426">System RobDroneGo</text><rect fill="#E2E2F0" height="49.2188" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148" x="82" y="213.4609"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="118" y="234.9941">&lt;&lt;system&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134" x="89" y="252.6035">System RobDroneGo</text><rect fill="#FFFFFF" height="116.8906" style="stroke:#181818;stroke-width:1.0;" width="10" x="151" y="87.5703"/><polygon fill="#181818" points="139,83.5703,149,87.5703,139,91.5703,143,87.5703" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="0" x2="145" y1="87.5703" y2="87.5703"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="7" x="7" y="82.7139">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="85" x="18" y="82.7139">GET /buildings</text><path d="M3,102.5703 L64,102.5703 L64,110.9219 L54,120.9219 L3,120.9219 L3,102.5703 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/><rect fill="none" height="94.8906" style="stroke:#000000;stroke-width:1.5;" width="237" x="3" y="102.5703"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="16" x="18" y="117.0654">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="115" x="79" y="115.9893">[buildings not found]</text><polygon fill="#181818" points="11,139.2734,1,143.2734,11,147.2734,7,143.2734" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="5" x2="150" y1="143.2734" y2="143.2734"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="7" x="17" y="138.417">2</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="114" x="28" y="138.417">response code: 422</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="3" x2="240" y1="152.2734" y2="152.2734"/><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="87" x="8" y="163.6924">[buildings sent]</text><polygon fill="#181818" points="11,185.4609,1,189.4609,11,193.4609,7,189.4609" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="5" x2="150" y1="189.4609" y2="189.4609"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="7" x="17" y="184.6045">3</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="114" x="28" y="184.6045">response code: 200</text><!--MD5=[9a37a9738f180e127f6fdffd396f8629]
+@startuml
+autonumber
+
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+ [-> sys: GET /buildings
+
+activate sys
+alt buildings not found
+    [<- -sys : response code: 422
+else buildings sent
+    [<- -sys : response code: 200
+end
+deactivate sys
+
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 18:01:30 WEST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: pt
+Country: PT
+--></g></svg>

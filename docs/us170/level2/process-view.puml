@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+box "  <<system>>\nRobDroneGo"
+participant "MD" as mdr
+
+    [-> mdr: GET /buildings
+
+    activate mdr
+    alt buildings
+        [<-- mdr : response code 422
+    else buildings sent
+        [<--mdr : response code 200
+    end
+    deactivate mdr
+
+
+@enduml
