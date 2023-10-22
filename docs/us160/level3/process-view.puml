@@ -1,0 +1,74 @@
+@startuml
+autonumber
+
+mainframe MD
+box "Back-End" #LightBlue
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "building:\nBuilding" as b
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+box "Database"
+database "Repository" as repo
+end box
+
+'activate [
+[-> r: patch /building/{id}
+
+    activate r
+        r -> ctrl : editBuilding(req,res,...)
+            activate ctrl
+                ctrl -> svc : editBuilding(id,dto)
+                activate svc
+                    svc -> repo : findByCode(building)
+                    activate repo
+                    repo --> b **: create()
+                    deactivate repo
+                    alt building not found
+                        svc --> ctrl : error
+                        deactivate b
+                        ctrl --> r : response 422
+                        [<--r : 422: Unprocessable Content
+                    else building exists
+
+                    activate repo
+                    deactivate repo
+
+                    activate b
+
+                    svc -> repo : save(building)
+                    activate repo
+                    deactivate repo
+                    note right of svc
+                        edit building specifications
+                        based on new ones
+                    end note
+
+                    svc -> map : domain2DTO(building)
+                    activate map
+                        map --> dto **: create(building)
+                        activate dto
+
+                        map --> svc : dto
+                        deactivate dto
+                    deactivate map
+
+                    svc --> ctrl : dto
+                deactivate svc
+
+                ctrl --> r : 201
+            deactivate ctrl
+
+
+
+
+    [<--r: Created
+deactivate r
+    end
+'deactivate [
+
+@enduml

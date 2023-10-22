@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys: PATCH /building/{id}
+
+activate sys
+alt building not found/bad params
+    [<-- sys : 422
+else building edited successfully
+    [<--sys  : 201
+end
+deactivate sys
+
+
+
+@enduml

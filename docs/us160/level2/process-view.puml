@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+box "   <<system>>\nRobDroneGo"
+participant "MD" as mdr
+
+
+    [--> mdr: PATCH /building/{id}
+
+    activate mdr
+    alt building not found/bad param
+         [<-- mdr : 422
+    else floor created successfully
+        [<-- mdr : 201
+    end
+    deactivate mdr
+
+@enduml
