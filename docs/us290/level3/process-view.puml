@@ -1,0 +1,68 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "elevator:\nElevator" as floor
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+ui --> r: GET /building/{id}/elevators
+    activate r
+        r -> ctrl : getElevator(req,res)
+        activate ctrl
+            ctrl -> svc : getElevator()
+            activate svc
+                svc -> repo : findByCode(building)
+                activate repo
+                deactivate repo
+
+                alt building not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    ui<--r : 412: Precondition Failed
+                else building found
+
+                    svc -> repo: findAll()
+                    activate repo
+                    deactivate repo
+
+                    alt elevators not found
+                        svc --> ctrl : error
+                        ctrl --> r : error (412)
+                        ui<--r : 412: Precondition Failed
+
+                    else
+
+                        loop for each elevator
+
+                                svc -> map : toDTO(elevator)
+                            activate map
+                                map --> dto** : create(elevator)
+                                activate dto
+                                    map --> svc : dto
+                                deactivate dto
+                            deactivate map
+                        end loop
+                            svc --> ctrl : dto
+                            ctrl --> r : response
+                            ui<-- r : 200: "OK" Sucessful
+
+                    end
+                end
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
+@enduml
