@@ -16,7 +16,7 @@ export class FloorNumber extends ValueObject<FloorNumberProps> {
     }
 
     public static create(floorNumber: number): Result<FloorNumber> {
-        const guardResult = Guard.againstNullOrUndefined(FloorNumber, 'floorNumber')
+        const guardResult = Guard.againstNullOrUndefined(floorNumber, 'floorNumber')
 
         if (!guardResult.succeeded) {
             return Result.fail<FloorNumber>(guardResult.message)
