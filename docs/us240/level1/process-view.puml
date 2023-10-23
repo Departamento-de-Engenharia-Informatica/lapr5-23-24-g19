@@ -1,0 +1,19 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys: POST /passages
+activate sys
+
+alt floors/building not found
+    [<--sys  : 412: Precondition Failed
+else passage not created
+    [<--sys : 422: Unprocessable Content
+else elevator created successfully
+    [<--sys  : 201: Created
+end
+
+deactivate sys
+
+@enduml
