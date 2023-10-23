@@ -53,6 +53,10 @@ export default {
             name: 'FloorController',
             path: '../controllers/floorController'
         },
+        elevator: {
+            name: 'ElevatorController',
+            path: '../controllers/elevatorController'
+        },
     },
 
     repos: {
@@ -68,10 +72,13 @@ export default {
             name: 'BuildingRepo',
             path: '../repos/buildingRepo',
         },
-        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
         floor: {
             name: 'FloorRepo',
             path: '../repos/floorRepo'
+        },
+        elevator: {
+            name: 'ElevatorRepo',
+            path: '../repos/mongo/elevatorRepo',
         },
     },
 
@@ -88,11 +95,14 @@ export default {
             name: 'buildingSchema',
             schema: '../persistence/schemas/buildingSchema',
         },
-        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
         floor: {
             name: 'floorSchema',
             schema: '../persistence/schemas/floorSchema'
         },
+        elevator: {
+            name: 'elevatorSchema',
+            schema: '../persistence/schemas/elevatorSchema'
+        }
     },
 
     services: {
@@ -104,10 +114,13 @@ export default {
             name: 'BuildingService',
             path: '../services/buildingService',
         },
-        /* FIXME: MARCOOOOOOOOOOOOOOOOOO */
         floor: {
             name: 'FloorService',
             path: '../services/floorService'
         },
+        elevator: {
+            name: 'ElevatorService',
+            path: '../services/elevatorService',
+        }
     },
 }

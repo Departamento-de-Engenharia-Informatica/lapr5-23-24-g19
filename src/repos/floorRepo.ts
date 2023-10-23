@@ -7,6 +7,7 @@ import { FloorId } from '../domain/floor/floorId'
 import { FloorMap } from '../mappers/FloorMap'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { json } from 'body-parser'
+import Building from '../domain/building/building'
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
@@ -37,9 +38,9 @@ export default class FloorRepo implements IFloorRepo {
         try {
 
             // if (floorDocument === null) {
-                const rawFloor: any = FloorMap.toPersistence(floor)
-                const floorCreated = await this.floorSchema.create(rawFloor)
-                return FloorMap.toDomain(floorCreated)
+            const rawFloor: any = FloorMap.toPersistence(floor)
+            const floorCreated = await this.floorSchema.create(rawFloor)
+            return FloorMap.toDomain(floorCreated)
             // } else {
             //     floorDocument.floorNumber = floor.floorNumber.value
             //     floorDocument.description = floor.description.value
@@ -52,4 +53,15 @@ export default class FloorRepo implements IFloorRepo {
             throw err
         }
     }
+
+    async find(building: Building, floorNumber: FloorNumber): Promise<Floor> {
+        const query = {
+            buildingId: building.code.value,
+            floorNumber: floorNumber.value,
+        }
+
+        const floor = await this.floorSchema.findOne(query)
+        return FloorMap.toDomain(floor)
+    }
+
 }

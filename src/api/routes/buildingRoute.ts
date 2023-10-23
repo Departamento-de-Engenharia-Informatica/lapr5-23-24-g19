@@ -6,6 +6,7 @@ import IBuildingController from '../../controllers/IControllers/IBuildingControl
 import IFloorController from '../../controllers/IControllers/IFloorController'
 
 import config from '../../../config'
+import IElevatorController from '../../controllers/IControllers/IElevatorController'
 
 const route = Router()
 
@@ -14,6 +15,7 @@ export default (app: Router) => {
 
     const buildingController = Container.get(config.controllers.building.name) as IBuildingController
     const floorController = Container.get(config.controllers.floor.name) as IFloorController
+    const elevatorCtrl = Container.get(config.controllers.elevator.name) as IElevatorController
 
     route.post(
         '',
@@ -28,9 +30,7 @@ export default (app: Router) => {
                 }),
             }),
         }),
-        (req, res, next) => buildingController.createBuilding(req, res, next)
-
-
+        (req, res, next) => buildingController.createBuilding(req, res, next),
     )
 
     route.post(
@@ -73,9 +73,20 @@ export default (app: Router) => {
         }),
         (req, res, next) => buildingController.editBuilding(req, res, next),
     )
-    route.get(
-        '',
-        (req, res, next) => buildingController.getBuildings(req, res, next),
+    route.get('', (req, res, next) => buildingController.getBuildings(req, res, next))
+
+    route.post(
+        '/:id/elevators',
+        celebrate({
+            body: Joi.object({
+                identifier: Joi.number().integer().required(),
+                floors: Joi.array().items(Joi.number().integer().required()).required(),
+                brand: Joi.string(),
+                model: Joi.string(),
+                serialNumber: Joi.string(),
+                description: Joi.string(),
+            }),
+        }),
+        (req, res, next) => elevatorCtrl.createElevator(req, res, next),
     )
-    
 }

@@ -17,6 +17,7 @@ export default async ({ expressApp }) => {
         }
     }
 
+
     await dependencyInjectorLoader(loaderProps)
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded')
 
