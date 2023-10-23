@@ -28,13 +28,13 @@ package system {
     package "Interface Adapters" {
         package "Controllers" {
             package "IControllers" {
-                interface IControllerCreateElevator
+                interface IControllerElevator
             }
 
             package "ImplControllers" {
-                class ControllerCreateElevator
+                class ControllerElevator
             }
-            ControllerCreateElevator -up-|> IControllerCreateElevator
+            ControllerElevator -up-|> IControllerElevator
         }
 
         package "Repositories" {
@@ -47,7 +47,7 @@ package system {
         RepoFloor .up.> DBDriver
         RepoElevator .up.> DBDriver
 
-        RouteElevator ....> IControllerCreateElevator
+        RouteElevator ....> IControllerElevator
     }
 
     package "Application Services" {
@@ -73,7 +73,7 @@ package system {
             RepoElevator --|> IRepoElevator
         }
 
-        ControllerCreateElevator ..> IAppServiceElevator
+        ControllerElevator ..> IAppServiceElevator
 
         AppServiceElevator .up.> IRepoBuilding
         AppServiceElevator .up.> IRepoFloor
