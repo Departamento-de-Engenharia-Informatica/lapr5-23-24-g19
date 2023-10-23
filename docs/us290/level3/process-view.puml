@@ -57,7 +57,7 @@ ui --> r: GET /building/{id}/elevators
                         end loop
                             svc --> ctrl : dto
                             ctrl --> r : response
-                            ui<-- r : 200: "OK" Sucessful
+                            ui<-- r : 200: "OK" Successful
 
                     end
                 end

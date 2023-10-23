@@ -6,7 +6,7 @@ box "RobDroneGo"
 participant "MD" as mdr
 
 activate actor
-    actor -> mdr: PATCH /elevator/{id}
+    actor -> mdr: PATCH/PUT  ( /elevator/{id} )
         activate mdr
 
         alt  elevator not found
@@ -14,7 +14,7 @@ activate actor
             else elevator bad params
             mdr --> actor : 422: Unprocessable Content
         else elevator edited successfully
-            mdr --> actor : 200: Edited
+            mdr --> actor : 200: "OK" Successful
         end
 
     deactivate mdr

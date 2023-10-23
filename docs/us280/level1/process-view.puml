@@ -5,7 +5,7 @@ actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: PATCH /elevator/{id}
+    actor -> sys: PATCH/PUT  ( /elevator/{id} )
     activate sys
 
     alt  elevator not found
@@ -13,7 +13,7 @@ activate actor
         else elevator bad params
         sys --> actor : 422: Unprocessable Content
     else elevator edited successfully
-        sys --> actor : 200: Edited
+        sys --> actor : 200: "OK" Successful
     end
 
     deactivate sys

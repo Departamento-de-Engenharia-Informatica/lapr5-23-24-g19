@@ -16,10 +16,10 @@ end box
 
 box "Database"
 database "Repository" as repo
-participant "elevator:\nElevator" as e
+'participant "elevator:\nElevator" as e
 end box
 
-ui --> r: PATCH (elevators/{id})
+ui --> r: PUT (elevators/{id})
     activate r
             r -> ctrl : editElevator(req,res,...)
                 activate ctrl
@@ -27,12 +27,12 @@ ui --> r: PATCH (elevators/{id})
                     activate svc
                         svc -> repo : findByIdentifier(elevator)
                         activate repo
-                            repo --> e **: create()
+                            'repo --> e **: create()
                         deactivate repo
 
                         alt elevator not found
                             svc --> ctrl : error
-                            ctrl --> r : response 412
+                            ctrl --> r : response 422
                             ui <--r : 412: Precondition Failed
                         else elevator exists
 
@@ -44,19 +44,19 @@ ui --> r: PATCH (elevators/{id})
 
                         alt elevator bad parameters
                             svc --> ctrl : error
-                            ctrl --> r : response 412
+                            ctrl --> r : response 422
                             ui <--r : 422: Unprocessable Content
                         else
-                           svc -> repo : save(building)
+                           svc -> repo : save(elevator)
                            activate repo
                            deactivate repo
 
 
 
 
-                        svc -> map : domain2DTO(building)
+                        svc -> map : domain2DTO(elevator)
                         activate map
-                            map --> dto **: create(building)
+                            map --> dto **: create(elevator)
                             activate dto
 
                             map --> svc : dto
@@ -72,7 +72,7 @@ ui --> r: PATCH (elevators/{id})
 
 
 
-        ui <--r: Edited
+        ui <--r: 200: "OK" Sucessful
         end
      end
     deactivate r

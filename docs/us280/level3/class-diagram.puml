@@ -82,13 +82,7 @@ package system {
                 entity Elevator <<root>> <<entity>>
             }
 
-            package "Building" as a_building {
-                entity Building <<root>> <<entity>>
-            }
 
-            package "Floor" as a_floor {
-                entity Floor <<root>> <<entity>>
-            }
         }
 
         package "Value Objects" {
@@ -109,8 +103,7 @@ package system {
         Elevator --> "1" SerialNumber
         Elevator --> "1" Description
 
-        Elevator -left-> "1" Building
-        Elevator "1" -up-> "*" Floor
+
 
 
         AppServiceElevator ..> Elevator
