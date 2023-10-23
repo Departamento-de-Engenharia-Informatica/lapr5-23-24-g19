@@ -11,7 +11,7 @@ import { BuildingCode as Code } from './buildingCode'
 import { BuildingDescription as Description } from './description'
 import { MaxFloorDimensions } from './maxFloorDimensions'
 
-interface BuildingProps {
+export interface BuildingProps {
     code: Code
     name: Name
     description: Description

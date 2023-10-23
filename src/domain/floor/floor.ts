@@ -9,7 +9,7 @@ import { IFloorDTO } from '../../dto/IFloorDTO'
 import Building from '../building/building'
 import { Description } from '../description'
 
-interface FloorProps {
+export interface FloorProps {
     building: Building
     floorNumber: FloorNumber
     description?: Description
