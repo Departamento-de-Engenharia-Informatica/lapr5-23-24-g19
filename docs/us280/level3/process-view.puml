@@ -1,0 +1,80 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+participant "elevator:\nElevator" as e
+end box
+
+ui --> r: PATCH (elevators/{id})
+    activate r
+            r -> ctrl : editElevator(req,res,...)
+                activate ctrl
+                    ctrl -> svc : editElevator(id,dto)
+                    activate svc
+                        svc -> repo : findByIdentifier(elevator)
+                        activate repo
+                            repo --> e **: create()
+                        deactivate repo
+
+                        alt elevator not found
+                            svc --> ctrl : error
+                            ctrl --> r : response 412
+                            ui <--r : 412: Precondition Failed
+                        else elevator exists
+
+                            note right of svc
+                                edit building specifications
+                                based on new ones
+                            end note
+
+
+                        alt elevator bad parameters
+                            svc --> ctrl : error
+                            ctrl --> r : response 412
+                            ui <--r : 422: Unprocessable Content
+                        else
+                           svc -> repo : save(building)
+                           activate repo
+                           deactivate repo
+
+
+
+
+                        svc -> map : domain2DTO(building)
+                        activate map
+                            map --> dto **: create(building)
+                            activate dto
+
+                            map --> svc : dto
+                            deactivate dto
+                        deactivate map
+
+                        svc --> ctrl : dto
+                    deactivate svc
+
+                    ctrl --> r : 200
+                deactivate ctrl
+
+
+
+
+        ui <--r: Edited
+        end
+     end
+    deactivate r
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+autonumber
+
+actor " " as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+activate actor
+    actor -> sys: PATCH /elevator/{id}
+    activate sys
+
+    alt  elevator not found
+    sys --> actor : 412: Precondition Failed
+        else elevator bad params
+        sys --> actor : 422: Unprocessable Content
+    else elevator edited successfully
+        sys --> actor : 200: Edited
+    end
+
+    deactivate sys
+deactivate actor
+
+@enduml

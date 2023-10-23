@@ -1,0 +1,124 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteElevator
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerEditElevator
+            }
+
+            package "ImplControllers" {
+                class ControllerEditElevator
+            }
+            ControllerEditElevator -up-|> IControllerEditElevator
+        }
+
+        package "Repositories" {
+
+            class RepoElevator
+        }
+
+
+        RepoElevator .up.> DBDriver
+
+        RouteElevator ....> IControllerEditElevator
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceElevator
+            }
+
+            package "ImplAppServices" {
+                class AppServiceElevator
+            }
+
+            AppServiceElevator --|> IAppServiceElevator
+
+            package "IRepositories" {
+
+                interface IRepoElevator
+            }
+
+
+            RepoElevator --|> IRepoElevator
+        }
+
+        ControllerEditElevator ..> IAppServiceElevator
+
+
+        AppServiceElevator .up.> IRepoElevator
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+
+            package "Elevator" as a_elevator {
+                entity Elevator <<root>> <<entity>>
+            }
+
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        package "Value Objects" {
+            package "Elevator" as vo_elevator {
+                class Identifier
+                class Brand
+                class Model
+                class SerialNumber
+                class Description
+
+            }
+        }
+
+
+        Elevator --> "1" Identifier
+        Elevator --> "1" Brand
+        Elevator --> "1" Model
+        Elevator --> "1" SerialNumber
+        Elevator --> "1" Description
+
+        Elevator -left-> "1" Building
+        Elevator "1" -up-> "*" Floor
+
+
+        AppServiceElevator ..> Elevator
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+
