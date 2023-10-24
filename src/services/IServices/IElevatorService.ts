@@ -4,8 +4,6 @@ import { IElevatorDTO } from '../../dto/IElevatorDTO'
 
 export default interface IElevatorService {
     createElevator(elevatorDto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>>
-
-    // FIXME: use ICreatedElevatorDTO @jonasantunes
-    editElevator(identifier: string, dto: IElevatorDTO): Promise<Result<IElevatorDTO>>
-    getElevators(code: string): Promise<Result<IElevatorDTO[]>>
+    editElevator(identifier: number, elevatorDto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>>
+    getElevators(code: string): Promise<Result<ICreatedElevatorDTO[]>>
 }

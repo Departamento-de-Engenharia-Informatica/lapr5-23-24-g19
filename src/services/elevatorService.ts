@@ -13,14 +13,14 @@ import { BuildingCode } from '../domain/building/buildingCode'
 import { FloorNumber } from '../domain/floor/floorNumber'
 
 import Elevator from '../domain/elevator/Elevator'
-import { ElevatorBrand as Brand } from '../domain/elevator/brand'
-import { ElevatorDescription as Description } from '../domain/elevator/description'
-import { ElevatorModel as Model } from '../domain/elevator/model'
-import { ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
+import { ElevatorBrand, ElevatorBrand as Brand } from '../domain/elevator/brand'
+import { ElevatorDescription, ElevatorDescription as Description } from '../domain/elevator/description'
+import { ElevatorModel, ElevatorModel as Model } from '../domain/elevator/model'
+import { ElevatorSerialNumber, ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
 import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 import { ElevatorIdentifier as Identifier } from '../domain/elevator/identifier'
-
+import MongoElevatorDataMap from '../repos/mongo/dataMapper/ElevatorDataMap'
 
 @Service()
 export default class ElevatorService implements IElevatorService {
@@ -94,27 +94,28 @@ export default class ElevatorService implements IElevatorService {
         return Result.ok(ElevatorMap.toDTO(elevator))
     }
 
-    public async editElevator(identifier: string, dto: IElevatorDTO): Promise<Result<IElevatorDTO>> {
+    public async editElevator(identifier: number, dto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>> {
         try {
-            // FIXME: @jonasantunes faz o parseInt no controller
-            const elevatorIdentifier = Identifier.create(parseInt(identifier))
-
-            if (elevatorIdentifier.isFailure) {
-                return Result.fail(elevatorIdentifier.errorValue())
-            }
-
             const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
 
-            const existElevator = await this.repo.existsInBuilding(building, elevatorIdentifier.getValue())
+            if (!building) {
+                return Result.fail('Building not found')
+            }
+
+            const elevatorIdentifier = Identifier.create(identifier).getValue()
+
+            const existElevator = await this.repo.existsInBuilding(building, elevatorIdentifier)
 
             if (existElevator === null) {
                 return Result.fail('Elevator not found')
             }
 
-            const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier.getValue())
+            const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier)
+            /*const elevatorDto = ElevatorMap.toDTO(elevator)
 
-            /* if (dto.brand) {
-                elevator.brand = ElevatorBrand.create(dto.brand).getValue()
+
+            if (dto.brand) {
+                elevatorDto.brand = dto.brand
             }
             if (dto.model) {
                 elevator.model = ElevatorModel.create(dto.model).getValue()
@@ -137,7 +138,7 @@ export default class ElevatorService implements IElevatorService {
         }
     }
 
-    public async getElevators(code: string): Promise<Result<IElevatorDTO[]>> {
+    public async getElevators(code: string): Promise<Result<ICreatedElevatorDTO[]>> {
         try {
             const bCode = BuildingCode.create(code)
 

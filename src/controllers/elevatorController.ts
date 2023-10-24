@@ -5,8 +5,6 @@ import { Inject, Service } from 'typedi'
 import IElevatorController from './IControllers/IElevatorController'
 import IElevatorService from '../services/IServices/IElevatorService'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
-import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { ElevatorIdentifier } from '../domain/elevator/identifier'
 
 @Service()
 export default class ElevatorController implements IElevatorController {
@@ -34,11 +32,9 @@ export default class ElevatorController implements IElevatorController {
     public async putElevator(req: Request, res: Response, next: NextFunction) {
         try {
             const firstId = req.params.id
-            const secondId = req.params.id
 
             const dto = req.body as IElevatorDTO
             dto.buildingId = firstId
-            dto.identifier = parseInt(secondId)
 
             const result = await this.service.createElevator(dto)
 
@@ -60,7 +56,7 @@ export default class ElevatorController implements IElevatorController {
             const dto = req.body as IElevatorDTO
             dto.buildingId = firstId
 
-            const result = await this.service.editElevator(secondId, req.body as IElevatorDTO)
+            const result = await this.service.editElevator(parseInt(secondId), req.body as IElevatorDTO)
 
             if (result.isFailure) {
                 return res.status(422).send()
