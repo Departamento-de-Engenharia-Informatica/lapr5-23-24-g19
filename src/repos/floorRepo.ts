@@ -1,18 +1,21 @@
 import { Service, Inject } from 'typedi'
-import { Document, Model } from 'mongoose'
+import { Document, Model, PipelineStage } from 'mongoose'
 import { IFloorPersistence } from '../dataschema/IFloorPersistence'
-import IFloorRepo from '../services/IRepos/IFloorRepo'
+import IFloorRepo, { BuildingFloorCount } from '../services/IRepos/IFloorRepo'
 import { Floor } from '../domain/floor/floor'
 import { FloorMap } from '../mappers/FloorMap'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import Building from '../domain/building/building'
+import { json } from 'body-parser'
+import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
 import { BuildingCode } from '../domain/building/buildingCode'
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
     private models: any
 
-    constructor(@Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>) { }
+    constructor(@Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
+                @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) { }
 
     private createBaseQuery(): any {
         return {
@@ -45,6 +48,33 @@ export default class FloorRepo implements IFloorRepo {
             return FloorMap.toDomain(floorDocument)
         } else return null
 
+    }
+
+    public async findBuildingsByMinMaxFloors(min: number, max: number): Promise<BuildingFloorCount[]> {
+        const aggregationPipeline = [
+          {
+            $group: {
+              _id: '$buildingCode',
+              floorCount: { $sum: 1 }, // count the number of floors for each building
+            },
+          },
+          {
+            $match: {
+              floorCount: {
+                $gte: min,
+                $lte: max,
+              },
+            },
+          }
+        ]
+
+        return (await this.floorSchema.aggregate(aggregationPipeline as PipelineStage[]))
+                .map(result => {
+                    return {
+                        buildingCode: BuildingCode.create(result._id).getValue(),
+                        floorCount: result.floorCount
+                    }
+                })
     }
 
     public async save(floor: Floor): Promise<Floor> {

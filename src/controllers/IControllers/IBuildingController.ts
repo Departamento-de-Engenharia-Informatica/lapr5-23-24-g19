@@ -5,4 +5,5 @@ export default interface IBuildingController {
     editBuilding(req: Request, res: Response, next: NextFunction)
     patchBuilding(req: Request, res: Response, next: NextFunction)
     getBuildings(req: Request, res: Response, next: NextFunction)
+    getBuildingsByFloors(req: Request, res: Response, next: NextFunction)
 }

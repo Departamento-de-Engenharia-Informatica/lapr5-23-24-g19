@@ -69,7 +69,7 @@ export default class BuildingRepo implements IBuildingRepo {
 
     public async findAll(): Promise<Building[]> {
         const records = await this.buildingSchema.find();
-        
+
         if (records.length === 0) {
           return []; // Return an empty array when there are no records
         }

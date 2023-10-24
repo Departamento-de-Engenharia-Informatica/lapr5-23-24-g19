@@ -6,6 +6,10 @@ import IBuildingController from './IControllers/IBuildingController'
 import IBuildingService from '../services/IServices/IBuildingService'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { BuildingCode } from '../domain/building/buildingCode'
+import { ParamsDictionary } from 'express-serve-static-core'
+import { ParsedQs } from 'qs'
+import { parseInt } from 'lodash'
+import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
 
 @Service()
 export default class BuildingController implements IBuildingController {
@@ -40,7 +44,7 @@ export default class BuildingController implements IBuildingController {
             return next(e)
         }
     }
-    
+
     public async patchBuilding(req: Request, res: Response, next: NextFunction) {
         try {
             const result = await this.service.editBuilding(req.params.id, req.body as IBuildingDTO)
@@ -57,7 +61,6 @@ export default class BuildingController implements IBuildingController {
 
     public async getBuildings(req: Request, res: Response, next: NextFunction) {
         try {
-
             const result = await this.service.getBuildings()
             if (result.isFailure) {
                 return res.status(422).send()
@@ -67,6 +70,32 @@ export default class BuildingController implements IBuildingController {
             return next(e)
         }
     }
-    
+
+    public async getBuildingsByFloors(req: Request, res: Response, next: NextFunction) {
+        try {
+            const minFloors = req.query.minFloors ? parseInt(req.query.minFloors as string) : undefined;
+            const maxFloors = req.query.maxFloors ? parseInt(req.query.maxFloors as string) : undefined;
+
+            if (minFloors !== undefined && maxFloors !== undefined) {
+                if (minFloors > maxFloors) {
+                    return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' });
+                }
+            }
+
+            const dto = req.body as IBuildingMinMaxFloorsDTO
+            dto.minMaxFloors = {min: minFloors, max: maxFloors}
+
+            const result = await this.service.getBuildingsByFloors(dto);
+
+            if (result.isFailure) {
+                return res.status(422).send()
+            }
+
+            return res.json(result.getValue()).status(200);
+        } catch (e) {
+            throw e
+        }
+    }
+
 
 }

@@ -8,6 +8,7 @@ import IFloorController from '../../controllers/IControllers/IFloorController'
 import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 
+
 const route = Router()
 
 export default (app: Router) => {
@@ -83,7 +84,6 @@ export default (app: Router) => {
         }),
         (req, res, next) => buildingController.editBuilding(req, res, next),
     )
-    route.get('', (req, res, next) => buildingController.getBuildings(req, res, next))
 
     route.post(
         '/:id/elevators',
@@ -162,5 +162,23 @@ export default (app: Router) => {
             }),
         }),
         (req, res, next) => elevatorCtrl.getElevators(req, res, next),
+    )
+
+    route.get(
+        '',
+        celebrate({
+            query: {
+                minFloors: Joi.number().integer(),
+                maxFloors: Joi.number().integer(),
+            },
+        }),
+
+        (req, res, next) => {
+            if (req.query.minFloors && req.query.maxFloors) {
+                return buildingController.getBuildingsByFloors(req, res, next);
+            } else {
+                return buildingController.getBuildings(req, res, next);
+            }
+        }
     )
 }

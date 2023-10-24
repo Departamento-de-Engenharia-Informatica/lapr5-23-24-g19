@@ -14,10 +14,16 @@ import { BuildingCode } from '../domain/building/buildingCode'
 import { BuildingName } from '../domain/building/buildingName'
 import { BuildingDescription } from '../domain/building/description'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
+import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
+import { IBuildingFloorNumberDTO } from '../dto/IBuildingFloorNumberDTO'
+import IFloorRepo from './IRepos/IFloorRepo'
+import { Resolver } from 'dns'
+import { BuildingFloorNumberMap } from '../mappers/BuildingFloorNumberMap'
 
 @Service()
 export default class BuildingService implements IBuildingService {
-    constructor(@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo) {}
+    constructor(@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo, 
+                @Inject(config.repos.floor.name) private floorRepo: IFloorRepo) {}
 
     public async createBuilding(dto: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
@@ -70,6 +76,27 @@ export default class BuildingService implements IBuildingService {
             } else {
                 const dtoList = await Promise.all(buildings.map(building => BuildingMap.toDTO(building)));
                 return Result.ok(dtoList);
+            }
+        } catch (e) {
+            throw e
+        }
+    }
+
+    public async getBuildingsByFloors(dto: IBuildingMinMaxFloorsDTO): Promise<Result<IBuildingFloorNumberDTO[]>> {
+        try {
+            const buildingsAndFloorCount = await this.floorRepo.findBuildingsByMinMaxFloors(dto.minMaxFloors.min, dto.minMaxFloors.max);
+
+            if (buildingsAndFloorCount.length == 0) {
+                return Result.fail('Buildings not found')
+            } else {
+                const dtoList = await Promise.all(
+                    buildingsAndFloorCount.map(async (value) => {
+                        const building = await this.buildingRepo.findByCode(value.buildingCode);
+                        return BuildingFloorNumberMap.toDTO(building, value.floorCount);
+                    })
+                );
+
+                return Result.ok(dtoList)
             }
         } catch (e) {
             throw e
