@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi'
-import { Model as MongoModel, Document } from 'mongoose'
+import { Model, Document } from 'mongoose'
 import config from '../../../config'
 import IElevatorPersistence from '../../dataschema/mongo/IElevatorPersistence'
 import Building from '../../domain/building/building'
@@ -8,22 +8,13 @@ import IElevatorRepo, { ElevatorDataMap } from '../../services/IRepos/IElevatorR
 import MongoElevatorDataMap from './dataMapper/ElevatorDataMap'
 import { ElevatorIdentifier } from '../../domain/elevator/identifier'
 
-import IBuildingRepo from '../../services/IRepos/IBuildingRepo'
-import IFloorRepo from '../../services/IRepos/IFloorRepo'
-
 @Service()
 export default class ElevatorRepo implements IElevatorRepo {
     private readonly mapper: ElevatorDataMap<IElevatorPersistence>
 
-    constructor(
-        @Inject(config.schemas.elevator.name) private schema: MongoModel<IElevatorPersistence & Document>,
-
-        // scuffed; this is not supposed to be needed
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
-        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
-    ) {
+    constructor(@Inject(config.schemas.elevator.name) private schema: Model<IElevatorPersistence & Document>) {
         // this shouldn't be needed; check class impl for more info
-        this.mapper = new MongoElevatorDataMap(this.buildingRepo, this.floorRepo)
+        this.mapper = new MongoElevatorDataMap()
     }
 
     async save(t: Elevator): Promise<Elevator> {
@@ -74,7 +65,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         return !!doc === true
     }
 
-    public async findByIdentifier(building: Building, identifier: ElevatorIdentifier): Promise<Elevator> {
+    async findByIdentifier(building: Building, identifier: ElevatorIdentifier): Promise<Elevator> {
         const query: Partial<IElevatorPersistence> = {
             building: building.code.value,
             identifier: identifier.value,
@@ -83,5 +74,13 @@ export default class ElevatorRepo implements IElevatorRepo {
         const doc = await this.schema.findOne(query)
 
         return this.mapper.toDomain(doc)
+    }
+
+    async nextIdentifier(): Promise<ElevatorIdentifier> {
+        const count = (await this.schema.find()).length
+
+        const identifier = ElevatorIdentifier.create(count + 1)
+        if (identifier.isFailure) return Promise.reject('Error generating identifier')
+        return identifier.getValue()
     }
 }

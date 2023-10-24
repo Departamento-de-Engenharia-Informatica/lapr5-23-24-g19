@@ -24,11 +24,8 @@ describe('Elevator Brand', () => {
     })
 
     it('must be alphanumeric', () => {
-        // has spaces
-        let brand = 'Mitsubishi Electric'
-        assert.isNotOk(ElevatorBrand.create(brand).isSuccess)
 
-        brand = 'MitsubishiElectric'
+        let brand = 'MitsubishiElectric'
         assert.isOk(ElevatorBrand.create(brand).isSuccess)
 
         brand = 'Schindler'
@@ -47,5 +44,16 @@ describe('Elevator Brand', () => {
         // clearly not valid
         brand = '!@#!$%!$!AQEQ@%[]1123'
         assert.isNotOk(ElevatorBrand.create(brand).isSuccess)
+    })
+
+    it('can contain spaces', () => {
+        let brand = 'Mitsubishi Electric'
+        assert.isOk(ElevatorBrand.create(brand).isSuccess)
+
+        brand = 'Hyundai Elevator'
+        assert.isOk(ElevatorBrand.create(brand).isSuccess)
+
+        brand = 'TK Elevator'
+        assert.isOk(ElevatorBrand.create(brand).isSuccess)
     })
 })

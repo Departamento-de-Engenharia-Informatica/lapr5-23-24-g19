@@ -5,7 +5,7 @@ interface DescriptionProps {
     value: string
 }
 
-const regex = /^[a-zA-Z0-9]{1,250}$/
+const regex = /^[a-zA-Z0-9 ]{1,250}$/
 
 export class ElevatorDescription extends ValueObject<DescriptionProps> {
     get value(): string {
@@ -21,6 +21,6 @@ export class ElevatorDescription extends ValueObject<DescriptionProps> {
             return Result.fail('Description should have less than 250 characters')
         }
 
-        return Result.ok(new ElevatorDescription({ value: description }))
+        return Result.ok(new ElevatorDescription({ value: description.trim() }))
     }
 }

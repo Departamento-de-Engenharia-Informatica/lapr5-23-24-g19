@@ -1,7 +1,6 @@
 import { Inject, Service } from 'typedi'
 import config from '../../config'
 import { Result } from '../core/logic/Result'
-import { ElevatorIdentifier } from '../domain/elevator/identifier'
 
 import IElevatorService from './IServices/IElevatorService'
 import IElevatorRepo from './IRepos/IElevatorRepo'
@@ -20,6 +19,7 @@ import { ElevatorModel as Model } from '../domain/elevator/model'
 import { ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
 import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
+import { ElevatorIdentifier as Identifier } from '../domain/elevator/identifier'
 
 
 @Service()
@@ -37,8 +37,9 @@ export default class ElevatorService implements IElevatorService {
             return Result.fail('Building not found')
         }
 
-        const identifier = ElevatorIdentifier.create(dto.identifier).getValue()
+        const identifier = await this.repo.nextIdentifier()
 
+        // guard against deletion
         if (await this.repo.existsInBuilding(building, identifier)) {
             return Result.fail(`Elevator already exists with identifier ${identifier.value}`)
         }
@@ -95,7 +96,8 @@ export default class ElevatorService implements IElevatorService {
 
     public async editElevator(identifier: string, dto: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
-            const elevatorIdentifier = ElevatorIdentifier.create(parseInt(identifier))
+            // FIXME: @jonasantunes faz o parseInt no controller
+            const elevatorIdentifier = Identifier.create(parseInt(identifier))
 
             if (elevatorIdentifier.isFailure) {
                 return Result.fail(elevatorIdentifier.errorValue())

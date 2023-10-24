@@ -34,10 +34,21 @@ describe('Elevator Model', () => {
         model = ElevatorModel.create('3300XL')
         assert.isOk(model.isSuccess)
 
-        model = ElevatorModel.create('3300 XL')
+        model = ElevatorModel.create('asd$#!1#%')
         assert.isNotOk(model.isSuccess)
+    })
 
-        model = ElevatorModel.create('asd $#! 1# %')
+    it('can contain spaces', () => {
+        let model = ElevatorModel.create('3300 XL')
+        assert.isOk(model.isSuccess)
+
+        model = ElevatorModel.create('6400 NA')
+        assert.isOk(model.isSuccess)
+
+        model = ElevatorModel.create('Miconic TX')
+        assert.isOk(model.isSuccess)
+
+        model = ElevatorModel.create('as d$ #!1# %')
         assert.isNotOk(model.isSuccess)
     })
 })

@@ -11,4 +11,5 @@ export default interface IElevatorRepo extends Repo<Elevator> {
     inBuilding(building: Building): Promise<Elevator[]>
     existsInBuilding(building: Building, identifier: ElevatorIdentifier): Promise<boolean>
     findByIdentifier(building: Building, identifier: ElevatorIdentifier): Promise<Elevator>
+    nextIdentifier(): Promise<ElevatorIdentifier>
 }

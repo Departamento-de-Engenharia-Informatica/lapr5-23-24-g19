@@ -1,6 +1,5 @@
 export interface IElevatorDTO {
     buildingId: string
-    identifier: number
     floors: number[]
 
     brand?: string

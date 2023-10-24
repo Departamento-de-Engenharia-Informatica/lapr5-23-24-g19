@@ -5,7 +5,7 @@ interface Props {
     value: string
 }
 
-const regex = /^[a-zA-Z0-9]{1,50}$/
+const regex = /^[a-zA-Z0-9 ]{1,50}$/
 
 export class ElevatorModel extends ValueObject<Props> {
     get value(): string {
@@ -21,6 +21,6 @@ export class ElevatorModel extends ValueObject<Props> {
             return Result.fail('Model must be alphanumeric and have no more than 50 characters')
         }
 
-        return Result.ok(new ElevatorModel({ value: model }))
+        return Result.ok(new ElevatorModel({ value: model.trim() }))
     }
 }
