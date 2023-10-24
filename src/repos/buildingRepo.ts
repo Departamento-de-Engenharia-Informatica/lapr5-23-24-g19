@@ -35,13 +35,11 @@ export default class BuildingRepo implements IBuildingRepo {
 
         try {
             if (buildingDocument === null) {
-                console.log("Building document null", building.id)
                 const rawBuilding: any = BuildingMap.toPersistence(building)
                 const buildingCreated = await this.buildingSchema.create(rawBuilding)
 
                 return BuildingMap.toDomain(buildingCreated)
             } else {
-                console.log("Building document not null", building.id.toString())
                 buildingDocument.code = building.code.value
                 buildingDocument.name = building.name.value
                 buildingDocument.description = building.description.value

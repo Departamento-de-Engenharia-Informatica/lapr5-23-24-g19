@@ -57,6 +57,10 @@ export default {
             name: 'ElevatorController',
             path: '../controllers/elevatorController'
         },
+        passage: {
+            name: 'PassageController',
+            path: '../controllers/passageController'
+        },
     },
 
     repos: {
@@ -80,6 +84,10 @@ export default {
             name: 'ElevatorRepo',
             path: '../repos/mongo/elevatorRepo',
         },
+        passage: {
+            name: 'PassageRepo',
+            path: '../repos/passageRepo'
+        },
     },
 
     schemas: {
@@ -102,7 +110,11 @@ export default {
         elevator: {
             name: 'elevatorSchema',
             schema: '../persistence/schemas/elevatorSchema'
-        }
+        },
+        passage: {
+            name: 'passageSchema',
+            schema: '../persistence/schemas/passageSchema'
+        },
     },
 
     services: {
@@ -121,6 +133,10 @@ export default {
         elevator: {
             name: 'ElevatorService',
             path: '../services/elevatorService',
-        }
+        },
+        passage: {
+            name: 'PassageService',
+            path: '../services/passageService'
+        },
     },
 }

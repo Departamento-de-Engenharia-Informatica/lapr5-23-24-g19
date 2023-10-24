@@ -3,11 +3,10 @@ import { Document, Model } from 'mongoose'
 import { IFloorPersistence } from '../dataschema/IFloorPersistence'
 import IFloorRepo from '../services/IRepos/IFloorRepo'
 import { Floor } from '../domain/floor/floor'
-import { FloorId } from '../domain/floor/floorId'
 import { FloorMap } from '../mappers/FloorMap'
 import { FloorNumber } from '../domain/floor/floorNumber'
-import { json } from 'body-parser'
 import Building from '../domain/building/building'
+import { BuildingCode } from '../domain/building/buildingCode'
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
@@ -29,6 +28,23 @@ export default class FloorRepo implements IFloorRepo {
         } else {
             return false
         }
+    }
+    public async findByCodeNumber(buildingCode: BuildingCode, floorNumber: FloorNumber): Promise<Floor> {
+        const query = { buildingCode: buildingCode.value, floorNumber: floorNumber.value }
+        const floorDocument = await this.floorSchema.findOne(query)
+        if (floorDocument != null) {
+            return FloorMap.toDomain(floorDocument)
+        } else return null
+
+    }
+
+    public async findByID(floorID: string): Promise<Floor> {
+        const query = { domainID: floorID}
+        const floorDocument = await this.floorSchema.findOne(query)
+        if (floorDocument != null) {
+            return FloorMap.toDomain(floorDocument)
+        } else return null
+
     }
 
     public async save(floor: Floor): Promise<Floor> {

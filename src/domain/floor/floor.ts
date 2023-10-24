@@ -49,4 +49,8 @@ export class Floor extends AggregateRoot<FloorProps> {
 
         }
     }
+
+    public sameBuilding(floor2: Floor): boolean {
+        return this.building.equals(floor2.building)
+    }
 }
