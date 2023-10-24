@@ -1,9 +1,11 @@
 import { Mapper } from '../core/infra/Mapper'
+
 import Elevator from '../domain/elevator/Elevator'
-import { IElevatorDTO } from '../dto/IElevatorDTO'
+import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 
 export class ElevatorMap extends Mapper<Elevator> {
-    static toDTO(elevator: Elevator): IElevatorDTO {
+
+    static toDTO(elevator: Elevator): ICreatedElevatorDTO {
         return {
             buildingId: elevator.building.code.value,
             floors: elevator.floors.map(f => f.floorNumber.value),

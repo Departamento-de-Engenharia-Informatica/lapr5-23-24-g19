@@ -1,23 +1,26 @@
 import { Inject, Service } from 'typedi'
 import config from '../../config'
 import { Result } from '../core/logic/Result'
-import { BuildingCode } from '../domain/building/buildingCode'
-import Elevator from '../domain/elevator/Elevator'
 import { ElevatorIdentifier } from '../domain/elevator/identifier'
-import { FloorNumber } from '../domain/floor/floorNumber'
-import { IElevatorDTO } from '../dto/IElevatorDTO'
-import { ElevatorMap } from '../mappers/ElevatorMap'
-import IBuildingRepo from './IRepos/IBuildingRepo'
-import IElevatorRepo from './IRepos/IElevatorRepo'
-import IFloorRepo from './IRepos/IFloorRepo'
+
 import IElevatorService from './IServices/IElevatorService'
-import { ElevatorBrand } from '../domain/elevator/brand'
-import { ElevatorModel } from '../domain/elevator/model'
-import { ElevatorSerialNumber } from '../domain/elevator/serialNumber'
-import { ElevatorDescription } from '../domain/elevator/description'
-import MongoElevatorDataMap from '../repos/mongo/dataMapper/ElevatorDataMap'
-import Building from '../domain/building/building'
-import { BuildingMap } from '../mappers/BuildingMap'
+import IElevatorRepo from './IRepos/IElevatorRepo'
+import { ElevatorMap } from '../mappers/ElevatorMap'
+
+import IBuildingRepo from './IRepos/IBuildingRepo'
+import IFloorRepo from './IRepos/IFloorRepo'
+
+import { BuildingCode } from '../domain/building/buildingCode'
+import { FloorNumber } from '../domain/floor/floorNumber'
+
+import Elevator from '../domain/elevator/Elevator'
+import { ElevatorBrand as Brand } from '../domain/elevator/brand'
+import { ElevatorDescription as Description } from '../domain/elevator/description'
+import { ElevatorModel as Model } from '../domain/elevator/model'
+import { ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
+import { IElevatorDTO } from '../dto/IElevatorDTO'
+import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
+
 
 @Service()
 export default class ElevatorService implements IElevatorService {
@@ -27,7 +30,7 @@ export default class ElevatorService implements IElevatorService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
-    async createElevator(dto: IElevatorDTO): Promise<Result<IElevatorDTO>> {
+    async createElevator(dto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>> {
         const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
 
         if (!building) {
@@ -40,21 +43,45 @@ export default class ElevatorService implements IElevatorService {
             return Result.fail(`Elevator already exists with identifier ${identifier.value}`)
         }
 
-        // grab the floors by their number in the building
+        // map the floorId's into the respective Floor object
         const floors =
             (
                 await Promise.all(
                     dto.floors.map(async fNum => {
                         const num = FloorNumber.create(fNum).getValue()
-                        return (await this.floorRepo.find(building, num)) ?? undefined
+                        try {
+                            return await this.floorRepo.find(building, num)
+                        } catch (_) {
+                            return undefined
+                        }
                     }),
                 )
             ).filter(f => f !== null && f !== undefined) ?? []
+
+        if (floors.length < dto.floors.length) {
+            const floorNums = floors.map(f => f.floorNumber.value)
+            const notFound = dto.floors.filter(f => !floorNums.includes(f))
+            return Result.fail(`Some floors were not found: ${notFound}`)
+        } else if (floors.length > dto.floors.length) {
+            // NOTE: This should NOT happen
+            console.log('Somehow more floors were found than specified')
+            return Result.fail('Unknown error while searching for floors')
+        }
+
+        const brand = dto.brand && Brand.create(dto.brand).getValue()
+        const model = dto.model && Model.create(dto.model).getValue()
+        const serialNumber = dto.serialNumber && SerialNumber.create(dto.serialNumber).getValue()
+        const description = dto.description && Description.create(dto.description).getValue()
 
         const result = Elevator.create({
             building,
             identifier,
             floors,
+
+            brand,
+            model,
+            serialNumber,
+            description,
         })
 
         if (result.isFailure) {
