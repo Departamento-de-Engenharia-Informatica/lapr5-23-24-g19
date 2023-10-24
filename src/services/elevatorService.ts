@@ -20,7 +20,6 @@ import { ElevatorSerialNumber, ElevatorSerialNumber as SerialNumber } from '../d
 import { IElevatorDTO } from '../dto/IElevatorDTO'
 import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 import { ElevatorIdentifier as Identifier } from '../domain/elevator/identifier'
-import MongoElevatorDataMap from '../repos/mongo/dataMapper/ElevatorDataMap'
 
 @Service()
 export default class ElevatorService implements IElevatorService {
@@ -111,11 +110,9 @@ export default class ElevatorService implements IElevatorService {
             }
 
             const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier)
-            /*const elevatorDto = ElevatorMap.toDTO(elevator)
-
 
             if (dto.brand) {
-                elevatorDto.brand = dto.brand
+                elevator.brand = ElevatorBrand.create(dto.brand).getValue()
             }
             if (dto.model) {
                 elevator.model = ElevatorModel.create(dto.model).getValue()
@@ -127,8 +124,32 @@ export default class ElevatorService implements IElevatorService {
                 elevator.description = ElevatorDescription.create(dto.description).getValue()
             }
             if (dto.floors) {
-                elevator.floors = dto.floors
-            }*/
+                const floors =
+                    (
+                        await Promise.all(
+                            dto.floors.map(async fNum => {
+                                const num = FloorNumber.create(fNum).getValue()
+                                try {
+                                    return await this.floorRepo.find(building, num)
+                                } catch (_) {
+                                    return undefined
+                                }
+                            }),
+                        )
+                    ).filter(f => f !== null && f !== undefined) ?? []
+
+                if (floors.length < dto.floors.length) {
+                    const floorNums = floors.map(f => f.floorNumber.value)
+                    const notFound = dto.floors.filter(f => !floorNums.includes(f))
+                    return Result.fail(`Some floors were not found: ${notFound}`)
+                } else if (floors.length > dto.floors.length) {
+                    // NOTE: This should NOT happen
+                    console.log('Somehow more floors were found than specified')
+                    return Result.fail('Unknown error while searching for floors')
+                }
+
+                elevator.floors = floors
+            }
 
             const elevatorRes = await this.repo.save(elevator)
 

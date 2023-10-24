@@ -74,4 +74,24 @@ export default class Elevator extends AggregateRoot<Props> {
     get serialNumber(): ElevatorSerialNumber {
         return this.props.serialNumber
     }
+
+    set brand(newBrand: Brand) {
+        this.props.brand = newBrand
+    }
+
+    set model(newModel: Model) {
+        this.props.model = newModel
+    }
+
+    set serialNumber(newSerialNumber: ElevatorSerialNumber) {
+        this.props.serialNumber = newSerialNumber
+    }
+
+    set description(newDescription: Description) {
+        this.props.description = newDescription
+    }
+
+    set floors(newFloors: Floor[]) {
+        this.props.floors = newFloors
+    }
 }
