@@ -1,0 +1,25 @@
+@startuml
+autonumber
+
+actor " " as actor
+box "RobDroneGo"
+participant "MD" as mdr
+
+
+actor -> mdr: GET /passages
+activate actor
+    activate mdr
+    alt floors/building not found
+        mdr --> actor : 412: Precondition Failed
+    else passage not found
+        actor <-- mdr : 412: Precondition Failed
+    else passages sent
+        actor <-- mdr : 200: "OK" Sucessful
+    end
+
+    deactivate mdr
+deactivate actor
+
+
+@enduml
+

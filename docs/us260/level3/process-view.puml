@@ -1,0 +1,88 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+ui --> r: GET /passages
+    activate r
+        r -> ctrl : getPassages(req,res)
+        activate ctrl
+            ctrl -> svc : getPassages()
+            activate svc
+                svc -> repo : findByCode(buildingCode1)
+                activate repo
+                    svc -> repo : findByCode(buildingCode2)
+                deactivate repo
+
+                alt building not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    ui<--r : 412: Precondition Failed
+                else building found
+
+                    svc --> svc: sameBuilding(building)
+                    activate repo
+                    deactivate repo
+
+                    alt same building
+                        svc --> ctrl : error
+                        ctrl --> r : error (412)
+                        ui<--r : 412: Precondition Failed
+
+                    else different building
+                        svc -> repo : findByCode(floorNumber1)
+                        activate repo
+                        deactivate repo
+                        svc -> repo : findByCode(floorNumber2)
+                        activate repo
+                                                    deactivate repo
+
+                        alt floor not found
+                            svc --> ctrl : error
+                            ctrl --> r : error (412)
+                            ui<--r : 412: Precondition Failed
+                        else
+                            svc -> repo : passagesBetweenBuildings()
+                            activate repo
+                            deactivate repo
+
+                        alt passages not found
+                            svc --> ctrl : error
+                            ctrl --> r : error (412)
+                            ui<--r : 412: Precondition Failed
+                        else
+                            loop for each passage
+                                 svc -> map : toDTO(passage)
+                                activate map
+                                    map --> dto** : create(passage)
+                                    activate dto
+                                        map --> svc : dto
+                                    deactivate dto
+                                deactivate map
+                            end loop
+                                svc --> ctrl : dto
+                                ctrl --> r : response
+                                ui<-- r : 200: "OK" Successful
+                            end
+                        end
+                    end
+                end
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
+@enduml
