@@ -59,7 +59,7 @@ end box
                         deactivate dto
                     deactivate map
                 end loop
-                    svc --> ctrl : dto
+                    svc --> ctrl : dtoList
                     ctrl --> r : response
                     [<-- r : response code 200
                 end
