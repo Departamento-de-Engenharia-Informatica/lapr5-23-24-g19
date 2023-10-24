@@ -110,4 +110,18 @@ export default class FloorRepo implements IFloorRepo {
         return FloorMap.toDomain(floor)
     }
 
+    public async findAllInBuilding(building: Building): Promise<Floor[]> {
+        const query = {
+            buildingId: building.code.value,
+        }
+
+        const records = await this.floorSchema.find(query)
+
+        if (records.length === 0) {
+            return []
+        }
+        const passageList = await Promise.all(records.map(record => FloorMap.toDomain(record)))
+
+        return passageList
+    }
 }
