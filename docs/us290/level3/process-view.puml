@@ -34,7 +34,7 @@ ui --> r: GET /building/{id}/elevators
                     ui<--r : 412: Precondition Failed
                 else building found
 
-                    svc -> repo: findAll()
+                    svc -> repo: inBuilding(building)
                     activate repo
                     deactivate repo
 

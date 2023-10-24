@@ -71,4 +71,18 @@ export default class ElevatorController implements IElevatorController {
             return next(e)
         }
     }
+
+    public async getElevators(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.getElevators(req.params.id)
+
+            if (result.isFailure) {
+                return res.status(422).send()
+            }
+
+            return res.json(result.getValue()).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
 }

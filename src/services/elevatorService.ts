@@ -16,6 +16,8 @@ import { ElevatorModel } from '../domain/elevator/model'
 import { ElevatorSerialNumber } from '../domain/elevator/serialNumber'
 import { ElevatorDescription } from '../domain/elevator/description'
 import MongoElevatorDataMap from '../repos/mongo/dataMapper/ElevatorDataMap'
+import Building from '../domain/building/building'
+import { BuildingMap } from '../mappers/BuildingMap'
 
 @Service()
 export default class ElevatorService implements IElevatorService {
@@ -101,6 +103,33 @@ export default class ElevatorService implements IElevatorService {
             const elevatorRes = await this.repo.save(elevator)
 
             return Result.ok(ElevatorMap.toDTO(elevatorRes))
+        } catch (e) {
+            throw e
+        }
+    }
+
+    public async getElevators(code: string): Promise<Result<IElevatorDTO[]>> {
+        try {
+            const bCode = BuildingCode.create(code)
+
+            if (bCode.isFailure) {
+                return Result.fail(bCode.errorValue())
+            }
+
+            const building = await this.buildingRepo.findByCode(bCode.getValue())
+
+            if (building === null) {
+                return Result.fail('Building not found')
+            }
+
+            const elevators = await this.repo.inBuilding(building)
+
+            if (elevators.length === 0) {
+                return Result.fail('Elevators not found')
+            } else {
+                const dtoList = await Promise.all(elevators.map(elevator => ElevatorMap.toDTO(elevator)))
+                return Result.ok(dtoList)
+            }
         } catch (e) {
             throw e
         }

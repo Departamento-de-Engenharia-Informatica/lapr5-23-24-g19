@@ -147,4 +147,23 @@ export default (app: Router) => {
         }),
         (req, res, next) => elevatorCtrl.putElevator(req, res, next),
     )
+
+    route.get(
+        '/:id',
+        celebrate({
+            body: Joi.object({
+                name: Joi.string(),
+                description: Joi.string(),
+                maxFloorDimensions: Joi.object({
+                    length: Joi.number()
+                        .integer()
+                        .required(),
+                    width: Joi.number()
+                        .integer()
+                        .required(),
+                }),
+            }),
+        }),
+        (req, res, next) => elevatorCtrl.getElevators(req, res, next),
+    )
 }
