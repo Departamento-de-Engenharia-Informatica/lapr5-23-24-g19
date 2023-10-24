@@ -1,15 +1,15 @@
-import { Inject, Service } from "typedi";
+import { Inject, Service } from 'typedi'
 import { Model as MongoModel, Document } from 'mongoose'
-import config from "../../../config";
-import IElevatorPersistence from "../../dataschema/mongo/IElevatorPersistence";
-import Building from "../../domain/building/building";
-import Elevator from "../../domain/elevator/Elevator";
-import IElevatorRepo, { ElevatorDataMap } from "../../services/IRepos/IElevatorRepo";
-import MongoElevatorDataMap from "./dataMapper/ElevatorDataMap";
-import { ElevatorIdentifier } from "../../domain/elevator/identifier";
+import config from '../../../config'
+import IElevatorPersistence from '../../dataschema/mongo/IElevatorPersistence'
+import Building from '../../domain/building/building'
+import Elevator from '../../domain/elevator/Elevator'
+import IElevatorRepo, { ElevatorDataMap } from '../../services/IRepos/IElevatorRepo'
+import MongoElevatorDataMap from './dataMapper/ElevatorDataMap'
+import { ElevatorIdentifier } from '../../domain/elevator/identifier'
 
-import IBuildingRepo from "../../services/IRepos/IBuildingRepo";
-import IFloorRepo from "../../services/IRepos/IFloorRepo";
+import IBuildingRepo from '../../services/IRepos/IBuildingRepo'
+import IFloorRepo from '../../services/IRepos/IFloorRepo'
 
 @Service()
 export default class ElevatorRepo implements IElevatorRepo {
@@ -51,7 +51,6 @@ export default class ElevatorRepo implements IElevatorRepo {
         } catch (err) {
             throw err
         }
-
     }
     async exists(t: Elevator): Promise<boolean> {
         return this.existsInBuilding(t.building, t.identifier)
@@ -65,7 +64,6 @@ export default class ElevatorRepo implements IElevatorRepo {
     }
 
     async existsInBuilding(building: Building, identifier: ElevatorIdentifier): Promise<boolean> {
-
         const query: Partial<IElevatorPersistence> = {
             building: building.code.value,
             identifier: identifier.value,
@@ -74,5 +72,16 @@ export default class ElevatorRepo implements IElevatorRepo {
         const doc = await this.schema.findOne(query)
 
         return !!doc === true
+    }
+
+    public async findByIdentifier(building: Building, identifier: ElevatorIdentifier): Promise<Elevator> {
+        const query: Partial<IElevatorPersistence> = {
+            building: building.code.value,
+            identifier: identifier.value,
+        }
+
+        const doc = await this.schema.findOne(query)
+
+        return this.mapper.toDomain(doc)
     }
 }

@@ -11,7 +11,7 @@ export class ElevatorMap extends Mapper<Elevator> {
             model: elevator.model?.value,
             brand: elevator.brand?.value,
             serialNumber: elevator.serialNumber?.value,
-            description: elevator.description?.value
+            description: elevator.description?.value,
         }
     }
 }

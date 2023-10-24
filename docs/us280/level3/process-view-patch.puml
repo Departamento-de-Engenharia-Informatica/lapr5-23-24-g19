@@ -23,7 +23,7 @@ ui --> r: PATCH (elevators/{id})
     activate r
             r -> ctrl : patchElevator(req,res,...)
                 activate ctrl
-                    ctrl -> svc : patchElevator(id,dto)
+                    ctrl -> svc : editElevator(id,dto)
                     activate svc
                         svc -> repo : findByIdentifier(elevator)
                         activate repo
