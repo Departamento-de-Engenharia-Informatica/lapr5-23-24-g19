@@ -1,0 +1,111 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteBuilding
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerBuilding
+            }
+
+            package "ImplControllers" {
+                class ControllerBuilding
+            }
+            ControllerBuilding -up-|> IControllerBuilding
+        }
+
+        package "Repositories" {
+            class BuildingRepo
+            class FloorRepo
+        }
+
+        BuildingRepo .up.> DBDriver
+        FloorRepo .up.> DBDriver
+
+        RouteBuilding ..> IControllerBuilding
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceBuilding
+            }
+
+            package "ImplAppServices" {
+                class AppServiceBuilding
+            }
+
+            AppServiceBuilding --|> IAppServiceBuilding
+
+            package "IRepositories" {
+                interface IBuildingRepo
+                interface IFloorRepo
+            }
+
+            BuildingRepo --|> IBuildingRepo
+            FloorRepo --|> IFloorRepo
+
+        }
+
+        ControllerBuilding ..> IAppServiceBuilding
+
+        AppServiceBuilding .up.> IBuildingRepo
+        AppServiceBuilding .up.> IFloorRepo
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        Building "1" --> "*" Floor
+
+
+        package "Value Objects" {
+                package "Building" as vo_building {
+                class BuildingCode
+                class BuildingName
+                class Description
+                class BuildingDimensions
+            }
+        }
+        Building "1" --> "1" BuildingCode
+        Building "1" --> "1" BuildingName
+        Building "1" --> "1" Description
+        Building "1" --> "1" BuildingDimensions
+
+        AppServiceBuilding ..> Building
+    }
+}
+
+@enduml
+
