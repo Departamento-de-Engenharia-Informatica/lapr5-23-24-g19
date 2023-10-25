@@ -1,0 +1,21 @@
+@startuml
+autonumber
+
+actor " " as actor
+box "RobDroneGo"
+participant "MD" as mdr
+
+activate actor
+
+    actor -> mdr: GET /robots
+
+    activate mdr
+    alt robots not found
+        actor <-- mdr : 412: Precondition Failed
+    else robots sent
+        actor <--mdr : 200: "OK" Successful
+    end
+
+deactivate mdr
+deactivate actor
+@enduml
