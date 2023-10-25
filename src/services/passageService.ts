@@ -10,10 +10,6 @@ import IPassageService from './IServices/IPassageService'
 import IPassageRepo from './IRepos/IPassageRepo'
 import { Passage } from '../domain/passage/passage'
 import { PassageMap } from '../mappers/PassageMap'
-import Building from '../domain/building/building'
-import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { BuildingMap } from '../mappers/BuildingMap'
-import { IElevatorDTO } from '../dto/IElevatorDTO'
 
 @Service()
 export default class PassageService implements IPassageService {
@@ -78,7 +74,7 @@ export default class PassageService implements IPassageService {
             if (passages.length === 0) {
                 return Result.fail('Buildings not found')
             } else {
-                const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
                 return Result.ok(dtoList)
             }
         } catch (e) {
@@ -99,7 +95,7 @@ export default class PassageService implements IPassageService {
             }
 
             const allPassages = await this.passageRepo.findAll()
-            const dtoList = await Promise.all(allPassages.map(passage => PassageMap.toDTO(passage)))
+            const dtoList = await Promise.all(allPassages.map((passage) => PassageMap.toDTO(passage)))
 
             const passages = await this.passageRepo.passagesBetweenBuildings(
                 dtoList,
@@ -110,7 +106,7 @@ export default class PassageService implements IPassageService {
             if (passages.length === 0) {
                 return Result.fail('Buildings not found')
             } else {
-                const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
                 return Result.ok(dtoList)
             }
         } catch (e) {

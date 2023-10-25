@@ -6,7 +6,12 @@ node_modules/
 
 # Visual Studio Code
 .vscode/
+
+# IntellIJ
 .idea/
+
+# Neovim
+.nvimrc
 
 # Logs
 logs/

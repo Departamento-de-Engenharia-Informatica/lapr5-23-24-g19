@@ -6,7 +6,6 @@ import { Floor } from '../domain/floor/floor'
 import { FloorMap } from '../mappers/FloorMap'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import Building from '../domain/building/building'
-import { json } from 'body-parser'
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
 import { BuildingCode } from '../domain/building/buildingCode'
 
@@ -14,8 +13,10 @@ import { BuildingCode } from '../domain/building/buildingCode'
 export default class FloorRepo implements IFloorRepo {
     private models: any
 
-    constructor(@Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
-                @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) { }
+    constructor(
+        @Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
+        @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
+    ) {}
 
     private createBaseQuery(): any {
         return {
@@ -38,43 +39,40 @@ export default class FloorRepo implements IFloorRepo {
         if (floorDocument != null) {
             return FloorMap.toDomain(floorDocument)
         } else return null
-
     }
 
     public async findByID(floorID: string): Promise<Floor> {
-        const query = { domainID: floorID}
+        const query = { domainID: floorID }
         const floorDocument = await this.floorSchema.findOne(query)
         if (floorDocument != null) {
             return FloorMap.toDomain(floorDocument)
         } else return null
-
     }
 
     public async findBuildingsByMinMaxFloors(min: number, max: number): Promise<BuildingFloorCount[]> {
         const aggregationPipeline = [
-          {
-            $group: {
-              _id: '$buildingCode',
-              floorCount: { $sum: 1 }, // count the number of floors for each building
+            {
+                $group: {
+                    _id: '$buildingCode',
+                    floorCount: { $sum: 1 }, // count the number of floors for each building
+                },
             },
-          },
-          {
-            $match: {
-              floorCount: {
-                $gte: min,
-                $lte: max,
-              },
+            {
+                $match: {
+                    floorCount: {
+                        $gte: min,
+                        $lte: max,
+                    },
+                },
             },
-          }
         ]
 
-        return (await this.floorSchema.aggregate(aggregationPipeline as PipelineStage[]))
-                .map(result => {
-                    return {
-                        buildingCode: BuildingCode.create(result._id).getValue(),
-                        floorCount: result.floorCount
-                    }
-                })
+        return (await this.floorSchema.aggregate(aggregationPipeline as PipelineStage[])).map((result) => {
+            return {
+                buildingCode: BuildingCode.create(result._id).getValue(),
+                floorCount: result.floorCount,
+            }
+        })
     }
 
     public async findByBuildingCode(code: BuildingCode): Promise<Floor[]> {
@@ -84,11 +82,11 @@ export default class FloorRepo implements IFloorRepo {
 
         const records = await this.floorSchema.find(query)
 
-        if (records.length == 0){
+        if (records.length == 0) {
             return []
         }
 
-        const floorList = await Promise.all(records.map(record => FloorMap.toDomain(record)))
+        const floorList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
         return floorList
     }
 
@@ -97,7 +95,6 @@ export default class FloorRepo implements IFloorRepo {
 
         const floorDocument = await this.floorSchema.findOne(query)
         try {
-
             const rawFloor: any = FloorMap.toPersistence(floor)
             if (floorDocument === null) {
                 const floorCreated = await this.floorSchema.create(rawFloor)
@@ -105,7 +102,7 @@ export default class FloorRepo implements IFloorRepo {
             } else {
                 floorDocument.floorNumber = rawFloor.floorNumber
                 floorDocument.buildingCode = rawFloor.buildingCode
-                floorDocument.description= rawFloor.buildingCode
+                floorDocument.description = rawFloor.buildingCode
                 floorDocument.map = rawFloor.map
 
                 await floorDocument.save()
@@ -128,7 +125,7 @@ export default class FloorRepo implements IFloorRepo {
 
     public async findAllInBuilding(building: Building): Promise<Floor[]> {
         const query = {
-            buildingId: building.code.value,
+            buildingCode: building.code.value,
         }
 
         const records = await this.floorSchema.find(query)
@@ -136,7 +133,7 @@ export default class FloorRepo implements IFloorRepo {
         if (records.length === 0) {
             return []
         }
-        const passageList = await Promise.all(records.map(record => FloorMap.toDomain(record)))
+        const passageList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
 
         return passageList
     }

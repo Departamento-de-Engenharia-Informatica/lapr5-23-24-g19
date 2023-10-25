@@ -8,7 +8,6 @@ import IFloorController from '../../controllers/IControllers/IFloorController'
 import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 
-
 const route = Router()
 
 export default (app: Router) => {
@@ -188,11 +187,11 @@ export default (app: Router) => {
 
         (req, res, next) => {
             if (req.query.minFloors && req.query.maxFloors) {
-                return buildingController.getBuildingsByFloors(req, res, next);
+                return buildingController.getBuildingsByFloors(req, res, next)
             } else {
-                return buildingController.getBuildings(req, res, next);
+                return buildingController.getBuildings(req, res, next)
             }
-        }
+        },
     )
 
     route.patch(
@@ -203,22 +202,23 @@ export default (app: Router) => {
                     length: Joi.number().required(),
                     width: Joi.number().required(),
                 }),
-                mapContent: Joi.array()
-                    .items(Joi.array().items(Joi.number().required())),
+                mapContent: Joi.array().items(Joi.array().items(Joi.number().required())),
                 passages: Joi.array().items({
                     x: Joi.number().required(),
-                    y: Joi.number().required()
+                    y: Joi.number().required(),
                 }),
                 elevators: Joi.array().items({
                     x: Joi.number().required(),
-                    y: Joi.number().required()
+                    y: Joi.number().required(),
                 }),
                 rooms: Joi.array().items({
                     x: Joi.number().required(),
-                    y: Joi.number().required()
+                    y: Joi.number().required(),
                 }),
             }),
         }),
         (req, res, next) => floorController.updateMap(req, res, next),
-    );
+    )
+
+    route.get('/:id/floors/passages', (req, res, next) => floorController.floorsWithPassage(req, res, next))
 }

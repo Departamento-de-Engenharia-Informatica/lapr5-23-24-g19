@@ -4,15 +4,12 @@ import { IPassagePersistence } from '../dataschema/IPassagePersistence'
 import IPassageRepo from '../services/IRepos/IPassageRepo'
 import { Passage } from '../domain/passage/passage'
 import { PassageMap } from '../mappers/PassageMap'
-import { Console, error } from 'console'
-import Building from '../domain/building/building'
-import { BuildingMap } from '../mappers/BuildingMap'
 import { BuildingCode } from '../domain/building/buildingCode'
 import { Floor } from '../domain/floor/floor'
 import { IPassageDTO } from '../dto/IPassageDTO'
 
 @Service()
-export default class passageRepo implements IPassageRepo {
+export default class PassageRepo implements IPassageRepo {
     private models: any
 
     constructor(@Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>) {}
@@ -84,7 +81,7 @@ export default class passageRepo implements IPassageRepo {
         if (records.length === 0) {
             return [] // Return an empty array when there are no records
         }
-        const passageList = await Promise.all(records.map(record => PassageMap.toDomain(record)))
+        const passageList = await Promise.all(records.map((record) => PassageMap.toDomain(record)))
 
         return passageList
     }
@@ -98,17 +95,58 @@ export default class passageRepo implements IPassageRepo {
             const buildingCode2 = codey.value
 
             const passages = dto.find(
-                (info => info.floor1.buildingCode === buildingCode1) &&
-                    (info => info.floor2.buildingCode === buildingCode2),
+                ((info) => info.floor1.buildingCode === buildingCode1) &&
+                    ((info) => info.floor2.buildingCode === buildingCode2),
             )
 
             const doc = await this.passageSchema.find(passages)
 
-            const passageList = await Promise.all(doc.map(record => PassageMap.toDomain(record)))
+            const passageList = await Promise.all(doc.map((record) => PassageMap.toDomain(record)))
 
             return passageList
         } catch (error) {
             throw error
         }
+    }
+
+    async floorsWithPassage(buildingFloors: Floor[]): Promise<Floor[]> {
+        type QueryResult = { matchedField: string }
+
+        const floorIDs = buildingFloors.map((f) => f.id.toString())
+        console.log(`Floor IDs: ${floorIDs}`)
+
+        const results: QueryResult[] = await this.passageSchema.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { floor1ID: { $in: floorIDs } },
+                        { floor2ID: { $in: floorIDs } }
+                    ],
+                },
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude _id from result
+                    matchedField: {
+                        $cond: {
+                            if: { $in: ['$floor1ID', floorIDs] },
+                            then: '$floor1ID',
+                            else: '$floor2ID',
+                        },
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: '$matchedField',
+                    matchedField: { $first: '$matchedField' },
+                },
+            },
+        ])
+
+        console.log(`Results (${results.length})`)
+        results.forEach((r) => console.log(`res: ${JSON.stringify(r)}`))
+
+        return results.map(({ matchedField: floorId }) => buildingFloors.find((f) => f.id.toString() == floorId))
     }
 }
