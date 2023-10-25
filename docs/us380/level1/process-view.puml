@@ -1,0 +1,19 @@
+@startuml
+autonumber
+
+actor " " as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+
+actor-> sys: GET /robots
+activate actor
+    activate sys
+    alt robots not found
+        actor <--sys : 412: Precondition Failed
+    else robots sent
+        actor <--sys : 200: "OK" Successful
+end
+deactivate sys
+
+
+@enduml

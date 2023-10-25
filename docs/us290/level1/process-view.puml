@@ -14,7 +14,7 @@ actor -> sys: GET /building/{id}/elevators
     else elevators not found
         actor <-- sys : 412: Precondition Failed
     else elevators sent
-        actor <-- sys : 200: "OK" Sucessful
+        actor <-- sys : 200: "OK" Successful
     end
 
 

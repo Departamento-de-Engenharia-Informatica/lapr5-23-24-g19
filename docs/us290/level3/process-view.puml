@@ -9,7 +9,7 @@ participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
 
-participant "elevator:\nElevator" as floor
+
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
 end box
