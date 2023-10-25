@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys: GET /buildings/:id/floors/passages
+
+activate sys
+    alt building not found
+        [<- sys : response code 404
+    else no passages exist
+        [<- sys : response code 404
+    else floors with passages found
+        [<- sys : response code 200
+    end
+deactivate sys
+
+@enduml

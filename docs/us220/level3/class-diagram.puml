@@ -1,0 +1,106 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        package "Routes" {
+            class PassageRoute
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IPassageController
+            }
+
+            package "ImplControllers" {
+                class PassageController
+            }
+            PassageController -up-|> IPassageController
+        }
+
+        package "Repositories" {
+            class BuildingRepo
+            class PassageRepo
+        }
+
+        BuildingRepo .up.> DBDriver
+        PassageRepo .up.> DBDriver
+
+        PassageRoute ....> IPassageController
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppPassageService
+            }
+
+            package "ImplAppServices" {
+                class AppPassageService
+            }
+
+            AppPassageService --|> IAppPassageService
+
+            package "IRepositories" {
+                interface IBuildingRepo
+                interface IPassageRepo
+            }
+
+            BuildingRepo --|> IBuildingRepo
+            PassageRepo --|> IPassageRepo
+        }
+
+        PassageController ..> IAppPassageService
+
+        AppPassageService .up.> IBuildingRepo
+        AppPassageService .up.> IPassageRepo
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Passage" as a_Passage {
+                entity Passage <<root>> <<entity>>
+            }
+
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        Passage "1" -up-> "2" Floor
+        Floor "*" -right-> "1" Building
+
+        AppPassageService ..> Passage
+        AppPassageService ..> Floor
+        AppPassageService ..> Building
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+

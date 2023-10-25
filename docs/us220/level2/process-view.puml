@@ -1,0 +1,19 @@
+@startuml
+autonumber
+
+box "  <<system>>\nRobDroneGo"
+participant "MD" as md
+
+[-> md: GET /buildings/:id/floors/passages
+
+activate md
+    alt building not found
+        [<- md : response code 404
+    else no passages exist
+        [<- md : response code 404
+    else floors with passages found
+        [<- md : response code 200
+    end
+deactivate md
+
+@enduml
