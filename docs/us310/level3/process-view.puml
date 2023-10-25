@@ -1,0 +1,80 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "room:\nRoom" as room
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+ui --> r: post (/room)
+    activate r
+        r -> ctrl : createRoom()
+        activate ctrl
+            ctrl -> svc : createRoom()
+            activate svc
+                svc -> repo : exists(buildingId)
+                activate repo
+                deactivate repo
+
+                alt building not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    r --> ui : 412: Precondition Failed
+                else building found
+                    svc -> repo: exists(floor)
+
+                    activate repo
+                    deactivate repo
+
+                    alt floor not found
+                        svc --> ctrl : error
+                        ctrl --> r : error (412)
+                        r --> ui : 412: Precondition Failed
+                    else floor found
+                        svc --> room** : create()
+
+                        activate room
+                        deactivate room
+
+                        alt room not created
+                            svc --> ctrl : error
+                            ctrl --> r : error (422)
+                            r --> ui : 422: Unprocessable Content
+
+                        else room created successfully
+                            svc -> repo : save(room)
+
+                            activate repo
+                                svc -> map : toDTO(room)
+                            deactivate repo
+
+                            activate map
+                                map --> dto** : create(room)
+                                activate dto
+                                    map --> svc : dto
+                                deactivate dto
+                            deactivate map
+
+                            svc --> ctrl : dto
+                            ctrl --> r : dto (201)
+                            r --> ui : 201: Created
+                        end
+                    end
+                end
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
+@enduml
