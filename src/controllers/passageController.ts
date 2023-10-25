@@ -6,7 +6,7 @@ import { Result } from '../core/logic/Result'
 import IPassageController from './IControllers/IPassageController'
 import IPassageService from '../services/IServices/IPassageService'
 import { IPassageDTO } from '../dto/IPassageDTO'
-import { IBuildingDTO } from '../dto/IBuildingDTO'
+import IUpdatePassageDTO from '../dto/IUpdatePassageDTO'
 
 @Service()
 export default class PassageController implements IPassageController {
@@ -56,6 +56,23 @@ export default class PassageController implements IPassageController {
             }
         } catch (e) {
             return next(e)
+        }
+    }
+
+    async editPassage(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.passageServiceInstance.editPassage(req.body as IUpdatePassageDTO)
+
+            if (result.isFailure) {
+                return res
+                    .json(result.errorValue())
+                    .status(404)
+                    .send()
+            }
+
+            return res.json(result.getValue()).status(200)
+        } catch (e) {
+            next(e)
         }
     }
 }

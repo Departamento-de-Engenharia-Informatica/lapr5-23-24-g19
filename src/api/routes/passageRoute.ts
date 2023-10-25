@@ -2,9 +2,6 @@ import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
 import { Container } from 'typedi'
 
-import IBuildingController from '../../controllers/IControllers/IBuildingController'
-import IFloorController from '../../controllers/IControllers/IFloorController'
-
 import config from '../../../config'
 import IPassageController from '../../controllers/IControllers/IPassageController'
 
@@ -13,7 +10,7 @@ const route = Router()
 export default (app: Router) => {
     app.use('/passages', route)
 
-    const PassageController = Container.get(config.controllers.passage.name) as IPassageController
+    const ctrl = Container.get(config.controllers.passage.name) as IPassageController
 
     route.post(
         '',
@@ -33,7 +30,7 @@ export default (app: Router) => {
                 }),
             }),
         }),
-        (req, res, next) => PassageController.createPassage(req, res, next),
+        (req, res, next) => ctrl.createPassage(req, res, next),
     )
 
     route.get(
@@ -66,6 +63,80 @@ export default (app: Router) => {
                 }).optional(),
             }).or('building1', 'building2'),
         }),
-        (req, res, next) => PassageController.getPassages(req, res, next),
+        (req, res, next) => ctrl.getPassages(req, res, next),
+    )
+
+    route.put(
+        '',
+        celebrate({
+            body: Joi.object({
+                old: Joi.object({
+                    floor1: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                    floor2: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                }),
+                new: Joi.object({
+                    floor1: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                    floor2: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                }),
+            }),
+        }),
+        (req, res, next) => ctrl.editPassage(req, res, next),
+    )
+
+    route.patch(
+        '',
+        celebrate({
+            body: Joi.object({
+                old: Joi.object({
+                    floor1: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                    floor2: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }).required(),
+                }),
+                new: Joi.object({
+                    floor1: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }),
+                    floor2: Joi.object({
+                        buildingCode: Joi.string().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
+                    }),
+                }),
+            }),
+        }),
+        (req, res, next) => ctrl.editPassage(req, res, next),
     )
 }

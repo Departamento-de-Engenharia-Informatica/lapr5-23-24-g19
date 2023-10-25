@@ -5,6 +5,7 @@ import { Floor } from '../../domain/floor/floor'
 import { IPassageDTO } from '../../dto/IPassageDTO'
 
 export default interface IPassageRepo extends Repo<Passage> {
+    find(floor1: Floor, floor2: Floor): Promise<Passage>
     save(passage: Passage): Promise<Passage>
     exists(passage: Passage | string): Promise<boolean>
     findAll(): Promise<Passage[]>
