@@ -1,0 +1,54 @@
+@startuml
+autonumber
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "floor:\nFloor" as floor
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+[--> r: GET /buildings/{id}/floors
+    activate r
+        r -> ctrl : getFloors()
+        activate ctrl
+            ctrl -> svc : getFloors()
+            activate svc
+                svc -> repo : findByBuildingCode()
+                activate repo
+                deactivate repo
+
+                alt floors not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    [<--r : response code 422
+                else floor created successfully
+
+                loop for each floor
+                    svc -> map : toDTO(floor)
+
+                    activate map
+                        map --> dto** : create()
+                        activate dto
+                            map --> svc : dto
+                        deactivate dto
+                    deactivate map
+                end loop
+
+                    svc --> ctrl : dtoList
+                    ctrl --> r : response
+                    [<-- r : response code 200
+                end
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
+@enduml
