@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+box "  <<system>>\nRobDroneGo"
+participant "MD" as mdr
+
+    [-> mdr: GET /buildings/{id}/floors
+
+    activate mdr
+    alt floors not found
+        [<--mdr : response code: 422
+    else floors found
+        [<--mdr : response code 200
+    end
+    deactivate mdr
+
+
+@enduml
