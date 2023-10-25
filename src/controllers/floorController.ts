@@ -8,6 +8,7 @@ import IBuildingService from '../services/IServices/IBuildingService'
 
 import { Result } from '../core/logic/Result'
 import { IFloorDTO } from '../dto/IFloorDTO'
+import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 
 @Service()
 export default class FloorController implements IFloorController {
@@ -23,6 +24,27 @@ export default class FloorController implements IFloorController {
             }
 
             const floorDTO = roleOrError.getValue()
+            return res.json(floorDTO).status(201)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
+    
+    public async updateMap(req: Request, res: Response, next: NextFunction) {
+        
+        try {
+            const dto = req.body as IFloorMapDTO
+            dto.buildingCode = req.params.id
+            dto.floorNumber = parseInt(req.params.floorNumber)
+            
+            const mapOrError = await this.floorServiceInstance.uploadMap(dto) as Result<IFloorMapDTO>
+
+            if(mapOrError.isFailure) {
+                return res.status(402).send()
+            }
+
+            const floorDTO = mapOrError.getValue()
             return res.json(floorDTO).status(201)
         } catch (e) {
             return next(e)

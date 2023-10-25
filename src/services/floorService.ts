@@ -7,11 +7,13 @@ import IFloorService from './IServices/IFloorService'
 import { Result } from '../core/logic/Result'
 import { Floor } from '../domain/floor/floor'
 import { FloorMap } from '../mappers/FloorMap'
-import { BuildingId } from '../domain/building/buildingId'
 import { BuildingCode } from '../domain/building/buildingCode'
 import { FloorNumber } from '../domain/floor/floorNumber'
+import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 import { Description } from '../domain/description'
-import { floor } from 'lodash'
+import { IFloorMapDTO } from '../dto/IFloorMapDTO'
+import { FloorMapContent } from '../domain/floor/floorMap'
+import { Console } from 'console'
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -25,7 +27,7 @@ export default class FloorService implements IFloorService {
             }
 
             floorDTO.buildingCode = buildingCode;
-            const floorOrError = await Floor.create({
+            const floorOrError = Floor.create({
                 building: building,
                 floorNumber: FloorNumber.create(floorDTO.floorNumber).getValue(),
                 description: Description.create(floorDTO.description).getValue()
@@ -41,5 +43,31 @@ export default class FloorService implements IFloorService {
         } catch (e) {
             throw e
         }
+    }
+
+    public async uploadMap(dto:IFloorMapDTO): Promise<Result<IFloorMapDTO>>{
+        try {
+            const floor = await this.floorRepo.findByCodeNumber(
+                BuildingCode.create(dto.buildingCode).getValue(),
+                FloorNumber.create(dto.floorNumber).getValue())
+
+            if(floor===null){
+                return Result.fail<IFloorMapDTO>("Floor not found");
+            }
+
+            if(!floor.building.fit(MaxFloorDimensions.create(dto.dimensions.length,dto.dimensions.width).getValue())){
+                return Result.fail<IFloorMapDTO>("Dimensions not valid");
+            }
+
+            if(!floor.addMap(dto)){
+                return Result.fail<IFloorMapDTO>("Map could not be created")
+            }
+            const saved = await this.floorRepo.save(floor)
+            return Result.ok<IFloorMapDTO>(FloorMap.toDTOFloorMap(saved))
+            
+        } catch (e) {
+            throw e
+        }
+
     }
 }

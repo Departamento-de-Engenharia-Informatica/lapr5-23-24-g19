@@ -75,6 +75,6 @@ export default class Building extends AggregateRoot<BuildingProps> {
     }
 
     public fit(dimension: MaxFloorDimensions): boolean{
-        return dimension.fit(dimension);
+        return this.maxFloorDimensions.fit(dimension);
     }
 }

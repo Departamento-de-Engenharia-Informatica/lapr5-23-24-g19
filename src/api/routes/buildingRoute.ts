@@ -181,4 +181,31 @@ export default (app: Router) => {
             }
         }
     )
+    
+    route.patch(
+        '/:id/floors/:floorNumber/maps',
+        celebrate({
+            body: Joi.object({
+                dimensions: Joi.object({
+                    length: Joi.number().required(),
+                    width: Joi.number().required(),
+                }),
+                mapContent: Joi.array()
+                    .items(Joi.array().items(Joi.number().required())),
+                passages: Joi.array().items({
+                    x: Joi.number().required(),
+                    y: Joi.number().required()
+                }),
+                elevators: Joi.array().items({
+                    x: Joi.number().required(),
+                    y: Joi.number().required()
+                }),
+                rooms: Joi.array().items({
+                    x: Joi.number().required(),
+                    y: Joi.number().required()
+                }),
+            }),
+        }),
+        (req, res, next) => floorController.updateMap(req, res, next),
+    );
 }

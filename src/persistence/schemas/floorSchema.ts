@@ -1,6 +1,42 @@
 import mongoose from 'mongoose'
 import { IFloorPersistence } from '../../dataschema/IFloorPersistence'
 
+const floorPropsSchema = new mongoose.Schema({
+    dimensions: {
+        type: {
+            mapLength: Number,
+            mapWidth: Number,
+        },
+        required: true
+    },
+    
+    mapContent: {
+        type: [[Number]],
+        required: true,
+    },
+    
+    passages: [
+        {
+            x: Number,
+            y: Number,
+        },
+    ],
+
+    rooms: [
+        {
+            x: Number,
+            y: Number,
+        },
+    ],
+    
+    elevators: [
+        {
+            x: Number,
+            y: Number,
+        },
+    ],
+});
+
 const Floor = new mongoose.Schema(
     {
         domainId: {
@@ -11,13 +47,13 @@ const Floor = new mongoose.Schema(
 
         floorNumber: {
             type: String,
-            required:true,
+            required: true,
             index: true,
         },
 
         buildingCode: {
             type: String,
-            required:true,
+            required: true,
             index: true,
         },
 
@@ -25,7 +61,13 @@ const Floor = new mongoose.Schema(
             type: String,
             required: false,
         },
+        
+        map: {
+            type: floorPropsSchema,
+            required:false,
+        },
     },
+
     { timestamps: true },
 )
 

@@ -1,6 +1,8 @@
 import { Result } from '../../core/logic/Result'
 import { IFloorDTO } from '../../dto/IFloorDTO'
+import { IFloorMapDTO } from '../../dto/IFloorMapDTO'
 
 export default interface IFloorService {
     createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Result<IFloorDTO>>
+    uploadMap(floorMapDto: IFloorMapDTO): Promise<Result<IFloorDTO>>
 }

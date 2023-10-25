@@ -83,18 +83,19 @@ export default class FloorRepo implements IFloorRepo {
         const floorDocument = await this.floorSchema.findOne(query)
         try {
 
-            // if (floorDocument === null) {
             const rawFloor: any = FloorMap.toPersistence(floor)
-            const floorCreated = await this.floorSchema.create(rawFloor)
-            return FloorMap.toDomain(floorCreated)
-            // } else {
-            //     floorDocument.floorNumber = floor.floorNumber.value
-            //     floorDocument.description = floor.description.value
-            //     floorDocument.buildingCode = floor.building.buildingCode.toString()
-
-            //     await floorDocument.save()
-            //     return floor
-            // }
+            if (floorDocument === null) {
+                const floorCreated = await this.floorSchema.create(rawFloor)
+                return FloorMap.toDomain(floorCreated)
+            } else {
+                floorDocument.floorNumber = rawFloor.floorNumber
+                floorDocument.buildingCode = rawFloor.buildingCode
+                floorDocument.description= rawFloor.buildingCode
+                floorDocument.map = rawFloor.map
+                
+                await floorDocument.save()
+                return floor
+            }
         } catch (err) {
             throw err
         }
