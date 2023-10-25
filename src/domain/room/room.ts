@@ -39,7 +39,7 @@ export default class Room extends AggregateRoot<RoomProps> {
         return this.props.building
     }
 
-    get floors(): Floor {
+    get floor(): Floor {
         return this.props.floor
     }
 

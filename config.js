@@ -61,6 +61,10 @@ export default {
             name: 'PassageController',
             path: '../controllers/passageController'
         },
+        room: {
+            name: 'RoomController',
+            path: '../controllers/roomController'
+        },
     },
 
     repos: {
@@ -87,6 +91,10 @@ export default {
         passage: {
             name: 'PassageRepo',
             path: '../repos/passageRepo'
+        },
+        room: {
+            name: 'RoomRepo',
+            path: '../repos/roomRepo'
         },
     },
 
@@ -115,6 +123,10 @@ export default {
             name: 'passageSchema',
             schema: '../persistence/schemas/passageSchema'
         },
+        room: {
+            name: 'roomSchema',
+            schema: '../persistence/schemas/roomSchema'
+        },
     },
 
     services: {
@@ -137,6 +149,10 @@ export default {
         passage: {
             name: 'PassageService',
             path: '../services/passageService'
+        },
+        room: {
+            name: 'RoomService',
+            path: '../services/roomService'
         },
     },
 }
