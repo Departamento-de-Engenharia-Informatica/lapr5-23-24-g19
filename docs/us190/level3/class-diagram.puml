@@ -13,13 +13,13 @@ skinparam component {
 
 package system {
     package "Infrastructure" {
-        package "Routes" {
-            class RouteFloor
-        }
-
         package "Persistence" {
             interface IDBDriver
             class DBDriver
+        }
+
+        package "Routes" {
+            class RouteFloor
         }
 
         DBDriver -right-|> IDBDriver
