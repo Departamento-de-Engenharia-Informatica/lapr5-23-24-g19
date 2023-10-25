@@ -1,0 +1,56 @@
+@startuml
+autonumber
+
+participant "??" as ui
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+ui--> r: GET /robots
+    activate r
+        r -> ctrl : getRobots(req,res)
+        activate ctrl
+            ctrl -> svc : getRobots()
+            activate svc
+                svc -> repo : findAll()
+                activate repo
+                deactivate repo
+
+                alt robots not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    ui<--r : 412: Precondition Failed
+                else robots found
+
+                loop for each robot
+                    activate repo
+                        svc -> map : toDTO(robot)
+                    deactivate repo
+
+                    activate map
+                        map --> dto** : create(robot)
+                        activate dto
+                            map --> svc : dto
+                        deactivate dto
+                    deactivate map
+                end loop
+                    svc --> ctrl : dto
+                    ctrl --> r : response
+                    ui<-- r : 200: "OK" Successful
+                end
+            deactivate svc
+        deactivate ctrl
+    deactivate r
+
+@enduml
