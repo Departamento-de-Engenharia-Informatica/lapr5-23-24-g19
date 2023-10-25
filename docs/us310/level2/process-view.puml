@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+actor " " as actor
+box "RobDroneGo"
+participant "MD" as mdr
+
+activate actor
+    actor -> mdr: POST /room
+    activate mdr
+
+    alt building not found
+        mdr --> actor : 412: Precondition Failed
+    else floor not found
+        mdr --> actor : 412: Precondition Failed
+    else room not created
+        mdr --> actor : 422: Unprocessable Content
+    else room created successfully
+        mdr --> actor : 201: Created
+    end
+
+    deactivate mdr
+deactivate actor
+
+
+@enduml
+
