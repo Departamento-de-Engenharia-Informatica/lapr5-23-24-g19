@@ -1,0 +1,28 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as actor
+box "RobDroneGo"
+participant "MD" as mdr
+
+activate actor
+
+    actor -> mdr: POST /robottypes
+
+    activate mdr
+    alt unkown user
+        mdr --> actor : 401: Unauthorized
+    else user not autorized
+        mdr --> actor : 403: Forbidden
+    else user authorized
+        alt robot type not created
+            mdr --> actor : 422: Unprocessable Content
+        else robot type created successfully
+            mdr --> actor : 201: Created
+        end
+    end
+    deactivate mdr
+
+deactivate actor
+
+@enduml
