@@ -24,19 +24,12 @@ ui --> r: post (/room)
         activate ctrl
             ctrl -> svc : createRoom()
             activate svc
-                svc -> repo : exists(buildingId)
+                svc -> repo : findByCodeNumber(buildingCode,floorNumber)
                 activate repo
                 deactivate repo
 
-                alt building not found
-                    svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    r --> ui : 412: Precondition Failed
-                else building found
-                    svc -> repo: exists(floor)
 
-                    activate repo
-                    deactivate repo
+
 
                     alt floor not found
                         svc --> ctrl : error
@@ -70,7 +63,7 @@ ui --> r: post (/room)
                             svc --> ctrl : dto
                             ctrl --> r : dto (201)
                             r --> ui : 201: Created
-                        end
+
                     end
                 end
             deactivate svc

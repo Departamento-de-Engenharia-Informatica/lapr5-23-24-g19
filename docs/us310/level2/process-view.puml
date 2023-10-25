@@ -9,9 +9,7 @@ activate actor
     actor -> mdr: POST /room
     activate mdr
 
-    alt building not found
-        mdr --> actor : 412: Precondition Failed
-    else floor not found
+    alt  floor not found
         mdr --> actor : 412: Precondition Failed
     else room not created
         mdr --> actor : 422: Unprocessable Content
