@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+box "   <<system>>\nRobDroneGo"
+participant "MD" as md
+
+
+[--> md: PUT /passages
+
+activate md
+    alt buildings/floors not found
+        [<-- sys : 404
+    else passage edited successfully
+        [<-- sys  : 201
+    end
+deactivate md
+
+@enduml

@@ -1,0 +1,111 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RoutePassage
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerPassage
+            }
+
+            package "ImplControllers" {
+                class ControllerPassage
+            }
+            ControllerPassage -up-|> IControllerPassage
+        }
+
+        package "Repositories" {
+            class RepoBuilding
+            class RepoFloor
+            class RepoPassage
+        }
+
+        RepoBuilding .up.> DBDriver
+        RepoFloor .up.> DBDriver
+        RepoPassage .up.> DBDriver
+
+        RoutePassage ....> IControllerPassage
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServicePassage
+            }
+
+            package "ImplAppServices" {
+                class AppServicePassage
+            }
+
+            AppServicePassage --|> IAppServicePassage
+
+            package "IRepositories" {
+                interface IRepoBuilding
+                interface IRepoFloor
+                interface IRepoPassage
+            }
+
+            RepoBuilding --|> IRepoBuilding
+            RepoFloor --|> IRepoFloor
+            RepoPassage --|> IRepoPassage
+        }
+
+        ControllerPassage ..> IAppServicePassage
+
+        AppServicePassage .up.> IRepoBuilding
+        AppServicePassage .up.> IRepoFloor
+        AppServicePassage .up.> IRepoPassage
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+
+            package "Passage" as a_Passage {
+                entity Passage <<root>> <<entity>>
+            }
+
+            package "Building" as a_building {
+                entity Building <<root>> <<entity>>
+            }
+
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+            }
+        }
+
+        Passage "1" -up-> "2" Floor
+
+        AppServicePassage ..> Passage
+        AppServicePassage ..> Floor
+        AppServicePassage ..> Building
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+

@@ -1,0 +1,95 @@
+@startuml
+autonumber
+
+mainframe MD
+
+box "Back-End" #LightBlue
+    participant "Route" as rt
+    participant "Controller" as ctrl
+    participant "Service" as svc
+    participant "Model" as model
+
+    participant "Mapper" as mapper
+    participant "dto:\nDTO" as dto
+
+    participant "Repository" as repo
+end box
+
+box "Database"
+    database "DB" as db
+end box
+
+[-> rt : PUT /passages
+
+activate rt
+    rt -> ctrl : editPassage()
+
+    activate ctrl
+        ctrl -> svc : editPassage(dto)
+
+        activate svc
+            svc -> repo : find()
+            note right : find old building & floor info
+            activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
+            deactivate repo
+
+            svc -> repo : find()
+            note right : find new building & floor info
+            activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
+            deactivate repo
+
+            alt building/floors not found
+                svc --> ctrl : error
+                ctrl --> rt : error (404)
+                [<- rt : error (404)
+            else found buildings & floors
+
+            svc -> repo : find(oldPassage)
+
+            activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
+            deactivate repo
+
+            alt passage does not exist
+                svc --> ctrl : error
+                ctrl --> rt : error (404)
+                [<- rt : error (404)
+            else passage found
+
+
+            svc -> model : updatePassage(newPassageInfo)
+            activate model
+            deactivate model
+
+            svc -> repo : save(updatedPassage)
+            activate repo
+                repo -> db : save()
+                activate db
+                deactivate db
+            deactivate repo
+
+            svc -> mapper : toDTO(updatedPassage)
+            activate mapper
+                mapper --> dto **: create()
+            deactivate mapper
+
+            svc --> ctrl : dto (200)
+        deactivate svc
+
+        ctrl --> rt : dto (200)
+    deactivate ctrl
+
+    [<-- rt : dto (200)
+    end
+    end
+deactivate rt
+
+@enduml

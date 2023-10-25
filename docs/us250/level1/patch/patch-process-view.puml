@@ -1,0 +1,16 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys: PATCH /passages
+
+activate sys
+    alt buildings/floors not found
+        [<-- sys : 404
+    else passage edited successfully
+        [<-- sys  : 200
+    end
+deactivate sys
+
+@enduml
