@@ -1,0 +1,60 @@
+@startuml
+autonumber
+
+mainframe MD
+box "Back-End" #LightBlue
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Floor" as floor
+participant "Map" as floorMap
+participant "Building" as building
+end box
+
+box "Database"
+database "Repository" as repo
+end box
+
+[--> r: PATCH /building/{id}/floors/{floorNumber}/maps
+    activate r
+        r ---> ctrl : uploadMap(req,res,...)
+        activate ctrl
+            ctrl -> svc : uploadMap(dto)
+            activate svc
+                svc -> repo : findByCodeNumber(buildingCode,floorNumber)
+                activate repo
+                deactivate repo
+
+                alt floor not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                    [<--r : 412: Precondition Failed
+                else floor found
+
+                    svc --> floor: getBuilding()
+                    activate floor
+                    deactivate floor
+                    svc --> building: checkDimension(mapDimensions)
+                    alt mapDimensions exceeded buildingDimensions
+                        activate building
+                        deactivate building
+
+
+                        svc --> floor : createMap(dto)
+                        activate floor
+                            floor --> floorMap** : create(dto)
+                        deactivate floor
+
+                        svc --> repo : save(floor)
+                        activate repo
+                        deactivate repo
+                        svc --> ctrl : dto
+                        deactivate svc
+                        ctrl --> r : dto (201)
+                        deactivate ctrl
+                        [<--r : 201: Created
+                    end
+                end
+    deactivate r
+
+@enduml

@@ -1,0 +1,116 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+        package "Routes" {
+            class RouteBuilding
+        }
+
+
+
+        DBDriver -right--|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerFloor
+            }
+
+            package "ImplControllers" {
+                class ControllerFloor
+            }
+            ControllerFloor -up-|> IControllerFloor
+        }
+
+        package "Repositories" {
+            class RepoFloor
+        }
+
+        RepoFloor .up.> DBDriver
+
+        RouteBuilding ...right.> IControllerFloor
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceFloor
+            }
+
+            package "ImplAppServices" {
+                class AppServiceFloor
+            }
+
+            AppServiceFloor --|> IAppServiceFloor
+
+            package "IRepositories" {
+                interface IRepoFloor
+            }
+
+            RepoFloor --|> IRepoFloor
+        }
+
+        ControllerFloor ..> IAppServiceFloor
+
+        AppServiceFloor .up.> IRepoFloor
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Floor" as a_floor {
+                entity Floor <<root>> <<entity>>
+                entity Map <<root>> <<entity>>
+
+            }
+            package "Building" as a_building{
+                entity Building <<root>> <<entity>>
+            }
+            Floor "1" --> "1" Building
+            Floor "1" --> "1" Map
+        }
+
+
+        package "Value Objects" {
+            package "Map" as vo_building {
+                class dimensions
+                class MapContent
+                class AvailableCoordinates{
+                    - coordinates[]
+                }
+            }
+
+            package "Building" as build {
+                class buildingDimensions
+            }
+        }
+
+        Map "1" --> "1" MapContent
+        Map "1" --> "1" dimensions
+
+        Building --> buildingDimensions
+
+        AppServiceFloor ..> Floor
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+

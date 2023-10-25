@@ -1,0 +1,19 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys: PATCH /building/{id}/floors/{number}/map
+activate sys
+
+alt building/floor not found
+    [<--sys  : 412: Precondition Failed
+else map not processed
+    [<--sys : 422: Unprocessable Content
+else floor map updated
+    [<--sys  : 201: Created
+end
+
+deactivate sys
+
+@enduml

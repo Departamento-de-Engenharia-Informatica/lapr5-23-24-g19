@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+box "RobDroneGo"
+participant "MD" as mdr
+
+[-> mdr: PATCH /building/{id}/floors/{number}/map
+activate mdr
+alt building/floor not found
+    [<--mdr  : 412: Precondition Failed
+else map not processed
+    [<--mdr : 422: Unprocessable Content
+else floor map updated
+    [<--mdr  : 201: Created
+end
+
+deactivate mdr
+
+@enduml
+
