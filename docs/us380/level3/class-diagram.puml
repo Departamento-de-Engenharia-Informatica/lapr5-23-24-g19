@@ -1,0 +1,97 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class RouteRobot
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerRobot
+            }
+
+            package "ImplControllers" {
+                class ControllerRobot
+            }
+            ControllerRobot -up-|> IControllerRobot
+        }
+
+        package "Repositories" {
+            class RepoRobot
+        }
+
+        RepoRobot .up.> DBDriver
+
+        RouteRobot ..> IControllerRobot
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceRobot
+            }
+
+            package "ImplAppServices" {
+                class AppServiceRobot
+            }
+
+            AppServiceRobot --|> IAppServiceRobot
+
+            package "IRepositories" {
+                interface IRepoRobot
+            }
+
+            RepoRobot --|> IRepoRobot
+        }
+
+        ControllerRobot ..> IAppServiceRobot
+
+        AppServiceRobot .up.> IRepoRobot
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "Robot" as a_robot {
+                entity Robot <<root>> <<entity>>
+            }
+
+        }
+
+
+        package "Value Objects" {
+                package "Robot" as vo_robot {
+                class RobotCode
+            }
+        }
+        Robot "1" --> "1" RobotCode
+
+        AppServiceRobot ..> Robot
+
+        'package "Services" {
+        '}
+    }
+}
+
+@enduml
+
