@@ -1,27 +1,25 @@
+import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 import { ValueObject } from '../../core/domain/ValueObject'
 import { Result } from '../../core/logic/Result'
+
+const maxLength = 50
 
 interface Props {
     name: string
 }
 
-const maxLength = 50
 
 export class RoomName extends ValueObject<Props> {
-    get value(): string {
-        return this.props.name
+    
+    private constructor(name: Props) {
+        super(name)
     }
 
-    private constructor(props: Props) {
-        super(props)
-    }
-
-    public static create(name?: string): Result<RoomName> {
-        name = name ?? ''
-        if (name.length > maxLength) {
-            return Result.fail(`The name of the room must have at most ${maxLength} characters`)
+    public static create(name: string): Result<RoomName> {
+        if (name.length <= maxLength) {
+            return Result.ok(new RoomName({name}))
         } else {
-            return Result.ok(new RoomName({ name }))
+            return Result.fail(`The name of the room must have at most ${maxLength} characters`)
         }
     }
 }

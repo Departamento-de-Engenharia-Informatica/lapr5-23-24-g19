@@ -6,7 +6,7 @@ interface DescriptionProps {
     value: string
 }
 
-const MAX_LENGTH = 255
+const MAX_LENGTH = 250
 
 export class RoomDescription extends ValueObject<DescriptionProps> {
     get value(): string {

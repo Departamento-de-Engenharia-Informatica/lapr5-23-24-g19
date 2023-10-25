@@ -1,19 +1,17 @@
 export interface IRoomPersistence {
     domainId: string
-    buildingCode: string
-
-    floor: number
     name: string
-
+    buildingCode: string
+    floorNumber: number
     description: string
-
     category: string
 
-    roomDimensionLength: number
-
-    roomDimensionWidth: number
-
-    roomPositionX: number
-
-    roomPositionY: number
+    dimensions:{
+        length: number
+        width: number
+    }
+    position: {
+        x:number,
+        y:number
+    }
 }

@@ -7,6 +7,7 @@ import IFloorController from '../../controllers/IControllers/IFloorController'
 
 import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
+import IRoomController from '../../controllers/IControllers/IRoomController'
 
 const route = Router()
 
@@ -16,6 +17,7 @@ export default (app: Router) => {
     const buildingController = Container.get(config.controllers.building.name) as IBuildingController
     const floorController = Container.get(config.controllers.floor.name) as IFloorController
     const elevatorCtrl = Container.get(config.controllers.elevator.name) as IElevatorController
+    const roomCtrl = Container.get(config.controllers.room.name) as IRoomController
 
     route.post(
         '',
@@ -155,6 +157,26 @@ export default (app: Router) => {
             }),
         }),
         (req, res, next) => elevatorCtrl.putElevator(req, res, next),
+    )
+
+    route.post(
+        '/:buildingId/floors/:floorNumber/rooms',
+        celebrate({
+            body: Joi.object({
+                name:Joi.string().required(),
+                description:Joi.string().required(),
+                category:Joi.string().required(),
+                dimensions: Joi.object({
+                    length: Joi.number().integer(),
+                    width: Joi.number().integer()
+                }),
+                positions: Joi.object({
+                    x: Joi.number().integer(),
+                    y: Joi.number().integer()
+                }),                
+            }),
+        }),
+        (req, res, next) => roomCtrl.createRoom(req, res, next),
     )
 
     route.get(

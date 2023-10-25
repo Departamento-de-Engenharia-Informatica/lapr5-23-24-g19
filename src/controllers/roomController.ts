@@ -12,7 +12,11 @@ export default class RoomController implements IRoomController {
 
     public async createRoom(req: Request, res: Response, next: NextFunction) {
         try {
-            const result = await this.service.createRoom(req.body as IRoomDTO)
+            const dto = req.body as IRoomDTO
+            dto.buildingCode = req.params.buildingId
+            dto.floorNumber = parseInt(req.params.floorNumber)
+            
+            const result = await this.service.createRoom(dto)
 
             if (result.isFailure) {
                 return res.status(422).send()

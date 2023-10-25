@@ -5,7 +5,6 @@ import IPassageRepo from '../services/IRepos/IPassageRepo'
 import { Passage } from '../domain/passage/passage'
 import { PassageMap } from '../mappers/PassageMap'
 import { BuildingCode } from '../domain/building/buildingCode'
-import { Floor } from '../domain/floor/floor'
 import { IPassageDTO } from '../dto/IPassageDTO'
 
 @Service()
@@ -29,23 +28,19 @@ export default class PassageRepo implements IPassageRepo {
             const passageDocument = await this.passageSchema.findOne(query)
 
             try {
-                if (passageDocument === null) {
-                    //ordem 1 nao existe
-                    const query2 = {
-                        floor1ID: passage.props.floor2.id.toString(),
-                        floor2ID: passage.props.floor1.id.toString(),
-                    }
-                    const passageDocument2 = await this.passageSchema.findOne(query2)
-
-                    if (passageDocument2 === null) {
-                        //ordem 2 nao existe
-                        return false //digo que existe
-                    } else {
-                        return true
-                    }
-                } else {
+                if (!!passageDocument) {
                     return true
                 }
+
+                //ordem 1 nao existe
+                const query2 = {
+                    floor1ID: passage.props.floor2.id.toString(),
+                    floor2ID: passage.props.floor1.id.toString(),
+                }
+                const passageDocument2 = await this.passageSchema.findOne(query2)
+
+                return !!passageDocument2
+
             } catch (error) {
                 throw error
             }

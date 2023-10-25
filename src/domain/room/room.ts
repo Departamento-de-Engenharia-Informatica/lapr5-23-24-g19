@@ -5,38 +5,28 @@ import { Result } from '../../core/logic/Result'
 import { Guard } from '../../core/logic/Guard'
 
 import { RoomId } from './roomId'
-
 import { RoomName as Name } from './roomName'
-
 import { RoomDescription as Description } from './description'
 import { RoomDimensions } from './roomDimensions'
-import Building from '../building/building'
 import { Floor } from '../floor/floor'
-import { RoomPositions } from './roomPositions'
 import { RoomCategory as Category } from './roomCategory'
+import { Coordinates } from '../floor/Coordinates'
+
+type RoomPosition = Coordinates
 
 export interface RoomProps {
-    building: Building
-    floor: Floor
-    name: Name
-    description: Description
+    name: Name 
     category: Category
+    description: Description
+    floor: Floor
     dimensions: RoomDimensions
-    positions: RoomPositions
+    positions: RoomPosition
 }
 
 export default class Room extends AggregateRoot<RoomProps> {
     room: Result<Name>
     get id(): UniqueEntityID {
         return this._id
-    }
-
-    get roomId(): RoomId {
-        return RoomId.caller(this.id)
-    }
-
-    get building(): Building {
-        return this.props.building
     }
 
     get floor(): Floor {
@@ -59,7 +49,7 @@ export default class Room extends AggregateRoot<RoomProps> {
         return this.props.dimensions
     }
 
-    get positions(): RoomPositions {
+    get positions(): RoomPosition {
         return this.props.positions
     }
 
@@ -70,7 +60,6 @@ export default class Room extends AggregateRoot<RoomProps> {
 
     public static create(dto: RoomProps, id?: UniqueEntityID): Result<Room> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: dto.building, argumentName: 'building' },
             { argument: dto.floor, argumentName: 'floor' },
             { argument: dto.name, argumentName: 'name' },
             { argument: dto.description, argumentName: 'description' },
