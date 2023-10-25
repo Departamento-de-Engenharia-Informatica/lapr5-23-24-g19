@@ -51,6 +51,19 @@ export default (app: Router) => {
         (req, res, next) => floorController.createFloor(req, res, next),
     )
 
+    route.get(
+        '/:id/floors',
+        celebrate({
+            body: Joi.object({
+                floorNumber: Joi.number()
+                    .integer()
+                    .required(),
+                description: Joi.string(),
+            }),
+        }),
+        (req, res, next) => floorController.getFloors(req, res, next),
+    )
+
     route.patch(
         '/:id',
         celebrate({
@@ -181,7 +194,7 @@ export default (app: Router) => {
             }
         }
     )
-    
+
     route.patch(
         '/:id/floors/:floorNumber/maps',
         celebrate({

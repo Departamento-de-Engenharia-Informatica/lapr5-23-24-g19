@@ -77,6 +77,21 @@ export default class FloorRepo implements IFloorRepo {
                 })
     }
 
+    public async findByBuildingCode(code: BuildingCode): Promise<Floor[]> {
+        const query = {
+            buildingCode: code.value,
+        }
+
+        const records = await this.floorSchema.find(query)
+
+        if (records.length == 0){
+            return []
+        }
+
+        const floorList = await Promise.all(records.map(record => FloorMap.toDomain(record)))
+        return floorList
+    }
+
     public async save(floor: Floor): Promise<Floor> {
         const query = { buildingCode: floor.building.code.value, floorNumber: floor.floorNumber.value }
 
@@ -92,7 +107,7 @@ export default class FloorRepo implements IFloorRepo {
                 floorDocument.buildingCode = rawFloor.buildingCode
                 floorDocument.description= rawFloor.buildingCode
                 floorDocument.map = rawFloor.map
-                
+
                 await floorDocument.save()
                 return floor
             }

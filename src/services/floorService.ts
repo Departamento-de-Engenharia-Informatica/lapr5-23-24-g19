@@ -12,12 +12,11 @@ import { FloorNumber } from '../domain/floor/floorNumber'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 import { Description } from '../domain/description'
 import { IFloorMapDTO } from '../dto/IFloorMapDTO'
-import { FloorMapContent } from '../domain/floor/floorMap'
-import { Console } from 'console'
 
 @Service()
 export default class FloorService implements IFloorService {
-    constructor(@Inject(config.repos.floor.name) private floorRepo: IFloorRepo,@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo) {}
+    constructor(@Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
+                @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo) {}
 
     public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Result<IFloorDTO>> {
         try {
@@ -45,6 +44,27 @@ export default class FloorService implements IFloorService {
         }
     }
 
+    public async getFloors(buildingCode: string): Promise<Result<IFloorDTO[]>> {
+        try {
+            const code = BuildingCode.create(buildingCode)
+
+            if (code.isFailure) {
+                return Result.fail(code.errorValue())
+            }
+
+            const floors = await this.floorRepo.findByBuildingCode(code.getValue())
+
+            if (floors.length == 0) {
+                return Result.fail('Floors not found')
+            } else {
+                const dtoList = await Promise.all(floors.map(floor => FloorMap.toDTO(floor)))
+                return Result.ok(dtoList)
+            }
+        } catch(e) {
+
+        }
+    }
+
     public async uploadMap(dto:IFloorMapDTO): Promise<Result<IFloorMapDTO>>{
         try {
             const floor = await this.floorRepo.findByCodeNumber(
@@ -64,7 +84,7 @@ export default class FloorService implements IFloorService {
             }
             const saved = await this.floorRepo.save(floor)
             return Result.ok<IFloorMapDTO>(FloorMap.toDTOFloorMap(saved))
-            
+
         } catch (e) {
             throw e
         }
