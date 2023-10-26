@@ -28,13 +28,13 @@ package system {
     package "Interface Adapters" {
         package "Controllers" {
             package "IControllers" {
-                interface IControllerCreateBuilding
+                interface IControllerBuilding
             }
 
             package "ImplControllers" {
-                class ControllerCreateBuilding
+                class ControllerBuilding
             }
-            ControllerCreateBuilding -up-|> IControllerCreateBuilding
+            ControllerBuilding -up-|> IControllerBuilding
         }
 
         package "Repositories" {
@@ -45,7 +45,7 @@ package system {
         RepoBuilding .up.> DBDriver
 
 
-        RouteBuilding ..> IControllerCreateBuilding
+        RouteBuilding ..> IControllerBuilding
     }
 
     package "Application Services" {
@@ -69,7 +69,7 @@ package system {
 
         }
 
-        ControllerCreateBuilding ..> IAppServiceBuilding
+        ControllerBuilding ..> IAppServiceBuilding
 
         AppServiceBuilding .up.> IRepoBuilding
 

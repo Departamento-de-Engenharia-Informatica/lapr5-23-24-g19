@@ -1,0 +1,19 @@
+{
+    "code":"B",
+    "name":"Informatica",
+    "description":"Departamento de Informatica",
+    "maxFloorDimensions":{
+        "length":100,
+        "width":150
+    }
+}
+
+{
+    "code":"J",
+    "name":"Civil",
+    "description":"Departamento de Civil",
+    "maxFloorDimensions":{
+        "length":200,
+        "width":250
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "floors":[1,2,3],
+    "model":"ElevatorModel2023",
+    "brand":"ElevatorBrand2023",
+    "serialNumber":"Elevatorserialnumber2023",
+    "description":"ElevatorInformatica"
+}
+
+{
+    "floors":[1,2,3],
+    "model":"ElevatorModel2022",
+    "brand":"ElevatorBrand2022",
+    "serialNumber":"Elevatorserialnumber2022",
+    "description":"ElevatorInformatica"
+}
