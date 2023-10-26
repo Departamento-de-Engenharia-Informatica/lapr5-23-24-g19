@@ -6,9 +6,9 @@ interface Props {
     value: string
 }
 
-const codeRegex = /^[a-zA-Z0-9 ]{1,5}$/
+const codeRegex = /^[a-zA-Z0-9 ]{1,25}$/
 
-export class BuildingCode extends ValueObject<Props> {
+export class RobotTypeCode extends ValueObject<Props> {
     get value(): string {
         return this.props.value
     }
@@ -17,7 +17,7 @@ export class BuildingCode extends ValueObject<Props> {
         super(props)
     }
 
-    public static create(code: string): Result<BuildingCode> {
+    public static create(code: string): Result<RobotTypeCode> {
         const guardResult = Guard.againstNullOrUndefined(code, 'code')
 
         if (!guardResult.succeeded) {
@@ -27,10 +27,10 @@ export class BuildingCode extends ValueObject<Props> {
 
         if (!codeRegex.test(code)) {
             return Result.fail(
-                'Code must contain at most 5 characters, letters and numbers, ' + 'possibly with spaces in-between',
+                'Code must contain at most 25 characters, letters and numbers, ' + 'possibly with spaces in-between',
             )
         } else {
-            return Result.ok(new BuildingCode({ value: code }))
+            return Result.ok(new RobotTypeCode({ value: code }))
         }
     }
 }

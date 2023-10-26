@@ -88,15 +88,17 @@ package system {
 
         package "Value Objects" {
             package "RobotType" as vo_building {
-                class RobotTypeDescription
+                class RobotTypeCode
                 class RobotTypeBrand
                 class RobotTypeModel
+                class TaskType
             }
         }
 
-        RobotType "1" --> "1" RobotTypeDescription
+        RobotType "1" --> "1" RobotTypeCode
         RobotType "1" --> "1" RobotTypeBrand
         RobotType "1" --> "1" RobotTypeModel
+        RobotType "1" ---> "*" TaskType
 
         AppServiceRobotType ..> RobotType
 
