@@ -5,6 +5,7 @@ import { IFloorMapDTO } from '../../dto/IFloorMapDTO'
 
 export default interface IFloorService {
     createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Result<IFloorDTO>>
+    editFloor(identifier: number, floorDTO: IFloorDTO): Promise<Result<IFloorDTO>>
     getFloors(buildingCode: string): Promise<Result<IFloorDTO[]>>
     floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorDTO[]>>
     uploadMap(floorMapDto: IFloorMapDTO): Promise<Result<IFloorDTO>>

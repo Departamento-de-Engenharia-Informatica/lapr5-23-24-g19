@@ -33,8 +33,16 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.floorNumber
     }
 
+    set floorNumber(floorNumber: FloorNumber) {
+        this.props.floorNumber = floorNumber
+    }
+
     get description(): Description {
         return this.props.description
+    }
+
+    set description(description: Description) {
+        this.props.description = description
     }
 
     private constructor(props: FloorProps, id?: UniqueEntityID) {
@@ -58,7 +66,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     public sameBuilding(floor2: Floor): boolean {
         return this.building.equals(floor2.building)
     }
-    
+
     public addMap(dto: IFloorMapDTO): boolean{
 
         const mapOrError = FloorMapContent.create({

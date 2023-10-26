@@ -66,6 +66,19 @@ export default (app: Router) => {
     )
 
     route.patch(
+        '/:id/floors/:floor',
+        celebrate({
+            body: Joi.object({
+                floorNumber: Joi.number()
+                    .integer()
+                    .required(),
+                description: Joi.string(),
+            }),
+        }),
+        (req, res, next) => floorController.patchFloor(req, res, next),
+    )
+
+    route.patch(
         '/:id',
         celebrate({
             body: Joi.object({
@@ -173,7 +186,7 @@ export default (app: Router) => {
                 positions: Joi.object({
                     x: Joi.number().integer(),
                     y: Joi.number().integer()
-                }),                
+                }),
             }),
         }),
         (req, res, next) => roomCtrl.createRoom(req, res, next),

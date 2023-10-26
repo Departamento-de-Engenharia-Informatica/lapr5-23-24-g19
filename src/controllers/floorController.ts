@@ -35,6 +35,27 @@ export default class FloorController implements IFloorController {
         }
     }
 
+    public async patchFloor(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingCode = req.params.id
+            const floor = req.params.floor
+
+            const dto = req.body as IFloorDTO
+            dto.buildingCode = buildingCode
+
+            const result = await this.service.editFloor(parseInt(floor), req.body as IFloorDTO)
+
+            if (result.isFailure) {
+                return res.status(422).send()
+            }
+
+            return res.json(result.getValue()).status(200)
+        } catch (e) {
+            return next(e)
+        }
+
+    }
+
     public async getFloors(req: Request, res: Response, next: NextFunction) {
         try {
             const result = await this.floorServiceInstance.getFloors(req.params.id)

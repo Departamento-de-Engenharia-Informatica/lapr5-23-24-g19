@@ -33,12 +33,20 @@ export default class FloorRepo implements IFloorRepo {
             return false
         }
     }
+
     public async findByCodeNumber(buildingCode: BuildingCode, floorNumber: FloorNumber): Promise<Floor> {
-        const query = { buildingCode: buildingCode.value, floorNumber: floorNumber.value }
+        const query = {
+            buildingCode: buildingCode.value,
+            floorNumber: floorNumber.value
+        }
+
         const floorDocument = await this.floorSchema.findOne(query)
+
         if (floorDocument != null) {
             return FloorMap.toDomain(floorDocument)
-        } else return null
+        }
+
+        return null
     }
 
     public async findByID(floorID: string): Promise<Floor> {
