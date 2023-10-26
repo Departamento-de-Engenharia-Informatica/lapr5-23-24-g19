@@ -50,8 +50,8 @@ export default class ElevatorController implements IElevatorController {
 
     public async patchElevator(req: Request, res: Response, next: NextFunction) {
         try {
-            const firstId = req.params.id
-            const secondId = req.params.id
+            const firstId = req.params.idb
+            const secondId = req.params.ide
 
             const dto = req.body as IElevatorDTO
             dto.buildingId = firstId

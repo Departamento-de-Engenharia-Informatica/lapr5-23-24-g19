@@ -22,7 +22,7 @@ ui --> r: GET /building/{id}/elevators
     activate r
         r -> ctrl : getElevator(req,res)
         activate ctrl
-            ctrl -> svc : getElevator()
+            ctrl -> svc : getElevator(buildingCode)
             activate svc
                 svc -> repo : findByCode(building)
                 activate repo

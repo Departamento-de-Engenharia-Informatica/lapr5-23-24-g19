@@ -54,14 +54,6 @@ export default (app: Router) => {
 
     route.get(
         '/:id/floors',
-        celebrate({
-            body: Joi.object({
-                floorNumber: Joi.number()
-                    .integer()
-                    .required(),
-                description: Joi.string(),
-            }),
-        }),
         (req, res, next) => floorController.getFloors(req, res, next),
     )
 
@@ -133,7 +125,7 @@ export default (app: Router) => {
     )
 
     route.patch(
-        '/:id/elevators/:id',
+        '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
                 floors: Joi.array()
@@ -193,21 +185,7 @@ export default (app: Router) => {
     )
 
     route.get(
-        '/:id',
-        celebrate({
-            body: Joi.object({
-                name: Joi.string(),
-                description: Joi.string(),
-                maxFloorDimensions: Joi.object({
-                    length: Joi.number()
-                        .integer()
-                        .required(),
-                    width: Joi.number()
-                        .integer()
-                        .required(),
-                }),
-            }),
-        }),
+        '/:id/elevators',
         (req, res, next) => elevatorCtrl.getElevators(req, res, next),
     )
 

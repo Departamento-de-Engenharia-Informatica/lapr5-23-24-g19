@@ -51,7 +51,8 @@ export default class ElevatorRepo implements IElevatorRepo {
         const result = await this.schema.find({
             building: building.code.value,
         })
-        return Promise.all(result.map(this.mapper.toDomain)) ?? []
+
+        return Promise.all(result.map(async e => await this.mapper.toDomain(e))) ?? []
     }
 
     async existsInBuilding(building: Building, identifier: ElevatorIdentifier): Promise<boolean> {
