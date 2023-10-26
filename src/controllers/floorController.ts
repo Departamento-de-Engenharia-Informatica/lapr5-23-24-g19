@@ -43,7 +43,7 @@ export default class FloorController implements IFloorController {
             const dto = req.body as IFloorDTO
             dto.buildingCode = buildingCode
 
-            const result = await this.service.editFloor(parseInt(floor), req.body as IFloorDTO)
+            const result = await this.floorServiceInstance.editFloor(parseInt(floor), req.body as IFloorDTO)
 
             if (result.isFailure) {
                 return res.status(422).send()
