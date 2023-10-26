@@ -50,8 +50,9 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async findByID(floorID: string): Promise<Floor> {
-        const query = { domainID: floorID }
+        const query = { domainId: floorID }
         const floorDocument = await this.floorSchema.findOne(query)
+
         if (floorDocument != null) {
             return FloorMap.toDomain(floorDocument)
         } else return null
@@ -123,7 +124,7 @@ export default class FloorRepo implements IFloorRepo {
 
     async find(building: Building, floorNumber: FloorNumber): Promise<Floor> {
         const query = {
-            buildingId: building.code.value,
+            buildingCode: building.code.value,
             floorNumber: floorNumber.value,
         }
 

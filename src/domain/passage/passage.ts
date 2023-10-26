@@ -12,8 +12,8 @@ interface PassageProps {
 }
 
 function invalidFloors(f1: Floor, f2: Floor) {
-    return !f1.equals(f2)
-        && !f1.building.equals(f2.building)
+    return f1.equals(f2)
+        || f1.building.equals(f2.building)
 }
 
 export class Passage extends AggregateRoot<PassageProps> {

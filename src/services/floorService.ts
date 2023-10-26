@@ -135,7 +135,6 @@ export default class FloorService implements IFloorService {
         }
 
         const buildingFloors = await this.floorRepo.findAllInBuilding(building)
-        console.log(`floors: ${JSON.stringify(buildingFloors[0].id.toString())}`)
         // if (buildingFloors.length == 0) {
         //     return Result.fail(`No floors in building ${buildingDTO.code}`)
         // }
