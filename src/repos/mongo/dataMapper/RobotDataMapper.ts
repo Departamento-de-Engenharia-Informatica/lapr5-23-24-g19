@@ -4,7 +4,7 @@ import { IRobotPersistence } from '../../../dataschema/mongo/IRobotPersistence'
 import { RobotCode } from '../../../domain/robot/code'
 import { RobotDescription } from '../../../domain/robot/description'
 import { RobotNickname } from '../../../domain/robot/nickname'
-import { Robot } from '../../../domain/robot/Robot'
+import Robot from '../../../domain/robot/Robot'
 import { RobotSerialNumber } from '../../../domain/robot/serialNumber'
 import { RobotState } from '../../../domain/robot/state'
 import { RobotTypeCode } from '../../../domain/robotType/robotTypeCode'
@@ -36,7 +36,7 @@ export default class MongoRobotDataMap
         const nickname = RobotNickname.create(p.nickname).getValue()
         const type = await this.robotTypeRepo.find(RobotTypeCode.create(p.type).getValue())
         const serialNumber = RobotSerialNumber.create(p.serialNumber).getValue()
-        const state = RobotState.create().getValue()
+        const state = RobotState.create()
         state.value = p.state
         const description = p.description && RobotDescription.create(p.description).getValue()
 

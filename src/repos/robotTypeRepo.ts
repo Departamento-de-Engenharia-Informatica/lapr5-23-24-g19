@@ -1,11 +1,11 @@
+import config from "../../config";
 import { Service, Inject } from 'typedi'
 import { Document, Model } from 'mongoose'
+
 import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence'
 import RobotType from '../domain/robotType/robotType'
 import { RobotTypeMap } from '../mappers/RobotTypeMap'
 import IRobotTypeRepo from '../services/IRepos/IRobotTypeRepo'
-import config from "../../config";
-import { Robot } from '../domain/robot/Robot'
 import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
 
 @Service()
@@ -25,10 +25,8 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
     }
 
     public async find(code: RobotTypeCode): Promise<RobotType> {
-        const query = { code: code.value }
-        const robotTypeDocument = await this.robotTypeSchema.findOne(query)
-
-        return RobotTypeMap.toDomain(robotTypeDocument)
+        const doc = await this.robotTypeSchema.findOne({ code: code.value })
+        return RobotTypeMap.toDomain(doc)
     }
 
     public async save(robotType: RobotType): Promise<RobotType> {
@@ -56,4 +54,5 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
             throw err
         }
     }
+
 }

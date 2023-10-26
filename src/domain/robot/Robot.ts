@@ -18,7 +18,7 @@ interface Props {
     description?: Description
 }
 
-export class Robot extends AggregateRoot<Props> {
+export default class Robot extends AggregateRoot<Props> {
     private constructor(props: Props, id?: UniqueEntityID) {
         super(props, id)
     }

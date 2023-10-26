@@ -65,6 +65,10 @@ export default {
             name: 'RoomController',
             path: '../controllers/roomController'
         },
+        robot: {
+            name: 'RobotController',
+            path: '../controllers/robotController'
+        },
         robotType: {
             name: 'RobotTypeController',
             path: '../controllers/robotTypeController'
@@ -99,6 +103,10 @@ export default {
         room: {
             name: 'RoomRepo',
             path: '../repos/roomRepo'
+        },
+        robot: {
+            name: 'RobotRepo',
+            path: '../repos/mongo/robotRepo'
         },
         robotType: {
             name: 'RobotTypeRepo',
@@ -135,6 +143,10 @@ export default {
             name: 'roomSchema',
             schema: '../persistence/schemas/roomSchema'
         },
+        robot: {
+            name: 'robotSchema',
+            schema: '../persistence/schemas/robotSchema'
+        },
         robotType: {
             name: 'robotType',
             schema: '../persistence/schemas/robotTypeSchema'
@@ -165,6 +177,10 @@ export default {
         room: {
             name: 'RoomService',
             path: '../services/roomService'
+        },
+        robot: {
+            name: 'RobotService',
+            path: '../services/robotService'
         },
         robotType: {
             name: 'RobotTypeService',

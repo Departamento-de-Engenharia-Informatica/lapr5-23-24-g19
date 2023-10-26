@@ -1,9 +1,8 @@
-import { ValueObject } from "../../core/domain/ValueObject";
-import { Result } from "../../core/logic/Result";
+import { ValueObject } from '../../core/domain/ValueObject'
 
 enum State {
     ENABLED,
-    DISABLED
+    DISABLED,
 }
 
 interface Props {
@@ -15,8 +14,8 @@ export class RobotState extends ValueObject<Props> {
         super(props)
     }
 
-    static create(): Result<RobotState> {
-        return Result.ok(new RobotState({ value: State.ENABLED }))
+    static create(): RobotState {
+        return new RobotState({ value: State.ENABLED })
     }
 
     set value(state: State) {
@@ -33,5 +32,16 @@ export class RobotState extends ValueObject<Props> {
 
     private enable() {
         this.value = State.ENABLED
+    }
+
+    toString(): string {
+        switch (this.value) {
+            case State.ENABLED:
+                return 'Enabled'
+            case State.DISABLED:
+                return 'Disabled'
+            default:
+                return 'Unknown'
+        }
     }
 }
