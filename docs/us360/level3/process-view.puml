@@ -1,0 +1,77 @@
+@startuml
+autonumber
+
+participant "Fleet Manager" as ui
+mainframe MD
+box "Back-End" #LightBlue
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Repository" as repo
+
+participant "robot:\nRobot" as b
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+end box
+box "Database"
+    database "Database" as db
+end box
+
+ui --> r : post(/robots)
+activate r
+    note right : verify if user is a \nfleet manager
+    alt unkown user
+        r --> ui : 401: Unauthorized
+    else user not authorized
+        r --> ui : 403: Forbidden
+    else user authorized
+
+    r -> ctrl : createRobot()
+    activate ctrl
+        ctrl -> svc : createRobot()
+        activate svc
+            svc -> repo : findRobotType(robotTypeCode)
+            activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
+            deactivate repo
+
+            svc --> b ** : create()
+            activate b
+
+            alt robot  not created
+                svc --> ctrl : error
+                deactivate b
+                ctrl --> r : error (422)
+                r --> ui : 422: Unprocessable Content
+            else robot  created successfully
+            svc -> repo : save(robot)
+            activate repo
+                repo -> db : save()
+                activate db
+                deactivate db
+            deactivate repo
+
+            svc -> map : toDTO(robot)
+            activate map
+                map --> dto **: create(robot)
+                activate dto
+
+                map --> svc : dto
+                deactivate dto
+            deactivate map
+
+            svc --> ctrl : dto
+        deactivate svc
+
+        ctrl --> r : dto (201)
+    deactivate ctrl
+    r --> ui: 201: Created
+deactivate r
+
+end
+end
+
+@enduml
