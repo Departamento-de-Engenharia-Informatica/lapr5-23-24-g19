@@ -11,10 +11,12 @@ actor -> sys: GET /building/{id}/elevators
     activate sys
     alt building not found
         sys --> actor : 412: Precondition Failed
-    else elevators not found
-        actor <-- sys : 412: Precondition Failed
-    else elevators sent
-        actor <-- sys : 200: "OK" Successful
+    else building found
+        alt elevators not found
+            actor <-- sys : 412: Precondition Failed
+        else elevators sent
+            actor <-- sys : 200: "OK" Successful
+        end
     end
 
 

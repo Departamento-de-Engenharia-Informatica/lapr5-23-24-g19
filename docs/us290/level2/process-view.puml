@@ -13,10 +13,12 @@ activate actor
         activate mdr
             alt building not found
                     mdr --> actor : 412: Precondition Failed
-            else elevators not found
-                actor <-- mdr : 412: Precondition Failed
-            else elevators sent
-                actor <-- mdr : 200: "OK" Successful
+            else building found
+                alt elevators not found
+                    actor <-- mdr : 412: Precondition Failed
+                else elevators sent
+                    actor <-- mdr : 200: "OK" Successful
+                end
             end
             deactivate mdr
 

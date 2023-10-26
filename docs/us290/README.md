@@ -1,4 +1,4 @@
-# US 290 - List elevators inside building - Level 3
+# US 290 - List elevators inside building
 
 ### 1. User Story Description
 
@@ -12,9 +12,24 @@ As an administrator, I intend to list all elevators inside a building.
 
 **From the client clarifications:**
 
-> **Question:**
+> **Question:** Olá,
+o enunciado diz:
+"Assume-se apenas um elevador por edifício"
+Tendo em conta que só há um elevador por edificio, pretende-se saber qual é o elevador de cada edificio? Ou é suposto haver mais do que um elevador num edificio?
 
-> **Answer:**
+> **Answer:** bom dia,
+de momento apenas necessitam suportar um elevador por edificio
+
+> **Question:** Boa tarde,
+Já foi aqui, aqui e aqui referido que só é necessário considerar 1 elevador por edifício.
+Nesta US pretende-se devolver ("listar") apenas 1 elevador.
+Que informacoes pretende, então, ver sobre esse elevador?
+Com os melhores cumprimentos,
+g079
+
+> **Answer:** bom dia,
+pretende-se listar todas as informações do elevador.
+notem que quando é dito que podem assumir que existe apenas um elevador é uma maneira de simplificar o problema para esta fase de prototipo, principalmente reduzindo a complexidade dos mapas e do calculo de percursos, mas nada vos impede de suportar vários elevadores no sistema se assim o entenderem
 
 ### 3. Diagrams
 

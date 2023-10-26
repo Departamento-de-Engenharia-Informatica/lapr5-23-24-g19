@@ -21,9 +21,9 @@ end box
 ui --> r: post(/building)
 
     activate r
-        r -> ctrl : createBuilding()
+        r -> ctrl : createBuilding(req,res)
             activate ctrl
-                ctrl -> svc : createBuilding()
+                ctrl -> svc : createBuilding(bodyDTO)
                 activate svc
 
                     svc --> b **: create()
@@ -58,7 +58,7 @@ ui --> r: post(/building)
 
 
 
-    r --> ui: Created
+    r --> ui: 201: Created
 deactivate r
     end
 'deactivate ui

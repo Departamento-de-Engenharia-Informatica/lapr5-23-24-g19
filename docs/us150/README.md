@@ -1,4 +1,4 @@
-# US 150 - Create building - Level 3
+# US 150 - Create building
 
 ### 1. User Story Description
 
@@ -50,9 +50,9 @@ o requisito 310 Criar sala permite definir um sala num dado piso de um edificio,
 
 ### 4.1 HTTP Requests
 
-|     Method     |    HTTP request     |                            Description                            |
-|:--------------:|:-------------------:|:-----------------------------------------------------------------:|
-| createBuilding | **POST** /buildings | Building Route calls method create building in buildingController |
+|     Method     |    HTTP request     |                           Description                            |
+|:--------------:|:-------------------:|:----------------------------------------------------------------:|
+| createBuilding | **POST** /buildings | Building Route calls method createBuilding in buildingController |
 
 ### 4.2 HTTP Response
 |  Status code  |       Description       |
