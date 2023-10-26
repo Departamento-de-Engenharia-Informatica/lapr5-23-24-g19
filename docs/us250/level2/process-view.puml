@@ -1,16 +1,18 @@
 @startuml
 autonumber
 
-participant "<<system>>\nSystem RobDroneGo" as sys
+box "   <<system>>\nRobDroneGo"
+participant "MD" as md
 
-[-> sys: PUT /passages
 
-activate sys
+[--> md: PATCH|PUT /passages
+
+activate md
     alt buildings/floors not found
         [<-- sys : 404
     else passage edited successfully
-        [<-- sys  : 201
+        [<-- sys  : 200
     end
-deactivate sys
+deactivate md
 
 @enduml

@@ -19,7 +19,7 @@ box "Database"
     database "DB" as db
 end box
 
-[-> rt : PUT /passages
+[-> rt : PATCH|PUT /passages
 
 activate rt
     rt -> ctrl : editPassage()

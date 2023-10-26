@@ -3,7 +3,7 @@ autonumber
 
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-[-> sys: PATCH /passages
+[-> sys: PATCH|PUT /passages
 
 activate sys
     alt buildings/floors not found
