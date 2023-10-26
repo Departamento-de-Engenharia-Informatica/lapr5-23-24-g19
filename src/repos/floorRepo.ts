@@ -100,7 +100,7 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async save(floor: Floor): Promise<Floor> {
-        const query = { buildingCode: floor.building.code.value, floorNumber: floor.floorNumber.value }
+        const query = { domainId: floor.id }
 
         const floorDocument = await this.floorSchema.findOne(query)
         try {
