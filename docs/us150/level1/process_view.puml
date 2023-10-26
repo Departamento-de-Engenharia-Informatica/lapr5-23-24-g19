@@ -5,7 +5,7 @@ actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: POST /building
+    actor -> sys: POST /buildings
 
     activate sys
     alt building not created

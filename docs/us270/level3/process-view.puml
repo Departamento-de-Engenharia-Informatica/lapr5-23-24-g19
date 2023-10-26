@@ -20,9 +20,9 @@ end box
 
 ui --> r: post (/buildings/{id}/elevators)
     activate r
-        r -> ctrl : createElevator()
+        r -> ctrl : createElevator(req,res,...)
         activate ctrl
-            ctrl -> svc : createElevator()
+            ctrl -> svc : createElevator(dto)
             activate svc
                 svc -> repo : findByCode(buildingCode)
                 activate repo

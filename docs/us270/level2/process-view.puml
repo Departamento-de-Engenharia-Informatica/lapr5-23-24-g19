@@ -6,7 +6,7 @@ box "RobDroneGo"
 participant "MD" as mdr
 
 activate actor
-    actor -> mdr: POST /building/{id}/elevators
+    actor -> mdr: POST /buildings/{id}/elevators
     activate mdr
 
     alt building not found

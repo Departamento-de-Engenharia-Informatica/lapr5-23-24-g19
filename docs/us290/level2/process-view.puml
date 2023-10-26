@@ -9,7 +9,7 @@ activate actor
 
 
 
-        actor-> mdr: GET /building/{id}/elevators
+        actor-> mdr: GET /buildings/{id}/elevators
         activate mdr
             alt building not found
                     mdr --> actor : 412: Precondition Failed

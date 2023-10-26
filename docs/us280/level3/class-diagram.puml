@@ -38,11 +38,13 @@ package system {
         }
 
         package "Repositories" {
-
+            class RepoBuilding
+            class RepoFloor
             class RepoElevator
         }
 
-
+        RepoBuilding .up.> DBDriver
+        RepoFloor .up.> DBDriver
         RepoElevator .up.> DBDriver
 
         RouteElevator ....> IControllerElevator
@@ -61,17 +63,20 @@ package system {
             AppServiceElevator --|> IAppServiceElevator
 
             package "IRepositories" {
-
+                interface IRepoBuilding
+                interface IRepoFloor
                 interface IRepoElevator
             }
 
-
+            RepoBuilding --|> IRepoBuilding
+            RepoFloor --|> IRepoFloor
             RepoElevator --|> IRepoElevator
         }
 
         ControllerElevator ..> IAppServiceElevator
 
-
+        AppServiceElevator .up.> IRepoBuilding
+        AppServiceElevator .up.> IRepoFloor
         AppServiceElevator .up.> IRepoElevator
     }
 
@@ -81,7 +86,6 @@ package system {
             package "Elevator" as a_elevator {
                 entity Elevator <<root>> <<entity>>
             }
-
 
         }
 

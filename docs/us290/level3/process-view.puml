@@ -18,9 +18,9 @@ box "Database"
 database "Repository" as repo
 end box
 
-ui --> r: GET /building/{id}/elevators
+ui --> r: GET /buildings/{id}/elevators
     activate r
-        r -> ctrl : getElevator(req,res)
+        r -> ctrl : getElevator(req,res,...)
         activate ctrl
             ctrl -> svc : getElevator(id)
             activate svc

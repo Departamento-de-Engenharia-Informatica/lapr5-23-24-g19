@@ -42,9 +42,9 @@ notem que quando é dito que podem assumir que existe apenas um elevador é uma 
 
 ### 4.1 HTTP Requests
 
-|    Method    |    HTTP request     |                          Description                           |
-|:------------:|:-------------------:|:--------------------------------------------------------------:|
-| getElevators | **POST** /buildings/:id/elevators | Building Route calls method getElevators in elevatorController |
+|    Method    |           HTTP request           |                          Description                           |
+|:------------:|:--------------------------------:|:--------------------------------------------------------------:|
+| getElevators | **GET** /buildings/:id/elevators | Building Route calls method getElevators in elevatorController |
 
 ### 4.2 HTTP Response
 | Status code |     Description     |

@@ -6,7 +6,7 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 
 
 activate actor
-actor -> sys: GET /building/{id}/elevators
+actor -> sys: GET /buildings/{id}/elevators
 
     activate sys
     alt building not found

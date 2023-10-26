@@ -1,0 +1,7 @@
+{
+    "floors":[1,2,3],
+    "model":"ElevatorModel2021",
+    "brand":"ElevatorBrand2021",
+    "serialNumber":"Elevatorserialnumber2021",
+    "description":"ElevatorInformatica"
+}

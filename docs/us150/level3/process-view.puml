@@ -18,7 +18,7 @@ database "Repository" as repo
 end box
 
 'activate ui
-ui --> r: post(/building)
+ui --> r: post(/buildings)
 
     activate r
         r -> ctrl : createBuilding(req,res)

@@ -5,15 +5,23 @@ actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate actor
-    actor -> sys: PATCH/PUT  ( /elevator/{id} )
+    actor -> sys: PATCH/PUT  ( /buildings/{idb}/elevators/{ide} )
     activate sys
 
-    alt  elevator not found
-    sys --> actor : 412: Precondition Failed
-        else elevator bad params
-        sys --> actor : 422: Unprocessable Content
-    else elevator edited successfully
-        sys --> actor : 200: "OK" Successful
+    alt building not found
+        sys --> actor : 412: Precondition Failed
+    else building found
+
+        alt elevator not found
+        sys --> actor : 412: Precondition Failed
+        else elevator exists
+
+            alt  elevator bad params
+                sys --> actor : 422: Unprocessable Content
+            else elevator edited successfully
+                sys --> actor : 200: "OK" Successful
+            end
+        end
     end
 
     deactivate sys

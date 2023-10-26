@@ -7,7 +7,7 @@ participant "MD" as mdr
 
 activate actor
 
-    actor -> mdr: POST /building
+    actor -> mdr: POST /buildings
 
     activate mdr
     alt building not created

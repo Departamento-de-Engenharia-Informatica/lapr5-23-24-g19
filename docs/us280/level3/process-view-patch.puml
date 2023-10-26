@@ -19,62 +19,80 @@ database "Repository" as repo
 'participant "elevator:\nElevator" as e
 end box
 
-ui --> r: PATCH (elevators/{id})
+ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
     activate r
             r -> ctrl : patchElevator(req,res,...)
                 activate ctrl
-                    ctrl -> svc : editElevator(id,dto)
+                    ctrl -> svc : editElevator(idElevator,dto)
                     activate svc
-                        svc -> repo : findByIdentifier(elevator)
+                        svc -> repo : findByCode(buildingCode)
                         activate repo
                             'repo --> e **: create()
                         deactivate repo
 
-                        alt elevator not found
+                        alt building not found
                             svc --> ctrl : error
-                            ctrl --> r : response 422
+                            ctrl --> r : response 412
                             ui <--r : 412: Precondition Failed
-                        else elevator exists
-
-                            note right of svc
-                                edit building specifications
-                                based on new ones
-                            end note
-
-
-                        alt elevator bad parameters
-                            svc --> ctrl : error
-                            ctrl --> r : response 422
-                            ui <--r : 422: Unprocessable Content
-                        else
-                           svc -> repo : save(elevator)
-                           activate repo
-                           deactivate repo
 
 
 
+                        else building found
 
-                        svc -> map : domain2DTO(elevator)
-                        activate map
-                            map --> dto **: create(elevator)
-                            activate dto
+                            svc -> repo : exitsInBuilding(building,elevatorIdentifier)
+                            activate repo
+                            deactivate repo
 
-                            map --> svc : dto
-                            deactivate dto
-                        deactivate map
+                            alt elevator not found
+                                svc --> ctrl : error
+                                ctrl --> r : response 412
+                                ui <--r : 412: Precondition Failed
+                            else elevator exists
 
-                        svc --> ctrl : dto
-                    deactivate svc
+                                svc -> repo: findByIdentifier(building,elevatorIdentifier)
+                                activate repo
+                                deactivate repo
 
-                    ctrl --> r : 200
-                deactivate ctrl
+                                note right of svc
+                                    edit building specifications
+                                    based on new ones
+                                end note
+
+
+                            alt elevator bad parameters
+                                svc --> ctrl : error
+                                ctrl --> r : response 422
+                                ui <--r : 422: Unprocessable Content
+                            else
+                               svc -> repo : save(elevator)
+                               activate repo
+                               deactivate repo
 
 
 
 
-        ui <--r: 200: "OK" Sucessful
-        end
-     end
+                            svc -> map : toDTO(elevator)
+                            activate map
+                                map --> dto **: create(elevator)
+                                activate dto
+
+                                map --> svc : dto
+                                deactivate dto
+                            deactivate map
+
+                            svc --> ctrl : dto
+                        deactivate svc
+
+                        ctrl --> r : 200
+                    deactivate ctrl
+
+
+
+
+            ui <--r: 200: "OK" Sucessful
+                end
+            end
+         end
     deactivate r
 
 @enduml

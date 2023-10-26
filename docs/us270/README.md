@@ -54,10 +54,11 @@ o número indeitifcativo do elevador deve ser gerado sequencialmente pelo sistem
 | createElevator | **POST** /buildings/:id/elevators | Building Route calls method createElevator in elevatorController |
 
 ### 4.2 HTTP Response
-|  Status code  |       Description       |
-|:-------------:|:-----------------------:|
-|    **201**    |         Created         |
-|    **422**    |  Unprocessable Content  |
+| Status code |      Description      |
+|:-----------:|:---------------------:|
+|   **201**   |        Created        |
+|   **412**   |  Precondition Failed  |
+|   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization
 
