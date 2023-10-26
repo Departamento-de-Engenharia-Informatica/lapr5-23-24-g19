@@ -135,10 +135,10 @@ export default class PassageService implements IPassageService {
             }
 
             const allPassages = await this.passageRepo.findAll()
-            const dtoList = await Promise.all(allPassages.map(passage => PassageMap.toDTO(passage)))
+            // const dtoList = await Promise.all(allPassages.map(passage => PassageMap.toDTO(passage)))
 
             const passages = await this.passageRepo.passagesBetweenBuildings(
-                dtoList,
+                allPassages,
                 b1Code.getValue(),
                 b2Code.getValue(),
             )

@@ -7,6 +7,7 @@ import IPassageController from './IControllers/IPassageController'
 import IPassageService from '../services/IServices/IPassageService'
 import { IPassageDTO } from '../dto/IPassageDTO'
 import IUpdatePassageDTO from '../dto/IUpdatePassageDTO'
+import { parseInt } from 'lodash'
 
 @Service()
 export default class PassageController implements IPassageController {
@@ -31,21 +32,18 @@ export default class PassageController implements IPassageController {
 
     public async getPassages(req: Request, res: Response, next: NextFunction) {
         try {
-            const building1 = req.body.building1
-            const building2 = req.body.building2
+            const building1 = req.query.building1 as string | undefined
+            const building2 = req.query.building2 as string | undefined
 
-            // Either 0 or 2 buildings are present
-            if (!building1 && !building2) {
+            // Less than two buildings specified
+            if (!building1 || !building2) {
                 const result = await this.passageServiceInstance.getAllPassages()
                 if (result.isFailure) {
                     return res.status(422).send()
                 }
                 return res.json(result.getValue()).status(200)
             } else if (building1 && building2) {
-                const firstId = req.params.id
-                const secondId = req.params.id
-
-                const result = await this.passageServiceInstance.getPassagesBetweenBuildings(firstId, secondId)
+                const result = await this.passageServiceInstance.getPassagesBetweenBuildings(building1, building2)
                 if (result.isFailure) {
                     return res.status(422).send()
                 }

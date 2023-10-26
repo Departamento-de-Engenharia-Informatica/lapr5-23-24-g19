@@ -34,34 +34,12 @@ export default (app: Router) => {
     )
 
     route.get(
-        '/:id/:id',
+        '',
         celebrate({
-            body: Joi.object({
-                building1: Joi.object({
-                    name: Joi.string(),
-                    description: Joi.string(),
-                    maxFloorDimensions: Joi.object({
-                        length: Joi.number()
-                            .integer()
-                            .required(),
-                        width: Joi.number()
-                            .integer()
-                            .required(),
-                    }),
-                }).optional(),
-                building2: Joi.object({
-                    name: Joi.string(),
-                    description: Joi.string(),
-                    maxFloorDimensions: Joi.object({
-                        length: Joi.number()
-                            .integer()
-                            .required(),
-                        width: Joi.number()
-                            .integer()
-                            .required(),
-                    }),
-                }).optional(),
-            }).or('building1', 'building2'),
+            query: {
+                building1: Joi.string(),
+                building2: Joi.string(),
+            },
         }),
         (req, res, next) => ctrl.getPassages(req, res, next),
     )
