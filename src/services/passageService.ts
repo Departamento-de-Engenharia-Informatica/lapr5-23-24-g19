@@ -161,7 +161,6 @@ export default class PassageService implements IPassageService {
         }
 
         const passage = passageRes.getValue()
-
         let f1: Floor | undefined, f2: Floor | undefined
         if (!!passageDTO.new.floor1) {
             const f1Info = passageDTO.new.floor1
@@ -182,31 +181,31 @@ export default class PassageService implements IPassageService {
 
         if (!!passageDTO.new.floor2) {
             const f2Info = passageDTO.new.floor2
-
             const b2 = await this.buildingRepo.findByCode(BuildingCode.create(f2Info.buildingCode).getValue())
-
+            
             if (!b2) {
                 return Result.fail(`Building not found with code ${f2Info.buildingCode}`)
             }
-            const floor = await this.floorRepo.find(b2, FloorNumber.create(f2Info.floorNumber).getValue())
 
+
+            const floor = await this.floorRepo.find(b2, FloorNumber.create(f2Info.floorNumber).getValue())
+            
             if (!floor) {
                 return Result.fail(`Floor ${f2Info.floorNumber} not found in building ${f2Info.buildingCode}`)
             }
 
+
             f2 = floor
         }
-
         const result = passage.update({
             floor1: f1,
             floor2: f2,
         })
-
+        
         if (result.isFailure) {
             return Result.fail(result.errorValue())
         }
-
         const updated = await this.passageRepo.save(result.getValue())
-        return Result.ok(PassageMap.toDTO(updated))
+        return Result.ok(PassageMap.toDTO(result.getValue()))
     }
 }

@@ -2,6 +2,7 @@ import { Repo } from '../../core/infra/Repo'
 import { Passage } from '../../domain/passage/passage'
 import { BuildingCode } from '../../domain/building/buildingCode'
 import { Floor } from '../../domain/floor/floor'
+import { IPassagePersistence } from '../../dataschema/IPassagePersistence'
 
 export default interface IPassageRepo extends Repo<Passage> {
     find(floor1: Floor, floor2: Floor): Promise<Passage>

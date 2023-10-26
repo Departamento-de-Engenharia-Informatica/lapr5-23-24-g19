@@ -115,7 +115,7 @@ export default class FloorRepo implements IFloorRepo {
                 floorDocument.map = rawFloor.map
 
                 await floorDocument.save()
-                return floor
+                return FloorMap.toDomain(floorDocument)
             }
         } catch (err) {
             throw err

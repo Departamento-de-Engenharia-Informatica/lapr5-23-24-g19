@@ -49,22 +49,21 @@ export default class PassageRepo implements IPassageRepo {
     }
 
     public async save(passage: Passage): Promise<Passage> {
+        const query = {domainId: passage.id}
+        const passageDocument = await this.passageSchema.findOne(query)
+        const rawPassage = PassageMap.toPersistence(passage)
+        
         try {
-            if (await this.exists(passage)) {
-                return null
+            if (passageDocument === null) {
+                const floorCreated = await this.passageSchema.create(rawPassage)
+                return PassageMap.toDomain(floorCreated)
+            } else {
+                passageDocument.floor1ID = rawPassage.floor1ID
+                passageDocument.floor2ID = rawPassage.floor2ID
+                await passageDocument.save()
 
-                // passageDocument.floor1ID = passage.props.floor1.id.toString()
-                // passageDocument.floor2ID = passage.props.floor2.id.toString()
-
-                // await passageDocument.save()
-                // return passage
+                return PassageMap.toDomain(passageDocument)
             }
-
-            const rawPassage: any = PassageMap.toPersistence(passage)
-
-            const passageCreated = await this.passageSchema.create(rawPassage)
-
-            return PassageMap.toDomain(passageCreated)
         } catch (err) {
             throw err
         }
@@ -143,7 +142,7 @@ export default class PassageRepo implements IPassageRepo {
     }
 
     async find(floor1: Floor, floor2: Floor): Promise<Passage> {
-        return (
+        return PassageMap.toDomain(
             (await this.passageSchema.findOne({
                 floor1ID: floor1.id.toString(),
                 floor2ID: floor2.id.toString(),
