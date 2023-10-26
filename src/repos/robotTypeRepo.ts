@@ -5,6 +5,8 @@ import RobotType from '../domain/robotType/robotType'
 import { RobotTypeMap } from '../mappers/RobotTypeMap'
 import IRobotTypeRepo from '../services/IRepos/IRobotTypeRepo'
 import config from "../../config";
+import { Robot } from '../domain/robot/Robot'
+import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
 
 @Service()
 export default class RobotTypeRepo implements IRobotTypeRepo {
@@ -17,21 +19,27 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
     }
 
     public async exists(robotType: RobotType): Promise<boolean> {
-        const query = { code: robotType.code }
-        const buildingDocument = await this.robotTypeSchema.findOne(query)
+        const query = { code: robotType.code.value }
+        const robotTypeDocument = await this.robotTypeSchema.findOne(query)
+        return !!robotTypeDocument
+    }
 
-        return !!buildingDocument
+    public async find(code: RobotTypeCode): Promise<RobotType> {
+        const query = { code: code.value }
+        const robotTypeDocument = await this.robotTypeSchema.findOne(query)
+
+        return RobotTypeMap.toDomain(robotTypeDocument)
     }
 
     public async save(robotType: RobotType): Promise<RobotType> {
-        const query = { code: robotType.code.toString() }
+        const query = { code: robotType.code.value }
 
         const robotTypeDocument = await this.robotTypeSchema.findOne(query)
 
         try {
             const rawRobotType = RobotTypeMap.toPersistence(robotType)
 
-            if (await this.exists(robotType)) {
+            if (!!robotTypeDocument) {
                 robotTypeDocument.code = rawRobotType.code
                 robotTypeDocument.brand = rawRobotType.brand
                 robotTypeDocument.model = rawRobotType.model
