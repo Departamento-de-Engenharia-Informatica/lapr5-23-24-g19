@@ -10,7 +10,7 @@ import { IRobotDTO } from '../dto/IRobotDTO'
 export default class RobotController implements IRobotController {
     constructor(@Inject(config.services.robot.name) private service: IRobotService) {}
 
-    public async createRobot(req: Request, res: Response, next: NextFunction) {
+    async createRobot(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = req.body as IRobotDTO
             const result = await this.service.createRobot(dto)

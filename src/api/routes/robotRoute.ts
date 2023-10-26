@@ -1,8 +1,8 @@
+import config from '../../../config'
+import { Container } from 'typedi'
 import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
-import { Container } from 'typedi'
 
-import config from '../../../config'
 import IRobotController from '../../controllers/IControllers/IRobotController'
 
 const route = Router()
@@ -10,7 +10,7 @@ const route = Router()
 export default (app: Router) => {
     app.use('/robots', route)
 
-    const ctrl = Container.get(config.controllers.robotType.name) as IRobotController
+    const ctrl = Container.get(config.controllers.robot.name) as IRobotController
 
     route.post(
         '',

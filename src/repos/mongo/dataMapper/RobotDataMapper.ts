@@ -1,5 +1,6 @@
-import Container from 'typedi'
 import config from '../../../../config'
+import Container from 'typedi'
+
 import { IRobotPersistence } from '../../../dataschema/mongo/IRobotPersistence'
 import { RobotCode } from '../../../domain/robot/code'
 import { RobotDescription } from '../../../domain/robot/description'
@@ -14,7 +15,7 @@ import IRobotTypeRepo from '../../../services/IRepos/IRobotTypeRepo'
 // scuffed impl because of schema not using ObjectId's
 export default class MongoRobotDataMap
     implements RobotDataMap<IRobotPersistence> {
-        private readonly robotTypeRepo: IRobotTypeRepo
+        private robotTypeRepo: IRobotTypeRepo
         constructor() {
             this.robotTypeRepo = Container.get(config.repos.robotType.name)
         }
@@ -36,8 +37,7 @@ export default class MongoRobotDataMap
         const nickname = RobotNickname.create(p.nickname).getValue()
         const type = await this.robotTypeRepo.find(RobotTypeCode.create(p.type).getValue())
         const serialNumber = RobotSerialNumber.create(p.serialNumber).getValue()
-        const state = RobotState.create()
-        state.value = p.state
+        const state = RobotState.create(p.state)
         const description = p.description && RobotDescription.create(p.description).getValue()
 
         const robot = Robot.create({

@@ -65,13 +65,13 @@ export default {
             name: 'RoomController',
             path: '../controllers/roomController'
         },
-        robot: {
-            name: 'RobotController',
-            path: '../controllers/robotController'
-        },
         robotType: {
             name: 'RobotTypeController',
             path: '../controllers/robotTypeController'
+        },
+        robot: {
+            name: 'RobotController',
+            path: '../controllers/robotController'
         },
     },
 
@@ -104,13 +104,13 @@ export default {
             name: 'RoomRepo',
             path: '../repos/roomRepo'
         },
-        robot: {
-            name: 'RobotRepo',
-            path: '../repos/mongo/robotRepo'
-        },
         robotType: {
             name: 'RobotTypeRepo',
             path: '../repos/robotTypeRepo'
+        },
+        robot: {
+            name: 'RobotRepo',
+            path: '../repos/mongo/robotRepo'
         },
     },
 
@@ -143,13 +143,13 @@ export default {
             name: 'roomSchema',
             schema: '../persistence/schemas/roomSchema'
         },
-        robot: {
-            name: 'robotSchema',
-            schema: '../persistence/schemas/robotSchema'
-        },
         robotType: {
             name: 'robotType',
             schema: '../persistence/schemas/robotTypeSchema'
+        },
+        robot: {
+            name: 'robotSchema',
+            schema: '../persistence/schemas/robotSchema'
         },
     },
 
@@ -178,13 +178,13 @@ export default {
             name: 'RoomService',
             path: '../services/roomService'
         },
-        robot: {
-            name: 'RobotService',
-            path: '../services/robotService'
-        },
         robotType: {
             name: 'RobotTypeService',
             path: '../services/robotTypeService'
+        },
+        robot: {
+            name: 'RobotService',
+            path: '../services/robotService'
         },
     },
 }

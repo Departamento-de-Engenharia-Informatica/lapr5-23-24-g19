@@ -14,8 +14,8 @@ export class RobotState extends ValueObject<Props> {
         super(props)
     }
 
-    static create(): RobotState {
-        return new RobotState({ value: State.ENABLED })
+    static create(state?: State): RobotState {
+        return new RobotState({ value: state ?? State.ENABLED })
     }
 
     set value(state: State) {

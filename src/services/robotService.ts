@@ -22,8 +22,8 @@ import { ICreatedRobotDTO } from '../dto/ICreatedRobotDTO'
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
-        @Inject(config.repos.robotType.name) private robotRepo: IRobotRepo,
-        @Inject(config.repos.robot.name) private robotTypeRepo: IRobotTypeRepo
+        @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
+        @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo
     ) {}
 
     public async createRobot(dto: IRobotDTO): Promise<Result<ICreatedRobotDTO>> {
