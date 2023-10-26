@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as actor
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+activate actor
+    actor -> sys: POST /robots
+
+    activate sys
+    alt unkown user
+        sys --> actor : 401: Unauthorized
+    else user not autorized
+        sys --> actor : 403: Forbidden
+    else user authorized
+        alt robot not created
+            sys --> actor : 422: Unprocessable Content
+        else robot created successfully
+            sys --> actor : 201: Created
+        end
+    end
+
+    deactivate sys
+deactivate actor
+
+
+@enduml
