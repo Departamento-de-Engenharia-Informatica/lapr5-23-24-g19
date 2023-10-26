@@ -24,7 +24,7 @@ ui --> r: post (/buildings/{id}/elevators)
         activate ctrl
             ctrl -> svc : createElevator()
             activate svc
-                svc -> repo : exists(buildingId)
+                svc -> repo : findByCode(buildingCode)
                 activate repo
                 deactivate repo
 
@@ -33,9 +33,10 @@ ui --> r: post (/buildings/{id}/elevators)
                     ctrl --> r : error (412)
                     r --> ui : 412: Precondition Failed
                 else building found
-                    svc -> repo: allExist(floors)
+                    svc -> repo: existsInBuilding(building,elevatorIdentifier)
 
                     activate repo
+                        svc -> repo: find(building,floorNumber)
                     deactivate repo
 
                     alt floor(s) not found

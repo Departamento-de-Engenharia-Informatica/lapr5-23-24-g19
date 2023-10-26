@@ -11,12 +11,16 @@ activate actor
 
     alt building not found
         mdr --> actor : 412: Precondition Failed
-    else floor(s) not found
-        mdr --> actor : 412: Precondition Failed
-    else elevator not created
-        mdr --> actor : 422: Unprocessable Content
-    else elevator created successfully
-        mdr --> actor : 201: Created
+    else building found
+        alt floor(s) not found
+            mdr --> actor : 412: Precondition Failed
+        else floors found
+            alt elevator not created
+                mdr --> actor : 422: Unprocessable Content
+            else elevator created successfully
+                mdr --> actor : 201: Created
+            end
+        end
     end
 
     deactivate mdr

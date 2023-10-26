@@ -10,12 +10,16 @@ activate actor
 
     alt building not found
         sys --> actor : 412: Precondition Failed
-    else floor(s) not found
-        sys --> actor : 412: Precondition Failed
-    else elevator not created
-        sys --> actor : 422: Unprocessable Content
-    else elevator created successfully
-        sys --> actor : 201: Created
+    else building found
+        alt floor(s) not found
+            sys --> actor : 412: Precondition Failed
+        else floors found
+            alt elevator not created
+                sys --> actor : 422: Unprocessable Content
+            else elevator created successfully
+                sys --> actor : 201: Created
+            end
+        end
     end
 
     deactivate sys

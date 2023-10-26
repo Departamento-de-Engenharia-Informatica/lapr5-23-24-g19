@@ -31,10 +31,10 @@ export default class ElevatorController implements IElevatorController {
 
     public async putElevator(req: Request, res: Response, next: NextFunction) {
         try {
-            const firstId = req.params.id
+            const buildingId = req.params.id
 
             const dto = req.body as IElevatorDTO
-            dto.buildingId = firstId
+            dto.buildingId = buildingId
 
             const result = await this.service.createElevator(dto)
 
@@ -73,7 +73,7 @@ export default class ElevatorController implements IElevatorController {
             const result = await this.service.getElevators(req.params.id)
 
             if (result.isFailure) {
-                return res.status(422).send()
+                return res.status(412).send()
             }
 
             return res.json(result.getValue()).status(200)

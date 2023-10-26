@@ -134,7 +134,7 @@ export default (app: Router) => {
                             .integer()
                             .required(),
                     )
-                    .required(),
+                    .optional(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
