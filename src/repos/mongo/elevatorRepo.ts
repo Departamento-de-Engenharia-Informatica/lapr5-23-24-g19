@@ -25,16 +25,18 @@ export default class ElevatorRepo implements IElevatorRepo {
 
         const doc = await this.schema.findOne(query)
         try {
+            const raw = await this.mapper.toPersistence(t)
             if (!doc) {
-                const raw = await this.mapper.toPersistence(t)
+
                 const elevator = await this.schema.create(raw)
 
                 return this.mapper.toDomain(elevator)
             } else {
-                doc.brand = t.brand?.value
-                doc.model = t.model?.value
-                doc.serialNumber = t.serialNumber?.value
-                doc.description = t.description?.value
+                doc.floors = raw.floors
+                doc.brand = raw.brand
+                doc.model = raw.model
+                doc.serialNumber = raw.serialNumber
+                doc.description = raw.description
 
                 await doc.save()
                 return t

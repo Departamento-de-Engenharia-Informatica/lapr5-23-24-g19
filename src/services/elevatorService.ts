@@ -13,10 +13,10 @@ import { BuildingCode } from '../domain/building/buildingCode'
 import { FloorNumber } from '../domain/floor/floorNumber'
 
 import Elevator from '../domain/elevator/Elevator'
-import { ElevatorBrand, ElevatorBrand as Brand } from '../domain/elevator/brand'
-import { ElevatorDescription, ElevatorDescription as Description } from '../domain/elevator/description'
-import { ElevatorModel, ElevatorModel as Model } from '../domain/elevator/model'
-import { ElevatorSerialNumber, ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
+import { ElevatorBrand as Brand } from '../domain/elevator/brand'
+import { ElevatorDescription as Description } from '../domain/elevator/description'
+import { ElevatorModel as Model } from '../domain/elevator/model'
+import { ElevatorSerialNumber as SerialNumber } from '../domain/elevator/serialNumber'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
 import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 import { ElevatorIdentifier as Identifier } from '../domain/elevator/identifier'
@@ -111,18 +111,11 @@ export default class ElevatorService implements IElevatorService {
 
             const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier)
 
-            if (dto.brand) {
-                elevator.brand = ElevatorBrand.create(dto.brand).getValue()
-            }
-            if (dto.model) {
-                elevator.model = ElevatorModel.create(dto.model).getValue()
-            }
-            if (dto.serialNumber) {
-                elevator.serialNumber = ElevatorSerialNumber.create(dto.serialNumber).getValue()
-            }
-            if (dto.description) {
-                elevator.description = ElevatorDescription.create(dto.description).getValue()
-            }
+            elevator.brand = dto.brand ? Brand.create(dto.brand).getValue() : undefined
+            elevator.model = dto.model ? Model.create(dto.model).getValue() : undefined
+            elevator.serialNumber = dto.serialNumber ? SerialNumber.create(dto.serialNumber).getValue() : undefined
+            elevator.description = dto.description ? Description.create(dto.description).getValue() : undefined
+
             if (dto.floors) {
                 const floors =
                     (

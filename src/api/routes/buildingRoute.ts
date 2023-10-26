@@ -145,7 +145,7 @@ export default (app: Router) => {
     )
 
     route.put(
-        '/:id/elevators',
+        '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
                 floors: Joi.array()
