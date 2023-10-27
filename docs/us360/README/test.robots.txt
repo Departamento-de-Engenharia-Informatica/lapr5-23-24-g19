@@ -1,0 +1,31 @@
+{
+    "code":"robot1",
+    "nickname":"RobotMarco",
+    "typeCode":"R01",
+    "serialNumber":"RobotSerial2023",
+    "description":"SuperRobot"
+}
+
+{
+    "code":"robot2",
+    "nickname":"RobotRuben",
+    "typeCode":"R01",
+    "serialNumber":"RobotSerial2022",
+    "description":"SuperRobotX"
+}
+
+{
+    "code":"robot3",
+    "nickname":"RobotNapoles",
+    "typeCode":"R02",
+    "serialNumber":"RobotSerial2021",
+    "description":"SuperRobotY"
+}
+
+{
+    "code":"robot4",
+    "nickname":"RobotJonas",
+    "typeCode":"R02",
+    "serialNumber":"RobotSerial2020",
+    "description":"SuperRobotZ"
+}

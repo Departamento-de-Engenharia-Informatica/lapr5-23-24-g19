@@ -24,4 +24,18 @@ export default class RobotController implements IRobotController {
             return next(e)
         }
     }
+
+    public async getRobots(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.getRobots()
+
+            if (result.isFailure) {
+                return res.status(412).send()
+            }
+
+            return res.json(result.getValue()).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
 }

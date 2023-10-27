@@ -9,5 +9,6 @@ export interface RobotDataMap<Persistence>
 export default interface IRobotRepo extends Repo<Robot> {
     save(robot: Robot): Promise<Robot>
     find(code:  RobotCode): Promise<Robot>
+    findAll(): Promise<Robot[]>
 }
 

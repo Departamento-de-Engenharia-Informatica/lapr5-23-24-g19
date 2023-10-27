@@ -8,6 +8,8 @@ import { IRobotPersistence } from '../../dataschema/mongo/IRobotPersistence'
 
 import Robot from '../../domain/robot/Robot'
 import { RobotCode } from '../../domain/robot/code'
+import Building from "../../domain/building/building";
+import {RobotMap} from "../../mappers/RobotMap";
 
 @Service()
 export default class RobotRepo implements IRobotRepo {
@@ -47,5 +49,15 @@ export default class RobotRepo implements IRobotRepo {
     async find(code: RobotCode): Promise<Robot> {
         const doc = await this.schema.findOne({ code: code.value })
         return this.mapper.toDomain(doc)
+    }
+
+    public async findAll(): Promise<Robot[]> {
+        const records = await this.schema.find()
+
+        if (records.length === 0) {
+            return [] // Return an empty array when there are no records
+        }
+        const robotList = await Promise.all(records.map(record => this.mapper.toDomain(record)))
+        return robotList
     }
 }

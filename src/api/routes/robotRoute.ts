@@ -25,4 +25,9 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.createRobot(req, res, next),
     )
+
+    route.get(
+        '',
+        (req, res, next) => ctrl.getRobots(req, res, next),
+    )
 }
