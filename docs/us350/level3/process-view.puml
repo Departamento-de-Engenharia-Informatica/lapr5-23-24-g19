@@ -1,9 +1,6 @@
 @startuml
 autonumber
 
-participant "Fleet Manager" as ui
-mainframe MD
-box "Back-End" #LightBlue
 
 participant "Route" as r
 participant "Controller" as ctrl
@@ -12,25 +9,40 @@ participant "Service" as svc
 participant "robotType:\nRobotType" as b
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
-box "Database"
-database "Repository" as repo
-end box
 
-ui --> r: post(/robottypes)
+participant "Repository" as repo
+database "Database" as db
+
+
+[->r: POST (/robottypes)
 
     activate r
         note right: verify if user is a \nfleet manager
         alt unkown user
-            r --> ui : 401: Unauthorized
+            [<-- r : 401: Unauthorized
         else user not authorized
-            r --> ui : 403: Forbidden
+            [<-- r : 403: Forbidden
         else user authorized
 
         r -> ctrl : createRobotType(res,req)
             activate ctrl
                 ctrl -> svc : createRobotType(dto)
                 activate svc
+
+                    svc -> repo: exists(rCode)
+                    activate repo
+                        repo -> db: findOne(rCode)
+                        activate db
+                        deactivate db
+                    deactivate repo
+
+                    alt robot already exists
+                    svc --> ctrl : error
+                    ctrl --> r : error (412)
+                        [<-- r : 412: Precondition Failed
+
+                    else robot not found
+
 
                     svc --> b **: create()
                     activate b
@@ -39,10 +51,13 @@ ui --> r: post(/robottypes)
                         svc --> ctrl : error
                         deactivate b
                         ctrl --> r : error (422)
-                        r --> ui : 422: Unprocessable Content
+                        [<-- r : 422: Unprocessable Content
                     else robot type created successfully
                     svc -> repo : save(robotType)
                     activate repo
+                        repo -> db : save()
+                        activate db
+                        deactivate db
                     deactivate repo
 
                     svc -> map : toDTO(robotType)
@@ -59,7 +74,7 @@ ui --> r: post(/robottypes)
 
                 ctrl --> r : dto (201)
             deactivate ctrl
-        r --> ui: 201: Created
+        [<-- r: 201: Created
     deactivate r
 end
 end
