@@ -7,7 +7,7 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate sys
     alt building(s) not found
-        [<--sys : response code: 422
+        [<--sys : response code: 404
     else building(s) found
         [<--sys : response code: 200
     end
