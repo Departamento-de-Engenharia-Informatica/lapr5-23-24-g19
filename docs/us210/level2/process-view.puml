@@ -1,18 +1,21 @@
 @startuml
 autonumber
 
-box "  <<system>>\nRobDroneGo"
+box "  <<mdrtem>>\nRobDroneGo"
 participant "MD" as mdr
 
-    [-> mdr: GET /buildings/{id}/floors
+[-> mdr: GET /buildings/{id}/floors
 
-    activate mdr
+activate mdr
+alt building not found
+    [<--mdr : response code: 422
+else building found
     alt floors not found
         [<--mdr : response code: 422
     else floors found
-        [<--mdr : response code 200
+        [<--mdr : response code: 200
     end
-    deactivate mdr
-
+end
+deactivate mdr
 
 @enduml
