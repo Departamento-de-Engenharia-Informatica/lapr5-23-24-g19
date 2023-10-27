@@ -7,10 +7,14 @@ participant "<<system>>\nSystem RobDroneGo" as sys
  [-> sys: GET /buildings/{id}/floors
 
 activate sys
-alt floors not found
+alt building not found
     [<--sys : response code: 422
-else floors found
-    [<--sys : response code: 200
+else building found
+    alt floors not found
+        [<--sys : response code: 422
+    else floors found
+        [<--sys : response code: 200
+    end
 end
 deactivate sys
 
