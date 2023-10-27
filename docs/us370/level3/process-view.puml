@@ -10,7 +10,7 @@ participant "robot:\nRobot" as robot
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
 
-database "Database" as db
+participant "DBDriver" as db
 
 [-> r : PATCH /robots/{:id}/inhibit
 activate r
