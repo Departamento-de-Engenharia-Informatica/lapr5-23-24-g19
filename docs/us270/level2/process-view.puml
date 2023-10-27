@@ -1,31 +1,20 @@
 @startuml
 autonumber
 
-actor " " as actor
-box "RobDroneGo"
 participant "MD" as mdr
 
-activate actor
-    actor -> mdr: POST /buildings/{id}/elevators
-    activate mdr
+[-> mdr : POST /buildings/{id}/elevators
 
+activate mdr
     alt building not found
-        mdr --> actor : 412: Precondition Failed
-    else building found
-        alt floor(s) not found
-            mdr --> actor : 412: Precondition Failed
-        else floors found
-            alt elevator not created
-                mdr --> actor : 422: Unprocessable Content
-            else elevator created successfully
-                mdr --> actor : 201: Created
-            end
-        end
+        [<-- mdr : 412: Precondition Failed
+    else floor(s) not found
+        [<-- mdr : 412: Precondition Failed
+    else elevator not created
+        [<-- mdr : 422: Unprocessable Content
+    else elevator created successfully
+        [<-- mdr : 201: Created
     end
-
-    deactivate mdr
-deactivate actor
-
+deactivate mdr
 
 @enduml
-

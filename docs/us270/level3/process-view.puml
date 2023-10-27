@@ -1,81 +1,77 @@
 @startuml
 autonumber
 
-participant "??" as ui
-
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
+participant "Repository" as repo
 
 participant "elevator:\nElevator" as elevator
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
 
-ui --> r: post (/buildings/{id}/elevators)
-    activate r
-        r -> ctrl : createElevator(req,res,...)
-        activate ctrl
-            ctrl -> svc : createElevator(dto)
-            activate svc
-                svc -> repo : findByCode(buildingCode)
+[--> r : POST /buildings/{id}/elevators
+activate r
+
+    r -> ctrl : createElevator()
+    activate ctrl
+
+        ctrl -> svc : createElevator(dto)
+        activate svc
+
+            svc -> repo : findByCode(buildingCode)
+            activate repo
+                repo ->] : find()
+            deactivate repo
+
+            alt building not found
+                svc --> ctrl : error
+                ctrl --> r : error (412)
+                [<-- r : 412: Precondition Failed
+            else building found
+
+                svc -> repo: findFloor(building,floorNumber)
                 activate repo
+                    repo ->] : find()
                 deactivate repo
 
-                alt building not found
+                alt floor(s) not found
                     svc --> ctrl : error
                     ctrl --> r : error (412)
-                    r --> ui : 412: Precondition Failed
-                else building found
-                    svc -> repo: existsInBuilding(building,elevatorIdentifier)
+                    [<- r : 412: Precondition Failed
+                else floors found
+                    svc --> elevator** : create()
 
-                    activate repo
-                        svc -> repo: find(building,floorNumber)
-                    deactivate repo
+                    activate elevator
+                    deactivate elevator
 
-                    alt floor(s) not found
+                    alt elevator not created
                         svc --> ctrl : error
-                        ctrl --> r : error (412)
-                        r --> ui : 412: Precondition Failed
-                    else floors found
-                        svc --> elevator** : create()
+                        ctrl --> r : error (422)
+                        [<- r : 422: Unprocessable Content
+                    else elevator created successfully
+                        svc -> repo : save(elevator)
+                        activate repo
+                            repo ->] : save()
+                        deactivate repo
 
-                        activate elevator
-                        deactivate elevator
+                        svc -> map : toDTO(elevator)
+                        activate map
+                            map --> dto** : create(elevator)
+                            activate dto
+                                map --> svc : dto
+                            deactivate dto
+                        deactivate map
 
-                        alt elevator not created
-                            svc --> ctrl : error
-                            ctrl --> r : error (422)
-                            r --> ui : 422: Unprocessable Content
-
-                        else elevator created successfully
-                            svc -> repo : save(elevator)
-
-                            activate repo
-                                svc -> map : toDTO(elevator)
-                            deactivate repo
-
-                            activate map
-                                map --> dto** : create(elevator)
-                                activate dto
-                                    map --> svc : dto
-                                deactivate dto
-                            deactivate map
-
-                            svc --> ctrl : dto
-                            ctrl --> r : dto (201)
-                            r --> ui : 201: Created
-                        end
+                        svc --> ctrl : dto
+                        ctrl --> r : dto (201)
+                        [<- r : 201: Created
                     end
                 end
-            deactivate svc
-        deactivate ctrl
-    deactivate r
+            end
+        deactivate svc
+    deactivate ctrl
+deactivate r
 
 @enduml
