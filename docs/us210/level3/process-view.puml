@@ -17,19 +17,30 @@ database "Repository" as repo
 end box
 
 [--> r: GET /buildings/{id}/floors
-    activate r
-        r -> ctrl : getFloors()
-        activate ctrl
-            ctrl -> svc : getFloors()
-            activate svc
+activate r
+    r -> ctrl : getFloors()
+    activate ctrl
+        ctrl -> svc : getFloors()
+        activate svc
+            svc -> repo : findByCode()
+            note right : tries to find building
+            activate repo
+            deactivate repo
+
+            alt building not found
+                svc --> ctrl : error
+                ctrl --> r : error(422)
+                [<-- r : 422: Unprocessable Content
+            else building found
                 svc -> repo : findByBuildingCode()
+                note right : tries to find floors
+
                 activate repo
                 deactivate repo
-
                 alt floors not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<--r : response code 422
+                    ctrl --> r : error (422)
+                    [<-- r : 422: Unprocessable Content
                 else floor created successfully
 
                 loop for each floor
@@ -45,10 +56,11 @@ end box
 
                     svc --> ctrl : dtoList
                     ctrl --> r : response
-                    [<-- r : response code 200
+                    [<-- r : 200: OK
                 end
-            deactivate svc
-        deactivate ctrl
-    deactivate r
+            end
+        deactivate svc
+    deactivate ctrl
+deactivate r
 
 @enduml
