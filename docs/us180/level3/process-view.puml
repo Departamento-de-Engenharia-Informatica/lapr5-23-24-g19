@@ -1,8 +1,6 @@
 @startuml
 autonumber
 
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
@@ -10,11 +8,9 @@ participant "Service" as svc
 participant "floor:\nFloor" as floor
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
+participant "Repository" as repo
+database "Database" as db
 
 [--> r: GET /buildings/?minFloors={min}&maxFloors={max}
 activate r
@@ -25,6 +21,9 @@ activate r
             svc -> repo : findBuildingsByMinMaxFloors(dto.min, dto.max)
             activate repo
                 note right: floor repository
+                repo -> db : find()
+                activate db
+                deactivate db
             deactivate repo
 
             alt building(s) not found
@@ -37,6 +36,9 @@ activate r
                 svc -> repo : findByCode(buildingCode)
                 activate repo
                     note right : building repository
+                    repo -> db : find()
+                    activate db
+                    deactivate db
                 deactivate repo
 
                 svc -> map : toDTO(building, floorCount)
