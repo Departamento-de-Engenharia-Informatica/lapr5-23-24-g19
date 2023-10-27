@@ -39,12 +39,14 @@ activate r
                     deactivate map
                 end loop
 
-                svc --> ctrl : dto
-                ctrl --> r : response
-                [<-- r : 200: "OK" Successful
-            end
+            svc --> ctrl : dto
         deactivate svc
+
+        ctrl --> r : response
     deactivate ctrl
+
+    [<-- r : 200: "OK" Successful
 deactivate r
+end
 
 @enduml

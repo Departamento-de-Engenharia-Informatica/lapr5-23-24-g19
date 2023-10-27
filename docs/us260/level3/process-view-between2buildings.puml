@@ -16,7 +16,7 @@ activate r
     r -> ctrl : getPassages()
     activate ctrl
 
-        ctrl -> svc : getPassages()
+        ctrl -> svc : getPassagesBetweenBuildings(bCode1, bCode2)
         activate svc
 
             svc -> repo : findByCode(buildingCode1)
@@ -43,44 +43,28 @@ activate r
                     ctrl --> r : error (412)
                     [<-- r : 412: Precondition Failed
                 else different building
-                    svc -> repo : findByCode(floorNumber1)
+                    svc -> repo : passagesBetweenBuildings(bCode1, bCode2)
                     activate repo
-                        repo ->] : find()
                     deactivate repo
 
-                    svc -> repo : findByCode(floorNumber2)
-                    activate repo
-                        repo ->] : find()
-                    deactivate repo
-
-                    alt floor not found
+                    alt passages not found
                         svc --> ctrl : error
                         ctrl --> r : error (412)
                         [<-- r : 412: Precondition Failed
-                    else
-                        svc -> repo : passagesBetweenBuildings()
-                        activate repo
-                        deactivate repo
+                    else passages found
+                        loop for each passage
+                             svc -> map : toDTO(passage)
+                            activate map
+                                map --> dto** : create(passage)
+                                activate dto
+                                    map --> svc : dto
+                                deactivate dto
+                            deactivate map
+                        end loop
 
-                        alt passages not found
-                            svc --> ctrl : error
-                            ctrl --> r : error (412)
-                            [<-- r : 412: Precondition Failed
-                        else
-                            loop for each passage
-                                 svc -> map : toDTO(passage)
-                                activate map
-                                    map --> dto** : create(passage)
-                                    activate dto
-                                        map --> svc : dto
-                                    deactivate dto
-                                deactivate map
-                            end loop
-
-                            svc --> ctrl : dto
-                            ctrl --> r : response
-                            [<-- r : 200: "OK" Successful
-                        end
+                        svc --> ctrl : dto
+                        ctrl --> r : response
+                        [<-- r : 200: Ok
                     end
                 end
             end
