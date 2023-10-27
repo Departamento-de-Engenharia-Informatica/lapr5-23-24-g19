@@ -111,7 +111,7 @@ export default class FloorRepo implements IFloorRepo {
             } else {
                 floorDocument.floorNumber = rawFloor.floorNumber
                 floorDocument.buildingCode = rawFloor.buildingCode
-                floorDocument.description = rawFloor.buildingCode
+                floorDocument.description = rawFloor.description
                 floorDocument.map = rawFloor.map
 
                 await floorDocument.save()

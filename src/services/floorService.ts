@@ -14,6 +14,7 @@ import { Description } from '../domain/description'
 import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
 import IPassageRepo from './IRepos/IPassageRepo'
+import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -49,7 +50,7 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async editFloor(identifier: number, dto: IFloorDTO): Promise<Result<IFloorDTO>> {
+    public async editFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>> {
         try {
             const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(buildingCode)
@@ -58,7 +59,7 @@ export default class FloorService implements IFloorService {
                 return Result.fail('Building not found')
             }
 
-            const floorNumber = FloorNumber.create(identifier).getValue()
+            const floorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
 
             const floor = await this.floorRepo.findByCodeNumber(buildingCode, floorNumber)
 
@@ -74,9 +75,9 @@ export default class FloorService implements IFloorService {
                 floor.floorNumber = FloorNumber.create(dto.floorNumber).getValue()
             }
 
-            const floorRes = await this.floorRepo.save(floor)
+            const result = await this.floorRepo.save(floor)
 
-            return Result.ok(FloorMap.toDTO(floorRes))
+            return Result.ok(FloorMap.toDTO(result))
         } catch (e) {
             throw e
         }

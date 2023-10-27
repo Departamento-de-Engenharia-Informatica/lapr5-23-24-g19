@@ -62,12 +62,24 @@ export default (app: Router) => {
         celebrate({
             body: Joi.object({
                 floorNumber: Joi.number()
-                    .integer()
-                    .required(),
+                    .integer(),
                 description: Joi.string(),
             }),
         }),
-        (req, res, next) => floorController.patchFloor(req, res, next),
+        (req, res, next) => floorController.editFloor(req, res, next),
+    )
+
+    route.put(
+        '/:id/floors/:floor',
+        celebrate({
+            body: Joi.object({
+                floorNumber: Joi.number()
+                    .integer()
+                    .required(),
+                description: Joi.string()
+            }),
+        }),
+        (req, res, next) => floorController.editFloor(req, res, next),
     )
 
     route.patch(

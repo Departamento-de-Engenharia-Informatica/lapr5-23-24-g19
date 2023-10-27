@@ -11,6 +11,7 @@ import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ParsedQs } from 'qs'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
+import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
 
 @Service()
 export default class FloorController implements IFloorController {
@@ -35,15 +36,13 @@ export default class FloorController implements IFloorController {
         }
     }
 
-    public async patchFloor(req: Request, res: Response, next: NextFunction) {
+    public async editFloor(req: Request, res: Response, next: NextFunction) {
         try {
-            const buildingCode = req.params.id
-            const floor = req.params.floor
+            const dto = req.body as IUpdateFloorDTO
+            dto.oldFloorNumber = parseInt(req.params.floor)
+            dto.buildingCode = req.params.id
 
-            const dto = req.body as IFloorDTO
-            dto.buildingCode = buildingCode
-
-            const result = await this.floorServiceInstance.editFloor(parseInt(floor), req.body as IFloorDTO)
+            const result = await this.floorServiceInstance.editFloor(req.body as IUpdateFloorDTO)
 
             if (result.isFailure) {
                 return res.status(422).send()
