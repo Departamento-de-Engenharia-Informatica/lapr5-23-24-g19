@@ -21,6 +21,6 @@ export class RobotCode extends ValueObject<Props> {
             return Result.fail('Robot code should have less than 30 characters')
         }
 
-        return Result.ok(new RobotCode ({ value: code }))
+        return Result.ok(new RobotCode({ value: code }))
     }
 }

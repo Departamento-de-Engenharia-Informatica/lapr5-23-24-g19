@@ -1,16 +1,16 @@
 import config from '../../../../config'
 import Container from 'typedi'
 
-import { IRobotPersistence } from '../../../dataschema/mongo/IRobotPersistence'
-import { RobotCode } from '../../../domain/robot/code'
-import { RobotDescription } from '../../../domain/robot/description'
-import { RobotNickname } from '../../../domain/robot/nickname'
-import Robot from '../../../domain/robot/Robot'
-import { RobotSerialNumber } from '../../../domain/robot/serialNumber'
-import { RobotState } from '../../../domain/robot/state'
-import { RobotTypeCode } from '../../../domain/robotType/robotTypeCode'
 import { RobotDataMap } from '../../../services/IRepos/IRobotRepo'
+import { IRobotPersistence } from '../../../dataschema/mongo/IRobotPersistence'
 import IRobotTypeRepo from '../../../services/IRepos/IRobotTypeRepo'
+
+import Robot from '../../../domain/robot/Robot'
+import { RobotCode as Code } from '../../../domain/robot/code'
+import { RobotDescription as Description } from '../../../domain/robot/description'
+import { RobotNickname as Nickname } from '../../../domain/robot/nickname'
+import { RobotSerialNumber as SerialNumber } from '../../../domain/robot/serialNumber'
+import { RobotTypeCode } from '../../../domain/robotType/robotTypeCode'
 
 // scuffed impl because of schema not using ObjectId's
 export default class MongoRobotDataMap
@@ -27,32 +27,33 @@ export default class MongoRobotDataMap
             nickname: robot.nickname.value,
             type: robot.type.code.value,
             serialNumber: robot.serialNumber.value,
-            state: robot.state.value,
+            state: robot.state,
             description: robot.description?.value
         }
     }
 
     async toDomain(p: IRobotPersistence): Promise<Robot> {
-        const code = RobotCode.create(p.code).getValue()
-        const nickname = RobotNickname.create(p.nickname).getValue()
+        const code = Code.create(p.code).getValue()
+        const nickname = Nickname.create(p.nickname).getValue()
         const type = await this.robotTypeRepo.find(RobotTypeCode.create(p.type).getValue())
-        const serialNumber = RobotSerialNumber.create(p.serialNumber).getValue()
-        const state = RobotState.create(p.state)
-        const description = p.description && RobotDescription.create(p.description).getValue()
+        const serialNumber = SerialNumber.create(p.serialNumber).getValue()
+        const description = p.description && Description.create(p.description).getValue()
 
-        const robot = Robot.create({
+        const result = Robot.create({
             code,
             nickname,
             type,
             serialNumber,
-            state,
             description
         })
 
-        if (robot.isFailure) {
+        if (result.isFailure) {
             return null
         }
 
-        return robot.getValue()
+        const robot = result.getValue()
+        robot.props.state = p.state
+
+        return robot
     }
 }

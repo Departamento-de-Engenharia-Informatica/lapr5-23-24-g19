@@ -26,8 +26,7 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createRobot(req, res, next),
     )
 
-    route.get(
-        '',
-        (req, res, next) => ctrl.getRobots(req, res, next),
-    )
+    route.patch('/:id/inhibit', (req, res, next) => ctrl.inhibitRobot(req, res, next))
+
+    route.get('', (req, res, next) => ctrl.getRobots(req, res, next))
 }

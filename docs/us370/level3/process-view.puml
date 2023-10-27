@@ -44,6 +44,13 @@ activate r
                 activate robot
                 deactivate robot
 
+                svc -> repo : save(robot)
+                activate repo
+                    repo -> db : save()
+                    activate db
+                    deactivate db
+                deactivate repo
+
                 svc -> map : toDTO(robot)
                 activate map
                     map --> dto **: create(robot)

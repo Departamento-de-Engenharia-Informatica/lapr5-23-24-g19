@@ -6,8 +6,8 @@ import IRobotService from './IServices/IRobotService'
 import { RobotMap } from '../mappers/RobotMap'
 import { IRobotDTO } from '../dto/IRobotDTO'
 
-import IRobotTypeRepo from './IRepos/IRobotTypeRepo'
 import IRobotRepo from './IRepos/IRobotRepo'
+import IRobotTypeRepo from './IRepos/IRobotTypeRepo'
 
 import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
 
@@ -16,17 +16,17 @@ import { RobotCode } from '../domain/robot/code'
 import { RobotNickname as Nickname } from '../domain/robot/nickname'
 import { RobotSerialNumber as SerialNumber } from '../domain/robot/serialNumber'
 import { RobotDescription as Description } from '../domain/robot/description'
-import { RobotState } from '../domain/robot/state'
 import { ICreatedRobotDTO } from '../dto/ICreatedRobotDTO'
+import { IRobotInhibitDTO } from '../dto/IRobotInhibitDTO'
 
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-        @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo
+        @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
     ) {}
 
-    public async createRobot(dto: IRobotDTO): Promise<Result<ICreatedRobotDTO>> {
+    async createRobot(dto: IRobotDTO): Promise<Result<ICreatedRobotDTO>> {
         try {
             const type = await this.robotTypeRepo.find(RobotTypeCode.create(dto.typeCode).getValue())
 
@@ -39,13 +39,10 @@ export default class RobotService implements IRobotService {
             const serialNumber = SerialNumber.create(dto.serialNumber).getValue()
             const description = dto.description && Description.create(dto.description).getValue()
 
-            const state = RobotState.create()
-
             const robot = Robot.create({
                 code,
                 nickname,
                 type,
-                state,
                 serialNumber,
                 description,
             })
@@ -61,7 +58,19 @@ export default class RobotService implements IRobotService {
         }
     }
 
-    public async getRobots(): Promise<Result<ICreatedRobotDTO[]>> {
+    async inhibitRobot(dto: IRobotInhibitDTO): Promise<Result<ICreatedRobotDTO>> {
+        const robot = await this.robotRepo.find(RobotCode.create(dto.code).getValue())
+
+        if (!robot) {
+            return Result.fail('No such robot found')
+        }
+
+        robot.inhibit()
+        const saved = await this.robotRepo.save(robot)
+        return Result.ok(RobotMap.toDTO(saved))
+    }
+
+    async getRobots(): Promise<Result<ICreatedRobotDTO[]>> {
         try {
             const robots = await this.robotRepo.findAll()
 

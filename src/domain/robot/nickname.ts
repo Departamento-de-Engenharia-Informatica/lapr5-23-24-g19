@@ -21,6 +21,6 @@ export class RobotNickname extends ValueObject<Props> {
             return Result.fail('Robot nickname should have less than 30 characters')
         }
 
-        return Result.ok(new RobotNickname ({ value: nickname.trim() }))
+        return Result.ok(new RobotNickname({ value: nickname.trim() }))
     }
 }

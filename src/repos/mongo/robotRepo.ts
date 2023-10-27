@@ -8,8 +8,6 @@ import { IRobotPersistence } from '../../dataschema/mongo/IRobotPersistence'
 
 import Robot from '../../domain/robot/Robot'
 import { RobotCode } from '../../domain/robot/code'
-import Building from "../../domain/building/building";
-import {RobotMap} from "../../mappers/RobotMap";
 
 @Service()
 export default class RobotRepo implements IRobotRepo {
