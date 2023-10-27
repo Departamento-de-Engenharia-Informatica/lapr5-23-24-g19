@@ -34,7 +34,7 @@ database "Database" as db
 
                     svc -> repo: inBuilding(building)
                     activate repo
-                        repo -> db : findOne(query)
+                        repo -> db : findOne(bcode)
                         activate db
                         deactivate db
                     deactivate repo

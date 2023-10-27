@@ -1,29 +1,25 @@
 @startuml
 autonumber
 
-participant "Fleet Manager" as ui
 
-mainframe MD
-box "Back-End" #LightBlue
+
+
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
-
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
+participant "Repository" as repo
+database "Database" as db
 
-box "Database"
-database "Repository" as repo
-end box
 
-ui--> r: GET /robots
+[-> r: GET /robots
     activate r
 note right : verify if user is a \nfleet manager
     alt unkown user
-        r --> ui : 401: Unauthorized
+        [<-- r : 401: Unauthorized
     else user not authorized
-        r --> ui : 403: Forbidden
+        [<-- r : 403: Forbidden
     else user authorized
         r -> ctrl : getRobots(req,res)
         activate ctrl
@@ -31,12 +27,15 @@ note right : verify if user is a \nfleet manager
             activate svc
                 svc -> repo : findAll()
                 activate repo
+                    repo -> db: find()
+                    activate db
+                    deactivate db
                 deactivate repo
 
                 alt robots not found
                     svc --> ctrl : error
                     ctrl --> r : error (412)
-                    ui<--r : 412: Precondition Failed
+                    [<-- r : 412: Precondition Failed
                 else robots found
 
                 loop for each robot
@@ -53,7 +52,7 @@ note right : verify if user is a \nfleet manager
                 end loop
                     svc --> ctrl : dto
                     ctrl --> r : response
-                    ui<-- r : 200: "OK" Successful
+                    [<-- r : 200: "OK" Successful
                 end
             deactivate svc
         deactivate ctrl

@@ -1,24 +1,24 @@
 @startuml
 autonumber
 
-actor "Fleet Manager" as actor
+
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 
-actor-> sys: GET /robots
-activate actor
+[-> sys: GET /robots
+
     activate sys
 
     alt unkown user
-                sys --> actor : 401: Unauthorized
+                [<-- sys : 401: Unauthorized
             else user not authorized
-                sys --> actor : 403: Forbidden
+                [<-- sys : 403: Forbidden
             else user authorized
 
             alt robots not found
-                actor <--sys : 412: Precondition Failed
+                [<-- sys : 412: Precondition Failed
             else robots sent
-                actor <--sys : 200: "OK" Successful
+                [<-- sys : 200: "OK" Successful
     end
 end
 deactivate sys
