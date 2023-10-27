@@ -1,0 +1,23 @@
+@startuml
+autonumber
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+[-> sys : PATCH /robots/{:id}/inhibit
+
+activate sys
+    ' alt unkown user
+    '     sys --> actor : 401: Unauthorized
+    ' else user not autorized
+    '     sys --> actor : 403: Forbidden
+    ' else user authorized
+        alt robot not found
+            [<-- sys : 404
+        else robot inhibited
+            [<-- sys : 200
+        end
+    ' end
+deactivate sys
+
+
+@enduml

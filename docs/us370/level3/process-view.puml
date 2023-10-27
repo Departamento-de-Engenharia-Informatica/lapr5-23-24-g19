@@ -1,0 +1,66 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Repository" as repo
+
+participant "robot:\nRobot" as robot
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+
+database "Database" as db
+
+[-> r : PATCH /robots/{:id}/inhibit
+activate r
+    ' note right : verify if user is a \nfleet manager
+    ' alt unkown user
+    '     r --> ui : 401: Unauthorized
+    ' else user not authorized
+    '     r --> ui : 403: Forbidden
+    ' else user authorized
+
+    r -> ctrl : inhibitRobot()
+    activate ctrl
+        ctrl -> svc : inhibitRobot()
+        activate svc
+            svc -> repo : findRobot(robotCode)
+            activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
+
+                repo --> svc : robot
+            deactivate repo
+
+            alt robot not found
+                svc --> ctrl : error
+                ctrl --> r : error (404)
+                [<-- r : error (404)
+            else robot found
+
+                svc -> robot : inhibit()
+                activate robot
+                deactivate robot
+
+                svc -> map : toDTO(robot)
+                activate map
+                    map --> dto **: create(robot)
+                    activate dto
+                        map --> svc : dto
+                    deactivate dto
+                deactivate map
+
+                svc --> ctrl : dto
+        deactivate svc
+
+        ctrl --> r : dto (200)
+    deactivate ctrl
+    [<-- r : dto (200)
+deactivate r
+
+
+end
+
+@enduml

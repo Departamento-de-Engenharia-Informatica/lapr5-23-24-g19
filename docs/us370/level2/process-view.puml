@@ -1,0 +1,23 @@
+@startuml
+autonumber
+
+participant "MD" as mdr
+
+[-> mdr : PATCH /robots/{:id}/inhibit
+
+activate mdr
+    ' alt unkown user
+    '     mdr --> actor : 401: Unauthorized
+    ' else user not autorized
+    '     mdr --> actor : 403: Forbidden
+    ' else user authorized
+        alt robot not found
+            [<-- mdr : 404
+        else robot inhibited
+            [<-- mdr : 200
+        end
+    ' end
+deactivate mdr
+
+
+@enduml

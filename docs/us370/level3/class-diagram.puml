@@ -1,0 +1,114 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        package "Routes" {
+            class RouteRobot
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerRobot
+            }
+
+            package "ImplControllers" {
+                class ControllerRobot
+            }
+            ControllerRobot -up-|> IControllerRobot
+        }
+
+        package "Repositories" {
+            class RepoRobotType
+            class RepoRobot
+        }
+
+        RepoRobotType .up.> DBDriver
+        RepoRobot .up.> DBDriver
+
+        RouteRobot ..> IControllerRobot
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceRobot
+            }
+
+            package "ImplAppServices" {
+                class AppServiceRobot
+            }
+
+            AppServiceRobot --|> IAppServiceRobot
+
+            package "IRepositories" {
+                interface IRepoRobotType
+                interface IRepoRobot
+            }
+
+            RepoRobotType --|> IRepoRobotType
+            RepoRobot --|> IRepoRobot
+
+        }
+
+        ControllerRobot ..> IAppServiceRobot
+
+        AppServiceRobot .up.> IRepoRobotType
+
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+            package "RobotType" as a_robottype {
+                entity RobotType <<root>> <<entity>>
+            }
+            package "Robot" as a_robot {
+                entity Robot <<root>> <<entity>>
+            }
+        }
+
+
+        package "Value Objects" {
+            package "Robot" as vo_robot{
+                class RobotCode
+                class RobotNickname
+                class RobotSerialNumber
+                class RobotDescription
+                class RobotState
+            }
+        }
+
+        AppServiceRobot ..> Robot
+
+        Robot "1" -left-> "1" RobotType
+
+        Robot "1" --> "1" RobotCode
+        Robot "1" --> "1" RobotNickname
+        Robot "1" --> "1" RobotSerialNumber
+        Robot "1" --> "1" RobotDescription
+        Robot "1" --> "1" RobotState
+
+    }
+}
+
+@enduml
+
