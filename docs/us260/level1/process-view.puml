@@ -1,31 +1,18 @@
 @startuml
 autonumber
 
-actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
+[-> sys : GET /passages
 
-activate actor
-actor -> sys: GET /passages
-
-    activate sys
-        alt building not found
-            sys --> actor : 412: Precondition Failed
-        else building found
-            alt passage not found
-                actor <-- sys : 412: Precondition Failed
-            else passages found
-                alt passages between buildings not found
-                    actor <-- sys : 412: Precondition Failed
-                else passages between buildings found
-
-                    actor <-- sys : 200: "OK" Successful
-                end
-            end
-        end
-
-
+activate sys
+    alt floors/building not found
+        [<-- sys : 412: Precondition Failed
+    else passage not found
+        [<-- sys : 412: Precondition Failed
+    else passages sent
+        [<-- sys : 200: Ok
+    end
 deactivate sys
-deactivate actor
 
 @enduml

@@ -1,32 +1,18 @@
 @startuml
 autonumber
 
-actor " " as actor
-box "RobDroneGo"
 participant "MD" as mdr
 
+[-> mdr : GET /passages
 
-actor -> mdr: GET /passages
-activate actor
-    activate mdr
-    alt building not found
-        mdr --> actor : 412: Precondition Failed
-    else building found
-        alt passage not found
-            actor <-- mdr : 412: Precondition Failed
-        else passages found
-            alt passages between buildings not found
-                actor <-- mdr : 412: Precondition Failed
-            else passages between buildings found
-
-                actor <-- mdr : 200: "OK" Successful
-            end
-        end
+activate mdr
+    alt floors/building not found
+        [<-- mdr : 412: Precondition Failed
+    else passage not found
+        [<-- mdr : 412: Precondition Failed
+    else passages sent
+        [<-- mdr : 200: Ok
     end
-
-    deactivate mdr
-deactivate actor
-
+deactivate mdr
 
 @enduml
-

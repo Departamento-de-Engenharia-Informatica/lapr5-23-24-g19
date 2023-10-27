@@ -1,60 +1,72 @@
 @startuml
 autonumber
 
-participant "??" as ui
-
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
+participant "Repository" as repo
 
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
 
-ui --> r: GET /passages
-    activate r
-        r -> ctrl : getPassages(req,res)
-        activate ctrl
-            ctrl -> svc : getPassagesBetweenBuildings(bCode1,bCode2)
-            activate svc
-                svc -> repo : findByCode(bCode1)
+[--> r : GET /passages
+activate r
+
+    r -> ctrl : getPassages()
+    activate ctrl
+
+        ctrl -> svc : getPassages()
+        activate svc
+
+            svc -> repo : findByCode(buildingCode1)
+            activate repo
+                repo ->] : find()
+            deactivate repo
+
+            svc -> repo : findByCode(buildingCode2)
+            activate repo
+                repo ->] : find()
+            deactivate repo
+
+            alt building not found
+                svc --> ctrl : error
+                ctrl --> r : error (412)
+                [<-- r : 412: Precondition Failed
+            else building found
+                svc --> svc : sameBuilding(building)
                 activate repo
-                    svc -> repo : findByCode(bCode2)
                 deactivate repo
 
-                alt building not found
+                alt same building
                     svc --> ctrl : error
                     ctrl --> r : error (412)
-                    ui<--r : 412: Precondition Failed
-                else building found
-
-                    svc -> repo: findAll()
+                    [<-- r : 412: Precondition Failed
+                else different building
+                    svc -> repo : findByCode(floorNumber1)
                     activate repo
+                        repo ->] : find()
                     deactivate repo
 
+                    svc -> repo : findByCode(floorNumber2)
+                    activate repo
+                        repo ->] : find()
+                    deactivate repo
 
-                    alt passages not found
+                    alt floor not found
                         svc --> ctrl : error
                         ctrl --> r : error (412)
-                        ui<--r : 412: Precondition Failed
-
-                    else passages found
-                        svc -> repo : passagesBetweenBuildings(passages,bcode1,bcode2)
+                        [<-- r : 412: Precondition Failed
+                    else
+                        svc -> repo : passagesBetweenBuildings()
                         activate repo
                         deactivate repo
 
-                        alt passages between buildings not found
+                        alt passages not found
                             svc --> ctrl : error
                             ctrl --> r : error (412)
-                            ui<--r : 412: Precondition Failed
-                        else passages between building found
-
+                            [<-- r : 412: Precondition Failed
+                        else
                             loop for each passage
                                  svc -> map : toDTO(passage)
                                 activate map
@@ -64,15 +76,16 @@ ui --> r: GET /passages
                                     deactivate dto
                                 deactivate map
                             end loop
-                                svc --> ctrl : dto
-                                ctrl --> r : response
-                                ui<-- r : 200: "OK" Successful
 
+                            svc --> ctrl : dto
+                            ctrl --> r : response
+                            [<-- r : 200: "OK" Successful
                         end
                     end
                 end
-            deactivate svc
-        deactivate ctrl
-    deactivate r
+            end
+        deactivate svc
+    deactivate ctrl
+deactivate r
 
 @enduml
