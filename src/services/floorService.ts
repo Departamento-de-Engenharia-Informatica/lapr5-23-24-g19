@@ -15,6 +15,7 @@ import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
 import IPassageRepo from './IRepos/IPassageRepo'
 import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
+import { result } from 'lodash'
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -76,7 +77,6 @@ export default class FloorService implements IFloorService {
             }
 
             const result = await this.floorRepo.save(floor)
-
             return Result.ok(FloorMap.toDTO(result))
         } catch (e) {
             throw e
@@ -85,21 +85,24 @@ export default class FloorService implements IFloorService {
 
     public async getFloors(buildingCode: string): Promise<Result<IFloorDTO[]>> {
         try {
-            const code = BuildingCode.create(buildingCode)
+            const code = BuildingCode.create(buildingCode).getValue()
+            const building = await this.buildingRepo.findByCode(code)
 
-            if (code.isFailure) {
-                return Result.fail(code.errorValue())
+            if (!building) {
+                return Result.fail('Building not found')
             }
 
-            const floors = await this.floorRepo.findByBuildingCode(code.getValue())
+            const floors = await this.floorRepo.findByBuildingCode(code)
 
             if (floors.length == 0) {
                 return Result.fail('Floors not found')
-            } else {
-                const dtoList = await Promise.all(floors.map((floor) => FloorMap.toDTO(floor)))
-                return Result.ok(dtoList)
             }
-        } catch (e) {}
+
+            const dtoList = await Promise.all(floors.map((floor) => FloorMap.toDTO(floor)))
+            return Result.ok(dtoList)
+        } catch (e) {
+            throw e
+        }
     }
 
     public async uploadMap(dto: IFloorMapDTO): Promise<Result<IFloorMapDTO>> {
