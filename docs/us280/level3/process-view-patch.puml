@@ -1,25 +1,20 @@
 @startuml
 autonumber
 
-participant "??" as ui
 
-mainframe MD
-box "Back-End" #LightBlue
+
+
+
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
-
-
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
+participant "Repository" as repo
+database "Database" as db
 
-box "Database"
-database "Repository" as repo
-'participant "elevator:\nElevator" as e
-end box
 
-ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
+[-> r: PATCH (/buildings/{idb}/elevators/{ide})
     activate r
             r -> ctrl : patchElevator(req,res,...)
                 activate ctrl
@@ -27,13 +22,15 @@ ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
                     activate svc
                         svc -> repo : findByCode(buildingCode)
                         activate repo
-                            'repo --> e **: create()
+                            repo -> db : findOne(bcode)
+                            activate db
+                            deactivate db
                         deactivate repo
 
                         alt building not found
                             svc --> ctrl : error
                             ctrl --> r : response 412
-                            ui <--r : 412: Precondition Failed
+                            [<-- r : 412: Precondition Failed
 
 
 
@@ -41,16 +38,22 @@ ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
 
                             svc -> repo : exitsInBuilding(building,elevatorIdentifier)
                             activate repo
+                                repo -> db : findOne(query)
+                                activate db
+                                deactivate db
                             deactivate repo
 
                             alt elevator not found
                                 svc --> ctrl : error
                                 ctrl --> r : response 412
-                                ui <--r : 412: Precondition Failed
+                                [<-- r : 412: Precondition Failed
                             else elevator exists
 
                                 svc -> repo: findByIdentifier(building,elevatorIdentifier)
                                 activate repo
+                                    repo -> db : findOne(query)
+                                    activate db
+                                    deactivate db
                                 deactivate repo
 
                                 note right of svc
@@ -62,10 +65,13 @@ ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
                             alt elevator bad parameters
                                 svc --> ctrl : error
                                 ctrl --> r : response 422
-                                ui <--r : 422: Unprocessable Content
+                                [<-- r : 422: Unprocessable Content
                             else elevator edited successfully
                                svc -> repo : save(elevator)
                                activate repo
+                                    repo -> db: save()
+                                    activate db
+                                    deactivate db
                                deactivate repo
 
 
@@ -89,7 +95,7 @@ ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
 
 
 
-            ui <--r: 200: "OK" Sucessful
+            [<-- r: 200: "OK" Sucessful
                 end
             end
          end
