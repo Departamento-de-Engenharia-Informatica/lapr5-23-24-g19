@@ -1,24 +1,23 @@
 @startuml
 autonumber
 
-actor " " as actor
+
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-activate actor
-    actor -> sys: POST (/buildings/{buildingId}/floors/{floorNumber}/rooms)
+
+    [-> sys: POST (/buildings/{buildingId}/floors/{floorNumber}/rooms)
     activate sys
 
     alt floor not found
-        sys --> actor : 412: Precondition Failed
+        [<-- sys : 412: Precondition Failed
     else floor found
     alt room not created
-        sys --> actor : 422: Unprocessable Content
+        [<-- sys : 422: Unprocessable Content
     else room created successfully
-        sys --> actor : 201: Created
+        [<-- sys : 201: Created
         end
     end
 
     deactivate sys
-deactivate actor
 
 @enduml
