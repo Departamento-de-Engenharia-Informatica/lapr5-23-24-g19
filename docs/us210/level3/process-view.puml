@@ -1,8 +1,6 @@
 @startuml
 autonumber
 
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
@@ -10,11 +8,9 @@ participant "Service" as svc
 participant "floor:\nFloor" as floor
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
+participant "Repository" as repo
+database "Database" as db
 
 [--> r: GET /buildings/{id}/floors
 activate r
@@ -25,6 +21,9 @@ activate r
             svc -> repo : findByCode()
             note right : tries to find building
             activate repo
+                repo -> db : find()
+                activate db
+                deactivate db
             deactivate repo
 
             alt building not found
@@ -34,9 +33,12 @@ activate r
             else building found
                 svc -> repo : findByBuildingCode()
                 note right : tries to find floors
-
                 activate repo
+                    repo -> db : find()
+                    activate db
+                    deactivate db
                 deactivate repo
+
                 alt floors not found
                     svc --> ctrl : error
                     ctrl --> r : error (422)
