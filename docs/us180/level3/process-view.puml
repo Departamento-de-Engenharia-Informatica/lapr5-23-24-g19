@@ -29,8 +29,8 @@ activate r
 
             alt building(s) not found
                 svc --> ctrl : error
-                ctrl --> r : error (422)
-                [<--r : 422: Unprocessable Content
+                ctrl --> r : error (404)
+                [<--r : 404: Unprocessable Content
             else building(s) found
 
             loop for each buildingCode
