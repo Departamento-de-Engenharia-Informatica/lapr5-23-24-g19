@@ -1,20 +1,15 @@
 @startuml
 autonumber
 
-mainframe MD
-box "Back-End" #LightBlue
-    participant "Route" as rt
-    participant "Controller" as ctrl
-    participant "Service" as svc
-    participant "Repository" as repo
+participant "Route" as rt
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Repository" as repo
 
-    participant "Mapper" as map
-    participant "dto:\nDTO" as dto
-end box
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
 
-box "Database"
-    database "DB" as db
-end box
+participant "DBDriver" as db
 
 [-> rt : GET /buildings/:id/floors/passages
 
@@ -47,6 +42,11 @@ activate rt
 
                     repo --> svc : floors
                 deactivate repo
+
+                svc -> map : toDTO()
+                activate map
+                    map --> dto **:create()
+                deactivate map
                 svc --> ctrl : floors
             end
         deactivate svc
