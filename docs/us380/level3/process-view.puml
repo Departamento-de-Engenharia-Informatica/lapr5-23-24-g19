@@ -1,7 +1,7 @@
 @startuml
 autonumber
 
-participant "??" as ui
+participant "Fleet Manager" as ui
 
 mainframe MD
 box "Back-End" #LightBlue
@@ -19,6 +19,12 @@ end box
 
 ui--> r: GET /robots
     activate r
+note right : verify if user is a \nfleet manager
+    alt unkown user
+        r --> ui : 401: Unauthorized
+    else user not authorized
+        r --> ui : 403: Forbidden
+    else user authorized
         r -> ctrl : getRobots(req,res)
         activate ctrl
             ctrl -> svc : getRobots()
@@ -34,9 +40,9 @@ ui--> r: GET /robots
                 else robots found
 
                 loop for each robot
-                    activate repo
+
                         svc -> map : toDTO(robot)
-                    deactivate repo
+
 
                     activate map
                         map --> dto** : create(robot)
@@ -51,6 +57,7 @@ ui--> r: GET /robots
                 end
             deactivate svc
         deactivate ctrl
+        end
     deactivate r
 
 @enduml

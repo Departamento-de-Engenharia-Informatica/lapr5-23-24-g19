@@ -43,7 +43,7 @@ ui --> r: GET /buildings/{id}/elevators
                         ctrl --> r : error (412)
                         ui<--r : 412: Precondition Failed
 
-                    else
+                    else elevators found
 
                         loop for each elevator
 

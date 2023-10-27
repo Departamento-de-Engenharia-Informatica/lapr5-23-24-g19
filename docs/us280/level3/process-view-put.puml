@@ -63,7 +63,7 @@ ui --> r: PATCH (/buildings/{idb}/elevators/{ide})
                                 svc --> ctrl : error
                                 ctrl --> r : response 422
                                 ui <--r : 422: Unprocessable Content
-                            else
+                            else elevator edited successfully
                                svc -> repo : save(elevator)
                                activate repo
                                deactivate repo

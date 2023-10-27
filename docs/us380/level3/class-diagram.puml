@@ -72,6 +72,10 @@ package system {
 
     package "Entities/Core/Domain" {
         package "Aggregates" {
+            package "RobotType" as a_robottype {
+                     entity RobotType <<root>> <<entity>>
+            }
+
             package "Robot" as a_robot {
                 entity Robot <<root>> <<entity>>
             }
@@ -80,16 +84,24 @@ package system {
 
 
         package "Value Objects" {
-                package "Robot" as vo_robot {
-                class RobotCode
-            }
-        }
-        Robot "1" --> "1" RobotCode
+                    package "Robot" as vo_robot{
+                        class RobotCode
+                        class RobotNickname
+                        class RobotSerialNumber
+                        class RobotDescription
+                        class RobotState
+                    }
+                }
 
-        AppServiceRobot ..> Robot
+                AppServiceRobot ..> Robot
 
-        'package "Services" {
-        '}
+                Robot "1" -left-> "1" RobotType
+
+                Robot "1" --> "1" RobotCode
+                Robot "1" --> "1" RobotNickname
+                Robot "1" --> "1" RobotSerialNumber
+                Robot "1" --> "1" RobotDescription
+                Robot "1" --> "1" RobotState
     }
 }
 
