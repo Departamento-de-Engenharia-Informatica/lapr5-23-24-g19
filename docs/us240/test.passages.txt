@@ -1,0 +1,21 @@
+{
+    "floor1":{
+        "buildingCode": "B",
+        "floorNumber": 1
+    },
+    "floor2":{
+        "buildingCode": "J",
+        "floorNumber": 1
+    }
+}
+
+{
+    "floor1":{
+        "buildingCode": "B",
+        "floorNumber": 3
+    },
+    "floor2":{
+        "buildingCode": "J",
+        "floorNumber": 3
+    }
+}

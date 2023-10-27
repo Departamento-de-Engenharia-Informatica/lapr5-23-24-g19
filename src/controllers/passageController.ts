@@ -7,7 +7,6 @@ import IPassageController from './IControllers/IPassageController'
 import IPassageService from '../services/IServices/IPassageService'
 import { IPassageDTO } from '../dto/IPassageDTO'
 import IUpdatePassageDTO from '../dto/IUpdatePassageDTO'
-import { parseInt } from 'lodash'
 
 @Service()
 export default class PassageController implements IPassageController {

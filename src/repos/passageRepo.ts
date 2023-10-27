@@ -49,14 +49,14 @@ export default class PassageRepo implements IPassageRepo {
     }
 
     public async save(passage: Passage): Promise<Passage> {
-        const query = {domainId: passage.id}
+        const query = {domainID: passage.id.toString()}
         const passageDocument = await this.passageSchema.findOne(query)
         const rawPassage = PassageMap.toPersistence(passage)
-        
+
         try {
             if (passageDocument === null) {
-                const floorCreated = await this.passageSchema.create(rawPassage)
-                return PassageMap.toDomain(floorCreated)
+                const passageCreated = await this.passageSchema.create(rawPassage)
+                return PassageMap.toDomain(passageCreated)
             } else {
                 passageDocument.floor1ID = rawPassage.floor1ID
                 passageDocument.floor2ID = rawPassage.floor2ID
