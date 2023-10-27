@@ -18,11 +18,11 @@ box "Database"
 database "Repository" as repo
 end box
 
-ui --> r: post (/room)
+ui --> r: post (/buildings/{buildingId}/floors/{floorNumber}/rooms)
     activate r
-        r -> ctrl : createRoom()
+        r -> ctrl : createRoom(req,res,...)
         activate ctrl
-            ctrl -> svc : createRoom()
+            ctrl -> svc : createRoom(dto)
             activate svc
                 svc -> repo : findByCodeNumber(buildingCode,floorNumber)
                 activate repo

@@ -27,9 +27,9 @@ ui --> r: post(/robottypes)
             r --> ui : 403: Forbidden
         else user authorized
 
-        r -> ctrl : createRobotType()
+        r -> ctrl : createRobotType(res,req)
             activate ctrl
-                ctrl -> svc : createRobotType()
+                ctrl -> svc : createRobotType(dto)
                 activate svc
 
                     svc --> b **: create()

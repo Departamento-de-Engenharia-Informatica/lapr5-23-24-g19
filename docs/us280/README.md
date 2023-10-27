@@ -60,8 +60,52 @@ No authorization required
 
 [HTTP REQUEST BODY](./README/test.elevators.txt)
 
-![put](README/put_route.JPG)
-![patch](README/patch_route.JPG)
+```typescript
+
+route.put(
+    '/:idb/elevators/:ide',
+    celebrate({
+        body: Joi.object({
+            floors: Joi.array()
+                .items(
+                    Joi.number()
+                        .integer()
+                        .required(),
+                )
+                .required(),
+            brand: Joi.string(),
+            model: Joi.string(),
+            serialNumber: Joi.string(),
+            description: Joi.string(),
+        }),
+    }),
+    (req, res, next) => elevatorCtrl.putElevator(req, res, next),
+)
+
+```
+
+```typescript
+
+route.patch(
+    '/:idb/elevators/:ide',
+        celebrate({
+            body: Joi.object({
+                floors: Joi.array()
+                        .items(
+                Joi.number()
+                        .integer()
+                        .required(),
+                )
+                .optional(),
+                brand: Joi.string(),
+                model: Joi.string(),
+                serialNumber: Joi.string(),
+                description: Joi.string(),
+            }),
+        }),
+    (req, res, next) => elevatorCtrl.patchElevator(req, res, next),
+)
+```
 
 ### 4.5 Simulation HTTP requests
 

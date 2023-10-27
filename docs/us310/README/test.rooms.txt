@@ -1,0 +1,13 @@
+{
+    "name":"RoomLapr5",
+    "description":"Room of Lapr5",
+    "category":"laboratorio",
+    "dimensions":{
+        "length":10,
+        "width":15
+    },
+    "positions":{
+        "x":3,
+        "y":4
+    }
+}

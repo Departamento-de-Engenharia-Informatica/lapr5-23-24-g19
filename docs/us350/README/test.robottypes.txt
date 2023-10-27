@@ -1,0 +1,13 @@
+{
+    "code":"R01",
+    "brand":"RobotTypeBrandLapr",
+    "model":"ModelLapr",
+    "taskType":"Vigilancia"
+}
+
+{
+    "code":"R02",
+    "brand":"RobotTypeBrandLapr5",
+    "model":"ModelLapr5",
+    "taskType":"Transport"
+}
