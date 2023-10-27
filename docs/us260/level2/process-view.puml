@@ -9,12 +9,19 @@ participant "MD" as mdr
 actor -> mdr: GET /passages
 activate actor
     activate mdr
-    alt floors/building not found
+    alt building not found
         mdr --> actor : 412: Precondition Failed
-    else passage not found
-        actor <-- mdr : 412: Precondition Failed
-    else passages sent
-        actor <-- mdr : 200: "OK" Sucessful
+    else building found
+        alt passage not found
+            actor <-- mdr : 412: Precondition Failed
+        else passages found
+            alt passages between buildings not found
+                actor <-- mdr : 412: Precondition Failed
+            else passages between buildings found
+
+                actor <-- mdr : 200: "OK" Successful
+            end
+        end
     end
 
     deactivate mdr

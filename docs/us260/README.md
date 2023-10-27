@@ -32,7 +32,8 @@ notem que uma vez que as passagens são bidirecionais, uma passagem entre o edif
 
 ![level1](level1/process-view.svg)
 ![level2](level2/process-view.svg)
-![level3](level3/process-view.svg)
+![level3](level3/process-view-allpassages.svg)
+![level3](level3/process-view-between2buildings.svg)
 ![level3](level3/class-diagram.svg)
 
 ### 4. HTTP

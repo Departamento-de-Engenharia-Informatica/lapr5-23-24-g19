@@ -114,7 +114,7 @@ export default class PassageService implements IPassageService {
             const passages = await this.passageRepo.findAll()
 
             if (passages.length === 0) {
-                return Result.fail('Buildings not found')
+                return Result.fail('passages not found')
             } else {
                 const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
                 return Result.ok(dtoList)
@@ -136,8 +136,18 @@ export default class PassageService implements IPassageService {
                 return Result.fail(b1Code.errorValue())
             }
 
+            const b1 = await this.buildingRepo.findByCode(b1Code.getValue())
+            const b2 = await this.buildingRepo.findByCode(b2Code.getValue())
+
+            if (!b1 || !b2) {
+                return Result.fail(`Building not found `)
+            }
+
             const allPassages = await this.passageRepo.findAll()
-            // const dtoList = await Promise.all(allPassages.map(passage => PassageMap.toDTO(passage)))
+
+            if (allPassages.length === 0) {
+                return Result.fail('passages not found')
+            }
 
             const passages = await this.passageRepo.passagesBetweenBuildings(
                 allPassages,
@@ -146,7 +156,7 @@ export default class PassageService implements IPassageService {
             )
 
             if (passages.length === 0) {
-                return Result.fail('Buildings not found')
+                return Result.fail('passages between buildings not found')
             } else {
                 const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
                 return Result.ok(dtoList)

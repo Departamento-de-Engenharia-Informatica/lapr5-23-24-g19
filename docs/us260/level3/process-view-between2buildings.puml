@@ -21,11 +21,11 @@ ui --> r: GET /passages
     activate r
         r -> ctrl : getPassages(req,res)
         activate ctrl
-            ctrl -> svc : getPassages()
+            ctrl -> svc : getPassagesBetweenBuildings(bCode1,bCode2)
             activate svc
-                svc -> repo : findByCode(buildingCode1)
+                svc -> repo : findByCode(bCode1)
                 activate repo
-                    svc -> repo : findByCode(buildingCode2)
+                    svc -> repo : findByCode(bCode2)
                 deactivate repo
 
                 alt building not found
@@ -34,37 +34,27 @@ ui --> r: GET /passages
                     ui<--r : 412: Precondition Failed
                 else building found
 
-                    svc --> svc: sameBuilding(building)
+                    svc -> repo: findAll()
                     activate repo
                     deactivate repo
 
-                    alt same building
+
+                    alt passages not found
                         svc --> ctrl : error
                         ctrl --> r : error (412)
                         ui<--r : 412: Precondition Failed
 
-                    else different building
-                        svc -> repo : findByCode(floorNumber1)
+                    else passages found
+                        svc -> repo : passagesBetweenBuildings(passages,bcode1,bcode2)
                         activate repo
                         deactivate repo
-                        svc -> repo : findByCode(floorNumber2)
-                        activate repo
-                                                    deactivate repo
 
-                        alt floor not found
+                        alt passages between buildings not found
                             svc --> ctrl : error
                             ctrl --> r : error (412)
                             ui<--r : 412: Precondition Failed
-                        else
-                            svc -> repo : passagesBetweenBuildings()
-                            activate repo
-                            deactivate repo
+                        else passages between building found
 
-                        alt passages not found
-                            svc --> ctrl : error
-                            ctrl --> r : error (412)
-                            ui<--r : 412: Precondition Failed
-                        else
                             loop for each passage
                                  svc -> map : toDTO(passage)
                                 activate map
@@ -77,7 +67,7 @@ ui --> r: GET /passages
                                 svc --> ctrl : dto
                                 ctrl --> r : response
                                 ui<-- r : 200: "OK" Successful
-                            end
+
                         end
                     end
                 end
