@@ -3,21 +3,17 @@ autonumber
 
 mainframe MD
 
-box "Back-End" #LightBlue
-    participant "Route" as rt
-    participant "Controller" as ctrl
-    participant "Service" as svc
-    participant "Model" as model
+participant "Route" as rt
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Model" as model
 
-    participant "Mapper" as mapper
-    participant "dto:\nDTO" as dto
+participant "Mapper" as mapper
+participant "dto:\nDTO" as dto
 
-    participant "Repository" as repo
-end box
+participant "Repository" as repo
 
-box "Database"
-    database "DB" as db
-end box
+participant "DBDriver" as db
 
 [-> rt : PATCH|PUT /passages
 
