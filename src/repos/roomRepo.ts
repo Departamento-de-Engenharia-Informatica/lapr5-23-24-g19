@@ -19,14 +19,14 @@ export default class RoomRepo implements IRoomRepo {
     }
 
     public async exists(room: Room): Promise<boolean> {
-        const query = { name: room.name }
+        const query = { name: room.name.value }
         const buildingDocument = await this.roomSchema.findOne(query)
 
-        return !!buildingDocument
+        return buildingDocument != null
     }
 
     public async save(room: Room): Promise<Room> {
-        const query = { name: room.name.toString()}
+        const query = { name: room.name.value}
 
         const roomDocument = await this.roomSchema.findOne(query)
 

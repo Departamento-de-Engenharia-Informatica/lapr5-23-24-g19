@@ -8,11 +8,14 @@ interface Props {
     name: string
 }
 
-
 export class RoomName extends ValueObject<Props> {
     
     private constructor(name: Props) {
         super(name)
+    }
+
+    get value(): string {
+        return this.props.name
     }
 
     public static create(name: string): Result<RoomName> {

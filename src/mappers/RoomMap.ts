@@ -19,7 +19,7 @@ export class RoomMap extends Mapper<Room> {
         return {
             buildingCode: room.floor.building.code.value,
             floorNumber: room.floor.floorNumber.value,
-            name: room.name.toString(),
+            name: room.name.value,
             description: room.description.value,
             category: room.category.value,
             dimensions: {
@@ -67,7 +67,7 @@ export class RoomMap extends Mapper<Room> {
             domainId: room.id.toString(),
             buildingCode: room.floor.building.code.value,
             floorNumber: room.floor.floorNumber.value,
-            name: room.name.toString(),
+            name: room.name.value,
             description: room.description.value,
             category: room.category.value,
             dimensions: {
