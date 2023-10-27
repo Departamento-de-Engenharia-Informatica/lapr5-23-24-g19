@@ -1,27 +1,20 @@
 @startuml
 autonumber
 
-actor "Fleet Manager" as actor
-box "RobDroneGo"
 participant "MD" as mdr
 
-activate actor
-    actor -> mdr: POST /robots
+[-> mdr: POST /robots
 
-    activate mdr
+activate mdr
     alt unkown user
-        mdr --> actor : 401: Unauthorized
+        [<-- mdr : 401: Unauthorized
     else user not autorized
-        mdr --> actor : 403: Forbidden
-    else user authorized
-        alt robot not created
-            mdr --> actor : 422: Unprocessable Content
-        else robot created successfully
-            mdr --> actor : 201: Created
-        end
+        [<-- mdr : 403: Forbidden
+    else robot not created
+        [<-- mdr : 422: Unprocessable Content
+    else robot created successfully
+        [<-- mdr : 201: Created
     end
-    deactivate mdr
-
-deactivate actor
+deactivate mdr
 
 @enduml

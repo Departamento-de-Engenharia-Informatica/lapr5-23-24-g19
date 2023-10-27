@@ -1,10 +1,6 @@
 @startuml
 autonumber
 
-participant "Fleet Manager" as ui
-mainframe MD
-box "Back-End" #LightBlue
-
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
@@ -13,18 +9,16 @@ participant "Repository" as repo
 participant "robot:\nRobot" as b
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
-box "Database"
-    database "Database" as db
-end box
 
-ui --> r : post(/robots)
+participant "DBDriver" as db
+
+[--> r : POST /robots
 activate r
     note right : verify if user is a \nfleet manager
     alt unkown user
-        r --> ui : 401: Unauthorized
+        [<-- r : 401: Unauthorized
     else user not authorized
-        r --> ui : 403: Forbidden
+        [<-- r : 403: Forbidden
     else user authorized
 
     r -> ctrl : createRobot()
@@ -39,13 +33,13 @@ activate r
             deactivate repo
 
             svc --> b ** : create()
-            activate b
+            ' activate b
+            ' deactivate b
 
             alt robot  not created
                 svc --> ctrl : error
-                deactivate b
                 ctrl --> r : error (422)
-                r --> ui : 422: Unprocessable Content
+                [<-- r : 422: Unprocessable Content
             else robot  created successfully
             svc -> repo : save(robot)
             activate repo
@@ -57,10 +51,11 @@ activate r
             svc -> map : toDTO(robot)
             activate map
                 map --> dto **: create(robot)
-                activate dto
+
+                ' activate dto
+                ' deactivate dto
 
                 map --> svc : dto
-                deactivate dto
             deactivate map
 
             svc --> ctrl : dto
@@ -68,7 +63,7 @@ activate r
 
         ctrl --> r : dto (201)
     deactivate ctrl
-    r --> ui: 201: Created
+    [<-- r: 201: Created
 deactivate r
 
 end
