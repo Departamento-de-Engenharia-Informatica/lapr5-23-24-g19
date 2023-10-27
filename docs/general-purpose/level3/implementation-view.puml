@@ -45,6 +45,10 @@ package system {
             }
         }
     }
+    package "DTO" {
+        package "IDTO" as dto{
+        }
+    }
 
     package "Entities/Core/Domain" {
         package "Aggregates" {
@@ -64,6 +68,8 @@ package system {
     "ImplAppServices" .down.> "Aggregates"
     "ImplAppServices" .down.> "Value Objects"
     "ImplAppServices" .down.> "Services"
+    "ImplAppServices" .up.> dto
+    "ImplControllers" .up.> dto
     "Repositories" .up.> "Persistence"
     "Repositories" .down.|> "IRepositories"
 }

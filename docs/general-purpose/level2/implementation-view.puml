@@ -14,11 +14,11 @@ skinparam component {
 
 package system {
     package "Infrastructure" {
+        package "Persistence" {
+        }
         package "Routes" {
         }
 
-        package "Persistence" {
-        }
     }
 
     package "Interface Adapters" {
@@ -44,11 +44,19 @@ package system {
         package "Services" {
         }
     }
+
+    package "DTO" {
+        package "DTO" as dto {
+        }
+    }
+
     "Routes" ..> "Controllers"
     "Controllers" ..> "App Services"
+    dto <.right. "Controllers"
     "App Services" ..> "Aggregates"
     "App Services" ..> "Value Objects"
     "App Services" ..> "Services"
+    "App Services" .up.> dto
     "Repositories" ..|> "App Services"
     "Repositories" ..> "Persistence"
 }
