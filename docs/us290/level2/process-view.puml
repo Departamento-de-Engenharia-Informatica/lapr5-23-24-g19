@@ -1,29 +1,25 @@
 @startuml
 autonumber
 
-actor " " as actor
-box "RobDroneGo"
 participant "MD" as mdr
 
-activate actor
 
 
 
-        actor-> mdr: GET /buildings/{id}/elevators
+        [-> mdr: GET /buildings/{id}/elevators
         activate mdr
             alt building not found
-                    mdr --> actor : 412: Precondition Failed
+                    [<-- mdr : 412: Precondition Failed
             else building found
                 alt elevators not found
-                    actor <-- mdr : 412: Precondition Failed
+                    [<-- mdr : 412: Precondition Failed
                 else elevators sent
-                    actor <-- mdr : 200: "OK" Successful
+                    [<-- mdr : 200: "OK" Successful
                 end
             end
             deactivate mdr
 
     deactivate mdr
-deactivate actor
 
 
 @enduml

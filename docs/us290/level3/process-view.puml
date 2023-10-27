@@ -1,10 +1,7 @@
 @startuml
 autonumber
 
-participant "??" as ui
 
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
@@ -12,13 +9,11 @@ participant "Service" as svc
 
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
+participant "Repository" as repo
+database "Database" as db
 
-box "Database"
-database "Repository" as repo
-end box
 
-ui --> r: GET /buildings/{id}/elevators
+[-> r : GET /buildings/{id}/elevators
     activate r
         r -> ctrl : getElevator(req,res,...)
         activate ctrl
@@ -26,22 +21,28 @@ ui --> r: GET /buildings/{id}/elevators
             activate svc
                 svc -> repo : findByCode(buildingCode)
                 activate repo
+                    repo -> db : findOne(bCode)
+                    activate db
+                    deactivate db
                 deactivate repo
 
                 alt building not found
                     svc --> ctrl : error
                     ctrl --> r : error (412)
-                    ui<--r : 412: Precondition Failed
+                     [<-- r : 412: Precondition Failed
                 else building found
 
                     svc -> repo: inBuilding(building)
                     activate repo
+                        repo -> db : findOne(query)
+                        activate db
+                        deactivate db
                     deactivate repo
 
                     alt elevators not found
                         svc --> ctrl : error
                         ctrl --> r : error (412)
-                        ui<--r : 412: Precondition Failed
+                         [<-- r : 412: Precondition Failed
 
                     else elevators found
 
@@ -57,7 +58,7 @@ ui --> r: GET /buildings/{id}/elevators
                         end loop
                             svc --> ctrl : dto
                             ctrl --> r : response
-                            ui<-- r : 200: "OK" Successful
+                             [<-- r : 200: "OK" Successful
 
                     end
                 end

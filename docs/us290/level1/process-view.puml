@@ -1,27 +1,25 @@
 @startuml
 autonumber
 
-actor " " as actor
+
 participant "<<system>>\nSystem RobDroneGo" as sys
 
 
-activate actor
-actor -> sys: GET /buildings/{id}/elevators
+[-> sys: GET /buildings/{id}/elevators
 
     activate sys
     alt building not found
-        sys --> actor : 412: Precondition Failed
+        [<-- sys : 412: Precondition Failed
     else building found
         alt elevators not found
-            actor <-- sys : 412: Precondition Failed
+            [<-- sys : 412: Precondition Failed
         else elevators sent
-            actor <-- sys : 200: "OK" Successful
+            [<-- sys : 200: "OK" Successful
         end
     end
 
 
 
 deactivate sys
-deactivate actor
 
 @enduml
