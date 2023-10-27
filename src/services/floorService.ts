@@ -15,7 +15,8 @@ import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
 import IPassageRepo from './IRepos/IPassageRepo'
 import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
-import { result } from 'lodash'
+import { IFloorPassageDTO } from '../dto/IFloorPassageDTO'
+import { FloorPassageMap } from '../mappers/FloorPassageMap'
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -132,18 +133,14 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    async floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorDTO[]>> {
+    async floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>> {
         const building = await this.buildingRepo.findByCode(BuildingCode.create(buildingDTO.code).getValue())
+
         if (!building) {
             return Result.fail(`Building with code ${buildingDTO.code} does not exist`)
         }
 
-        const buildingFloors = await this.floorRepo.findAllInBuilding(building)
-        // if (buildingFloors.length == 0) {
-        //     return Result.fail(`No floors in building ${buildingDTO.code}`)
-        // }
-
-        const floors = await this.passageRepo.floorsWithPassage(buildingFloors)
-        return Result.ok(floors.map(FloorMap.toDTO))
+        const floors = await this.passageRepo.floorsWithPassage(building)
+        return Result.ok(floors.map(f => FloorPassageMap.toDTO(f)))
     }
 }

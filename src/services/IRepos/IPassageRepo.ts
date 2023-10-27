@@ -2,7 +2,8 @@ import { Repo } from '../../core/infra/Repo'
 import { Passage } from '../../domain/passage/passage'
 import { BuildingCode } from '../../domain/building/buildingCode'
 import { Floor } from '../../domain/floor/floor'
-import { IPassagePersistence } from '../../dataschema/IPassagePersistence'
+import { IFloorPassageDomainDTO } from '../../dto/IFloorPassageDomainDTO'
+import Building from '../../domain/building/building'
 
 export default interface IPassageRepo extends Repo<Passage> {
     find(floor1: Floor, floor2: Floor): Promise<Passage>
@@ -12,5 +13,5 @@ export default interface IPassageRepo extends Repo<Passage> {
     // FIXME: scuffed due to ObjId's; Building should've been the argument
     passagesBetweenBuildings(dto: Passage[], codex: BuildingCode, codey: BuildingCode): Promise<Passage[]>
     // FIXME: scuffed due to ObjId's; Building should've been the argument
-    floorsWithPassage(buildingFloors: Floor[]): Promise<Floor[]>
+    floorsWithPassage(building: Building): Promise<IFloorPassageDomainDTO[]>
 }

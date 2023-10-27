@@ -8,6 +8,7 @@ import { FloorNumber } from '../domain/floor/floorNumber'
 import Building from '../domain/building/building'
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
 import { BuildingCode } from '../domain/building/buildingCode'
+import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
@@ -145,5 +146,14 @@ export default class FloorRepo implements IFloorRepo {
         const passageList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
 
         return passageList
+    }
+
+    async findById(id: string | UniqueEntityID): Promise<Floor> {
+        if (id instanceof UniqueEntityID) {
+            id = id.toString()
+        }
+
+        const floor = await this.floorSchema.findOne({ domainId: id })
+        return FloorMap.toDomain(floor)
     }
 }

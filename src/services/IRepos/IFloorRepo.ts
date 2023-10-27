@@ -3,6 +3,7 @@ import Building from '../../domain/building/building'
 import { FloorNumber } from '../../domain/floor/floorNumber'
 import { BuildingCode } from '../../domain/building/buildingCode'
 import { Floor } from '../../domain/floor/floor'
+import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 
 export type BuildingFloorCount = {
     buildingCode: BuildingCode
@@ -17,4 +18,5 @@ export default interface IFloorRepo extends Repo<Floor> {
     findByCodeNumber(buildingCode: BuildingCode, floorNumber: FloorNumber): Promise<Floor>
     findBuildingsByMinMaxFloors(min: number, max: number): Promise<BuildingFloorCount[]>
     findAllInBuilding(building: Building): Promise<Floor[]>
+    findById(id: UniqueEntityID | string): Promise<Floor>
 }
