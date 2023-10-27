@@ -43,7 +43,7 @@ as categorias são de uma lista especifica. neste momento não é necessário ex
 
 ### 3. Diagrams
 
-![level1](level1/process-view.svg)
+![level1](level1/process_view.svg)
 ![level2](level2/process-view.svg)
 ![level3](level3/process-view.svg)
 ![level3](level3/class-diagram.svg)
@@ -73,5 +73,6 @@ No authorization required
 
 ### 4.5 Simulation HTTP requests
 
-![postman](README/postman_getElevators.JPG)
-![mongo](README/mongo_getElevators.JPG)
+![postman](README/postman_bB_f1_room1.JPG)
+![postman](README/postman_bB_f3_room1.JPG)
+![mongo](README/mongo_rooms.JPG)

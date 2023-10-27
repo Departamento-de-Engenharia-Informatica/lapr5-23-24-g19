@@ -11,3 +11,17 @@
         "y":4
     }
 }
+
+{
+    "name":"RoomARQSI",
+    "description":"Room of ARQSI",
+    "category":"gabinete",
+    "dimensions":{
+        "length":20,
+        "width":20
+    },
+    "positions":{
+        "x":1,
+        "y":1
+    }
+}
