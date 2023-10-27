@@ -17,54 +17,44 @@ database "Repository" as repo
 end box
 
 [--> r: GET /buildings/?minFloors={min}&maxFloors={max}
-    activate r
-        r -> ctrl : getBuildingsByFloors()
-        activate ctrl
-            ctrl -> map : toDTO()
-            activate map
-                map -> dto** : create()
-                note right : dto storing min and max \nfloor values
-                activate dto
-                    map --> ctrl : dto
-                deactivate dto
-            deactivate map
+activate r
+    r -> ctrl : getBuildingsByFloors()
+    activate ctrl
+        ctrl -> svc : getBuildingsByFloors(dto)
+        activate svc
+            svc -> repo : findBuildingsByMinMaxFloors(dto.min, dto.max)
+            activate repo
+                note right: floor repository
+            deactivate repo
 
+            alt building(s) not found
+                svc --> ctrl : error
+                ctrl --> r : error (422)
+                [<--r : 422: Unprocessable Content
+            else building(s) found
 
-            ctrl -> svc : getBuildingsByFloors(dto)
-            activate svc
-                svc -> repo : findBuildingsByMinMaxFloors(dto.min, dto.max)
+            loop for each buildingCode
+                svc -> repo : findByCode(buildingCode)
                 activate repo
-                    note right: floor repository
+                    note right : building repository
                 deactivate repo
 
-                alt building(s) not found
-                    svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<--r : response code 422
-                else building(s) found
+                svc -> map : toDTO(building, floorCount)
 
-                loop for each buildingCode
-                    svc -> repo : findByCode(buildingCode)
-                    activate repo
-                        note right : building repository
-                    deactivate repo
-
-                    svc -> map : toDTO(building, floorCount)
-
-                    activate map
-                        map --> dto** : create()
-                        note right: dto storing building \ninformation and floor count
-                        activate dto
-                            map --> svc : dto
-                        deactivate dto
-                    deactivate map
-                end loop
-                    svc --> ctrl : dtoList
-                    ctrl --> r : response
-                    [<-- r : response code 200
-                end
-            deactivate svc
-        deactivate ctrl
-    deactivate r
+                activate map
+                    map --> dto** : create()
+                    note right: dto storing building \ninformation and floor count
+                    activate dto
+                        map --> svc : dto
+                    deactivate dto
+                deactivate map
+            end loop
+                svc --> ctrl : dtoList
+                ctrl --> r : response
+                [<-- r : 422: OK
+            end
+        deactivate svc
+    deactivate ctrl
+deactivate r
 
 @enduml
