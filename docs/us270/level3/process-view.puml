@@ -41,10 +41,10 @@ activate r
                     ctrl --> r : error (412)
                     [<- r : 412: Precondition Failed
                 else floors found
-                    svc --> elevator** : create()
+                    svc --> elevator **: create()
 
-                    activate elevator
-                    deactivate elevator
+                    ' activate elevator
+                    ' deactivate elevator
 
                     alt elevator not created
                         svc --> ctrl : error
