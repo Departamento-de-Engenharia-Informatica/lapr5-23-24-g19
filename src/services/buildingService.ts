@@ -22,7 +22,7 @@ import { BuildingFloorNumberMap } from '../mappers/BuildingFloorNumberMap'
 
 @Service()
 export default class BuildingService implements IBuildingService {
-    constructor(@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo, 
+    constructor(@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
                 @Inject(config.repos.floor.name) private floorRepo: IFloorRepo) {}
 
     public async createBuilding(dto: IBuildingDTO): Promise<Result<IBuildingDTO>> {
@@ -88,16 +88,16 @@ export default class BuildingService implements IBuildingService {
 
             if (buildingsAndFloorCount.length == 0) {
                 return Result.fail('Buildings not found')
-            } else {
-                const dtoList = await Promise.all(
-                    buildingsAndFloorCount.map(async (value) => {
-                        const building = await this.buildingRepo.findByCode(value.buildingCode);
-                        return BuildingFloorNumberMap.toDTO(building, value.floorCount);
-                    })
-                );
-
-                return Result.ok(dtoList)
             }
+
+            const dtoList = await Promise.all(
+                buildingsAndFloorCount.map(async (value) => {
+                    const building = await this.buildingRepo.findByCode(value.buildingCode);
+                    return BuildingFloorNumberMap.toDTO(building, value.floorCount);
+                })
+            );
+
+            return Result.ok(dtoList)
         } catch (e) {
             throw e
         }

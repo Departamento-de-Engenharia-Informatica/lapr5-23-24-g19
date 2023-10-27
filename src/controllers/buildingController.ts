@@ -73,13 +73,11 @@ export default class BuildingController implements IBuildingController {
 
     public async getBuildingsByFloors(req: Request, res: Response, next: NextFunction) {
         try {
-            const minFloors = req.query.minFloors ? parseInt(req.query.minFloors as string) : undefined;
-            const maxFloors = req.query.maxFloors ? parseInt(req.query.maxFloors as string) : undefined;
+            const minFloors = parseInt(req.query.minFloors.toString())
+            const maxFloors = parseInt(req.query.maxFloors.toString())
 
-            if (minFloors !== undefined && maxFloors !== undefined) {
-                if (minFloors > maxFloors) {
-                    return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' });
-                }
+            if (minFloors > maxFloors) {
+                return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' });
             }
 
             const dto = req.body as IBuildingMinMaxFloorsDTO
@@ -88,7 +86,7 @@ export default class BuildingController implements IBuildingController {
             const result = await this.service.getBuildingsByFloors(dto);
 
             if (result.isFailure) {
-                return res.status(422).send()
+                return res.status(404).send()
             }
 
             return res.json(result.getValue()).status(200);
