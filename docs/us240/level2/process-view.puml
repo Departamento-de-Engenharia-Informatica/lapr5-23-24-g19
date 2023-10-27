@@ -1,20 +1,18 @@
 @startuml
 autonumber
 
-box "RobDroneGo"
 participant "MD" as mdr
 
-    [-> mdr: POST /passages
-    activate mdr
+[-> mdr: POST /passages
+activate mdr
     alt building not found
-        [<--mdr  : 412: Precondition Failed
+        [<-- mdr : 412: Precondition Failed
     else same building
-        [<--mdr  : 422: Unprocessable Content
+        [<-- mdr : 422: Unprocessable Content
     else elevator created successfully
-        [<--mdr  : 201: Created
+        [<-- mdr : 201: Created
     end
-
-    deactivate mdr
+deactivate mdr
 
 @enduml
 
