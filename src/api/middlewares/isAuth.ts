@@ -20,7 +20,8 @@ const getTokenFromHeader = (req) => {
         (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') ||
         (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
     ) {
-        return req.headers.authorization.split(' ')[1]
+        req.token = req.headers.authorization.split(' ')[1]
+        return req.token
     }
     return null
 }
