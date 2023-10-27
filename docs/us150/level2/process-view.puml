@@ -1,22 +1,16 @@
 @startuml
 autonumber
 
-actor " " as actor
-box "RobDroneGo"
 participant "MD" as mdr
 
-activate actor
+[-> mdr: POST /buildings
 
-    actor -> mdr: POST /buildings
-
-    activate mdr
+activate mdr
     alt building not created
-        mdr --> actor : 422: Unprocessable Content
+        [<-- mdr : 422: Unprocessable Content
     else building created successfully
-        mdr --> actor : 201: Created
+        [<-- mdr : 201: Created
     end
-    deactivate mdr
-
-deactivate actor
+deactivate mdr
 
 @enduml
