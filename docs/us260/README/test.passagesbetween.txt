@@ -1,0 +1,12 @@
+route.get(
+        '',
+        celebrate({
+            query: {
+                building1: Joi.string(),
+                building2: Joi.string(),
+            },
+        }),
+        (req, res, next) => ctrl.getPassages(req, res, next),
+
+
+
