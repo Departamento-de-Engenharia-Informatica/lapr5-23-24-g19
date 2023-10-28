@@ -22,7 +22,7 @@ export default class BuildingController implements IBuildingController {
                 return res.status(ret).send(error.message)
             }
             const message = result.value as IBuildingDTO
-            return res.json(message).status(201);
+            return res.status(201).send(message)
         } catch (e) {
             return next(e)
         }
