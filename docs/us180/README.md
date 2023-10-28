@@ -51,16 +51,12 @@ Class Diagram
 |   **404**   | building(s) not found |
 |   **200**   | building(s) found |
 
-## 4.3 Authorization
 
-Only Fleet Managers are allowed to execute this functionality
-
-
-### 4.4 HTTP Request Body
+### 4.3 HTTP Request Body
 
 n/a
 
-### 4.5 HTTP Response Body
+### 4.4 HTTP Response Body
 
 ```json
 {
