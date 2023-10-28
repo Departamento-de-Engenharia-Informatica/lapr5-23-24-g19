@@ -52,7 +52,7 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async editFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>> {
+    public async patchFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>> {
         try {
             const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(buildingCode)
@@ -69,9 +69,39 @@ export default class FloorService implements IFloorService {
                 return Result.fail('Floor not found')
             }
 
-            if (dto.description) {
-                floor.description = Description.create(dto.description).getValue()
+            if(dto.description) {
+                Description.create(dto.description).getValue()
             }
+
+            if (dto.floorNumber) {
+                floor.floorNumber = FloorNumber.create(dto.floorNumber).getValue()
+            }
+
+            const result = await this.floorRepo.save(floor)
+            return Result.ok(FloorMap.toDTO(result))
+        } catch (e) {
+            throw e
+        }
+    }
+
+    public async putFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>> {
+        try {
+            const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
+            const building = await this.buildingRepo.findByCode(buildingCode)
+
+            if (!building) {
+                return Result.fail('Building not found')
+            }
+
+            const floorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
+
+            const floor = await this.floorRepo.findByCodeNumber(buildingCode, floorNumber)
+
+            if (floor === null) {
+                return Result.fail('Floor not found')
+            }
+
+            floor.description = dto.description && Description.create(dto.description).getValue()
 
             if (dto.floorNumber) {
                 floor.floorNumber = FloorNumber.create(dto.floorNumber).getValue()

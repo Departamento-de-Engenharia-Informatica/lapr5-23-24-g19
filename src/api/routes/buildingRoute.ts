@@ -66,7 +66,7 @@ export default (app: Router) => {
                 description: Joi.string(),
             }),
         }),
-        (req, res, next) => floorController.editFloor(req, res, next),
+        (req, res, next) => floorController.patchFloor(req, res, next),
     )
 
     route.put(
@@ -79,7 +79,7 @@ export default (app: Router) => {
                 description: Joi.string()
             }),
         }),
-        (req, res, next) => floorController.editFloor(req, res, next),
+        (req, res, next) => floorController.putFloor(req, res, next),
     )
 
     route.patch(

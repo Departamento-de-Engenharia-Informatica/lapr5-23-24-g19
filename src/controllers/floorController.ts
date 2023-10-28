@@ -8,8 +8,6 @@ import IFloorService from '../services/IServices/IFloorService'
 import { Result } from '../core/logic/Result'
 import { IFloorDTO } from '../dto/IFloorDTO'
 import { IFloorMapDTO } from '../dto/IFloorMapDTO'
-import { ParamsDictionary } from 'express-serve-static-core'
-import { ParsedQs } from 'qs'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
 import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
 
@@ -36,13 +34,13 @@ export default class FloorController implements IFloorController {
         }
     }
 
-    public async editFloor(req: Request, res: Response, next: NextFunction) {
+    public async patchFloor(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = req.body as IUpdateFloorDTO
             dto.oldFloorNumber = parseInt(req.params.floor)
             dto.buildingCode = req.params.id
 
-            const result = await this.floorServiceInstance.editFloor(req.body as IUpdateFloorDTO)
+            const result = await this.floorServiceInstance.patchFloor(req.body as IUpdateFloorDTO)
 
             if (result.isFailure) {
                 return res.status(422).send()
@@ -52,7 +50,24 @@ export default class FloorController implements IFloorController {
         } catch (e) {
             return next(e)
         }
+    }
 
+    public async putFloor(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto = req.body as IUpdateFloorDTO
+            dto.oldFloorNumber = parseInt(req.params.floor)
+            dto.buildingCode = req.params.id
+
+            const result = await this.floorServiceInstance.putFloor(req.body as IUpdateFloorDTO)
+
+            if (result.isFailure) {
+                return res.status(422).send()
+            }
+
+            return res.json(result.getValue()).status(200)
+        } catch (e) {
+            return next(e)
+        }
     }
 
     public async getFloors(req: Request, res: Response, next: NextFunction) {

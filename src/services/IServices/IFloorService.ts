@@ -7,7 +7,8 @@ import { IUpdateFloorDTO } from '../../dto/IUpdateFloorDTO'
 
 export default interface IFloorService {
     createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Result<IFloorDTO>>
-    editFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>>
+    patchFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>>
+    putFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>>
     getFloors(buildingCode: string): Promise<Result<IFloorDTO[]>>
     floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>>
     uploadMap(floorMapDto: IFloorMapDTO): Promise<Result<IFloorDTO>>
