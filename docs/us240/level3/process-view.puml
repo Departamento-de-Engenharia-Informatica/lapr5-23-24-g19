@@ -9,8 +9,7 @@ participant "passage:\nPassage" as passage
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
 participant "Repository" as repo
-
-' TODO: @uz0maki review?
+database "Database" as db
 
 [--> r : POST /passages
 activate r
@@ -20,55 +19,48 @@ activate r
         ctrl -> svc : createPassage(dto)
         activate svc
 
-            svc -> repo : findByCode(buildingCode1)
-
+            svc -> repo : findByCodeNumber(floorNumber1,buildingCode1)
             activate repo
-                repo ->] : find()
+                repo ->db : find()
+                activate db
+                deactivate db
             deactivate repo
 
-            svc -> repo : findByCode(buildingCode2)
+            svc -> repo : findByCodeNumber(floorNumber2,buildingCode2)
             activate repo
-                repo ->] : find()
+                repo ->db : find()
+                activate db
+                deactivate db
             deactivate repo
-
-            alt building not found
-                svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<-- r : 412: Precondition Failed
-            else building found
-                svc --> svc : sameBuilding(buildingCode1,buildingCode2))
-            alt same building
-                svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<--r : 412: Precondition Failed
-            else building found
-            svc -> repo : findByCode(floorNumber1)
-            activate repo
-                repo ->] : find()
-            deactivate repo
-            svc -> repo : findByCode(floorNumber2)
             alt floor not found
             svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<--r : 412: Precondition Failed
+                ctrl --> r : error (404)
+                [<--r : error(404)
             else
-            activate repo
-                repo ->] : find()
-            deactivate repo
+                note right of svc
+                    check if floors belong to the same building
+                end note
+            alt same building
+                svc --> ctrl : error
+                ctrl --> r : error (422)
+                [<--r : error(422)
+            else different buildings
                     svc --> passage** : create(floor1,floor2)
 
                 svc -> repo : save(passage)
+                activate repo
+                    repo -> db: save(passage)
+                    activate db
+                    deactivate db
+                deactivate repo
+
             alt passage not created
                 svc --> ctrl : error
                 ctrl --> r : error (422)
-                [<--r: 422: Unprocessable Content
+                [<--r: error(422)
 
             else passage created successfully
-
-                activate repo
-                    svc -> map : toDTO(passage)
-                deactivate repo
-
+                svc -> map : toDTO(passage)
                 activate map
                     map --> dto** : create(passage)
                     activate dto
@@ -80,8 +72,7 @@ activate r
                 deactivate svc
                 ctrl --> r : dto (201)
                 deactivate ctrl
-                [<--r : 201: Created
-            end
+                [<--r : dto(201)
             end
             end
             end

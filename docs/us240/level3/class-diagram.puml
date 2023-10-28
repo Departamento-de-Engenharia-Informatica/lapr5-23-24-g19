@@ -13,13 +13,14 @@ skinparam component {
 
 package system {
     package "Infrastructure" {
-        package "Routes" {
-            class RoutePassage
-        }
 
         package "Persistence" {
             interface IDBDriver
             class DBDriver
+        }
+
+        package "Routes" {
+            class RoutePassage
         }
 
         DBDriver -right-|> IDBDriver
@@ -47,7 +48,7 @@ package system {
         RepoFloor .up.> DBDriver
         RepoPassage .up.> DBDriver
 
-        RoutePassage ....> IControllerCreatePassage
+        RoutePassage ..> IControllerCreatePassage
     }
 
     package "Application Services" {
@@ -96,14 +97,20 @@ package system {
             }
         }
         Passage "1" -up-> "2" Floor
+        Floor "1" --> "1" Building
 
         AppServicePassage ..> Passage
         AppServicePassage ..> Floor
         AppServicePassage ..> Building
 
-        'package "Services" {
-        '}
     }
+
+    package "DTO" {
+        interface IPassageDTO
+
+    }
+    AppServicePassage --> IPassageDTO
+    ControllerCreatePassage --> IPassageDTO
 }
 
 @enduml

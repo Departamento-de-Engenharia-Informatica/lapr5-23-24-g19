@@ -1,16 +1,18 @@
 @startuml
 autonumber
 
-participant "MD" as mdr
+participant "<<system>>\nMD" as mdr
 
 [-> mdr: POST /passages
 activate mdr
-    alt building not found
-        [<-- mdr : 412: Precondition Failed
+    alt floor not found
+        [<-- mdr : 404 not found
     else same building
-        [<-- mdr : 422: Unprocessable Content
-    else elevator created successfully
-        [<-- mdr : 201: Created
+        [<-- mdr : 422 Unprocessable Content
+    else passage already exists
+        [<-- mdr : 422 Unprocessable Content
+    else passage created successfully
+        [<-- mdr : 201 Created
     end
 deactivate mdr
 
