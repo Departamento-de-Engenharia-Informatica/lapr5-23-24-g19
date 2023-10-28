@@ -1,6 +1,6 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { Result, Either, left, right } from '../core/logic/Result'
+import { Either, left, right } from '../core/logic/Result'
 
 import IRobotService, { RobotErrorCode, RobotErrorResult } from './IServices/IRobotService'
 import { RobotMap } from '../mappers/RobotMap'
@@ -37,10 +37,10 @@ export default class RobotService implements IRobotService {
                 })
             }
 
-            const code = this.getResult(RobotCode.create(dto.code))
-            const nickname = this.getResult(Nickname.create(dto.nickname))
-            const serialNumber = this.getResult(SerialNumber.create(dto.serialNumber))
-            const description = dto.description && this.getResult(Description.create(dto.description))
+            const code = RobotCode.create(dto.code).getOrThrow()
+            const nickname = Nickname.create(dto.nickname).getOrThrow()
+            const serialNumber = SerialNumber.create(dto.serialNumber).getOrThrow()
+            const description = dto.description && Description.create(dto.description).getOrThrow()
 
             const robot = Robot.create({
                 code,
@@ -48,16 +48,9 @@ export default class RobotService implements IRobotService {
                 type,
                 serialNumber,
                 description,
-            })
+            }).getOrThrow()
 
-            if (robot.isFailure) {
-                return left({
-                    errorCode: RobotErrorCode.BussinessRuleViolation,
-                    message: robot.errorValue().toString(),
-                })
-            }
-
-            const saved = await this.robotRepo.save(robot.getValue())
+            const saved = await this.robotRepo.save(robot)
             return right(RobotMap.toDTO(saved))
         } catch (e) {
             return left({
@@ -68,7 +61,15 @@ export default class RobotService implements IRobotService {
     }
 
     async inhibitRobot(dto: IRobotInhibitDTO): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
-        const robot = await this.robotRepo.find(RobotCode.create(dto.code).getValue())
+        const code = RobotCode.create(dto.code)
+        if (code.isFailure) {
+            return left({
+                errorCode: RobotErrorCode.BussinessRuleViolation,
+                message: code.errorValue().toString()
+            })
+        }
+
+        const robot = await this.robotRepo.find(code.getValue())
 
         if (!robot) {
             return left({
@@ -108,11 +109,5 @@ export default class RobotService implements IRobotService {
         // } catch (e) {
         //     throw e
         // }
-    }
-
-    // TODO: refactor to Utils
-    private getResult<T>(result: Result<T>): T {
-        if (result.isFailure) throw new Error(result.errorValue().toString())
-        return result.getValue()
     }
 }
