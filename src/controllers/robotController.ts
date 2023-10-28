@@ -3,7 +3,7 @@ import { Inject, Service } from 'typedi'
 import { Request, Response, NextFunction } from 'express'
 
 import IRobotController from './IControllers/IRobotController'
-import IRobotService from '../services/IServices/IRobotService'
+import IRobotService, { RobotErrorCode, RobotErrorResult } from '../services/IServices/IRobotService'
 import { IRobotDTO } from '../dto/IRobotDTO'
 import { IRobotInhibitDTO } from '../dto/IRobotInhibitDTO'
 
@@ -16,11 +16,12 @@ export default class RobotController implements IRobotController {
             const dto = req.body as IRobotDTO
             const result = await this.service.createRobot(dto)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const err = result.value as RobotErrorResult
+                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
             }
 
-            return res.json(result.getValue()).status(201)
+            return res.json(result.value).status(201)
         } catch (e) {
             return next(e)
         }
@@ -30,12 +31,12 @@ export default class RobotController implements IRobotController {
         try {
             const result = await this.service.getRobots()
 
-            if (result.isFailure) {
-                // TODO: 404 code instead?
-                return res.status(412).send()
+            if (result.isLeft()) {
+                const err = result.value as RobotErrorResult
+                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
             }
 
-            return res.json(result.getValue()).status(200)
+            return res.json(result.value).status(200)
         } catch (e) {
             return next(e)
         }
@@ -46,14 +47,30 @@ export default class RobotController implements IRobotController {
             const dto = { code: req.params.id } as IRobotInhibitDTO
             const result = await this.service.inhibitRobot(dto)
 
-            if (result.isFailure) {
-                return res.status(404).send()
+            if (result.isLeft()) {
+                const err = result.value as RobotErrorResult
+                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
             }
 
-            // TODO: double check return code
-            return res.json(result.getValue()).status(200)
+            return res.json(result.value).status(200)
         } catch (e) {
             return next(e)
         }
+    }
+
+    private resolveHttpCode(result: RobotErrorCode) {
+        let ret: number
+        switch (result) {
+            case RobotErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case RobotErrorCode.NotFound:
+                ret = 404
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
     }
 }

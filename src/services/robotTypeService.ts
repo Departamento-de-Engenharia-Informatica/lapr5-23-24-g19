@@ -37,7 +37,7 @@ export default class RobotTypeService implements IRobotTypeService {
             if (await this.robotTypeRepo.exists(robotType)) {
                 return Result.fail("[422] Robot type already exists")
             }
-            
+
             const saved = await this.robotTypeRepo.save(robotType)
             return Result.ok<IRobotTypeDTO>(RobotTypeMap.toDTO(saved))
         } catch (e) {

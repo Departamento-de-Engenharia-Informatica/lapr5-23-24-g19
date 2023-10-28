@@ -5,12 +5,7 @@ import config from '../../config'
 import IBuildingController from './IControllers/IBuildingController'
 import IBuildingService, { ErrorResult, ErrorCode } from '../services/IServices/IBuildingService'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
-import { BuildingCode } from '../domain/building/buildingCode'
-import { ParamsDictionary } from 'express-serve-static-core'
-import { ParsedQs } from 'qs'
-import { parseInt } from 'lodash'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
-import { Either,left,right } from '../core/logic/Result'
 
 
 @Service()
@@ -56,7 +51,7 @@ export default class BuildingController implements IBuildingController {
         try {
             const result = await this.service.editBuilding(req.params.id, req.body as IBuildingDTO)
 
- 
+
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
@@ -70,7 +65,7 @@ export default class BuildingController implements IBuildingController {
         }
     }
 
-    public async getBuildings(req: Request, res: Response, next: NextFunction) {
+    public async getBuildings(_: Request, res: Response, next: NextFunction) {
         try {
             const result = await this.service.getBuildings()
             if (result.isFailure) {

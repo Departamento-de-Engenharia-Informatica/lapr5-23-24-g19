@@ -17,7 +17,6 @@ import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
 import { IBuildingFloorNumberDTO } from '../dto/IBuildingFloorNumberDTO'
 import IFloorRepo from './IRepos/IFloorRepo'
-import { Resolver } from 'dns'
 import { BuildingFloorNumberMap } from '../mappers/BuildingFloorNumberMap'
 
 @Service()
@@ -116,7 +115,7 @@ export default class BuildingService implements IBuildingService {
             if (bCode.isFailure) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building Code does not meet requirements" 
+                    message: "Building Code does not meet requirements"
                     }as ErrorResult)
             }
 
@@ -124,7 +123,7 @@ export default class BuildingService implements IBuildingService {
             if (building === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building not found" 
+                    message: "Building not found"
                 }as ErrorResult)
             }
 
