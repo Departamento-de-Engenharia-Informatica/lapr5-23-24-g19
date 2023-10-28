@@ -3,17 +3,19 @@ autonumber
 
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-    [-> sys: POST /building/{id}/floors
+[-> sys: POST /building/{id}/floors
 
-    activate sys
-    alt building not found
-        [<--sys : 404 not found
-    else floor already exists
-        [<--sys : 422 Unprocessable Content
-    else floor created successfully
-        [<--sys : 201 created
+activate sys
+alt building not found
+    [<--sys : 404: not found
+else building found
+    alt floor already exists
+        [<--sys : 422: Unprocessable Content
+    else floor doesn't exist
+        [<--sys : 201: Created
     end
-    deactivate sys
+end
+deactivate sys
 
 
 @enduml
