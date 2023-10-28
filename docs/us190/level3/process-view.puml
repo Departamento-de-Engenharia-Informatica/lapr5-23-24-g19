@@ -1,10 +1,6 @@
 @startuml
 autonumber
 
-participant "??" as ui
-
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
@@ -12,33 +8,43 @@ participant "Service" as svc
 participant "floor:\nFloor" as floor
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
+participant "Repository" as repo
+database "Database" as db
 
-'activate ui
-ui --> r: post(/building/{id}/floors)
+[--> r: post(/building/{id}/floors)
     activate r
         r -> ctrl : createFloor()
         activate ctrl
-            ctrl -> svc : createFloor()
+            ctrl -> svc : createFloor(dto)
             activate svc
-                svc -> repo : exists(buildingId)
+                svc -> repo : find(buildingCode)
                 activate repo
+                    repo -> db: find(buildingCode)
+                    activate db
+                    db --> repo: building
+                    deactivate db
+                    repo --> svc: building
                 deactivate repo
 
                 alt building not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    r --> ui : 412: Precondition Failed
+                    ctrl --> r : error (404)
+                    [<--r : 404 not found
+                else floor created successfully
+                    svc ->repo: findByCodeNumber(buildingCode,floorNumber)
+                    activate repo
+                        repo -> db :findByCodeNumber((buildingCode,floorNumber)
+                        activate db
+                        deactivate db
+                    deactivate repo
+                alt floor already exists
+                    svc --> ctrl : error
+                    ctrl --> r : error (422)
+                    [<--r : 422 unprocessable content
                 else floor created successfully
                     svc --> floor** : create()
-                    activate floor
-                        svc -> repo : save(floor)
-                    deactivate floor
-
+                    svc -> repo : save(floor)
                     activate repo
                         svc -> map : toDTO(floor)
                     deactivate repo
@@ -52,7 +58,8 @@ ui --> r: post(/building/{id}/floors)
 
                     svc --> ctrl : dto
                     ctrl --> r : dto (201)
-                    r --> ui : 201: Created
+                    [<--r : 201 Created
+                end
                 end
             deactivate svc
         deactivate ctrl

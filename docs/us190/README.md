@@ -1,25 +1,47 @@
-# US 150 - Create building - Level 3
+# US 190
 
 ### 1. User Story Description
 
-As an administrator, I intend to create a building.
+As an administrator, I intend to create a floor
 
 ### 2. Customer Specifications and Clarifications
 
 **From the specifications document:**
 
 
-
 **From the client clarifications:**
 
+[ID 190 floor code](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=25484)
 
-> **Question:**
+[US id310/190/230 Criar sala de piso de edifício](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=25016)
 
-> **Answer:**
+[US190 - Criar Piso de Edifício](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=25248)
 
+[US 190/240/270/310](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=25188)
 
 ### 3. Diagrams
 
+### Level 1
+
+Process View
+
+![process-view.svg](level1%2Fprocess-view.svg)
+
+### Level 2
+
+Process View
+
+![process-view.svg](level2%2Fprocess-view.svg)
+
+### Level 3
+
+Process View
+
+![process-view.svg](level3%2Fprocess-view.svg)
+
+Class Diagram
+
+![class-diagram.svg](level3%2Fclass-diagram.svg)
 
 
 ### 4. HTTP
@@ -48,3 +70,9 @@ No authorization required
 
 ![postman](README/postman_buildingJ_floor1.JPG)
 ![mongo](README/mongo_buildingJ_floor1.JPG)
+
+## 5. Design Patterns
+
+[README.md](..%2Fgeneral-purpose%2FREADME.md)
+
+## 6.Test

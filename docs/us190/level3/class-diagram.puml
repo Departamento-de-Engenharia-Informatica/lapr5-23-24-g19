@@ -98,10 +98,13 @@ package system {
         Floor "1" --> "1" FloorNumber
 
         AppServiceFloor ..> Floor
-
-        'package "Services" {
-        '}
     }
+    package "DTO" {
+        interface IFloorDTO
+
+    }
+    AppServiceFloor --> IFloorDTO
+    ControllerCreateFloor --> IFloorDTO
 }
 
 @enduml
