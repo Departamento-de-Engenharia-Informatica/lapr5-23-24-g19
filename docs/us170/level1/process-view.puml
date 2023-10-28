@@ -1,16 +1,15 @@
 @startuml
 autonumber
 
+participant "<<system>>\nRobDroneGo" as sys
 
-participant "<<system>>\nSystem RobDroneGo" as sys
-
- [-> sys: GET /buildings
+[-> sys: GET /buildings
 
 activate sys
 alt buildings not found
-    [<--sys : response code: 422
+    [<--sys : response status 404
 else buildings sent
-    [<--sys : response code: 200
+    [<--sys : response status 200
 end
 deactivate sys
 

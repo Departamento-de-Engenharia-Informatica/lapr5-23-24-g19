@@ -1,16 +1,15 @@
 @startuml
 autonumber
 
-box "  <<system>>\nRobDroneGo"
-participant "MD" as mdr
+participant "<<system>>\nMD" as mdr
 
     [-> mdr: GET /buildings
 
     activate mdr
     alt buildings
-        [<-- mdr : response code 422
+        [<-- mdr : response status 404
     else buildings sent
-        [<--mdr : response code 200
+        [<--mdr : response status 200
     end
     deactivate mdr
 

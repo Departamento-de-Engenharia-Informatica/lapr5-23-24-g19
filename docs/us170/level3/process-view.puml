@@ -1,22 +1,17 @@
 @startuml
 autonumber
 
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
 
-participant "floor:\nFloor" as floor
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
-end box
 
-box "Database"
-database "Repository" as repo
-end box
+participant "Repository" as repo
+database "DB" as db
 
-[--> r: GET /building/{id}
+[--> r: GET /buildings
     activate r
         r -> ctrl : getBuildings(req,res)
         activate ctrl
@@ -24,29 +19,27 @@ end box
             activate svc
                 svc -> repo : findAll()
                 activate repo
+                    repo -> db : findAll()
+                    activate db
+                    deactivate db
                 deactivate repo
 
                 alt building not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<--r : response code 422
+                    ctrl --> r : error (404)
+                    [<--r : error(404)
                 else floor created successfully
 
                 loop for each building
-                    activate repo
-                        svc -> map : toDTO(building)
-                    deactivate repo
-
+                    svc -> map : toDTO(building)
                     activate map
                         map --> dto** : create(floor)
-                        activate dto
                             map --> svc : dto
-                        deactivate dto
                     deactivate map
                 end loop
                     svc --> ctrl : dto
-                    ctrl --> r : response
-                    [<-- r : response code 200
+                    ctrl --> r : dto(200)
+                    [<-- r : dto(200)
                 end
             deactivate svc
         deactivate ctrl
