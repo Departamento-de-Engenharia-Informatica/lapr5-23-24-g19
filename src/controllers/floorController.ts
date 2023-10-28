@@ -18,6 +18,7 @@ export default class FloorController implements IFloorController {
     public async createFloor(req: Request, res: Response, next: NextFunction) {
         try {
             const buildingId = req.params.id
+
             const roleOrError = (await this.floorServiceInstance.createFloor(
                 req.body as IFloorDTO,
                 buildingId,
