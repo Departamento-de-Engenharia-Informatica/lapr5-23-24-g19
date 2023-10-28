@@ -1,22 +1,23 @@
 @startuml
 autonumber
 
-actor " " as actor
 participant "<<system>>\nSystem RobDroneGo" as sys
 
-activate actor
-    actor -> sys: PATCH/PUT  ( /buildings/{id}/floors/{floor} )
-    activate sys
-
-    alt  floor not found
-    sys --> actor : 412: Precondition Failed
-        else floor bad params
-        sys --> actor : 422: Unprocessable Content
-    else floor edited successfully
-        sys --> actor : 200: "OK" Successful
+[-> sys: PATCH/PUT  ( /buildings/{id}/floors/{floor} )
+activate sys
+    alt  building not found
+            [<-- sys : 404: Not Found
+        else building found
+            alt floor not found
+                [<-- sys : 404: Not Found
+            else floor found
+                alt floor bad parameters
+                    [<-- sys : 422: Unprocessable Content
+                else floor correct parameters
+                    [<-- sys : 200: OK
+            end
+        end
     end
-
-    deactivate sys
-deactivate actor
+deactivate sys
 
 @enduml
