@@ -1,8 +1,8 @@
 import { Inject, Service } from 'typedi'
 import config from '../../config'
-import { Result } from '../core/logic/Result'
+import { Either, Result, left, right } from '../core/logic/Result'
 
-import IElevatorService from './IServices/IElevatorService'
+import IElevatorService, { ErrorResult, ErrorCode } from './IServices/IElevatorService'
 import IElevatorRepo from './IRepos/IElevatorRepo'
 import { ElevatorMap } from '../mappers/ElevatorMap'
 
@@ -29,19 +29,16 @@ export default class ElevatorService implements IElevatorService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
-    async createElevator(dto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>> {
+    async createElevator(dto: IElevatorDTO): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
         const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
 
         if (!building) {
-            return Result.fail('Building not found')
+            return left({
+                errorCode: ErrorCode.NotFound,
+                message: 'Building Not found',
+            })
         }
-
         const identifier = await this.repo.nextIdentifier()
-
-        // guard against deletion
-        if (await this.repo.existsInBuilding(building, identifier)) {
-            return Result.fail(`Elevator already exists with identifier ${identifier.value}`)
-        }
 
         // map the floorId's into the respective Floor object
         const floors =
@@ -59,13 +56,10 @@ export default class ElevatorService implements IElevatorService {
             ).filter(f => f !== null && f !== undefined) ?? []
 
         if (floors.length < dto.floors.length) {
-            const floorNums = floors.map(f => f.floorNumber.value)
-            const notFound = dto.floors.filter(f => !floorNums.includes(f))
-            return Result.fail(`Some floors were not found: ${notFound}`)
-        } else if (floors.length > dto.floors.length) {
-            // NOTE: This should NOT happen
-            console.log('Somehow more floors were found than specified')
-            return Result.fail('Unknown error while searching for floors')
+            return left({
+                errorCode: ErrorCode.NotFound,
+                message: 'Floors were not found ',
+            })
         }
 
         const brand = dto.brand && Brand.create(dto.brand).getValue()
@@ -85,20 +79,30 @@ export default class ElevatorService implements IElevatorService {
         })
 
         if (result.isFailure) {
-            return Result.fail(result.error)
+            return left({
+                errorCode: ErrorCode.BussinessRuleViolation,
+                message: 'Elevator parameters do not meet requirements ',
+            })
         }
 
         const elevator = result.getValue()
         await this.repo.save(elevator)
-        return Result.ok(ElevatorMap.toDTO(elevator))
+
+        return right(ElevatorMap.toDTO(elevator))
     }
 
-    public async editElevator(identifier: number, dto: IElevatorDTO): Promise<Result<ICreatedElevatorDTO>> {
+    public async editElevator(
+        identifier: number,
+        dto: IElevatorDTO,
+    ): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
         try {
             const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
 
             if (!building) {
-                return Result.fail('Building not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Building Not found',
+                })
             }
 
             const elevatorIdentifier = Identifier.create(identifier).getValue()
@@ -106,15 +110,18 @@ export default class ElevatorService implements IElevatorService {
             const existElevator = await this.repo.existsInBuilding(building, elevatorIdentifier)
 
             if (existElevator === null) {
-                return Result.fail('Elevator not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Elevator Not found',
+                })
             }
 
             const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier)
 
-            elevator.brand = dto.brand ? Brand.create(dto.brand).getValue() : undefined
-            elevator.model = dto.model ? Model.create(dto.model).getValue() : undefined
-            elevator.serialNumber = dto.serialNumber ? SerialNumber.create(dto.serialNumber).getValue() : undefined
-            elevator.description = dto.description ? Description.create(dto.description).getValue() : undefined
+            elevator.brand = dto.brand ? Brand.create(dto.brand).getValue() : null
+            elevator.model = dto.model ? Model.create(dto.model).getValue() : null
+            elevator.serialNumber = dto.serialNumber ? SerialNumber.create(dto.serialNumber).getValue() : null
+            elevator.description = dto.description ? Description.create(dto.description).getValue() : null
 
             if (dto.floors) {
                 const floors =
@@ -132,47 +139,56 @@ export default class ElevatorService implements IElevatorService {
                     ).filter(f => f !== null && f !== undefined) ?? []
 
                 if (floors.length < dto.floors.length) {
-                    const floorNums = floors.map(f => f.floorNumber.value)
-                    const notFound = dto.floors.filter(f => !floorNums.includes(f))
-                    return Result.fail(`Some floors were not found: ${notFound}`)
-                } else if (floors.length > dto.floors.length) {
-                    // NOTE: This should NOT happen
-                    console.log('Somehow more floors were found than specified')
-                    return Result.fail('Unknown error while searching for floors')
+                    return left({
+                        errorCode: ErrorCode.NotFound,
+                        message: 'Floors were not found ',
+                    })
                 }
 
                 elevator.floors = floors
             }
 
             const elevatorRes = await this.repo.save(elevator)
-
-            return Result.ok(ElevatorMap.toDTO(elevatorRes))
+            return right(ElevatorMap.toDTO(elevatorRes))
         } catch (e) {
+            return left({
+                errorCode: ErrorCode.BussinessRuleViolation,
+                message: 'Business rule violation',
+            } as ErrorResult)
             throw e
         }
     }
 
-    public async getElevators(code: string): Promise<Result<ICreatedElevatorDTO[]>> {
+    public async getElevators(code: string): Promise<Either<ErrorResult, ICreatedElevatorDTO[]>> {
         try {
             const bCode = BuildingCode.create(code)
 
             if (bCode.isFailure) {
-                return Result.fail(bCode.errorValue())
+                return left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: 'Building code parameters do not meet requirements',
+                })
             }
 
             const building = await this.buildingRepo.findByCode(bCode.getValue())
 
             if (building === null) {
-                return Result.fail('Building not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Building not found',
+                })
             }
 
             const elevators = await this.repo.inBuilding(building)
 
             if (elevators.length === 0) {
-                return Result.fail('Elevators not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Elevators not found',
+                })
             } else {
                 const dtoList = await Promise.all(elevators.map(elevator => ElevatorMap.toDTO(elevator)))
-                return Result.ok(dtoList)
+                return right(dtoList)
             }
         } catch (e) {
             throw e

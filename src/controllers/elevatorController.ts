@@ -1,10 +1,12 @@
 import config from '../../config'
-
 import { Request, Response, NextFunction } from 'express'
 import { Inject, Service } from 'typedi'
+
 import IElevatorController from './IControllers/IElevatorController'
-import IElevatorService from '../services/IServices/IElevatorService'
+import IElevatorService, { ErrorResult, ErrorCode } from '../services/IServices/IElevatorService'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
+import { IBuildingDTO } from '../dto/IBuildingDTO'
+import {ICreatedElevatorDTO} from "../dto/ICreatedElevatorDTO";
 
 @Service()
 export default class ElevatorController implements IElevatorController {
@@ -19,11 +21,14 @@ export default class ElevatorController implements IElevatorController {
 
             const result = await this.service.createElevator(body as IElevatorDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(201)
+            const message = result.value as IElevatorDTO
+            return res.json(message).status(201)
         } catch (err) {
             return next(err)
         }
@@ -39,11 +44,14 @@ export default class ElevatorController implements IElevatorController {
 
             const result = await this.service.editElevator(parseInt(secondId), req.body as IElevatorDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(200)
+            const message = result.value as IElevatorDTO
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -59,11 +67,14 @@ export default class ElevatorController implements IElevatorController {
 
             const result = await this.service.editElevator(parseInt(secondId), req.body as IElevatorDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(200)
+            const message = result.value as IElevatorDTO
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -73,13 +84,32 @@ export default class ElevatorController implements IElevatorController {
         try {
             const result = await this.service.getElevators(req.params.id)
 
-            if (result.isFailure) {
-                return res.status(412).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(200)
+            const message = result.value as IElevatorDTO[]
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
+    }
+
+    private resolveHttpCode(result: ErrorCode) {
+        let ret: number
+        switch (result) {
+            case ErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case ErrorCode.NotFound:
+                ret = 404
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
     }
 }
