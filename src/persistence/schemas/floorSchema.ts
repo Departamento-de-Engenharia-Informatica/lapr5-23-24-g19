@@ -4,8 +4,8 @@ import { IFloorPersistence } from '../../dataschema/IFloorPersistence'
 const floorPropsSchema = new mongoose.Schema({
     dimensions: {
         type: {
-            mapLength: Number,
-            mapWidth: Number,
+            length: Number,
+            width: Number,
         },
         required: true
     },

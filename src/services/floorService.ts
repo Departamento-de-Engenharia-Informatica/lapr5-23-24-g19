@@ -60,7 +60,6 @@ export default class FloorService implements IFloorService {
         try {
             const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(buildingCode)
-            console.log(JSON.stringify(dto))
 
             if (!building) {
                 return left({

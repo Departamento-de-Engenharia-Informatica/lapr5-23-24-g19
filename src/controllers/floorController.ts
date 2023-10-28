@@ -133,7 +133,7 @@ export default class FloorController implements IFloorController {
     private resolveHttpCode(result: ErrorCode) {
         let ret: number
         switch (result) {
-            case ErrorCode.BussinessRuleViolation:
+            case ErrorCode.BusinessRuleViolation:
                 ret = 422
                 break
             case ErrorCode.NotFound:

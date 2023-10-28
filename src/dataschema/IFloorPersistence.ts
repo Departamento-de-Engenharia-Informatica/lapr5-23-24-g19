@@ -5,8 +5,8 @@ export interface IFloorPersistence {
     description: string
     map?:{
         dimensions:{
-            mapLength: number
-            mapWidth: number
+            length: number
+            width: number
         }
         
         mapContent: number[][]

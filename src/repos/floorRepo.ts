@@ -9,6 +9,7 @@ import Building from '../domain/building/building'
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
 import { BuildingCode } from '../domain/building/buildingCode'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
+import { json, raw } from 'body-parser'
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
@@ -102,7 +103,6 @@ export default class FloorRepo implements IFloorRepo {
 
     public async save(floor: Floor): Promise<Floor> {
         const query = { domainId: floor.id }
-
         const floorDocument = await this.floorSchema.findOne(query)
         try {
             const rawFloor: any = FloorMap.toPersistence(floor)
