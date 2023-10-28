@@ -49,6 +49,7 @@ notem que uma vez que as passagens são bidirecionais, uma passagem entre o edif
 | Status code |     Description     |
 |:-----------:|:-------------------:|
 |   **200**   |         OK          |
+|   **404**   |      Not found      |
 |   **412**   | Precondition Failed |
 
 ### 4.3 Authorization
