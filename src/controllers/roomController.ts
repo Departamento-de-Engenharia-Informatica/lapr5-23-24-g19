@@ -4,7 +4,7 @@ import config from '../../config'
 
 import IRoomController from './IControllers/IRoomController'
 import { IRoomDTO } from '../dto/IRoomDTO'
-import IRoomService from '../services/IServices/IRoomService'
+import IRoomService, { ErrorCode, ErrorResult } from '../services/IServices/IRoomService'
 
 @Service()
 export default class RoomController implements IRoomController {
@@ -15,16 +15,38 @@ export default class RoomController implements IRoomController {
             const dto = req.body as IRoomDTO
             dto.buildingCode = req.params.buildingId
             dto.floorNumber = parseInt(req.params.floorNumber)
-            
+
             const result = await this.service.createRoom(dto)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(201)
+            const message = result.value as IRoomDTO
+            return res.json(message).status(201)
         } catch (e) {
             return next(e)
         }
+    }
+
+    private resolveHttpCode(result: ErrorCode) {
+        let ret: number
+        switch (result) {
+            case ErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case ErrorCode.AlreadyExists:
+                ret = 422
+                break
+            case ErrorCode.NotFound:
+                ret = 404
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
     }
 }

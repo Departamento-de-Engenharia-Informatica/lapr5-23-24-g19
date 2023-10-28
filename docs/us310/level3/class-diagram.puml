@@ -130,6 +130,11 @@ package system {
         'package "Services" {
         '}
     }
+    package "DTO" {
+                  interface IRoomDTO
+            }
+            AppServiceRoom --> IRoomDTO
+            ControllerRoom -up-> IRoomDTO
 }
 
 @enduml
