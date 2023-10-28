@@ -220,7 +220,7 @@ export default (app: Router) => {
     )
 
     route.patch(
-        '/:id/floors/:floorNumber/maps',
+        '/:id/floors/:floorNumber/map',
         celebrate({
             body: Joi.object({
                 dimensions: Joi.object({
