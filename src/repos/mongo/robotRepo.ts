@@ -19,7 +19,7 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     async save(t: Robot): Promise<Robot> {
-        const doc = await this.schema.findOne({ code: t.code.value })
+        const doc = await this.schema.findOne({ domainId: t.id.toString() })
 
         try {
             const raw = await this.mapper.toPersistence(t)

@@ -48,6 +48,9 @@ const Robot = new Schema({
     },
 })
 
+Robot.index({ code: 1 }, { unique: true })
+Robot.index({ nickname: 1 }, { unique: true })
+
 // serialNumber must be unique per robot type
 Robot.index({ serialNumber: 1, type: 1 }, { unique: true })
 
