@@ -1,8 +1,6 @@
 @startuml
 autonumber
 
-mainframe MD
-
 participant "Route" as rt
 participant "Controller" as ctrl
 participant "Service" as svc
