@@ -4,7 +4,6 @@ import { IPassagePersistence } from '../dataschema/IPassagePersistence'
 import IPassageRepo from '../services/IRepos/IPassageRepo'
 import { Passage } from '../domain/passage/passage'
 import { PassageMap } from '../mappers/PassageMap'
-import { BuildingCode } from '../domain/building/buildingCode'
 import { Floor } from '../domain/floor/floor'
 import config from '../../config'
 import IFloorRepo from '../services/IRepos/IFloorRepo'
@@ -13,12 +12,9 @@ import Building from '../domain/building/building'
 
 @Service()
 export default class PassageRepo implements IPassageRepo {
+    constructor(@Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>) {}
 
-    constructor(
-        @Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>
-    ) {}
-
-    public async exists(passage: Passage | string): Promise<boolean> {
+    async exists(passage: Passage | string): Promise<boolean> {
         if (passage instanceof Passage) {
             const query = {
                 floor1ID: passage.props.floor1.id.toString(),
@@ -46,7 +42,7 @@ export default class PassageRepo implements IPassageRepo {
         return false
     }
 
-    public async save(passage: Passage): Promise<Passage> {
+    async save(passage: Passage): Promise<Passage> {
         const query = { domainID: passage.id.toString() }
         const passageDocument = await this.passageSchema.findOne(query)
         const rawPassage = PassageMap.toPersistence(passage)
@@ -67,27 +63,24 @@ export default class PassageRepo implements IPassageRepo {
         }
     }
 
-    public async findAll(): Promise<Passage[]> {
+    async findAll(): Promise<Passage[]> {
         const records = await this.passageSchema.find()
 
         if (records.length === 0) {
-            return [] // Return an empty array when there are no records
+            return []
         }
 
-        const passageList = await Promise.all(records.map(async record => await PassageMap.toDomain(record)))
-
-        return passageList
+        return Promise.all(records.map(async record => await PassageMap.toDomain(record)))
     }
-    public async passagesBetweenBuildings(
-        dto: Passage[],
-        codex: BuildingCode,
-        codey: BuildingCode,
-    ): Promise<Passage[]> {
-        try {
-            const buildingCode1 = codex.value
-            const buildingCode2 = codey.value
 
-            const passages = dto
+    async passagesBetweenBuildings(b1: Building, b2: Building): Promise<Passage[]> {
+        try {
+            const allPassages = await this.findAll()
+
+            const buildingCode1 = b1.code.value
+            const buildingCode2 = b2.code.value
+
+            const passages = allPassages
                 .filter(
                     info =>
                         (info.props.floor1.building.code.value === buildingCode1 &&
@@ -97,11 +90,11 @@ export default class PassageRepo implements IPassageRepo {
                 )
                 .map(info => info.id.toString())
 
-            const doc = await this.passageSchema.find({
+            const docs = await this.passageSchema.find({
                 domainID: { $in: passages },
             })
 
-            const passageList = await Promise.all(doc.map(async record => await PassageMap.toDomain(record)))
+            const passageList = await Promise.all(docs.map(async d => await PassageMap.toDomain(d)))
 
             return passageList
         } catch (error) {

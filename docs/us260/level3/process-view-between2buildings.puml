@@ -43,7 +43,7 @@ activate r
                     ctrl --> r : error (412)
                     [<-- r : 412: Precondition Failed
                 else different building
-                    svc -> repo : passagesBetweenBuildings(bCode1, bCode2)
+                    svc -> repo : passagesBetweenBuildings(building1, building2)
                     activate repo
                     deactivate repo
 

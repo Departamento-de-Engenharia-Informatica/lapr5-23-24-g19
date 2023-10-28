@@ -19,7 +19,7 @@ export default class PassageService implements IPassageService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
-    ) {}
+    ) { }
 
     public async createPassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
         try {
@@ -132,27 +132,23 @@ export default class PassageService implements IPassageService {
             const b1Code = BuildingCode.create(building1Code)
             const b2Code = BuildingCode.create(building2Code)
 
-            if (b1Code.isFailure || b2Code.isFailure) {
+            if (b1Code.isFailure) {
                 return Result.fail(b1Code.errorValue())
+            } else if (b2Code.isFailure) {
+                return Result.fail(b2Code.errorValue())
             }
 
             const b1 = await this.buildingRepo.findByCode(b1Code.getValue())
             const b2 = await this.buildingRepo.findByCode(b2Code.getValue())
 
-            if (!b1 || !b2) {
-                return Result.fail(`Building not found `)
-            }
-
-            const allPassages = await this.passageRepo.findAll()
-
-            if (allPassages.length === 0) {
-                return Result.fail('passages not found')
+            if (!b1) {
+                return Result.fail(`Building not found: ${building1Code}`)
+            } else if (!b2) {
+                return Result.fail(`Building not found: ${building2Code}`)
             }
 
             const passages = await this.passageRepo.passagesBetweenBuildings(
-                allPassages,
-                b1Code.getValue(),
-                b2Code.getValue(),
+                b1, b2
             )
 
             if (passages.length === 0) {
@@ -218,6 +214,6 @@ export default class PassageService implements IPassageService {
             return Result.fail(result.errorValue())
         }
         const updated = await this.passageRepo.save(result.getValue())
-        return Result.ok(PassageMap.toDTO(result.getValue()))
+        return Result.ok(PassageMap.toDTO(updated))
     }
 }
