@@ -108,7 +108,7 @@ package system {
 
     }
     AppServiceRobotType -up-> IRobotTypeDTO
-    CqontrollerRobotType -up-> IRobotTypeDTO
+    ControllerRobotType -up-> IRobotTypeDTO
 }
 
 @enduml
