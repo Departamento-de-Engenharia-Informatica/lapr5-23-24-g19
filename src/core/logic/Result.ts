@@ -29,6 +29,13 @@ export class Result<T> {
         return this._value
     }
 
+    public getOrThrow(): T {
+        if (this.isFailure) {
+            throw new Error(JSON.stringify(this.errorValue()))
+        }
+        return this.getValue()
+    }
+
     public errorValue(): T {
         return this.error as T
     }
@@ -42,7 +49,7 @@ export class Result<T> {
     }
 
     public static combine(results: Result<any>[]): Result<any> {
-        for (let result of results) {
+        for (const result of results) {
             if (result.isFailure) return result
         }
         return Result.ok()
@@ -62,7 +69,7 @@ export class Left<L> {
         return true
     }
 
-    isRight(): boolean{
+    isRight(): boolean {
         return false
     }
 }
@@ -74,7 +81,7 @@ export class Right<A> {
         this.value = value
     }
 
-    isLeft(): boolean{
+    isLeft(): boolean {
         return false
     }
 

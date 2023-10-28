@@ -1,7 +1,7 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { Result } from '../core/logic/Result'
-import IRobotTypeService from './IServices/IRobotTypeService'
+import { Either, left, right } from '../core/logic/Result'
+import IRobotTypeService, { RobotTypeErrorCode, RobotTypeErrorResult } from './IServices/IRobotTypeService'
 import { IRobotTypeDTO } from '../dto/IRobotTypeDTO'
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo'
 import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
@@ -15,33 +15,43 @@ import { RobotTypeMap } from '../mappers/RobotTypeMap'
 export default class RobotTypeService implements IRobotTypeService {
     constructor(@Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo) {}
 
-    public async createRobotType(dto: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>> {
+    async createRobotType(dto: IRobotTypeDTO): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>> {
         try {
-            const dtoCode = RobotTypeCode.create(dto.code).getValue()
-            const dtoBrand = RobotTypeBrand.create(dto.brand).getValue()
-            const dtoModel = RobotTypeModel.create(dto.model).getValue()
+            const dtoCode = RobotTypeCode.create(dto.code).getOrThrow()
+            const dtoBrand = RobotTypeBrand.create(dto.brand).getOrThrow()
+            const dtoModel = RobotTypeModel.create(dto.model).getOrThrow()
+
             let dtoTaskType: TaskType[]
-            try{
-                dtoTaskType = dto.taskTypes.map(taskType => TaskType.toType(taskType));
-            }catch(e){
-                return Result.fail("[422] task types unknown")
+            try {
+                dtoTaskType = dto.taskTypes.map(taskType => TaskType.toType(taskType))
+            } catch (e) {
+                return left({
+                    errorCode: RobotTypeErrorCode.BussinessRuleViolation,
+                    message: (e as Error).message,
+                })
             }
 
             const robotType = RobotType.create({
                 code: dtoCode,
                 brand: dtoBrand,
                 model: dtoModel,
-                taskType: dtoTaskType
-            }).getValue()
+                taskType: dtoTaskType,
+            }).getOrThrow()
 
             if (await this.robotTypeRepo.exists(robotType)) {
-                return Result.fail("[422] Robot type already exists")
+                return left({
+                    errorCode: RobotTypeErrorCode.BussinessRuleViolation,
+                    message: 'Robot type already exists',
+                })
             }
 
             const saved = await this.robotTypeRepo.save(robotType)
-            return Result.ok<IRobotTypeDTO>(RobotTypeMap.toDTO(saved))
+            return right(RobotTypeMap.toDTO(saved))
         } catch (e) {
-            return Result.fail("[422] error at createRobotType")
+            return left({
+                errorCode: RobotTypeErrorCode.BussinessRuleViolation,
+                message: 'Error creating robot type',
+            })
         }
     }
 }

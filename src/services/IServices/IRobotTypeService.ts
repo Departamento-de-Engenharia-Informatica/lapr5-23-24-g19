@@ -1,6 +1,16 @@
-import { Result } from '../../core/logic/Result'
+import { Either } from '../../core/logic/Result'
 import { IRobotTypeDTO } from '../../dto/IRobotTypeDTO'
 
+export enum RobotTypeErrorCode {
+    NotFound,
+    BussinessRuleViolation,
+}
+
+export type RobotTypeErrorResult = {
+    errorCode: RobotTypeErrorCode
+    message: string
+}
+
 export default interface IRobotTypeService {
-    createRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>
+    createRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>>
 }

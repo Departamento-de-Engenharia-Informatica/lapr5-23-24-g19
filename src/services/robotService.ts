@@ -1,6 +1,6 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { Either, left, Result, right } from '../core/logic/Result'
+import { Result, Either, left, right } from '../core/logic/Result'
 
 import IRobotService, { RobotErrorCode, RobotErrorResult } from './IServices/IRobotService'
 import { RobotMap } from '../mappers/RobotMap'

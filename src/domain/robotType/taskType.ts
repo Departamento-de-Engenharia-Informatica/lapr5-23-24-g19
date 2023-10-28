@@ -1,8 +1,6 @@
-import { error } from "console"
-
 export enum TaskType {
-    SURVEILLANCE="SURVEILLANCE",
-    DELIVERY="DELIVERY",
+    SURVEILLANCE = 'SURVEILLANCE',
+    DELIVERY = 'DELIVERY',
 }
 
 export namespace TaskType {
@@ -13,10 +11,14 @@ export namespace TaskType {
             case TaskType.DELIVERY:
                 return 'Delivery'
             default:
-                throw error
+                throw 'Unknown'
         }
     }
     export function toType(s: string): TaskType {
-        return TaskType[s.trim().toUpperCase()]
+        const type = TaskType[s.trim().toUpperCase()]
+        if (!type) {
+            throw new Error(`Unknown TaskType: ${type}`)
+        }
+        return type
     }
 }
