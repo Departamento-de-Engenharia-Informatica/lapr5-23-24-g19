@@ -101,8 +101,8 @@ export default (app: Router) => {
         '/:id',
         celebrate({
             body: Joi.object({
-                name: Joi.string(),
-                description: Joi.string(),
+                name: Joi.string().required(),
+                description: Joi.string().required(),
                 maxFloorDimensions: Joi.object({
                     length: Joi.number()
                         .integer()
@@ -110,10 +110,10 @@ export default (app: Router) => {
                     width: Joi.number()
                         .integer()
                         .required(),
-                }),
+                }).required(),
             }),
         }),
-        (req, res, next) => buildingController.editBuilding(req, res, next),
+        (req, res, next) => buildingController.putBuilding(req, res, next),
     )
 
     route.post(

@@ -1,6 +1,6 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { Either, Result,left,right } from '../core/logic/Result'
+import { Either, left,right } from '../core/logic/Result'
 
 import IBuildingService, { ErrorCode, ErrorResult } from './IServices/IBuildingService'
 import IBuildingRepo from '../services/IRepos/IBuildingRepo'
@@ -15,7 +15,6 @@ import { BuildingName } from '../domain/building/buildingName'
 import { BuildingDescription } from '../domain/building/description'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
-import { IBuildingFloorNumberDTO } from '../dto/IBuildingFloorNumberDTO'
 import IFloorRepo from './IRepos/IFloorRepo'
 import { BuildingFloorNumberMap } from '../mappers/BuildingFloorNumberMap'
 
@@ -127,11 +126,10 @@ export default class BuildingService implements IBuildingService {
             throw e
         }
     }
-
-
-    public async editBuilding(code: string, dto: IBuildingEditDTO): Promise<Either<ErrorResult,IBuildingDTO>> {
+    
+    public async editBuilding(dto: IBuildingEditDTO): Promise<Either<ErrorResult,IBuildingDTO>> {
         try {
-            const bCode = BuildingCode.create(code)
+            const bCode = BuildingCode.create(dto.code)
             if (bCode.isFailure) {
                 return left({
                     errorCode: ErrorCode.BussinessRuleViolation,
@@ -147,31 +145,40 @@ export default class BuildingService implements IBuildingService {
                 }as ErrorResult)
             }
 
-            //TODO: optimize
             if(dto.name){
-                building.name = BuildingName.create(dto.name).getValue();
+                const nameEdit = BuildingName.create(dto.name);
+                if (nameEdit.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BussinessRuleViolation,
+                        message: "Building Name does not meet requirements" 
+                    }as ErrorResult)
+                }
+                building.name = nameEdit.getValue()
+                
             }
             if(dto.description){
-                building.description = BuildingDescription.create(dto.description).getValue();
+                const descrEdit = BuildingDescription.create(dto.description)
+                if (descrEdit.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BussinessRuleViolation,
+                        message: "Building Descr does not meet requirements" 
+                    }as ErrorResult)
+                }
+                building.description = descrEdit.getValue()
             }
 
             if(dto.maxFloorDimensions){
-                let length;
-                let  width;
+                const length = dto.maxFloorDimensions.length
+                const width = dto.maxFloorDimensions.width
 
-                if(dto.maxFloorDimensions.length){
-                    length = dto.maxFloorDimensions.length
-                }else{
-                    length = building.maxFloorDimensions.length
+                const maxFloor = MaxFloorDimensions.create(length, width)
+                if (maxFloor.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BussinessRuleViolation,
+                        message: "Building Dimensios does not meet requirements" 
+                    }as ErrorResult)
                 }
-
-                if(dto.maxFloorDimensions.width){
-                    width = dto.maxFloorDimensions.width
-                }else{
-                    width = building.maxFloorDimensions.width
-                }
-
-                building.maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
+                building.maxFloorDimensions = maxFloor.getValue()
             }
 
             const buildingRes = await this.buildingRepo.save(building)
@@ -183,7 +190,6 @@ export default class BuildingService implements IBuildingService {
                 errorCode: ErrorCode.BussinessRuleViolation,
                 message: "Business rule violation" 
             }as ErrorResult)
-            throw e
         }
     }
 }

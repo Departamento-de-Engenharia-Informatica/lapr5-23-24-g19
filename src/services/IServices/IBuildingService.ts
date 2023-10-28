@@ -1,5 +1,6 @@
 import { Either, Result } from '../../core/logic/Result'
 import { IBuildingDTO } from '../../dto/IBuildingDTO'
+import { IBuildingEditDTO } from '../../dto/IBuildingEditDTO'
 import { IBuildingMinMaxFloorsDTO } from '../../dto/IBuildingMinMaxFloorsDTO'
 
 export enum ErrorCode{
@@ -20,5 +21,5 @@ export default interface IBuildingService {
     getBuilding(buildingId: string): Promise<Either<ErrorResult,IBuildingDTO>>
     getBuildings(): Promise<Either<ErrorResult,IBuildingDTO[]>>
     getBuildingsByFloors(minMaxFloorsDTO: IBuildingMinMaxFloorsDTO): Promise<Either<ErrorResult,IBuildingDTO[]>>
-    editBuilding(buildingId: string, buildingDTO: IBuildingDTO): Promise<Either<ErrorResult,IBuildingDTO>>
+    editBuilding(buildingDTO: IBuildingEditDTO): Promise<Either<ErrorResult,IBuildingDTO>>
 }

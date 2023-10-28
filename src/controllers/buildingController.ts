@@ -5,6 +5,7 @@ import config from '../../config'
 import IBuildingController from './IControllers/IBuildingController'
 import IBuildingService, { ErrorResult, ErrorCode } from '../services/IServices/IBuildingService'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
+import { IBuildingEditDTO } from '../dto/IBuildingEditDTO'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
 
 
@@ -22,17 +23,17 @@ export default class BuildingController implements IBuildingController {
                 return res.status(ret).send(error.message)
             }
             const message = result.value as IBuildingDTO
-            return res.status(201).send(message)
+            return res.status(201).send(message);
         } catch (e) {
             return next(e)
         }
     }
 
-    public async editBuilding(req: Request, res: Response, next: NextFunction) {
+    public async putBuilding(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = req.body as IBuildingDTO;
             dto.code = req.params.id;
-            const result = await this.service.createBuilding(dto)
+            const result = await this.service.editBuilding(dto)
 
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
@@ -49,7 +50,9 @@ export default class BuildingController implements IBuildingController {
 
     public async patchBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const result = await this.service.editBuilding(req.params.id, req.body as IBuildingDTO)
+            let dto = req.body as IBuildingEditDTO
+            dto.code = req.params.id
+            const result = await this.service.editBuilding(dto)
 
 
             if (result.isLeft()) {
