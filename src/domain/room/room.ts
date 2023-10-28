@@ -4,7 +4,6 @@ import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 import { Result } from '../../core/logic/Result'
 import { Guard } from '../../core/logic/Guard'
 
-import { RoomId } from './roomId'
 import { RoomName as Name } from './roomName'
 import { RoomDescription as Description } from './description'
 import { RoomDimensions } from './roomDimensions'
@@ -12,15 +11,14 @@ import { Floor } from '../floor/floor'
 import { RoomCategory as Category } from './roomCategory'
 import { Coordinates } from '../floor/Coordinates'
 
-type RoomPosition = Coordinates
 
 export interface RoomProps {
-    name: Name 
+    name: Name
     category: Category
     description: Description
     floor: Floor
     dimensions: RoomDimensions
-    positions: RoomPosition
+    positions: Coordinates
 }
 
 export default class Room extends AggregateRoot<RoomProps> {
@@ -49,10 +47,9 @@ export default class Room extends AggregateRoot<RoomProps> {
         return this.props.dimensions
     }
 
-    get positions(): RoomPosition {
+    get positions(): Coordinates {
         return this.props.positions
     }
-
 
     private constructor(props: RoomProps, id?: UniqueEntityID) {
         super(props, id)
