@@ -3,13 +3,15 @@ import { Inject, Service } from 'typedi'
 import config from '../../config'
 
 import IBuildingController from './IControllers/IBuildingController'
-import IBuildingService from '../services/IServices/IBuildingService'
+import IBuildingService, { ErrorResult, ErrorCode } from '../services/IServices/IBuildingService'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { BuildingCode } from '../domain/building/buildingCode'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ParsedQs } from 'qs'
 import { parseInt } from 'lodash'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
+import { Either,left,right } from '../core/logic/Result'
+
 
 @Service()
 export default class BuildingController implements IBuildingController {
@@ -19,11 +21,13 @@ export default class BuildingController implements IBuildingController {
         try {
             const result = await this.service.createBuilding(req.body as IBuildingDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error= result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
-
-            return res.json(result.getValue()).status(201);
+            const message = result.value as IBuildingDTO
+            return res.json(message).status(201);
         } catch (e) {
             return next(e)
         }
@@ -35,11 +39,14 @@ export default class BuildingController implements IBuildingController {
             dto.code = req.params.id;
             const result = await this.service.createBuilding(dto)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error= result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(201);
+            const message = result.value as IBuildingDTO
+            return res.json(message).status(200);
         } catch (e) {
             return next(e)
         }
@@ -49,11 +56,15 @@ export default class BuildingController implements IBuildingController {
         try {
             const result = await this.service.editBuilding(req.params.id, req.body as IBuildingDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+ 
+            if (result.isLeft()) {
+                const error= result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(201);
+            const message = result.value as IBuildingDTO
+            return res.json(message).status(200);
         } catch (e) {
             return next(e)
         }
@@ -95,5 +106,21 @@ export default class BuildingController implements IBuildingController {
         }
     }
 
+
+    private resolveHttpCode(result: ErrorCode) {
+        let ret: number
+        switch (result) {
+            case ErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case ErrorCode.NotFound:
+                ret = 404
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
+    }
 
 }

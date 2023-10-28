@@ -1,8 +1,8 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { Result } from '../core/logic/Result'
+import { Either, Result,left,right } from '../core/logic/Result'
 
-import IBuildingService from './IServices/IBuildingService'
+import IBuildingService, { ErrorCode, ErrorResult } from './IServices/IBuildingService'
 import IBuildingRepo from '../services/IRepos/IBuildingRepo'
 
 import { BuildingMap } from '../mappers/BuildingMap'
@@ -25,7 +25,7 @@ export default class BuildingService implements IBuildingService {
     constructor(@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
                 @Inject(config.repos.floor.name) private floorRepo: IFloorRepo) {}
 
-    public async createBuilding(dto: IBuildingDTO): Promise<Result<IBuildingDTO>> {
+    public async createBuilding(dto: IBuildingDTO): Promise<Either<ErrorResult,IBuildingDTO>> {
         try {
             /* TODO: error check */
             const code = BuildingCode.create(dto.code).getValue()
@@ -37,15 +37,21 @@ export default class BuildingService implements IBuildingService {
 
             const result = Building.create({ code, name, description, maxFloorDimensions })
             if (result.isFailure) {
-                return Result.fail<IBuildingDTO>(result.errorValue())
+                return left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: "Building parameters do not meet requirements"
+                })
             }
 
             const building = result.getValue()
             await this.buildingRepo.save(building)
 
-            return Result.ok(BuildingMap.toDTO(building))
+            return right(BuildingMap.toDTO(building))
         } catch (e) {
-            throw e
+            return left({
+                errorCode: ErrorCode.BussinessRuleViolation,
+                message: "Error businessRuleViolation"
+            })
         }
     }
 
@@ -104,16 +110,22 @@ export default class BuildingService implements IBuildingService {
     }
 
 
-    public async editBuilding(code: string, dto: IBuildingEditDTO): Promise<Result<IBuildingDTO>> {
+    public async editBuilding(code: string, dto: IBuildingEditDTO): Promise<Either<ErrorResult,IBuildingDTO>> {
         try {
             const bCode = BuildingCode.create(code)
             if (bCode.isFailure) {
-                return Result.fail(bCode.errorValue())
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Building Code does not meet requirements" 
+                    }as ErrorResult)
             }
 
             const building = await this.buildingRepo.findByCode(bCode.getValue())
             if (building === null) {
-                return Result.fail('Building not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Building not found" 
+                }as ErrorResult)
             }
 
             //TODO: optimize
@@ -145,8 +157,7 @@ export default class BuildingService implements IBuildingService {
 
             const buildingRes = await this.buildingRepo.save(building)
 
-
-            return Result.ok(BuildingMap.toDTO(buildingRes))
+            return right(BuildingMap.toDTO(buildingRes))
 
         } catch (e) {
             throw e

@@ -49,44 +49,44 @@ export class Result<T> {
     }
 }
 
-export type Either<L, A> = Left<L, A> | Right<L, A>
+export type Either<L, A> = Left<L> | Right<A>
 
-export class Left<L, A> {
+export class Left<L> {
     readonly value: L
 
     constructor(value: L) {
         this.value = value
     }
 
-    isLeft(): this is Left<L, A> {
+    isLeft(): boolean {
         return true
     }
 
-    isRight(): this is Right<L, A> {
+    isRight(): boolean{
         return false
     }
 }
 
-export class Right<L, A> {
+export class Right<A> {
     readonly value: A
 
     constructor(value: A) {
         this.value = value
     }
 
-    isLeft(): this is Left<L, A> {
+    isLeft(): boolean{
         return false
     }
 
-    isRight(): this is Right<L, A> {
+    isRight(): boolean {
         return true
     }
 }
 
 export const left = <L, A>(l: L): Either<L, A> => {
-    return new Left(l)
+    return new Left<L>(l)
 }
 
 export const right = <L, A>(a: A): Either<L, A> => {
-    return new Right<L, A>(a)
+    return new Right<A>(a)
 }
