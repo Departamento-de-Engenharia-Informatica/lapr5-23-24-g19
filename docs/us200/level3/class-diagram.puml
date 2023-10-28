@@ -22,8 +22,10 @@ package system {
             class DBDriver
         }
 
+
         DBDriver -right-|> IDBDriver
     }
+
 
     package "Interface Adapters" {
         package "Controllers" {
@@ -38,14 +40,15 @@ package system {
         }
 
         package "Repositories" {
-
+            class RepoBuilding
             class RepoFloor
         }
 
 
         RepoFloor .up.> DBDriver
+        RepoBuilding .up.> DBDriver
 
-        RouteBuilding ....> IControllerFloor
+        RouteBuilding ..> IControllerFloor
     }
 
     package "Application Services" {
@@ -61,18 +64,24 @@ package system {
             AppServiceFloor --|> IAppServiceFloor
 
             package "IRepositories" {
-
+                interface IRepoBuilding
                 interface IRepoFloor
             }
 
-
             RepoFloor --|> IRepoFloor
+            RepoBuilding --|> IRepoBuilding
         }
 
         ControllerFloor ..> IAppServiceFloor
-
-
         AppServiceFloor .up.> IRepoFloor
+        AppServiceFloor .up.> IRepoBuilding
+    }
+
+    package "DTO" as p_DTO {
+        interface IUpdateFloorDTO
+
+        ControllerFloor ..> IUpdateFloorDTO
+        AppServiceFloor ..> IUpdateFloorDTO
     }
 
 
@@ -99,11 +108,7 @@ package system {
         Floor "1" --> "1" FloorNumber
 
         AppServiceFloor ..> Floor
-
-        'package "Services" {
-        '}
     }
-
 }
 
 @enduml
