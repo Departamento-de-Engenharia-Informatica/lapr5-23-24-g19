@@ -4,6 +4,8 @@ import { IBuildingMinMaxFloorsDTO } from '../../dto/IBuildingMinMaxFloorsDTO'
 
 export enum ErrorCode{
     NotFound,
+    RequirementsNotMatch,
+    AlreadyExists,
     BussinessRuleViolation
 }
 
@@ -15,8 +17,8 @@ export type ErrorResult = {
 
 export default interface IBuildingService {
     createBuilding(buildingDTO: IBuildingDTO): Promise<Either<ErrorResult,IBuildingDTO>>
-    getBuilding(buildingId: string): Promise<Result<IBuildingDTO>>
-    getBuildings(): Promise<Result<IBuildingDTO[]>>
-    getBuildingsByFloors(minMaxFloorsDTO: IBuildingMinMaxFloorsDTO): Promise<Result<IBuildingDTO[]>>
+    getBuilding(buildingId: string): Promise<Either<ErrorResult,IBuildingDTO>>
+    getBuildings(): Promise<Either<ErrorResult,IBuildingDTO[]>>
+    getBuildingsByFloors(minMaxFloorsDTO: IBuildingMinMaxFloorsDTO): Promise<Either<ErrorResult,IBuildingDTO[]>>
     editBuilding(buildingId: string, buildingDTO: IBuildingDTO): Promise<Either<ErrorResult,IBuildingDTO>>
 }

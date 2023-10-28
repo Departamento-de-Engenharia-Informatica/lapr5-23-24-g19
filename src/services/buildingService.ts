@@ -33,12 +33,20 @@ export default class BuildingService implements IBuildingService {
 
             const { length, width } = dto.maxFloorDimensions
             const maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
-
+            
             const result = Building.create({ code, name, description, maxFloorDimensions })
             if (result.isFailure) {
                 return left({
                     errorCode: ErrorCode.BussinessRuleViolation,
                     message: "Building parameters do not meet requirements"
+                })
+            }
+
+            
+            if(this.buildingRepo.exists(result.getValue())){
+                return left({
+                    errorCode: ErrorCode.AlreadyExists,
+                    message: "Building already exists"
                 })
             }
 
@@ -54,45 +62,57 @@ export default class BuildingService implements IBuildingService {
         }
     }
 
-    public async getBuilding(code: string): Promise<Result<IBuildingDTO>> {
+    public async getBuilding(code: string): Promise<Either<ErrorResult,IBuildingDTO>> {
         try {
             const bCode = BuildingCode.create(code)
             if (bCode.isFailure) {
-                return Result.fail(bCode.errorValue())
+                return  left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: "Building code not valid"
+                })
             }
 
             const building = await this.buildingRepo.findByCode(bCode.getValue())
             if (building === null) {
-                return Result.fail('Building not found')
+                return  left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Building not found"
+                })
             } else {
-                return Result.ok(BuildingMap.toDTO(building))
+                return right(BuildingMap.toDTO(building))
             }
         } catch (e) {
             throw e
         }
     }
 
-    public async getBuildings(): Promise<Result<IBuildingDTO[]>> {
+    public async getBuildings(): Promise<Either<ErrorResult,IBuildingDTO[]>> {
         try {
             const buildings = await this.buildingRepo.findAll();
 
             if (buildings.length === 0) {
-                return Result.fail('Buildings not found');
+                return  left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Buildings not found"
+                })
             } else {
                 const dtoList = await Promise.all(buildings.map(building => BuildingMap.toDTO(building)));
-                return Result.ok(dtoList);
+                return right(dtoList)
             }
         } catch (e) {
             throw e
         }
     }
 
-    public async getBuildingsByFloors(dto: IBuildingMinMaxFloorsDTO): Promise<Result<IBuildingFloorNumberDTO[]>> {
+    public async getBuildingsByFloors(dto: IBuildingMinMaxFloorsDTO): Promise<Either<ErrorResult,IBuildingDTO[]>> {
         try {
             const buildingsAndFloorCount = await this.floorRepo.findBuildingsByMinMaxFloors(dto.minMaxFloors.min, dto.minMaxFloors.max);
 
             if (buildingsAndFloorCount.length == 0) {
-                return Result.fail('Buildings not found')
+                return  left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Buildings not found"
+                })
             }
 
             const dtoList = await Promise.all(
@@ -102,7 +122,7 @@ export default class BuildingService implements IBuildingService {
                 })
             );
 
-            return Result.ok(dtoList)
+            return right(dtoList)
         } catch (e) {
             throw e
         }
@@ -114,8 +134,8 @@ export default class BuildingService implements IBuildingService {
             const bCode = BuildingCode.create(code)
             if (bCode.isFailure) {
                 return left({
-                    errorCode: ErrorCode.NotFound,
-                    message: "Building Code does not meet requirements"
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: "Building Code does not meet requirements" 
                     }as ErrorResult)
             }
 
@@ -159,6 +179,10 @@ export default class BuildingService implements IBuildingService {
             return right(BuildingMap.toDTO(buildingRes))
 
         } catch (e) {
+            return left({
+                errorCode: ErrorCode.BussinessRuleViolation,
+                message: "Business rule violation" 
+            }as ErrorResult)
             throw e
         }
     }
