@@ -19,8 +19,7 @@ export default (app: Router) => {
                 code: Joi.string().required(),
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
-                taskType: Joi.string().required(),
-            }),
+                taskTypes: Joi.array().items(Joi.string()).min(1).required()}),
         }),
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )

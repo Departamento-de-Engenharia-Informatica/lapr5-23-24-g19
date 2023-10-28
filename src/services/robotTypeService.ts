@@ -20,20 +20,23 @@ export default class RobotTypeService implements IRobotTypeService {
             const dtoCode = RobotTypeCode.create(dto.code).getValue()
             const dtoBrand = RobotTypeBrand.create(dto.brand).getValue()
             const dtoModel = RobotTypeModel.create(dto.model).getValue()
-            const dtoTaskType = TaskType.create({ value: dto.taskType }).getValue()
+            let dtoTaskType: TaskType[]
+            try{
+                dtoTaskType = dto.taskTypes.map(taskType => TaskType.toType(taskType));
+            }catch(e){
+                return Result.fail("[422] task types unknown")
+            }
 
             const robotType = RobotType.create({
                 code: dtoCode,
                 brand: dtoBrand,
                 model: dtoModel,
-                taskType: dtoTaskType,
+                taskType: dtoTaskType
             }).getValue()
-
 
             if (await this.robotTypeRepo.exists(robotType)) {
                 return Result.fail("[422] Robot type already exists")
             }
-
             
             const saved = await this.robotTypeRepo.save(robotType)
             return Result.ok<IRobotTypeDTO>(RobotTypeMap.toDTO(saved))

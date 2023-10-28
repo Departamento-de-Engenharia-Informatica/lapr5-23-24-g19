@@ -26,7 +26,7 @@ const RobotType = new Schema(
         },
 
         taskType: {
-            type: String,
+            type: [String],
             required: true,
         },
     },

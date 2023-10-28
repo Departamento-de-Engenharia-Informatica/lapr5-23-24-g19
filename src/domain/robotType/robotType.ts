@@ -12,7 +12,7 @@ interface Props {
     code: Code
     brand: Brand
     model: Model
-    taskType: TaskType
+    taskType: TaskType[]
 }
 
 export default class RobotType extends AggregateRoot<Props> {
@@ -51,7 +51,7 @@ export default class RobotType extends AggregateRoot<Props> {
         return this.props.model
     }
 
-    get taskType(): TaskType {
+    get taskType(): TaskType[] {
         return this.props.taskType
     }
 }
