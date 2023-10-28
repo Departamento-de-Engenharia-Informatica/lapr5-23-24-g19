@@ -43,7 +43,7 @@ export default class BuildingService implements IBuildingService {
             }
 
             
-            if(this.buildingRepo.exists(result.getValue())){
+            if(this.buildingRepo.findByCode(code)!=null){
                 return left({
                     errorCode: ErrorCode.AlreadyExists,
                     message: "Building already exists"
