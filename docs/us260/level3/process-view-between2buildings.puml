@@ -35,13 +35,12 @@ activate r
                 [<-- r : 404: Not found
             else building found
                 svc --> svc : sameBuilding(building)
-                activate repo
-                deactivate repo
+
 
                 alt same building
                     svc --> ctrl : error
                     ctrl --> r : error (412)
-                    [<-- r : 412: Precondition Failed
+                    [<-- r : 422: Unprocessable Content
                 else different building
                     svc -> repo : passagesBetweenBuildings(building1, building2)
                     activate repo

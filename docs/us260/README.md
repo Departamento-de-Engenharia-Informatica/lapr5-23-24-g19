@@ -46,11 +46,11 @@ notem que uma vez que as passagens são bidirecionais, uma passagem entre o edif
 | getPassages | **GET** /passages/?building1=B&building2=J |                                                              |
 | getPassages |             **GET** /passages              |                                                              |
 ### 4.2 HTTP Response
-| Status code |     Description     |
-|:-----------:|:-------------------:|
-|   **200**   |         OK          |
-|   **404**   |      Not found      |
-|   **412**   | Precondition Failed |
+| Status code |      Description      |
+|:-----------:|:---------------------:|
+|   **200**   |          OK           |
+|   **404**   |       Not found       |
+|   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization
 

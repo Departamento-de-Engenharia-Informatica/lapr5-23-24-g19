@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { Inject, Service } from 'typedi'
 import config from '../../config'
 
-import { Result } from '../core/logic/Result'
 import IPassageController from './IControllers/IPassageController'
-import IPassageService from '../services/IServices/IPassageService'
+import IPassageService, { ErrorResult, ErrorCode } from '../services/IServices/IPassageService'
 import { IPassageDTO } from '../dto/IPassageDTO'
 import IUpdatePassageDTO from '../dto/IUpdatePassageDTO'
 
@@ -14,16 +13,16 @@ export default class PassageController implements IPassageController {
 
     public async createPassage(req: Request, res: Response, next: NextFunction) {
         try {
-            const roleOrError = (await this.passageServiceInstance.createPassage(req.body as IPassageDTO)) as Result<
-                IPassageDTO
-            >
+            const result = await this.passageServiceInstance.createPassage(req.body as IPassageDTO)
 
-            if (roleOrError.isFailure) {
-                return res.status(402).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            const floorDTO = roleOrError.getValue()
-            return res.json(floorDTO).status(201)
+            const message = result.value as IPassageDTO
+            return res.json(message).status(201)
         } catch (e) {
             return next(e)
         }
@@ -37,16 +36,22 @@ export default class PassageController implements IPassageController {
             // Less than two buildings specified
             if (!building1 || !building2) {
                 const result = await this.passageServiceInstance.getAllPassages()
-                if (result.isFailure) {
-                    return res.status(422).send()
+                if (result.isLeft()) {
+                    const error = result.value as ErrorResult
+                    const ret: number = this.resolveHttpCode(error.errorCode)
+                    return res.status(ret).send(error.message)
                 }
-                return res.json(result.getValue()).status(200)
+                const message = result.value as IPassageDTO[]
+                return res.json(message).status(200)
             } else if (building1 && building2) {
                 const result = await this.passageServiceInstance.getPassagesBetweenBuildings(building1, building2)
-                if (result.isFailure) {
-                    return res.status(422).send()
+                if (result.isLeft()) {
+                    const error = result.value as ErrorResult
+                    const ret: number = this.resolveHttpCode(error.errorCode)
+                    return res.status(ret).send(error.message)
                 }
-                return res.json(result.getValue()).status(200)
+                const message = result.value as IPassageDTO[]
+                return res.json(message).status(200)
             } else {
                 // Handle the case of having exactly 1 building here
                 return res.status(400).json({ error: 'You must provide either 0 or 2 buildings' })
@@ -60,16 +65,35 @@ export default class PassageController implements IPassageController {
         try {
             const result = await this.passageServiceInstance.editPassage(req.body as IUpdatePassageDTO)
 
-            if (result.isFailure) {
-                return res
-                    .json(result.errorValue())
-                    .status(404)
-                    .send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                const ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(200)
+            const message = result.value as IPassageDTO
+            return res.json(message).status(200)
         } catch (e) {
             next(e)
         }
+    }
+
+    private resolveHttpCode(result: ErrorCode) {
+        let ret: number
+        switch (result) {
+            case ErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case ErrorCode.NotFound:
+                ret = 404
+                break
+            case ErrorCode.AlreadyExists:
+                ret = 422
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
     }
 }

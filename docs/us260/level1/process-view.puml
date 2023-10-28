@@ -6,13 +6,19 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 [-> sys : GET /passages
 
 activate sys
-    alt floors/building not found
-        [<-- sys : 404: Not found
-    else passage not found
-        [<-- sys : 404: Not found
-    else passages sent
-        [<-- sys : 200: Ok
-    end
+    alt building not found
+            [<-- sys : 404: Not found
+        else building found
+           alt same building
+            [<-- sys : 422: Unprocessable content
+            else different building
+                alt  passage not found
+                    [<-- sys : 404: Not found
+                else passages sent
+                    [<-- sys : 200: Ok
+            end
+            end
+        end
 deactivate sys
 
 @enduml

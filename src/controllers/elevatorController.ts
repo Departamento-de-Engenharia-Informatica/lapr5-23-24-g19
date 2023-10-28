@@ -5,8 +5,6 @@ import { Inject, Service } from 'typedi'
 import IElevatorController from './IControllers/IElevatorController'
 import IElevatorService, { ErrorResult, ErrorCode } from '../services/IServices/IElevatorService'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
-import { IBuildingDTO } from '../dto/IBuildingDTO'
-import {ICreatedElevatorDTO} from "../dto/ICreatedElevatorDTO";
 
 @Service()
 export default class ElevatorController implements IElevatorController {

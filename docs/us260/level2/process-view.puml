@@ -6,12 +6,18 @@ participant "MD" as mdr
 [-> mdr : GET /passages
 
 activate mdr
-    alt floors/building not found
+    alt building not found
         [<-- mdr : 404: Not found
-    else passage not found
-        [<-- mdr : 404: Not found
-    else passages sent
-        [<-- mdr : 200: Ok
+    else building found
+       alt same building
+        [<-- mdr : 422: Unprocessable content
+        else different building
+            alt  passage not found
+                [<-- mdr : 404: Not found
+            else passages sent
+                [<-- mdr : 200: Ok
+        end
+        end
     end
 deactivate mdr
 
