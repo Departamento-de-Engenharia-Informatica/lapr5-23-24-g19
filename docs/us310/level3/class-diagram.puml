@@ -108,18 +108,18 @@ package system {
             package "Room" as vo_room {
                 class RoomName
                 class RoomDescription
-                class RoomCategorization
+                class RoomCategory
                 class RoomDimensions
-                class RoomPosition
+                class Coordinates
             }
         }
 
 
         Room "1" --> "1" RoomName
         Room "1" --> "1" RoomDescription
-        Room "1" --> "1" RoomCategorization
+        Room "1" --> "1" RoomCategory
         Room "1" --> "1" RoomDimensions
-        Room "1" --> "1" RoomPosition
+        Room "1" --> "1" Coordinates
 
         Room -left-> "1" Building
         Room -up-> "1" Floor
