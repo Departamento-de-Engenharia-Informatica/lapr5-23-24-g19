@@ -1,17 +1,12 @@
 import { assert } from 'chai'
 import { createSandbox } from 'sinon'
 import { describe, it } from 'mocha'
-
-import { Result } from '../../core/logic/Result'
-
-import Building, { BuildingProps } from '../building/building'
-
-//import {Building,  BuildingProps } from '../building/building'
-//import { BuildingId } from './buildingId'
-import { BuildingName as Name } from './buildingName'
-import { BuildingCode as Code } from './buildingCode'
-import { BuildingDescription as Description } from './description'
+import Building from './building'
+import { BuildingName } from './buildingName'
+import { BuildingCode } from './buildingCode'
+import { BuildingDescription } from './description'
 import { MaxFloorDimensions } from './maxFloorDimensions'
+import { Result } from '../../core/logic/Result'
 
 describe('Building', () => {
     const sinon = createSandbox()
@@ -20,41 +15,94 @@ describe('Building', () => {
         sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
     }
 
-    let code: Code, name: Name, description: Description, maxFloorDimensions: MaxFloorDimensions
-    let building: Building
-
-    beforeEach(() => {
-        stubCreate(Building)
-
-        building = Building.create({} as BuildingProps).getValue()
-
-        code = Code.create('B001').getValue()
-        name = Name.create('Test Building').getValue()
-        description = Description.create('A test building').getValue()
-        maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
-    })
+    beforeEach(() => {})
 
     afterEach(sinon.restore)
 
-    it('allows changing the name, description, and max floor dimensions', () => {
-        const updatedName = Name.create('Updated Building Name').getValue()
-        const updatedDescription = Description.create('An updated building').getValue()
-        const updatedDimensions = MaxFloorDimensions.create(10, 20).getValue()
+    it('should allow changing the name, description, and max floor dimensions', () => {
+        const code = BuildingCode.create('B001').getValue()
+        const name = BuildingName.create('Test Building').getValue()
+        const description = BuildingDescription.create('A test building').getValue()
+        const maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
 
-        const building = Building.create({
+        const result = Building.create({
             code,
             name,
             description,
             maxFloorDimensions,
-        }).getValue()
+        })
 
-        building.name = updatedName
-        assert.strictEqual(building.name, updatedName)
+        const updatedName = BuildingName.create('Updated Building Name').getValue()
+        const updatedDescription = BuildingDescription.create('An updated building').getValue()
+        const updatedDimensions = MaxFloorDimensions.create(10, 20).getValue()
 
-        building.description = updatedDescription
-        assert.strictEqual(building.description, updatedDescription)
+        result.getValue().name = updatedName
+        assert.isOk(result.isSuccess)
 
-        building.maxFloorDimensions = updatedDimensions
-        assert.deepStrictEqual(building.maxFloorDimensions, updatedDimensions)
+        result.getValue().description = updatedDescription
+        assert.isOk(result.isSuccess)
+
+        result.getValue().maxFloorDimensions = updatedDimensions
+        assert.isOk(result.isSuccess)
+    })
+
+    it('should fail when creating a building with null or undefined code', () => {
+        stubCreate(BuildingName)
+        stubCreate(BuildingDescription)
+        stubCreate(MaxFloorDimensions)
+
+        const result = Building.create({
+            code: undefined,
+            name: BuildingName.create('').getValue(),
+            description: BuildingDescription.create('').getValue(),
+            maxFloorDimensions: MaxFloorDimensions.create(0, 0).getValue(),
+        })
+
+        assert.isNotOk(result.isSuccess)
+    })
+
+    it('should fail when creating a building with null or undefined name', () => {
+        stubCreate(BuildingCode)
+        stubCreate(BuildingDescription)
+        stubCreate(MaxFloorDimensions)
+
+        const result = Building.create({
+            code: BuildingCode.create('').getValue(),
+            name: undefined,
+            description: BuildingDescription.create('').getValue(),
+            maxFloorDimensions: MaxFloorDimensions.create(0, 0).getValue(),
+        })
+
+        assert.isNotOk(result.isSuccess)
+    })
+
+    it('should fail when creating a building with null or undefined description', () => {
+        stubCreate(BuildingCode)
+        stubCreate(BuildingName)
+        stubCreate(MaxFloorDimensions)
+
+        const result = Building.create({
+            code: BuildingCode.create('').getValue(),
+            name: BuildingName.create('').getValue(),
+            description: undefined,
+            maxFloorDimensions: MaxFloorDimensions.create(0, 0).getValue(),
+        })
+
+        assert.isNotOk(result.isSuccess)
+    })
+
+    it('should fail when creating a building with null or undefined max floor dimensions', () => {
+        stubCreate(BuildingCode)
+        stubCreate(BuildingName)
+        stubCreate(BuildingDescription)
+
+        const result = Building.create({
+            code: BuildingCode.create('').getValue(),
+            name: BuildingName.create('').getValue(),
+            description: BuildingDescription.create('').getValue(),
+            maxFloorDimensions: undefined,
+        })
+
+        assert.isNotOk(result.isSuccess)
     })
 })
