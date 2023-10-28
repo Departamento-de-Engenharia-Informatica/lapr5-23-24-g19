@@ -24,25 +24,43 @@ skinparam package {
         - code
         - name
         - description
-        - maxFloorDimensions
+        - maxLength
+        - maxWidth
     }
     class Elevator{
+        - description
+        - brand
+        - model
+        - serialNumber
     }
 
     class Floor{
+        - floorNumber
+        - description
     }
-    class Connection{
+
+    class Passage{
+
     }
+
     class Room{
+        - name
+        - description
+        - roomCategory
+        - dimensions
+        - position
     }
 
 
     class Robot{
-        - id
-        - marca
-        - n_serie
+        - code
+        - nickName
+        - serialNumber
+        - description
     }
     class RobotType{
+        - brand
+        - model
     }
     note left: in order to fulfill the client's needs,\ncurrently there will be 2 types of robots:\nRobisep and Droneisep, but it can scale as needed
     class TaskType{
@@ -52,18 +70,17 @@ skinparam package {
     'ROBOTS
     Robot "*" --> "1" RobotType
 
-    RobotType "1" --> "1..*" TaskType: can execute
-    Robot "1" <-- "1" Task: executed by
-    TaskType "1" <-- "*" Task
+    RobotType --> "1..*" TaskType: can execute
+    Robot "1" <-- Task: executed by
+    TaskType <-- "*" Task
 
 
     'Buildings
     Building "1" --> "1..*" Floor
-    Floor "2" <-- "1" Elevator
-    Connection "1" ---> "2" Floor : connects
+    Floor "*" <-- "1" Elevator
+    Building "1" <-- Elevator
+    Passage "1" ---> "2" Floor : connects
     Floor "1" ---> "0..*" Room
-
-    class Coordinates{
 
     }
 
