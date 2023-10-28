@@ -30,11 +30,9 @@ Listar pisos de edifício com passagem para outros edifícios
 ## 4. HTTP
 
 ## 4.1 HTTP Requests
-
-|  Method           | HTTP request  | URI                                |
-|:-----------------:|:-------------:|:----------------------------------:|
-| floorsWithPassage | **GET**       |  /buildings/{:id}/floors/passages  |
-
+| Method    | URI                               |
+|:---------:|:---------------------------------:|
+| GET       | /buildings/{:id}/floors/passages  |
 
 ## 4.2 HTTP Response
 | Status code |   Description   |

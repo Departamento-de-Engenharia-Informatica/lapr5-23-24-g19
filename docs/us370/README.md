@@ -30,9 +30,9 @@ N/a
 
 ## 4.1 HTTP Requests
 
-|    Method    | HTTP request |          URI        |
-|:------------:|:------------:|:-------------------:|
-| inhibitRobot |   **PATCH**  |  /robots/{:id}/inhibit  |
+| Method    | URI                   |
+|:---------:|:---------------------:|
+| **PATCH** | /robots/{:id}/inhibit |
 
 
 ## 4.2 HTTP Response
