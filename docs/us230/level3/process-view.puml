@@ -1,53 +1,61 @@
 @startuml
 autonumber
 
-mainframe MD
-box "Back-End" #LightBlue
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
 participant "Floor" as floor
-participant "Map" as floorMap
 participant "Building" as building
-end box
+participant "Mapper" as map
+participant "DTO" as dto
 
-box "Database"
-database "Repository" as repo
-end box
 
-[--> r: PATCH /building/{id}/floors/{floorNumber}/maps
+participant "Repository" as repo
+database "Database" as db
+
+[--> r: PATCH /building/{id}/floors/{floorNumber}/map
     activate r
-        r ---> ctrl : uploadMap(req,res,...)
+        r ---> ctrl : uploadMap()
         activate ctrl
             ctrl -> svc : uploadMap(dto)
             activate svc
                 svc -> repo : findByCodeNumber(buildingCode,floorNumber)
                 activate repo
+                    repo -> db  : find(buildingCode,floorNumber)
+                    activate db
+                    deactivate db
+                    repo <-- db : floor
+                    svc <-- repo : floor
                 deactivate repo
 
                 alt floor not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<--r : 412: Precondition Failed
+                    ctrl --> r : error (404)
+                    [<--r : error(404)
                 else floor found
-
-                    svc --> floor: getBuilding()
-                    activate floor
-                    deactivate floor
-                    svc --> building: checkDimension(mapDimensions)
+                    note right of svc
+                        check building dimensions
+                    end note
                     alt mapDimensions exceeded buildingDimensions
-                        activate building
-                        deactivate building
-
-
-                        svc --> floor : createMap(dto)
+                        svc --> ctrl : error
+                        ctrl --> r : error (422)
+                        [<--r : error(422)
+                    else
+                        svc --> floor : updateMap(dto)
                         activate floor
-                            floor --> floorMap** : create(dto)
                         deactivate floor
 
                         svc --> repo : save(floor)
                         activate repo
+                            repo -> db : save(floor)
+                            activate db
+                            deactivate db
                         deactivate repo
+                        svc -> map : toDTO(building)
+                        activate map
+                            map --> dto** : create(floor)
+                                map --> svc : dto
+                        deactivate map
                         svc --> ctrl : dto
                         deactivate svc
                         ctrl --> r : dto (201)

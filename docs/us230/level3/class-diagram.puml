@@ -90,10 +90,9 @@ package system {
             package "Map" as vo_building {
                 class dimensions
                 class MapContent
-                class AvailableCoordinates{
-                    - coordinates[]
-                }
+                class Coordinates
             }
+
 
             package "Building" as build {
                 class buildingDimensions
@@ -102,14 +101,21 @@ package system {
 
         Map "1" --> "1" MapContent
         Map "1" --> "1" dimensions
+        Map "1" --> "*" Coordinates: elevators
+        Map "1" --> "*" Coordinates: passages
+        Map "1" --> "*" Coordinates: rooms
 
         Building --> buildingDimensions
 
         AppServiceFloor ..> Floor
 
-        'package "Services" {
-        '}
     }
+    package "DTO" {
+        interface IFloorMapDTO
+
+    }
+    AppServiceFloor -up-> IFloorMapDTO
+    ControllerFloor -up-> IFloorMapDTO
 }
 
 @enduml

@@ -6,12 +6,12 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 [-> sys: PATCH /building/{id}/floors/{number}/map
 activate sys
 
-alt building/floor not found
-    [<--sys  : 412: Precondition Failed
+alt floor not found
+    [<--sys  : 404 not found
 else map not processed
-    [<--sys : 422: Unprocessable Content
+    [<--sys : 422 Unprocessable Content
 else floor map updated
-    [<--sys  : 201: Created
+    [<--sys  : 200 OK
 end
 
 deactivate sys
