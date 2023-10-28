@@ -13,58 +13,58 @@ participant "Repository" as repo
 database "Database" as db
 
 [--> r: post(/building/{id}/floors)
-    activate r
-        r -> ctrl : createFloor()
-        activate ctrl
-            ctrl -> svc : createFloor(dto)
-            activate svc
-                svc -> repo : find(buildingCode)
+activate r
+    r -> ctrl : createFloor()
+    activate ctrl
+        ctrl -> svc : createFloor(dto)
+        activate svc
+            svc -> repo : findByCode(buildingCode)
+            activate repo
+                repo -> db : find()
+                activate db
+                    db --> repo : building
+                deactivate db
+                repo --> svc : building
+            deactivate repo
+
+            alt building not found
+                svc --> ctrl : error
+                ctrl --> r : error (404)
+                [<--r : 404: Not Found
+            else building found
+                svc ->repo : findByCodeNumber(buildingCode,floorNumber)
                 activate repo
-                    repo -> db: find(buildingCode)
+                    repo -> db : find()
                     activate db
-                    db --> repo: building
+                        db --> repo : floor
                     deactivate db
-                    repo --> svc: building
+                    repo --> svc : floor
+                deactivate repo
+            alt floor already exists
+                svc --> ctrl : error
+                ctrl --> r : error (422)
+                [<--r : 422: Unprocessable Content
+            else floor doesn't exist
+                svc --> floor** : create()
+                svc -> repo : save(floor)
+                activate repo
+                    svc -> map : toDTO(floor)
                 deactivate repo
 
-                alt building not found
-                    svc --> ctrl : error
-                    ctrl --> r : error (404)
-                    [<--r : 404 not found
-                else floor created successfully
-                    svc ->repo: findByCodeNumber(buildingCode,floorNumber)
-                    activate repo
-                        repo -> db :findByCodeNumber((buildingCode,floorNumber)
-                        activate db
-                        deactivate db
-                    deactivate repo
-                alt floor already exists
-                    svc --> ctrl : error
-                    ctrl --> r : error (422)
-                    [<--r : 422 unprocessable content
-                else floor created successfully
-                    svc --> floor** : create()
-                    svc -> repo : save(floor)
-                    activate repo
-                        svc -> map : toDTO(floor)
-                    deactivate repo
+                activate map
+                    map --> dto** : create(floor)
+                    activate dto
+                        map --> svc : dto
+                    deactivate dto
+                deactivate map
 
-                    activate map
-                        map --> dto** : create(floor)
-                        activate dto
-                            map --> svc : dto
-                        deactivate dto
-                    deactivate map
-
-                    svc --> ctrl : dto
-                    ctrl --> r : dto (201)
-                    [<--r : 201 Created
-                end
-                end
-            deactivate svc
-        deactivate ctrl
-    deactivate r
-
-'deactivate ui
+                svc --> ctrl : dto
+                ctrl --> r : dto (201)
+                [<--r : 201: Created
+            end
+            end
+        deactivate svc
+    deactivate ctrl
+deactivate r
 
 @enduml
