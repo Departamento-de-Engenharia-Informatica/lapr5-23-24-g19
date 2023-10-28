@@ -97,7 +97,9 @@ export default class FloorRepo implements IFloorRepo {
             return []
         }
 
+        console.log("vamos fazer toDomain")
         const floorList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
+        console.log("ola", floorList)
         return floorList
     }
 

@@ -27,30 +27,59 @@ export default class FloorService implements IFloorService {
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
     ) {}
 
-    public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Result<IFloorDTO>> {
+    public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
-            const building = await this.buildingRepo.findByCode(BuildingCode.create(buildingCode).getValue())
+            const code = BuildingCode.create(buildingCode).getValue()
+            const building = await this.buildingRepo.findByCode(code)
 
-            if (building === null) {
-                return Result.fail<IFloorDTO>('Building not found')
+            if (!building) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Building not found"
+                })
+            }
+
+            const floorNumber = FloorNumber.create(floorDTO.floorNumber).getValue()
+            const floor = await this.floorRepo.findByCodeNumber(code, floorNumber)
+
+            if (floor) {
+                return left({
+                    errorCode: ErrorCode.BusinessRuleViolation,
+                    message: "Floor already exists"
+                })
             }
 
             floorDTO.buildingCode = buildingCode
 
+            let description = undefined
+
+            if (floorDTO.description) {
+                description = Description.create(floorDTO.description)
+
+                if (description.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BusinessRuleViolation,
+                        message: "Description not valid"
+                    })
+                }
+                description = description.getValue()
+            }
+
             const floorOrError = Floor.create({
                 building: building,
                 floorNumber: FloorNumber.create(floorDTO.floorNumber).getValue(),
-                description: Description.create(floorDTO.description).getValue(),
+                description: description
             })
 
             if (floorOrError.error) {
-                return Result.fail<IFloorDTO>('Floor not created')
+                return left({
+                    errorCode: ErrorCode.BusinessRuleViolation,
+                    message: "There was a problem while create the floor"
+                })
             }
 
-            await this.floorRepo.save(floorOrError.getValue())
-
-            const floorDTOResult = FloorMap.toDTO(floorOrError.getValue()) as IFloorDTO
-            return Result.ok<IFloorDTO>(floorDTOResult)
+            const result = await this.floorRepo.save(floorOrError.getValue())
+            return right(FloorMap.toDTO(result))
         } catch (e) {
             throw e
         }
@@ -168,6 +197,7 @@ export default class FloorService implements IFloorService {
 
     public async getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>> {
         try {
+            console.log('entrou service')
             const code = BuildingCode.create(buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(code)
 
@@ -177,8 +207,10 @@ export default class FloorService implements IFloorService {
                     message: "Building not found"
                 })
             }
+            console.log("vamos fazer find de floors")
 
             const floors = await this.floorRepo.findByBuildingCode(code)
+            console.log(floors)
 
             if (floors.length == 0) {
                 return left({

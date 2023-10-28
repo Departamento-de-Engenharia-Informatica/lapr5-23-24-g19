@@ -20,17 +20,16 @@ export default class FloorController implements IFloorController {
         try {
             const buildingId = req.params.id
 
-            const roleOrError = (await this.floorServiceInstance.createFloor(
-                req.body as IFloorDTO,
-                buildingId,
-            )) as Result<IFloorDTO>
+            const result = await this.floorServiceInstance.createFloor(req.body as IFloorDTO, buildingId)
 
-            if (roleOrError.isFailure) {
-                return res.status(402).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            const floorDTO = roleOrError.getValue()
-            return res.json(floorDTO).status(201)
+            const message = result.value as IFloorDTO
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
