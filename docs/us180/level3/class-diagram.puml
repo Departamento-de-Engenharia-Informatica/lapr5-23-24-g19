@@ -13,13 +13,13 @@ skinparam component {
 
 package system {
     package "Infrastructure" {
-        package "Routes" {
-            class RouteBuilding
-        }
-
         package "Persistence" {
             interface IDBDriver
             class DBDriver
+        }
+
+        package "Routes" {
+            class RouteBuilding
         }
 
         DBDriver -right-|> IDBDriver
@@ -74,6 +74,17 @@ package system {
 
         AppServiceBuilding .up.> IBuildingRepo
         AppServiceBuilding .up.> IFloorRepo
+    }
+
+    package "DTO" as p_DTO {
+        interface IBuildingMinMaxFloorsDTO
+        interface IBuildingFloorNumberDTO
+
+        ControllerBuilding ..> IBuildingMinMaxFloorsDTO
+        AppServiceBuilding ..> IBuildingMinMaxFloorsDTO
+
+        ControllerBuilding ..> IBuildingFloorNumberDTO
+        AppServiceBuilding ..> IBuildingFloorNumberDTO
     }
 
     package "Entities/Core/Domain" {
