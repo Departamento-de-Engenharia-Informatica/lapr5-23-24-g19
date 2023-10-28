@@ -34,8 +34,8 @@ note right : verify if user is a \nfleet manager
 
                 alt robots not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<-- r : 412: Precondition Failed
+                    ctrl --> r : error (404)
+                    [<-- r : 404: Not found
                 else robots found
 
                 loop for each robot
@@ -51,7 +51,7 @@ note right : verify if user is a \nfleet manager
                     deactivate map
                 end loop
                     svc --> ctrl : dto
-                    ctrl --> r : response
+                    ctrl --> r : dto(200)
                     [<-- r : 200: "OK" Successful
                 end
             deactivate svc

@@ -28,8 +28,8 @@ database "Database" as db
 
                 alt building not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                     [<-- r : 412: Precondition Failed
+                    ctrl --> r : error (404)
+                     [<-- r : 404: Not Found
                 else building found
 
                     svc -> repo: inBuilding(building)
@@ -41,8 +41,8 @@ database "Database" as db
 
                     alt elevators not found
                         svc --> ctrl : error
-                        ctrl --> r : error (412)
-                         [<-- r : 412: Precondition Failed
+                        ctrl --> r : error (404)
+                         [<-- r : 404: Not Found
 
                     else elevators found
 
@@ -57,7 +57,7 @@ database "Database" as db
                             deactivate map
                         end loop
                             svc --> ctrl : dto
-                            ctrl --> r : response
+                            ctrl --> r : dto(200)
                              [<-- r : 200: "OK" Successful
 
                     end

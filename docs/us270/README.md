@@ -57,7 +57,7 @@ o número indeitifcativo do elevador deve ser gerado sequencialmente pelo sistem
 | Status code |      Description      |
 |:-----------:|:---------------------:|
 |   **201**   |        Created        |
-|   **412**   |  Precondition Failed  |
+|   **404**   |       Not found       |
 |   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization

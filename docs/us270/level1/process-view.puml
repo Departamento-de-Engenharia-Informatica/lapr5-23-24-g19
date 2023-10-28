@@ -7,9 +7,9 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate sys
     alt building not found
-        [<-- sys : 412: Precondition Failed
+        [<-- sys : 404: Not found
     else floor(s) not found
-        [<-- sys : 412: Precondition Failed
+        [<-- sys : 404: Not found
     else elevator not created
         [<-- sys : 422: Unprocessable Content
     else elevator created successfully

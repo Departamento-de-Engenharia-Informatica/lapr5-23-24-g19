@@ -30,8 +30,8 @@ database "Database" as db
 
                     alt floor not found
                         svc --> ctrl : error
-                        ctrl --> r : error (412)
-                        [<-- r : 412: Precondition Failed
+                        ctrl --> r : error (404)
+                        [<-- r : 404: Not Found
                     else floor found
                         svc --> room** : create()
 

@@ -9,11 +9,11 @@ participant "MD" as mdr
         activate mdr
 
             alt building not found
-                [<-- mdr : 412: Precondition Failed
+                [<-- mdr : 404: Not Found
             else building found
 
                 alt elevator not found
-                [<-- mdr : 412: Precondition Failed
+                [<-- mdr : 404: Not Found
                 else elevator exists
 
                     alt  elevator bad params

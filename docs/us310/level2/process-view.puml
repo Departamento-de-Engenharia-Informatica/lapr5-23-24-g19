@@ -9,7 +9,7 @@ participant "MD" as mdr
     activate mdr
 
     alt  floor not found
-        [<-- mdr  : 412: Precondition Failed
+        [<-- mdr  : 404: Not Found
     else floor found
     alt room not created
         [<-- mdr  : 422: Unprocessable Content

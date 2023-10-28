@@ -16,7 +16,7 @@ activate mdr
 
 
     alt robots not found
-        [<-- mdr  : 412: Precondition Failed
+        [<-- mdr  : 404: Not found
     else robots sent
         [<-- mdr  : 200: "OK" Successful
     end

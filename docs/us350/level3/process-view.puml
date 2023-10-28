@@ -36,12 +36,12 @@ database "Database" as db
                         deactivate db
                     deactivate repo
 
-                    alt robot already exists
+                    alt robot type already exists
                     svc --> ctrl : error
                     ctrl --> r : error (412)
                         [<-- r : 412: Precondition Failed
 
-                    else robot not found
+                    else robot type not found
 
 
                     svc --> b **: create()
@@ -76,6 +76,7 @@ database "Database" as db
             deactivate ctrl
         [<-- r: 201: Created
     deactivate r
+    end
 end
 end
 

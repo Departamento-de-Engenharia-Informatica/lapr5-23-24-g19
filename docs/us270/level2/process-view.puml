@@ -7,9 +7,9 @@ participant "MD" as mdr
 
 activate mdr
     alt building not found
-        [<-- mdr : 412: Precondition Failed
+        [<-- mdr : 404: Not found
     else floor(s) not found
-        [<-- mdr : 412: Precondition Failed
+        [<-- mdr : 404: Not found
     else elevator not created
         [<-- mdr : 422: Unprocessable Content
     else elevator created successfully

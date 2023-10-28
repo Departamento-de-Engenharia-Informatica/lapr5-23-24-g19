@@ -10,7 +10,7 @@ participant "Mapper" as map
 participant "dto:\nDTO" as dto
 
 
-[--> r : GET /passages
+[-> r : GET /passages
 activate r
 
     r -> ctrl : getPassages()
@@ -31,8 +31,8 @@ activate r
 
             alt building not found
                 svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<-- r : 412: Precondition Failed
+                ctrl --> r : error (404)
+                [<-- r : 404: Not found
             else building found
                 svc --> svc : sameBuilding(building)
                 activate repo
@@ -49,8 +49,8 @@ activate r
 
                     alt passages not found
                         svc --> ctrl : error
-                        ctrl --> r : error (412)
-                        [<-- r : 412: Precondition Failed
+                        ctrl --> r : error (404)
+                        [<-- r : 404: Not found
                     else passages found
                         loop for each passage
                              svc -> map : toDTO(passage)
@@ -63,7 +63,7 @@ activate r
                         end loop
 
                         svc --> ctrl : dto
-                        ctrl --> r : response
+                        ctrl --> r : dto(200)
                         [<-- r : 200: Ok
                     end
                 end

@@ -9,7 +9,7 @@ participant "<<system>>\nSystem RobDroneGo" as sys
     activate sys
 
     alt floor not found
-        [<-- sys : 412: Precondition Failed
+        [<-- sys : 404: Not Found
     else floor found
     alt room not created
         [<-- sys : 422: Unprocessable Content

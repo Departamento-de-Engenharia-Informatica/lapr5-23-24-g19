@@ -47,10 +47,10 @@ notem que quando é dito que podem assumir que existe apenas um elevador é uma 
 | getElevators | **GET** /buildings/:id/elevators | Building Route calls method getElevators in elevatorController |
 
 ### 4.2 HTTP Response
-| Status code |     Description     |
-|:-----------:|:-------------------:|
-|   **200**   |         OK          |
-|   **412**   | Precondition Failed |
+| Status code |  Description   |
+|:-----------:|:--------------:|
+|   **200**   |       OK       |
+|   **404**   |   Not Found    |
 
 ### 4.3 Authorization
 

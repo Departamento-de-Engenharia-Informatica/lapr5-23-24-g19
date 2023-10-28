@@ -11,7 +11,7 @@ participant "Mapper" as map
 participant "dto:\nDTO" as dto
 
 
-[--> r : POST /buildings/{id}/elevators
+[-> r : POST /buildings/{id}/elevators
 activate r
 
     r -> ctrl : createElevator()
@@ -27,8 +27,8 @@ activate r
 
             alt building not found
                 svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<-- r : 412: Precondition Failed
+                ctrl --> r : error (404)
+                [<-- r : 404: Not found
             else building found
 
                 svc -> repo: findFloor(building,floorNumber)
@@ -38,8 +38,8 @@ activate r
 
                 alt floor(s) not found
                     svc --> ctrl : error
-                    ctrl --> r : error (412)
-                    [<- r : 412: Precondition Failed
+                    ctrl --> r : error (404)
+                    [<-- r : 404: Not found
                 else floors found
                     svc --> elevator **: create()
 
@@ -49,7 +49,7 @@ activate r
                     alt elevator not created
                         svc --> ctrl : error
                         ctrl --> r : error (422)
-                        [<- r : 422: Unprocessable Content
+                        [<-- r : 422: Unprocessable Content
                     else elevator created successfully
                         svc -> repo : save(elevator)
                         activate repo
@@ -66,7 +66,7 @@ activate r
 
                         svc --> ctrl : dto
                         ctrl --> r : dto (201)
-                        [<- r : 201: Created
+                        [<-- r : 201: Created
                     end
                 end
             end

@@ -49,7 +49,7 @@ breve descrição (opcional, alfanumerico, 250 caracteres)
 | Status code |      Description      |
 |:-----------:|:---------------------:|
 |   **200**   |          OK           |
-|   **412**   |  Precondition Failed  |
+|   **404**   |       Not Found       |
 |   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization

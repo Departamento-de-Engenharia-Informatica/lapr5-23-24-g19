@@ -16,7 +16,7 @@ participant "<<system>>\nSystem RobDroneGo" as sys
             else user authorized
 
             alt robots not found
-                [<-- sys : 412: Precondition Failed
+                [<-- sys : 404: Not found
             else robots sent
                 [<-- sys : 200: "OK" Successful
     end

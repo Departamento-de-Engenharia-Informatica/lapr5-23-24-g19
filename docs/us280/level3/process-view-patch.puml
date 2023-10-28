@@ -29,8 +29,8 @@ database "Database" as db
 
                         alt building not found
                             svc --> ctrl : error
-                            ctrl --> r : response 412
-                            [<-- r : 412: Precondition Failed
+                            ctrl --> r : response 404
+                            [<-- r : 404: Not Found
 
 
 
@@ -45,8 +45,8 @@ database "Database" as db
 
                             alt elevator not found
                                 svc --> ctrl : error
-                                ctrl --> r : response 412
-                                [<-- r : 412: Precondition Failed
+                                ctrl --> r : response 404
+                                [<-- r : 404: Not Found
                             else elevator exists
 
                                 svc -> repo: findByIdentifier(building,elevatorIdentifier)
@@ -89,7 +89,7 @@ database "Database" as db
                             svc --> ctrl : dto
                         deactivate svc
 
-                        ctrl --> r : 200
+                        ctrl --> r : dto(200)
                     deactivate ctrl
 
 

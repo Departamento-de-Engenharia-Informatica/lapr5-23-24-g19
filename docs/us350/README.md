@@ -78,6 +78,7 @@ Cumprimentos
 | Status code |      Description      |
 |:-----------:|:---------------------:|
 |   **201**   |        Created        |
+|   **412**   |  Precondition Failed  |
 |   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization

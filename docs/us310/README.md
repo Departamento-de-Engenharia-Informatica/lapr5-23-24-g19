@@ -60,7 +60,7 @@ as categorias são de uma lista especifica. neste momento não é necessário ex
 | Status code |      Description      |
 |:-----------:|:---------------------:|
 |   **201**   |        Created        |
-|   **412**   |  Precondition Failed  |
+|   **404**   |       Not Found       |
 |   **422**   | Unprocessable Content |
 
 ### 4.3 Authorization

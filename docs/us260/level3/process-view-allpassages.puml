@@ -9,7 +9,7 @@ participant "Repository" as repo
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
 
-[--> r : GET /passages
+[-> r : GET /passages
 activate r
 
     r -> ctrl : getPassages(req,res)
@@ -25,8 +25,8 @@ activate r
 
             alt passages not found
                 svc --> ctrl : error
-                ctrl --> r : error (412)
-                [<-- r : 412: Precondition Failed
+                ctrl --> r : error (404)
+                [<-- r : 404: Not found
             else passages found
                 loop for each passage
                     svc -> map : toDTO(passage)
@@ -42,7 +42,7 @@ activate r
             svc --> ctrl : dto
         deactivate svc
 
-        ctrl --> r : response
+        ctrl --> r : dto(200)
     deactivate ctrl
 
     [<-- r : 200: "OK" Successful

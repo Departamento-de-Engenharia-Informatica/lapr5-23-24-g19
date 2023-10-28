@@ -7,9 +7,9 @@ participant "<<system>>\nSystem RobDroneGo" as sys
 
 activate sys
     alt floors/building not found
-        [<-- sys : 412: Precondition Failed
+        [<-- sys : 404: Not found
     else passage not found
-        [<-- sys : 412: Precondition Failed
+        [<-- sys : 404: Not found
     else passages sent
         [<-- sys : 200: Ok
     end

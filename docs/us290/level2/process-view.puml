@@ -9,10 +9,10 @@ participant "MD" as mdr
         [-> mdr: GET /buildings/{id}/elevators
         activate mdr
             alt building not found
-                    [<-- mdr : 412: Precondition Failed
+                    [<-- mdr : 404: Not Found
             else building found
                 alt elevators not found
-                    [<-- mdr : 412: Precondition Failed
+                    [<-- mdr : 404: Not Found
                 else elevators sent
                     [<-- mdr : 200: "OK" Successful
                 end

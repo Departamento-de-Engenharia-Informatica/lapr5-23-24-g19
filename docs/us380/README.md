@@ -28,12 +28,12 @@ No questions done to the client about this user story
 | getRobots | **GET** /robots | Robot Route calls method getRobots in robotController |
 
 ### 4.2 HTTP Response
-| Status code |     Description     |
-|:-----------:|:-------------------:|
-|   **200**   |         OK          |
-|   **401**   |    Unauthorized     |
-|   **403**   |      Forbidden      |
-|   **412**   | Precondition Failed |
+| Status code | Description  |
+|:-----------:|:------------:|
+|   **200**   |      OK      |
+|   **401**   | Unauthorized |
+|   **403**   |  Forbidden   |
+|   **404**   |  Not found   |
 
 ### 4.3 Authorization
 

@@ -13,10 +13,14 @@ participant "MD" as mdr
     else user not autorized
         [<-- mdr  : 403: Forbidden
     else user authorized
+    alt robttype already exists
+        [<-- mdr: 412: Precondition failed
+    else robot type not found
         alt robot type not created
             [<-- mdr  : 422: Unprocessable Content
         else robot type created successfully
             [<-- mdr  : 201: Created
+            end
         end
     end
     deactivate mdr
