@@ -18,7 +18,7 @@ export type ErrorResult = {
 export default interface IFloorService {
     createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Result<IFloorDTO>>
     patchFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
-    putFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>>
+    putFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     getFloors(buildingCode: string): Promise<Result<IFloorDTO[]>>
     floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>>
     uploadMap(floorMapDto: IFloorMapDTO): Promise<Result<IFloorDTO>>

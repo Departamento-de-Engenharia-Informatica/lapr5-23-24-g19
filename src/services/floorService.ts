@@ -105,7 +105,6 @@ export default class FloorService implements IFloorService {
 
                 floor.floorNumber = newFloorNumber.getValue()
             }
-            console.log(JSON.stringify(floor))
 
             const result = await this.floorRepo.save(floor)
             return right(FloorMap.toDTO(result))
@@ -114,31 +113,55 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async putFloor(dto: IUpdateFloorDTO): Promise<Result<IFloorDTO>> {
+    public async putFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
             const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(buildingCode)
 
             if (!building) {
-                return Result.fail('Building not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Building not found"
+                })
             }
 
-            const floorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
+            const oldFloorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
 
-            const floor = await this.floorRepo.findByCodeNumber(buildingCode, floorNumber)
+            const floor = await this.floorRepo.findByCodeNumber(buildingCode, oldFloorNumber)
 
             if (floor === null) {
-                return Result.fail('Floor not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Floor not found"
+                })
             }
 
-            floor.description = dto.description && Description.create(dto.description).getValue()
+            const description = dto.description && Description.create(dto.description)
+
+            if (description.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BusinessRuleViolation,
+                        message: "Floor description do not meet requirements"
+                    })
+            }
+
+            floor.description = description.getValue()
 
             if (dto.floorNumber) {
-                floor.floorNumber = FloorNumber.create(dto.floorNumber).getValue()
+                const newFloorNumber = FloorNumber.create(dto.floorNumber)
+
+                if (newFloorNumber.isFailure) {
+                    return left({
+                        errorCode: ErrorCode.BusinessRuleViolation,
+                        message: "Floor number do not meet requirements"
+                    })
+                }
+
+                floor.floorNumber = newFloorNumber.getValue()
             }
 
             const result = await this.floorRepo.save(floor)
-            return Result.ok(FloorMap.toDTO(result))
+            return right(FloorMap.toDTO(result))
         } catch (e) {
             throw e
         }
