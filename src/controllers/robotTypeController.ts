@@ -5,6 +5,7 @@ import config from '../../config'
 import IRobotTypeController from './IControllers/IRobotTypeController'
 import { IRobotTypeDTO } from '../dto/IRobotTypeDTO'
 import IRobotTypeService, { RobotTypeErrorCode, RobotTypeErrorResult } from '../services/IServices/IRobotTypeService'
+import {IRobotDTO} from "../dto/IRobotDTO";
 
 @Service()
 export default class RobotTypeController implements IRobotTypeController {
@@ -21,7 +22,8 @@ export default class RobotTypeController implements IRobotTypeController {
                 return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
             }
 
-            return res.json(result.value).status(201)
+            const message = result.value as IRobotTypeDTO
+            return res.status(201).send(message)
         } catch (e) {
             return next(e)
         }

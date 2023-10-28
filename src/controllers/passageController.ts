@@ -22,7 +22,7 @@ export default class PassageController implements IPassageController {
             }
 
             const message = result.value as IPassageDTO
-            return res.json(message).status(201)
+            return res.status(201).send(message)
         } catch (e) {
             return next(e)
         }

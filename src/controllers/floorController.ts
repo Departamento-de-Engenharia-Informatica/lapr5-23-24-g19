@@ -29,7 +29,7 @@ export default class FloorController implements IFloorController {
             }
 
             const message = result.value as IFloorDTO
-            return res.json(message).status(200)
+            return res.status(201).send(message)
         } catch (e) {
             return next(e)
         }

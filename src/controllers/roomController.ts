@@ -25,7 +25,7 @@ export default class RoomController implements IRoomController {
             }
 
             const message = result.value as IRoomDTO
-            return res.json(message).status(201)
+            return res.status(201).send(message)
         } catch (e) {
             return next(e)
         }
