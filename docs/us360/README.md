@@ -24,7 +24,6 @@ Como gestor de frota pretendo adicionar um novo robot à frota indicando o seu t
 - Several rules were laid out for each property of a robot
 
 ## 3. Diagrams
-
 ### Level 1
 - [Logical View](../general-purpose/level1/logical-view.svg)
 - [Process View](./level1/process-view.svg)
