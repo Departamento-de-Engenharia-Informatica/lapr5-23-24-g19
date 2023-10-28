@@ -149,7 +149,7 @@ export default class UserService implements IUserService {
         const email = user.email.value
         const firstName = user.firstName
         const lastName = user.lastName
-        const role = user.role.id.value
+        const role = user.role.name
 
         return jwt.sign(
             {
@@ -159,7 +159,7 @@ export default class UserService implements IUserService {
                 firstName: firstName,
                 lastName: lastName,
                 exp: exp.getTime() / 1000,
-            },
+            }as UserToken,
             config.jwtSecret,
         )
     }
@@ -174,4 +174,15 @@ export default class UserService implements IUserService {
             return Result.fail<Role>("Couldn't find role by id=" + roleId)
         }
     }
+
+}
+
+export interface UserToken{
+    id: string,
+    email: string,
+    role: string,
+    firstName: string,
+    lastName: string
+    exp: number
+    
 }
