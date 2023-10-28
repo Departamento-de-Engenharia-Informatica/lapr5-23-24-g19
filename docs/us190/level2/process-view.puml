@@ -7,11 +7,13 @@ participant "<<system>>\nMD" as mdr
 
 activate mdr
 alt building not found
-    [<--mdr : 404 not found
-else floor already exists
-    [<--mdr : 422 Unprocessable Content
-else floor created successfully
-    [<--mdr : 201 Created
+    [<--mdr : 404: not found
+else building found
+    alt floor already exists
+        [<--mdr : 422: Unprocessable Content
+    else floor doesn't exist
+        [<--mdr : 201: Created
+    end
 end
 deactivate mdr
 
