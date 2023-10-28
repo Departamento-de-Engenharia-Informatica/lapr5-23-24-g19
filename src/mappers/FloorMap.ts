@@ -15,7 +15,7 @@ export class FloorMap extends Mapper<Floor> {
         return {
             buildingCode: Floor.building.code.value,
             floorNumber: Floor.floorNumber.value,
-            description: Floor.description.value,
+            description: Floor.description?.value,
         } as IFloorDTO
     }
 
@@ -23,10 +23,13 @@ export class FloorMap extends Mapper<Floor> {
         //TODO: implement map component toDomain
         const buildingRepo = Container.get(BuildingRepo)
         const building = await buildingRepo.findByCode(BuildingCode.create(raw.buildingCode).getValue())
+
+        const description = raw.description ? Description.create(raw.description).getValue() : undefined;
+
         const FloorOrError = Floor.create(
             {
                 floorNumber: FloorNumber.create(raw.floorNumber).getValue(),
-                description: Description.create(raw.description).getValue(),
+                description: description,
                 building: building,
             },
             new UniqueEntityID(raw.domainId),
@@ -46,7 +49,7 @@ export class FloorMap extends Mapper<Floor> {
             domainId: Floor.id.toString(),
             buildingCode: Floor.building.code.value,
             floorNumber: Floor.floorNumber.value,
-            description: Floor.description.value,
+            description: Floor.description?.value,
             map: {
                 dimensions: {
                     mapLength: map?.dimensions.length,

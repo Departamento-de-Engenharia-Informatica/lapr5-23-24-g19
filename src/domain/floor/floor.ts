@@ -50,11 +50,11 @@ export class Floor extends AggregateRoot<FloorProps> {
     }
 
     public static create(dto: FloorProps, id?: UniqueEntityID): Result<Floor> {
-            const guardResult = Guard.againstNullOrUndefinedBulk([
-                { argument: dto.floorNumber, argumentName: 'floorNumber' },
-                { argument: dto.description, argumentName: 'buildingDescription' },
-                { argument: dto.building, argumentName: 'building' },
-            ])
+        const guardResult = Guard.againstNullOrUndefinedBulk([
+            { argument: dto.building, argumentName: 'building' },
+            { argument: dto.floorNumber, argumentName: 'floorNumber' },
+        ])
+
         if (!guardResult.succeeded) {
             return Result.fail<Floor>(guardResult.message)
         }else{
