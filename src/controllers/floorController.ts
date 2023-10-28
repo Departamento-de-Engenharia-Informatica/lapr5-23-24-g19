@@ -10,6 +10,7 @@ import { IFloorDTO } from '../dto/IFloorDTO'
 import { IFloorMapDTO } from '../dto/IFloorMapDTO'
 import { IBuildingCodeDTO } from '../dto/IBuildingCodeDTO'
 import { IUpdateFloorDTO } from '../dto/IUpdateFloorDTO'
+import { ErrorCode, ErrorResult } from '../services/IServices/IFloorService'
 
 @Service()
 export default class FloorController implements IFloorController {
@@ -43,11 +44,14 @@ export default class FloorController implements IFloorController {
 
             const result = await this.floorServiceInstance.patchFloor(req.body as IUpdateFloorDTO)
 
-            if (result.isFailure) {
-                return res.status(422).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            return res.json(result.getValue()).status(200)
+            const message = result.value as IUpdateFloorDTO
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -118,5 +122,21 @@ export default class FloorController implements IFloorController {
         } catch (e) {
             return next(e)
         }
+    }
+
+    private resolveHttpCode(result: ErrorCode) {
+        let ret: number
+        switch (result) {
+            case ErrorCode.BussinessRuleViolation:
+                ret = 422
+                break
+            case ErrorCode.NotFound:
+                ret = 404
+                break
+            default:
+                ret = 400
+                break
+        }
+        return ret
     }
 }
