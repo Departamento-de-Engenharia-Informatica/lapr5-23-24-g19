@@ -2,7 +2,7 @@
 
 ### 1. User Story Description
 
-As an administrator, I intend to edit an elevator in a building.
+I intend to edit an elevator in a building.
 
 ### 2. Customer Specifications and Clarifications
 

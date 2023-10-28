@@ -15,8 +15,11 @@ No questions done to the client about this user story
 ### 3. Diagrams
 
 ![level1](level1/process-view.svg)
+
 ![level2](level2/process-view.svg)
+
 ![level3](level3/process-view.svg)
+
 ![level3](level3/class-diagram.svg)
 
 ### 4. HTTP

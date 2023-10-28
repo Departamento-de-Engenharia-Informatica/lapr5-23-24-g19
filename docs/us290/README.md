@@ -2,7 +2,7 @@
 
 ### 1. User Story Description
 
-As an administrator, I intend to list all elevators inside a building.
+I intend to list all elevators inside a building.
 
 ### 2. Customer Specifications and Clarifications
 
