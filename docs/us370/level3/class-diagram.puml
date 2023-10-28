@@ -107,7 +107,17 @@ package system {
         Robot "1" --> "1" RobotDescription
         Robot "1" --> "1" RobotState
 
+
     }
+    package "DTO" {
+        interface ICreatedRobotDTO
+        interface IRobotInhibitDTO
+
+    }
+    AppServiceRobot --> ICreatedRobotDTO
+    ControllerRobot --> ICreatedRobotDTO
+    AppServiceRobot --> IRobotInhibitDTO
+    ControllerRobot --> IRobotInhibitDTO
 }
 
 @enduml
