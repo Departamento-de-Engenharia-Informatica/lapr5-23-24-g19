@@ -115,6 +115,11 @@ package system {
         'package "Services" {
         '}
     }
+    package "DTO" {
+              interface IElevatorDTO
+        }
+        AppServiceElevator -up-> IElevatorDTO
+        ControllerElevator -up-> IElevatorDTO
 }
 
 @enduml

@@ -103,6 +103,12 @@ package system {
                 Robot "1" --> "1" RobotDescription
                 Robot "1" --> "1" RobotState
     }
+
+    package "DTO" {
+              interface IRobotDTO
+        }
+        AppServiceRobot -up-> IRobotDTO
+        ControllerRobot -up-> IRobotDTO
 }
 
 @enduml
