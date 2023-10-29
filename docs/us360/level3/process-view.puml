@@ -4,13 +4,13 @@ autonumber
 participant "Route" as r
 participant "Controller" as ctrl
 participant "Service" as svc
-participant "Repository" as repo
 
 participant "robot:\nRobot" as b
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
+participant "Repository" as repo
 
-participant "DBDriver" as db
+database "Database" as db
 
 [--> r : POST /robots
 activate r
@@ -29,7 +29,9 @@ activate r
             activate repo
                 repo -> db : find()
                 activate db
+                    db --> repo : robotType
                 deactivate db
+                repo --> svc : robotType
             deactivate repo
 
             svc --> b ** : create()

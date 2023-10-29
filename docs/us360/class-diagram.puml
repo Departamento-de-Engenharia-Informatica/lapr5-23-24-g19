@@ -76,6 +76,13 @@ package system {
 
     }
 
+    package "DTO" {
+        interface IRobotDTO
+
+        AppServiceRobot -down-> IRobotDTO
+        ControllerRobot -down-> IRobotDTO
+    }
+
     package "Entities/Core/Domain" {
         package "Aggregates" {
             package "RobotType" as a_robottype {
