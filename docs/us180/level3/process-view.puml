@@ -12,7 +12,7 @@ participant "dto:\nDTO" as dto
 participant "Repository" as repo
 database "Database" as db
 
-[--> r: GET /buildings/?minFloors={min}&maxFloors={max}
+[-> r: GET /buildings/?minFloors={min}&maxFloors={max}
 activate r
     r -> ctrl : getBuildingsByFloors()
     activate ctrl
@@ -49,7 +49,7 @@ activate r
                 svc -> map : toDTO(building, floorCount)
 
                 activate map
-                    map -> dto** : create()
+                    map --> dto** : create()
                     note right : dto storing building \ninformation and floor count
                     activate dto
                         map --> svc : dto

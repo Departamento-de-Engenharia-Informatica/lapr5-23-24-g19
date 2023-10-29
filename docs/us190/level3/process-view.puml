@@ -12,7 +12,7 @@ participant "dto:\nDTO" as dto
 participant "Repository" as repo
 database "Database" as db
 
-[--> r: post(/building/{id}/floors)
+[-> r: post(/building/{id}/floors)
 activate r
     r -> ctrl : createFloor()
     activate ctrl
@@ -48,8 +48,12 @@ activate r
                 svc --> floor** : create()
                 svc -> repo : save(floor)
                 activate repo
-                    svc -> map : toDTO(floor)
+                    repo -> db : save()
+                    activate db
+                    deactivate db
                 deactivate repo
+
+                svc -> map : toDTO(floor)
 
                 activate map
                     map --> dto** : create(floor)
