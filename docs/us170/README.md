@@ -40,10 +40,6 @@ Class Diagram
 |:------------:|:------------:|:----------------------------------------------------------:|
 | getBuildings |   **GET**    |                         /buildings                         |
 
-### 4.1.1 Body example
-
-N/a
-
 ## 4.2 HTTP Response
 | Status code |     Description     |
 |:-----------:|:-------------------:|
@@ -57,13 +53,23 @@ No authorization required
 
 ### 4.4 HTTP Request Body
 
-
-### 4.5 Simulation HTTP requests
+N/A
 
 
 ### 5. Design Patterns
 
-[README.md](..%2Fgeneral-purpose%2FREADME.md)
+
+Dependency inversion: Classes of one layer don't use specific implementations of a class from another layer (aside from domain); instead an interface defines a contract for how communications are made.
+
+Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file
+
+Single Responsibility (partially) - for each domain entity, there is a dedicated controller, service, repository (interface) definition that deals with/processes/handles operations related to that domain entity, and no other.
+
+DTO: DTO's are used to transfer information between the different layers
+
+Repository Pattern: The Repository pattern is used to abstract and encapsulate data access and database operations. It provides a consistent API for accessing data, which can be implemented differently in different layers.
+
+
 
 ### 6.Test
 

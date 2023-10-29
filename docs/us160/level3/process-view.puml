@@ -60,13 +60,13 @@ end box
                     svc --> ctrl : dto
                 deactivate svc
 
-                ctrl --> r : 201
+                ctrl --> r : 200
             deactivate ctrl
 
 
 
 
-    [<--r: Created
+    [<--r: 200 OK
 deactivate r
     end
 'deactivate [

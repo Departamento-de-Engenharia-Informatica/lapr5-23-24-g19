@@ -108,3 +108,7 @@ Authorization required : Fleet Manager
     + The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
 
 - DTO: DTO's are used to transfer information between the different layers
+
+- Repository Pattern: The Repository pattern is used to abstract and encapsulate data access and database operations. It provides a consistent API for accessing data, which can be implemented differently in different layers.
+
+

@@ -95,6 +95,13 @@ package system {
         'package "Services" {
         '}
     }
+
+    package "DTO" {
+        interface IPassageDTO
+
+    }
+    AppServicePassage -up-> IPassageDTO
+    ControllerPassage -up-> IPassageDTO
 }
 
 @enduml

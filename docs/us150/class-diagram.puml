@@ -102,9 +102,14 @@ package system {
 
         AppServiceBuilding ..> Building
 
-        'package "Services" {
-        '}
     }
+
+    package "DTO" {
+        interface IBuildingDTO
+
+    }
+    AppServiceBuilding -up-> IBuildingDTO
+    ControllerBuilding -up-> IBuildingDTO
 }
 
 @enduml
