@@ -4,6 +4,7 @@ import { Container } from 'typedi'
 
 import config from '../../../config'
 import IRobotTypeController from '../../controllers/IControllers/IRobotTypeController'
+import middlewares from '../middlewares'
 
 const route = Router()
 
@@ -20,7 +21,7 @@ export default (app: Router) => {
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
                 taskTypes: Joi.array().items(Joi.string()).min(1).required()}),
-        }),
+        }),middlewares.isAuth,middlewares.attachCurrentUser,middlewares.checkFleetManager,
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )
 }
