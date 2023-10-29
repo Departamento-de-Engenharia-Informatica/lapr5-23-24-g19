@@ -27,7 +27,7 @@ List buildings within a min and max floors
 - [Logical View](../general-purpose/level3/logical-view.svg)
 - [Process View](./level3/process-view.svg)
 - [Implementation View](../general-purpose/level3/implementation-view.svg)
-- [Class Diagram](./class-diagram.svg)
+- [Class Diagram](./level3/class-diagram.svg)
 
 ## 4. HTTP
 
