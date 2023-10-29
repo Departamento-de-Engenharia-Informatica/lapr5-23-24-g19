@@ -3,26 +3,57 @@ import { describe, it } from 'mocha'
 import { TaskType } from './taskType'
 
 describe('TaskType', () => {
-    it('should create a valid task type', () => {
-        const validTaskTypeValue = 'Test Task Type'
-        const taskType = TaskType.create({ value: validTaskTypeValue })
+    it('should create surveillence task type, unsensitive case', () => {
+        const validTaskTypeValue = 'SurVeIllance'
+        const taskType = TaskType.toType(validTaskTypeValue)
 
-        assert.isOk(taskType.isSuccess)
+        assert.equal(taskType,TaskType.SURVEILLANCE)
     })
 
-    it('should fail when creating a task type with null or undefined value', () => {
-        const taskType1 = TaskType.create({ value: null })
-        assert.isNotOk(taskType1.isSuccess)
+    it('should create surveillence task type', () => {
+        const validTaskTypeValue = 'Surveillance'
+        const taskType = TaskType.toType(validTaskTypeValue)
 
-        const taskType2 = TaskType.create({ value: undefined })
-        assert.isNotOk(taskType2.isSuccess)
+        assert.equal(taskType,TaskType.SURVEILLANCE)
     })
+    
+    it('should trim leading and trailing whitespace from the value', () => {
+        const taskTypeValue = '   SURVEILLANCE     '
+        const taskType = TaskType.toType(taskTypeValue)
+
+        assert.equal(taskType,TaskType.SURVEILLANCE)
+    })
+    it('should parse task type to string', () => {
+        const taskTypeValue = 'SURVEILLANCE'
+        const taskType = TaskType.toString(TaskType.SURVEILLANCE)
+
+        assert.equal(taskType,taskTypeValue.trim().toUpperCase())
+    })
+    it('should create surveillence task type, unsensitive case', () => {
+        const validTaskTypeValue = 'DelivERY'
+        const taskType = TaskType.toType(validTaskTypeValue)
+
+        assert.equal(taskType,TaskType.DELIVERY)
+    })
+    it('should create surveillence task type', () => {
+        const validTaskTypeValue = 'Delivery'
+        const taskType = TaskType.toType(validTaskTypeValue)
+
+        assert.equal(taskType,TaskType.DELIVERY)
+    })
+
 
     it('should trim leading and trailing whitespace from the value', () => {
-        const taskTypeValue = '   Leading and Trailing Whitespace   '
-        const taskType = TaskType.create({ value: taskTypeValue })
+        const taskTypeValue = '   DELIVERY     '
+        const taskType = TaskType.toType(taskTypeValue)
 
-        assert.isOk(taskType.isSuccess)
-        assert.equal(taskType.getValue().value, 'Leading and Trailing Whitespace')
+        assert.equal(taskType,TaskType.DELIVERY)
+    })
+
+    it('should parse task type to string', () => {
+        const taskTypeValue = 'DELIVERY'
+        const taskType = TaskType.toString(TaskType.DELIVERY)
+
+        assert.equal(taskType,taskTypeValue.trim().toUpperCase())
     })
 })

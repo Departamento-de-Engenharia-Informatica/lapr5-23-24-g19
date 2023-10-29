@@ -23,7 +23,7 @@ describe('RobotType', () => {
         const code = RobotTypeCode.create('R001').getValue()
         const brand = RobotTypeBrand.create('RoboTech').getValue()
         const model = RobotTypeModel.create('ModelX').getValue()
-        const taskType = TaskType.create({ value: 'Cleaning' }).getValue()
+        const taskType = [TaskType.toType("delivery"), TaskType.toType("Surveillance")]
 
         const result = RobotType.create({
             code,
@@ -38,13 +38,12 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined code', () => {
         stubCreate(RobotTypeBrand)
         stubCreate(RobotTypeModel)
-        stubCreate(TaskType)
 
         const result = RobotType.create({
             code: undefined,
             brand: RobotTypeBrand.create('').getValue(),
             model: RobotTypeModel.create('').getValue(),
-            taskType: TaskType.create({ value: '' }).getValue(),
+            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
         })
 
         assert.isNotOk(result.isSuccess)
@@ -53,13 +52,12 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined brand', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeModel)
-        stubCreate(TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
             brand: undefined,
             model: RobotTypeModel.create('').getValue(),
-            taskType: TaskType.create({ value: '' }).getValue(),
+            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
         })
 
         assert.isNotOk(result.isSuccess)
@@ -68,13 +66,12 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined model', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
-        stubCreate(TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
             brand: RobotTypeBrand.create('').getValue(),
             model: undefined,
-            taskType: TaskType.create({ value: '' }).getValue(),
+            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
         })
 
         assert.isNotOk(result.isSuccess)

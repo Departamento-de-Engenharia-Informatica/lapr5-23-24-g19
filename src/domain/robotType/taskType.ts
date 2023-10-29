@@ -5,11 +5,11 @@ export enum TaskType {
 
 export namespace TaskType {
     export function toString(s: TaskType): string {
-        switch (s) {
+        switch (s.trim().toUpperCase()) {
             case TaskType.SURVEILLANCE:
-                return 'Surveillance'
+                return 'SURVEILLANCE'
             case TaskType.DELIVERY:
-                return 'Delivery'
+                return 'DELIVERY'
             default:
                 throw 'Unknown'
         }
