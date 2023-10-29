@@ -29,7 +29,7 @@ activate r
             alt building(s) not found
                 svc --> ctrl : error
                 ctrl --> r : error (404)
-                [<--r : 404: Unprocessable Content
+                [<--r : 404: Not Found
             else building(s) found
 
             loop for each buildingCode
@@ -45,7 +45,7 @@ activate r
 
                 activate map
                     map --> dto** : create()
-                    note right: dto storing building \ninformation and floor count
+                    note right : dto storing building \ninformation and floor count
                     activate dto
                         map --> svc : dto
                     deactivate dto
@@ -53,7 +53,7 @@ activate r
             end loop
                 svc --> ctrl : dtoList
                 ctrl --> r : response
-                [<-- r : 422: OK
+                [<-- r : 200: OK
             end
         deactivate svc
     deactivate ctrl
