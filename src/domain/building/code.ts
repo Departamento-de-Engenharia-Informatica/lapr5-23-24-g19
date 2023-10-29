@@ -23,6 +23,7 @@ export class BuildingCode extends ValueObject<Props> {
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message)
         }
+
         code = code.trim()
 
         if (!codeRegex.test(code)) {

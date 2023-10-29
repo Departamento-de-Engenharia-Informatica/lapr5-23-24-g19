@@ -36,7 +36,7 @@ export class MaxFloorDimensions extends ValueObject<Props> {
         }
     }
 
-    public fit (dimension: MaxFloorDimensions): boolean{
-        return this.length>=dimension.length && this.width>=dimension.width
+    public fit(dimension: MaxFloorDimensions): boolean {
+        return this.length >= dimension.length && this.width >= dimension.width
     }
 }

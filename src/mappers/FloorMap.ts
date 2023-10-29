@@ -2,7 +2,7 @@ import { Mapper } from '../core/infra/Mapper'
 import { IFloorDTO } from '../dto/IFloorDTO'
 import { Floor } from '../domain/floor/floor'
 import { FloorNumber } from '../domain/floor/floorNumber'
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { IFloorPersistence } from '../dataschema/IFloorPersistence'
 import Container from 'typedi'
@@ -36,7 +36,7 @@ export class FloorMap extends Mapper<Floor> {
                 elevators: raw.map.elevators.map(elevator => {return Coordinates.create(elevator.x,elevator.y)}),
                 rooms: raw.map.rooms.map(room => {return Coordinates.create(room.x,room.y)}),
             }as FloorMapProps)
-            
+
             if (mapOrError.isFailure) {
                 return null
             }
@@ -70,7 +70,7 @@ export class FloorMap extends Mapper<Floor> {
         }as IFloorPersistence
 
         if(map!=null && map != undefined){
-            
+
             pers.map = {
                 dimensions:{
                     length: map?.dimensions.length,

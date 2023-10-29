@@ -1,7 +1,7 @@
 import { Repo } from '../../core/infra/Repo'
 import Building from '../../domain/building/building'
 import { FloorNumber } from '../../domain/floor/floorNumber'
-import { BuildingCode } from '../../domain/building/buildingCode'
+import { BuildingCode } from '../../domain/building/code'
 import { Floor } from '../../domain/floor/floor'
 import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 

@@ -17,15 +17,15 @@ export class BuildingDescription extends ValueObject<DescriptionProps> {
         super(props)
     }
 
-    public static create(description: string): Result<BuildingDescription> {
+    static create(description: string): Result<BuildingDescription> {
         const guardResult = Guard.againstNullOrUndefined(description, 'description')
 
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message)
-        } else if (description.length > MAX_LENGTH) {
+        } else if (description.trim().length > MAX_LENGTH) {
             return Result.fail(`Description should have no more than ${MAX_LENGTH} characters`)
         }
 
-        return Result.ok(new BuildingDescription({ value: description }))
+        return Result.ok(new BuildingDescription({ value: description.trim() }))
     }
 }

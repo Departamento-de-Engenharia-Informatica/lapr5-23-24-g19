@@ -9,7 +9,7 @@ import { ElevatorMap } from '../mappers/ElevatorMap'
 import IBuildingRepo from './IRepos/IBuildingRepo'
 import IFloorRepo from './IRepos/IFloorRepo'
 
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 
 import Elevator from '../domain/elevator/Elevator'

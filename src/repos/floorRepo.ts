@@ -7,7 +7,7 @@ import { FloorMap } from '../mappers/FloorMap'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import Building from '../domain/building/building'
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence'
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { json, raw } from 'body-parser'
 

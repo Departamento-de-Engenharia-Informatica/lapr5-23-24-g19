@@ -1,6 +1,6 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 import IFloorRepo from './IRepos/IFloorRepo'
 import { IRoomDTO } from '../dto/IRoomDTO'
 import IRoomService, { ErrorResult, ErrorCode } from './IServices/IRoomService'

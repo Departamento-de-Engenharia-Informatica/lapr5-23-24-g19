@@ -7,7 +7,7 @@ import { IPassagePersistence } from '../dataschema/IPassagePersistence'
 import Container from 'typedi'
 import { IPassageDTO } from '../dto/IPassageDTO'
 import FloorRepo from '../repos/floorRepo'
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 
 

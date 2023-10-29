@@ -4,28 +4,28 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 
 import Building from '../domain/building/building'
 
-import { BuildingCode as Code } from '../domain/building/buildingCode'
-import { BuildingName as Name } from '../domain/building/buildingName'
+import { BuildingCode as Code } from '../domain/building/code'
+import { BuildingName as Name } from '../domain/building/name'
 import { BuildingDescription as Description } from '../domain/building/description'
 import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
 
 export class BuildingMap extends Mapper<Building> {
-    public static toDTO(building: Building): IBuildingDTO {
+    static toDTO(building: Building): IBuildingDTO {
         const { length, width } = building.maxFloorDimensions
         return {
             code: building.code.value,
-            name: building.name.value,
-            description: building.description.value,
+            name: building.name?.value,
+            description: building.description?.value,
             maxFloorDimensions: { length, width },
         }
     }
 
-    public static async toDomain(raw: any): Promise<Building> {
-        const code = Code.create(raw.code).getValue()
-        const name = Name.create(raw.name).getValue()
-        const description = Description.create(raw.description).getValue()
+    static toDomain(raw: any): Building {
+        const code = Code.create(raw.code).getOrThrow()
+        const name = raw.name && Name.create(raw.name).getOrThrow()
+        const description = raw.description && Description.create(raw.description).getOrThrow()
 
-        const maxFloorDimensions = MaxFloorDimensions.create(raw.maxFloorLength, raw.maxFloorWidth).getValue()
+        const maxFloorDimensions = MaxFloorDimensions.create(raw.maxFloorLength, raw.maxFloorWidth).getOrThrow()
 
         const result = Building.create(
             { code, name, description, maxFloorDimensions },
@@ -40,12 +40,12 @@ export class BuildingMap extends Mapper<Building> {
         return result.getValue()
     }
 
-    public static toPersistence(building: Building): any {
+    static toPersistence(building: Building): any {
         return {
             domainId: building.id.toString(),
             code: building.code.value,
-            name: building.name.value,
-            description: building.description.value,
+            name: building.name?.value,
+            description: building.description?.value,
             maxFloorLength: building.maxFloorDimensions.length,
             maxFloorWidth: building.maxFloorDimensions.width,
         }

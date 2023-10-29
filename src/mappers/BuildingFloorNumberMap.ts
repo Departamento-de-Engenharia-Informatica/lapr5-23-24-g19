@@ -8,8 +8,8 @@ export class BuildingFloorNumberMap extends Mapper<Building> {
         const { length, width } = building.maxFloorDimensions
         return {
             code: building.code.value,
-            name: building.name.value,
-            description: building.description.value,
+            name: building.name?.value,
+            description: building.description?.value,
             maxFloorDimensions: { length, width },
             floorNumber
         }

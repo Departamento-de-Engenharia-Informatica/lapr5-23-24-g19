@@ -5,13 +5,13 @@ import IBuildingRepo from '../services/IRepos/IBuildingRepo'
 import Building from '../domain/building/building'
 import { BuildingId } from '../domain/building/buildingId'
 import { BuildingMap } from '../mappers/BuildingMap'
-import { BuildingCode } from '../domain/building/buildingCode'
+import { BuildingCode } from '../domain/building/code'
 
 @Service()
 export default class BuildingRepo implements IBuildingRepo {
     private models: any
 
-    constructor(@Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) { }
+    constructor(@Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
@@ -41,15 +41,14 @@ export default class BuildingRepo implements IBuildingRepo {
                 return BuildingMap.toDomain(buildingCreated)
             } else {
                 buildingDocument.code = building.code.value
-                buildingDocument.name = building.name.value
-                buildingDocument.description = building.description.value
+                buildingDocument.name = building.name?.value
+                buildingDocument.description = building.description?.value
 
                 const { length, width } = building.maxFloorDimensions
                 buildingDocument.maxFloorLength = length
                 buildingDocument.maxFloorWidth = width
 
                 await buildingDocument.save()
-
                 return building
             }
         } catch (err) {
@@ -57,7 +56,7 @@ export default class BuildingRepo implements IBuildingRepo {
         }
     }
 
-    public async findByCode(code: BuildingCode): Promise<Building> {
+    async findByCode(code: BuildingCode): Promise<Building> {
         const record = await this.buildingSchema.findOne({ code: code.value })
 
         if (record != null) {
@@ -67,13 +66,13 @@ export default class BuildingRepo implements IBuildingRepo {
         }
     }
 
-    public async findAll(): Promise<Building[]> {
-        const records = await this.buildingSchema.find();
+    async findAll(): Promise<Building[]> {
+        const doc = await this.buildingSchema.find()
 
-        if (records.length === 0) {
-          return []; // Return an empty array when there are no records
+        if (doc.length === 0) {
+            return []
         }
-        const buildingList = await Promise.all(records.map(record => BuildingMap.toDomain(record)));
-        return buildingList;
-      }
+
+        return doc.map(b => BuildingMap.toDomain(b))
+    }
 }
