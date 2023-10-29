@@ -6,12 +6,6 @@ As a fleet manager, I intend to add a new type of robot, specifying its designat
 
 ### 2. Customer Specifications and Clarifications
 
-**From the specifications document:**
-
-
-
-**From the client clarifications:**
-
 > **Question:** Bom dia estimando cliente,
 A minha dúvida é em relação às tarefas e às suas definições.
 Existem diferentes tipos de tarefas, por isso, cada uma terá os seus atributos. No entanto, que atributos definem uma tarefa em geral? Apenas a sua designação?
@@ -61,18 +55,28 @@ Cumprimentos
 
 ### 3. Diagrams
 
-![level1](level1/process-view.svg)
-![level2](level2/process-view.svg)
-![level3](level3/process-view.svg)
-![level3](level3/class-diagram.svg)
+### Level 1
+
+- [Logical View](../general-purpose/level1/logical-view.svg)
+- [Process View](./level1/process-view.svg)
+
+### Level 2
+- [Logical View](../general-purpose/level2/logical-view.svg)
+- [Process View](./level2/process-view.svg)
+
+### Level 3
+- [Logical View](../general-purpose/level3/logical-view.svg)
+- [Process View](./level3/process-view.svg)
+- [Implementation View](../general-purpose/level3/implementation-view.svg)
+- [Class Diagram](./level3/class-diagram.svg)
 
 ### 4. HTTP
 
 ### 4.1 HTTP Requests
 
-|   Method   |                       HTTP request                        |                        Description                        |
-|:----------:|:---------------------------------------------------------:|:---------------------------------------------------------:|
-| createRobotType | **POST** /robottypes | RobotType Route calls method createRobotType in createRobotType |
+|   Method   |                       HTTP request                        |
+|:----------:|:---------------------------------------------------------:|
+| POST |  /robottypes |
 
 ### 4.2 HTTP Response
 | Status code |      Description      |
@@ -94,3 +98,13 @@ Authorization required : Fleet Manager
 ![postman](README/postman_robottype1.JPG)
 ![postman](README/postman_robottype2.JPG)
 ![mongo](README/mongo_robottypes.JPG)
+
+### 5. Design Patterns
+- Dependency inversion: Classes of one layer don't use specific implementations of a class from another layer (aside from domain); instead an interface defines a contract for how communications are made.
+
+- Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file.
+
+- Single Responsibility (partially) - for each domain entity, there is a dedicated controller, service, repository (interface) definition that deals with/processes/handles operations related to that domain entity, and no other.
+    + The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
+
+- DTO: DTO's are used to transfer information between the different layers
