@@ -16,45 +16,39 @@ List buildings within a min and max floors
 
 ### Level 1
 
-Process View
-
-![process-view.svg](level1%2Fprocess-view.svg)
+- [Logical View](../general-purpose/level1/logical-view.svg)
+- [Process View](./level1/process-view.svg)
 
 ### Level 2
-
-Process View
-
-![process-view.svg](level2%2Fprocess-view.svg)
+- [Logical View](../general-purpose/level2/logical-view.svg)
+- [Process View](./level2/process-view.svg)
 
 ### Level 3
-
-Process View
-
-![process-view.svg](level3%2Fprocess-view.svg)
-
-Class Diagram
-
-![class-diagram.svg](level3%2Fclass-diagram.svg)
+- [Logical View](../general-purpose/level3/logical-view.svg)
+- [Process View](./level3/process-view.svg)
+- [Implementation View](../general-purpose/level3/implementation-view.svg)
+- [Class Diagram](./class-diagram.svg)
 
 ## 4. HTTP
 
 ## 4.1 HTTP Requests
 
-|    Method    | HTTP request |          URI          |
-|:------------:|:------------:|:---------------------:|
-| buildings    |   **GET**    |  /buildings/?minFloors={min}&maxFloors={max}|
+| Method | HTTP request |
+|:------:|:------------:|
+| GET    |   /buildings/?minFloors={min}&maxFloors={max}|
 
 
 ## 4.2 HTTP Response
+
 | Status code |   Description   |
 |:-----------:|:---------------:|
+|   **200**   | list of buildings with min and max floors |
 |   **404**   | building(s) not found |
-|   **200**   | building(s) found |
 
 
 ### 4.3 HTTP Request Body
 
-n/a
+None; GET methods should not require a body
 
 ### 4.4 HTTP Response Body
 
@@ -69,9 +63,12 @@ n/a
 ```
 
 ### 5. Design Patterns
+- Dependency inversion: Classes of one layer don't use specific implementations of a class from another layer (aside from domain); instead an interface defines a contract for how communications are made.
 
-[README.md](..%2Fgeneral-purpose%2FREADME.md)
+- Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file.
 
+- Single Responsibility (partially) - for each domain entity, there is a dedicated controller, service, repository (interface) definition that deals with/processes/handles operations related to that domain entity, and no other.
+    + The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
 
-### 6.Test
+- DTO: DTO's are used to transfer information between the different layers
 
