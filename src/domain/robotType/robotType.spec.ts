@@ -38,6 +38,8 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined code', () => {
         stubCreate(RobotTypeBrand)
         stubCreate(RobotTypeModel)
+        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
+        
 
         const result = RobotType.create({
             code: undefined,
@@ -52,6 +54,7 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined brand', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeModel)
+        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
@@ -66,6 +69,7 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined model', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
+        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
@@ -81,6 +85,7 @@ describe('RobotType', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
         stubCreate(RobotTypeModel)
+        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),

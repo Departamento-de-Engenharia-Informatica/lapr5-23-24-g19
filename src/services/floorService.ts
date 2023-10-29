@@ -18,6 +18,8 @@ import { FloorPassageMap } from '../mappers/FloorPassageMap'
 import { ErrorCode, ErrorResult } from './IServices/IFloorService'
 import config from '../../config'
 import { Inject, Service } from 'typedi'
+import { FloorMapContent } from '../domain/floor/floorMap'
+import { Coordinates } from '../domain/floor/Coordinates'
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -229,24 +231,38 @@ export default class FloorService implements IFloorService {
                 BuildingCode.create(dto.buildingCode).getValue(),
                 FloorNumber.create(dto.floorNumber).getValue(),
             )
-
             if (floor === null) {
                 return Result.fail<IFloorMapDTO>('Floor not found')
             }
-
-            if (
-                !floor.building.fit(MaxFloorDimensions.create(dto.dimensions.length, dto.dimensions.width).getValue())
-            ) {
-                return Result.fail<IFloorMapDTO>('Dimensions not valid')
+            const map = this.createMap(dto)
+            if (map.isFailure) {
+                return Result.fail<IFloorMapDTO>(map.errorValue())
+            }
+                
+            if (!floor.addMap(map.getValue())) {
+                return Result.fail<IFloorMapDTO>('Map dimensions too large')
             }
 
-            if (!floor.addMap(dto)) {
-                return Result.fail<IFloorMapDTO>('Map could not be created')
-            }
             const saved = await this.floorRepo.save(floor)
             return Result.ok<IFloorMapDTO>(FloorMap.toDTOFloorMap(saved))
         } catch (e) {
             throw e
+        }
+    }
+
+    private createMap(dto:IFloorMapDTO):Result<FloorMapContent>{
+        const mapOrError = FloorMapContent.create({
+            dimensions: MaxFloorDimensions.create(dto.dimensions.length, dto.dimensions.width).getValue(),
+            mapContent: dto.mapContent,
+            passages: dto.passages.map(passage => Coordinates.create(passage.x, passage.y).getValue()),
+            elevators: dto.elevators.map(elevator => Coordinates.create(elevator.x, elevator.y).getValue()),
+            rooms: dto.rooms.map(room => Coordinates.create(room.x, room.y).getValue())
+        });
+        if(mapOrError.isSuccess){
+            return Result.ok(mapOrError.getValue())
+        }else{
+
+            return Result.fail("Map does not meet requirements")
         }
     }
 
