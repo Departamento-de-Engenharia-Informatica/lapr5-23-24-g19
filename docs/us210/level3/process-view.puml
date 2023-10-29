@@ -28,8 +28,8 @@ activate r
 
             alt building not found
                 svc --> ctrl : error
-                ctrl --> r : error(422)
-                [<-- r : 422: Unprocessable Content
+                ctrl --> r : error(404)
+                [<-- r : 404: Not Found
             else building found
                 svc -> repo : findByBuildingCode()
                 note right : tries to find floors
@@ -41,8 +41,8 @@ activate r
 
                 alt floors not found
                     svc --> ctrl : error
-                    ctrl --> r : error (422)
-                    [<-- r : 422: Unprocessable Content
+                    ctrl --> r : error (404)
+                    [<-- r : 404: Not Found
                 else floor created successfully
 
                 loop for each floor
