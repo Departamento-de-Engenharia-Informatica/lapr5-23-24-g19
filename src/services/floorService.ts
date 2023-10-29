@@ -208,7 +208,6 @@ export default class FloorService implements IFloorService {
             }
 
             const floors = await this.floorRepo.findByBuildingCode(code)
-            console.log(floors)
 
             if (floors.length == 0) {
                 return left({
