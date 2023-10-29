@@ -8,10 +8,10 @@ participant "MD" as mdr
 
 activate mdr
 alt building not found
-    [<--mdr : response code: 422
+    [<--mdr : response code: 404
 else building found
     alt floors not found
-        [<--mdr : response code: 422
+        [<--mdr : response code: 404
     else floors found
         [<--mdr : response code: 200
     end
