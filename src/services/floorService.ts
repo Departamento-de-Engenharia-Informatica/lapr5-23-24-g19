@@ -225,26 +225,35 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async uploadMap(dto: IFloorMapDTO): Promise<Result<IFloorMapDTO>> {
+    public async uploadMap(dto: IFloorMapDTO): Promise<Either<ErrorResult,IFloorMapDTO>> {
         try {
             const floor = await this.floorRepo.findByCodeNumber(
                 BuildingCode.create(dto.buildingCode).getValue(),
                 FloorNumber.create(dto.floorNumber).getValue(),
             )
             if (floor === null) {
-                return Result.fail<IFloorMapDTO>('Floor not found')
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Floor not found"
+                })
             }
             const map = this.createMap(dto)
             if (map.isFailure) {
-                return Result.fail<IFloorMapDTO>(map.errorValue())
+                return left({
+                    errorCode: ErrorCode.BusinessRuleViolation,
+                    message: "Map does not meet requirements"
+                })
             }
                 
             if (!floor.addMap(map.getValue())) {
-                return Result.fail<IFloorMapDTO>('Map dimensions too large')
+                return left({
+                    errorCode: ErrorCode.BusinessRuleViolation,
+                    message: "Map too large"
+                })
             }
 
             const saved = await this.floorRepo.save(floor)
-            return Result.ok<IFloorMapDTO>(FloorMap.toDTOFloorMap(saved))
+            return right(FloorMap.toDTOFloorMap(saved))
         } catch (e) {
             throw e
         }

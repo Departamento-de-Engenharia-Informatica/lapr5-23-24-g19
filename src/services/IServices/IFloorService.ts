@@ -21,5 +21,5 @@ export default interface IFloorService {
     putFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>>
     floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>>
-    uploadMap(floorMapDto: IFloorMapDTO): Promise<Result<IFloorDTO>>
+    uploadMap(floorMapDto: IFloorMapDTO): Promise<Either<ErrorResult,IFloorDTO>>
 }

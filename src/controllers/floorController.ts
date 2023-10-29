@@ -100,14 +100,16 @@ export default class FloorController implements IFloorController {
             dto.buildingCode = req.params.id
             dto.floorNumber = parseInt(req.params.floorNumber)
 
-            const mapOrError = (await this.floorServiceInstance.uploadMap(dto)) as Result<IFloorMapDTO>
+            const result = await this.floorServiceInstance.uploadMap(dto)
 
-            if (mapOrError.isFailure) {
-                return res.status(402).send()
+            if (result.isLeft()) {
+                const error = result.value as ErrorResult
+                let ret: number = this.resolveHttpCode(error.errorCode)
+                return res.status(ret).send(error.message)
             }
 
-            const floorDTO = mapOrError.getValue()
-            return res.json(floorDTO).status(201)
+            const message = result.value as IUpdateFloorDTO
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
