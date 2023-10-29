@@ -12,6 +12,7 @@ import { RobotTypeModel } from '../robotType/robotTypeModel'
 import { TaskType } from '../robotType/taskType'
 import { Result } from '../../core/logic/Result'
 import { Description } from '../description'
+import { RobotState } from './state'
 
 describe('Robot', () => {
     const sinon = createSandbox()
@@ -155,5 +156,100 @@ describe('Robot', () => {
         })
 
         assert.isNotOk(result.isSuccess)
+    })
+
+    it('should be able to inhibit robot', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        let value = result.getValue().state
+        assert.equal(value, RobotState.ENABLED)
+
+        result.getValue().inhibit()
+
+        value = result.getValue().state
+        assert.equal(value, RobotState.DISABLED)
+
+    })
+
+    it('should be able to get code value', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        const value = result.getValue().code
+
+        assert.equal(value, result.getValue().code)
+    })
+
+    it('should be able to get nickname value', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        const value = result.getValue().nickname
+
+        assert.equal(value, result.getValue().nickname)
+    })
+
+    it('should be able to get serial number value', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        const value = result.getValue().serialNumber
+
+        assert.equal(value, result.getValue().serialNumber)
+    })
+
+    it('should be able to get type value', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        const value = result.getValue().type
+
+        assert.equal(value, result.getValue().type)
+    })
+
+    it('should be able to get description value', () => {
+        const result = Robot.create({
+            code,
+            nickname: nick,
+            serialNumber: serial,
+            type,
+        })
+
+        assert.isOk(result.isSuccess)
+
+        const value = result.getValue().description
+
+        assert.equal(value, result.getValue().description)
     })
 })
