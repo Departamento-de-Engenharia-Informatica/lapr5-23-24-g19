@@ -23,7 +23,7 @@ export default class BuildingController implements IBuildingController {
                 return res.status(ret).send(error.message)
             }
             const message = result.value as IBuildingDTO
-            return res.status(201).send(message);
+            return res.status(201).send(JSON.stringify(message))
         } catch (e) {
             return next(e)
         }
@@ -38,7 +38,7 @@ export default class BuildingController implements IBuildingController {
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
-                return res.status(ret).send(error.message)
+                return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO
@@ -58,7 +58,7 @@ export default class BuildingController implements IBuildingController {
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
-                return res.status(ret).send(error.message)
+                return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO
@@ -74,7 +74,7 @@ export default class BuildingController implements IBuildingController {
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
-                return res.status(ret).send(error.message)
+                return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO[]
@@ -101,7 +101,7 @@ export default class BuildingController implements IBuildingController {
             if (result.isLeft()) {
                 const error= result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
-                return res.status(ret).send(error.message)
+                return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO[]
@@ -115,7 +115,7 @@ export default class BuildingController implements IBuildingController {
     private resolveHttpCode(result: ErrorCode) {
         let ret: number
         switch (result) {
-            case ErrorCode.BussinessRuleViolation:
+            case ErrorCode.BusinessRuleViolation:
                 ret = 422
                 break
             case ErrorCode.NotFound:
