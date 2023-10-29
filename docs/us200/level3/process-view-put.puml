@@ -13,7 +13,7 @@ participant "dto:\nDTO" as dto
 participant "Repository" as repo
 database "Database" as db
 
-[--> r: PUT (buildings/{id}/floors/{floor})
+[-> r: PUT (buildings/{id}/floors/{floor})
 activate r
     r -> ctrl : putFloor(req,res,...)
         activate ctrl
@@ -23,7 +23,9 @@ activate r
                 activate repo
                     repo -> db : find()
                     activate db
+                        db --> repo : building
                     deactivate db
+                    repo --> svc : building
                 deactivate repo
 
                 alt building not found
@@ -35,7 +37,9 @@ activate r
                     activate repo
                         repo -> db : find()
                         activate db
+                            db --> repo : floor
                         deactivate db
+                        repo --> svc : floor
                     deactivate repo
 
                     alt floor not found
