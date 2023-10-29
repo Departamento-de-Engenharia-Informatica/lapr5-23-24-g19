@@ -197,7 +197,6 @@ export default class FloorService implements IFloorService {
 
     public async getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>> {
         try {
-            console.log('entrou service')
             const code = BuildingCode.create(buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(code)
 
@@ -207,7 +206,6 @@ export default class FloorService implements IFloorService {
                     message: "Building not found"
                 })
             }
-            console.log("vamos fazer find de floors")
 
             const floors = await this.floorRepo.findByBuildingCode(code)
             console.log(floors)
