@@ -13,6 +13,7 @@ import { ElevatorBrand as Brand } from './brand'
 import { ElevatorModel as Model } from './model'
 import { ElevatorDescription as Description } from './description'
 import { ElevatorSerialNumber as SerialNumber } from './serialNumber'
+import { FloorNumber } from '../floor/floorNumber'
 
 describe('Elevator', () => {
     const sinon = createSandbox()
@@ -180,5 +181,245 @@ describe('Elevator', () => {
         })
 
         assert.isOk(result.isSuccess)
+    })
+
+    it('should be able to get building', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        assert.equal(building, result.getValue().building)
+    })
+
+    it('should be able to get identifier', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        assert.equal(identifier, result.getValue().identifier)
+    })
+
+    it('should be able to get floors', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        assert.equal(floor, result.getValue().floors[0])
+    })
+
+    it('should be able to get brand', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const brand = Brand.create('Android').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: brand,
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        assert.equal(brand, result.getValue().brand)
+    })
+
+    it('should be able to get model', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const brand = Brand.create('Android').getValue()
+        const model = Model.create('Version2').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: brand,
+            model: model,
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        assert.equal(model, result.getValue().model)
+    })
+
+    it('should be able to get serial number', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const serialNumber = SerialNumber.create('SERIAL123').getValue()
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: serialNumber,
+        })
+
+        assert.equal(serialNumber, result.getValue().serialNumber)
+    })
+
+    it('should be able to get description', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const description = Description.create('TestDescription').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+
+            description
+        })
+
+        assert.equal(description, result.getValue().description)
+    })
+
+    it('should be able to set brand', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const brand = Brand.create('Android').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        result.getValue().brand = brand
+
+        assert.equal(brand, result.getValue().brand)
+    })
+
+    it('should be able to set model', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const model = Model.create('iOS').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        result.getValue().model = model
+
+        assert.equal(model, result.getValue().model)
+    })
+
+    it('should be able to set serial number', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const serialNumber = SerialNumber.create('SERIAL123').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        result.getValue().serialNumber = serialNumber
+
+        assert.equal(serialNumber, result.getValue().serialNumber)
+    })
+
+    it('should be able to set description', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const description = Description.create('description').getValue()
+        const newDescription = Description.create('newDescription').getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+
+            description
+        })
+
+        result.getValue().description = newDescription
+
+        assert.equal(newDescription, result.getValue().description)
+    })
+
+    it('should be able to set floors', () => {
+        stubCreate(Brand)
+        stubCreate(Model)
+        stubCreate(SerialNumber)
+
+        const newFloor = Floor.create({
+            building: building,
+            floorNumber: FloorNumber.create(4).getValue()
+        }).getValue()
+
+        let result = Elevator.create({
+            building,
+            identifier,
+            floors: [floor],
+            brand: Brand.create('').getValue(),
+            model: Model.create('').getValue(),
+            serialNumber: SerialNumber.create('').getValue(),
+        })
+
+        result.getValue().floors = [newFloor]
+
+        assert.equal(newFloor, result.getValue().floors[0])
     })
 })
