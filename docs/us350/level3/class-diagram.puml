@@ -106,9 +106,9 @@ package system {
     package "DTO" {
         interface IRobotTypeDTO
 
+        AppServiceRobotType -up-> IRobotTypeDTO
+        ControllerRobotType -up-> IRobotTypeDTO
     }
-    AppServiceRobotType -up-> IRobotTypeDTO
-    ControllerRobotType -up-> IRobotTypeDTO
 }
 
 @enduml
