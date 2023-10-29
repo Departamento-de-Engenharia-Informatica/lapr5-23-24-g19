@@ -53,13 +53,15 @@ None; GET methods should not require a body
 ### 4.4 HTTP Response Body
 
 ```json
-{
-    code: 'D',
-    name: 'Building D',
-    description: 'Example building',
-    maxFloorDimensions: { length: 10, width: 10 },
-    floorNumber: 5
-}
+[
+    {
+        "code": "D",
+        "name": "Building D",
+        "description": "Example building",
+        "maxFloorDimensions": { "length": 10, "width": 10 },
+        "floorNumber": 5
+    }
+]
 ```
 
 ### 5. Design Patterns
