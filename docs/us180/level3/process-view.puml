@@ -23,7 +23,10 @@ activate r
                 note right: floor repository
                 repo -> db : find()
                 activate db
+                    db --> repo : dto
+                    note right : dto contains buildingCode and floorCount
                 deactivate db
+                repo --> svc : dto
             deactivate repo
 
             alt building(s) not found
@@ -38,13 +41,15 @@ activate r
                     note right : building repository
                     repo -> db : find()
                     activate db
+                         db --> repo : building
                     deactivate db
+                    repo --> svc : building
                 deactivate repo
 
                 svc -> map : toDTO(building, floorCount)
 
                 activate map
-                    map --> dto** : create()
+                    map -> dto** : create()
                     note right : dto storing building \ninformation and floor count
                     activate dto
                         map --> svc : dto
