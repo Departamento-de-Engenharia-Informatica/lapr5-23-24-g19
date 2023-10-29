@@ -168,7 +168,7 @@ describe('Robot controller:', () => {
         })
     })
 
-    describe('createRobot(): robotController + robotService integration test using spy on roleService', () => {
+    describe('inhibitRobot(): robotController + robotService integration test using spy on roleService', () => {
         it('should work with correct values', async () => {
             const body = {
                 "id": 'Robot12',
