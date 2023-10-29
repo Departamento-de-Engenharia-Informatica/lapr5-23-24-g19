@@ -30,6 +30,10 @@ pnpm-lock.yaml
 # Windows
 Thumbs.db
 
+#Tests
+.nyc_output/
+coverage/
+
 # Other
 
 docs/**/*.png
