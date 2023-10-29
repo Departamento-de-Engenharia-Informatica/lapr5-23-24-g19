@@ -36,6 +36,10 @@ export class FloorMapContent extends ValueObject<FloorMapProps> {
         return this.props.dimensions
     }
 
+    set dimensions(dimensions: MaxFloorDimensions){
+        this.dimensions = dimensions
+    }
+
     private constructor(props: FloorMapProps) {
         super(props)
     }
@@ -44,7 +48,7 @@ export class FloorMapContent extends ValueObject<FloorMapProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.dimensions, argumentName: 'dimensions' },
             { argument: props.mapContent, argumentName: 'mapContent' },
-            
+        
             { argument: props.elevators, argumentName: 'buildingDescription' },
             { argument: props.passages, argumentName: 'buildingDescription' },
             { argument: props.rooms, argumentName: 'buildingDescription' },

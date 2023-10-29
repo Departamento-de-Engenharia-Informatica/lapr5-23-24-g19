@@ -32,6 +32,9 @@ export class Floor extends AggregateRoot<FloorProps> {
     get floorNumber(): FloorNumber {
         return this.props.floorNumber
     }
+    get map(): FloorMapContent {
+        return this.props.map
+    }
 
     set floorNumber(floorNumber: FloorNumber) {
         this.props.floorNumber = floorNumber
@@ -67,21 +70,13 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.building.equals(floor2.building)
     }
 
-    public addMap(dto: IFloorMapDTO): boolean{
-
-        const mapOrError = FloorMapContent.create({
-            dimensions: MaxFloorDimensions.create(dto.dimensions.length, dto.dimensions.width).getValue(),
-            mapContent: dto.mapContent,
-            passages: dto.passages.map(passage => Coordinates.create(passage.x, passage.y).getValue()),
-            elevators: dto.elevators.map(elevator => Coordinates.create(elevator.x, elevator.y).getValue()),
-            rooms: dto.rooms.map(room => Coordinates.create(room.x, room.y).getValue())
-        });
-
-        if(mapOrError.isSuccess){
-            this.props.map=mapOrError.getValue()
+    public addMap(newMap: FloorMapContent): boolean{
+        if(this.building.fit(newMap.dimensions)){
+            this.props.map = newMap
             return true
         }else{
             return false
         }
     }
+    
 }
