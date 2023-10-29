@@ -80,6 +80,13 @@ package system {
         AppServiceElevator .up.> IRepoElevator
     }
 
+    package "DTO" as p_DTO {
+        interface IElevatorDTO
+
+        ControllerElevator ..> IElevatorDTO
+        AppServiceElevator ..> IElevatorDTO
+    }
+
     package "Entities/Core/Domain" {
         package "Aggregates" {
 

@@ -9,6 +9,9 @@ participant "Repository" as repo
 participant "elevator:\nElevator" as elevator
 participant "Mapper" as map
 participant "dto:\nDTO" as dto
+participant "Repository" as repo
+
+database "Database" as db
 
 
 [-> r : POST /buildings/{id}/elevators
@@ -22,7 +25,11 @@ activate r
 
             svc -> repo : findByCode(buildingCode)
             activate repo
-                repo ->] : find()
+                repo -> db : find()
+                activate db
+                    db --> repo : building
+                deactivate db
+                repo --> svc : building
             deactivate repo
 
             alt building not found
@@ -31,9 +38,13 @@ activate r
                 [<-- r : 404: Not found
             else building found
 
-                svc -> repo: findFloor(building,floorNumber)
+                svc -> repo : findFloor(building,floorNumber)
                 activate repo
-                    repo ->] : find()
+                    repo -> db: find()
+                    activate db
+                        db --> repo : floor
+                    deactivate db
+                    repo --> svc : floor
                 deactivate repo
 
                 alt floor(s) not found
@@ -53,7 +64,9 @@ activate r
                     else elevator created successfully
                         svc -> repo : save(elevator)
                         activate repo
-                            repo ->] : save()
+                            repo -> db: save()
+                            activate db
+                            deactivate db
                         deactivate repo
 
                         svc -> map : toDTO(elevator)
