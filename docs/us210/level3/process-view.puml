@@ -12,7 +12,7 @@ participant "dto:\nDTO" as dto
 participant "Repository" as repo
 database "Database" as db
 
-[--> r: GET /buildings/{id}/floors
+[-> r: GET /buildings/{id}/floors
 activate r
     r -> ctrl : getFloors()
     activate ctrl
@@ -23,7 +23,9 @@ activate r
             activate repo
                 repo -> db : find()
                 activate db
+                    db --> repo : building
                 deactivate db
+                repo --> svc : building
             deactivate repo
 
             alt building not found
@@ -36,14 +38,16 @@ activate r
                 activate repo
                     repo -> db : find()
                     activate db
+                        db --> repo : floors
                     deactivate db
+                    repo --> svc : floors
                 deactivate repo
 
                 alt floors not found
                     svc --> ctrl : error
                     ctrl --> r : error (404)
                     [<-- r : 404: Not Found
-                else floor created successfully
+                else floors found
 
                 loop for each floor
                     svc -> map : toDTO(floor)
