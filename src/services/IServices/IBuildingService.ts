@@ -7,7 +7,7 @@ export enum ErrorCode{
     NotFound,
     RequirementsNotMatch,
     AlreadyExists,
-    BussinessRuleViolation
+    BusinessRuleViolation
 }
 
 export type ErrorResult = {

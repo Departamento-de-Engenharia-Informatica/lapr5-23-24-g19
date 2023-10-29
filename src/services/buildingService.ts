@@ -29,16 +29,16 @@ export default class BuildingService implements IBuildingService {
     public async createBuilding(dto: IBuildingDTO): Promise<Either<ErrorResult, IBuildingDTO>> {
         try {
             const code = Code.create(dto.code).getOrThrow()
-            const name = dto.name && Name.create(dto.name).getValue()
-            const description = dto.description && BuildingDescription.create(dto.description).getValue()
+            const name = dto.name && Name.create(dto.name).getOrThrow()
+            const description = dto.description && BuildingDescription.create(dto.description).getOrThrow()
 
             const { length, width } = dto.maxFloorDimensions
-            const maxFloorDimensions = MaxFloorDimensions.create(length, width).getValue()
+            const maxFloorDimensions = MaxFloorDimensions.create(length, width).getOrThrow()
 
             const result = Building.create({ code, name, description, maxFloorDimensions })
             if (result.isFailure) {
                 return left({
-                    errorCode: ErrorCode.BussinessRuleViolation,
+                    errorCode: ErrorCode.BusinessRuleViolation,
                     message: 'Building parameters do not meet requirements',
                 })
             }
@@ -56,8 +56,8 @@ export default class BuildingService implements IBuildingService {
             return right(BuildingMap.toDTO(saved))
         } catch (e) {
             return left({
-                errorCode: ErrorCode.BussinessRuleViolation,
-                message: 'Error businessRuleViolation',
+                errorCode: ErrorCode.BusinessRuleViolation,
+                message: e.message
             })
         }
     }
@@ -67,7 +67,7 @@ export default class BuildingService implements IBuildingService {
             const bCode = Code.create(code)
             if (bCode.isFailure) {
                 return left({
-                    errorCode: ErrorCode.BussinessRuleViolation,
+                    errorCode: ErrorCode.BusinessRuleViolation,
                     message: 'Building code not valid',
                 })
             }
@@ -138,7 +138,7 @@ export default class BuildingService implements IBuildingService {
             const bCode = Code.create(dto.code)
             if (bCode.isFailure) {
                 return left({
-                    errorCode: ErrorCode.BussinessRuleViolation,
+                    errorCode: ErrorCode.BusinessRuleViolation,
                     message: 'Building Code does not meet requirements',
                 } as ErrorResult)
             }
@@ -157,7 +157,7 @@ export default class BuildingService implements IBuildingService {
                 const nameEdit = Name.create(dto.name)
                 if (nameEdit.isFailure) {
                     return left({
-                        errorCode: ErrorCode.BussinessRuleViolation,
+                        errorCode: ErrorCode.BusinessRuleViolation,
                         message: 'Building Name does not meet requirements',
                     } as ErrorResult)
                 }
@@ -168,7 +168,7 @@ export default class BuildingService implements IBuildingService {
                 const descrEdit = BuildingDescription.create(dto.description)
                 if (descrEdit.isFailure) {
                     return left({
-                        errorCode: ErrorCode.BussinessRuleViolation,
+                        errorCode: ErrorCode.BusinessRuleViolation,
                         message: 'Building Descr does not meet requirements',
                     } as ErrorResult)
                 }
@@ -182,7 +182,7 @@ export default class BuildingService implements IBuildingService {
                 const maxFloor = MaxFloorDimensions.create(length, width)
                 if (maxFloor.isFailure) {
                     return left({
-                        errorCode: ErrorCode.BussinessRuleViolation,
+                        errorCode: ErrorCode.BusinessRuleViolation,
                         message: 'Building Dimensios does not meet requirements',
                     } as ErrorResult)
                 }
@@ -194,7 +194,7 @@ export default class BuildingService implements IBuildingService {
             return right(BuildingMap.toDTO(buildingRes))
         } catch (e) {
             return left({
-                errorCode: ErrorCode.BussinessRuleViolation,
+                errorCode: ErrorCode.BusinessRuleViolation,
                 message: 'Business rule violation',
             } as ErrorResult)
         }
