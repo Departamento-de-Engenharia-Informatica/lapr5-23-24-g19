@@ -39,7 +39,6 @@ async function mkPassageFloor() {
 
     await post(`/buildings/${bPayload.code}/floors`, fPayload, (tx, rx) => {
         tx.buildingCode = bPayload.code
-        rx.floorNumber = parseInt(rx.floorNumber)
         expect(rx).to.deep.equal(tx)
     })
 
@@ -91,9 +90,6 @@ describe('create passage', () => {
         const payload = { floor1, floor2 }
 
         await post(`/passages`, payload, (tx, rx) => {
-            rx.floor1.floorNumber = parseInt(rx.floor1.floorNumber)
-            rx.floor2.floorNumber = parseInt(rx.floor2.floorNumber)
-
             expect(rx).to.deep.equal(tx)
         })
 

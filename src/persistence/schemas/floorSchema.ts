@@ -46,7 +46,7 @@ const Floor = new mongoose.Schema(
         },
 
         floorNumber: {
-            type: String,
+            type: Number,
             required: true,
             index: true,
         },

@@ -95,7 +95,6 @@ describe('create elevator', () => {
             // console.log(fPayload.floorNumber)
             await post(`/buildings/${bPayload.code}/floors`, fPayload, (tx, rx) => {
                 tx.buildingCode = bPayload.code
-                rx.floorNumber = parseInt(rx.floorNumber)
                 expect(rx).to.deep.equal(tx)
             })
 
@@ -110,7 +109,6 @@ describe('create elevator', () => {
             tx.buildingId = bPayload.code
             tx.identifier = rx.identifier
 
-            rx.floors = rx.floors.map(f => parseInt(f))
             expect(rx).to.deep.equal(tx)
         })
 

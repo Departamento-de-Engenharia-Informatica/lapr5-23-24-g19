@@ -40,7 +40,6 @@ async function mkRoom() {
 
     await post(`/buildings/${bPayload.code}/floors`, fPayload, (tx, rx) => {
         tx.buildingCode = bPayload.code
-        rx.floorNumber = parseInt(rx.floorNumber)
         expect(rx).to.deep.equal(tx)
     })
 

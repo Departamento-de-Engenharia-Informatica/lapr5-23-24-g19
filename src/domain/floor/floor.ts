@@ -5,13 +5,9 @@ import { Result } from '../../core/logic/Result'
 import { Guard } from '../../core/logic/Guard'
 import { FloorNumber } from './floorNumber'
 
-import { IFloorDTO } from '../../dto/IFloorDTO'
-import { IFloorMapDTO } from '../../dto/IFloorMapDTO'
 import Building from '../building/building'
 import { Description } from '../description'
 import { FloorMapContent } from './floorMap'
-import { MaxFloorDimensions } from '../building/maxFloorDimensions'
-import { Coordinates } from './Coordinates'
 
 export interface FloorProps {
     building: Building
