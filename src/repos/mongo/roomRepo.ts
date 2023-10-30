@@ -1,10 +1,10 @@
 import { Service, Inject } from 'typedi'
 import { Document, Model } from 'mongoose'
-import IRoomRepo from '../services/IRepos/IRoomRepo'
-import { IRoomPersistence } from '../dataschema/IRoomPersistence'
-import Room from '../domain/room/room'
-import { RoomId } from '../domain/room/roomId'
-import { RoomMap } from '../mappers/RoomMap'
+import IRoomRepo from '../../services/IRepos/IRoomRepo'
+import { IRoomPersistence } from '../../dataschema/mongo/IRoomPersistence'
+import Room from '../../domain/room/room'
+import { RoomId } from '../../domain/room/roomId'
+import { RoomMap } from '../../mappers/RoomMap'
 
 @Service()
 export default class RoomRepo implements IRoomRepo {

@@ -3,10 +3,10 @@ import { IFloorDTO } from '../dto/IFloorDTO'
 import { Passage } from '../domain/passage/passage'
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
-import { IPassagePersistence } from '../dataschema/IPassagePersistence'
+import { IPassagePersistence } from '../dataschema/mongo/IPassagePersistence'
 import Container from 'typedi'
 import { IPassageDTO } from '../dto/IPassageDTO'
-import FloorRepo from '../repos/floorRepo'
+import FloorRepo from '../repos/mongo/floorRepo'
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 

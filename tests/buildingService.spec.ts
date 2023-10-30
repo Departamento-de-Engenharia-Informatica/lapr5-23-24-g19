@@ -22,7 +22,7 @@ describe('Building Service', () => {
         let schema = require('../src/persistence/schemas/buildingSchema').default
         Container.set('buildingSchema', schema)
 
-        let repoC = require('../src/repos/buildingRepo').default
+        let repoC = require('../src/repos/mongo/buildingRepo').default
         let repoInst = Container.get(repoC)
         Container.set('BuildingRepo', repoInst)
     })

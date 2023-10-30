@@ -7,7 +7,7 @@ import config from '../../../config'
 import IUserRepo from '../../services/IRepos/IUserRepo'
 import jwt from 'jsonwebtoken'
 import { User } from '../../domain/user'
-import { IUserPersistence } from '../../dataschema/IUserPersistence'
+import { IUserPersistence } from '../../dataschema/mongo/IUserPersistence'
 import { IUserDTO } from '../../dto/IUserDTO'
 
 /**

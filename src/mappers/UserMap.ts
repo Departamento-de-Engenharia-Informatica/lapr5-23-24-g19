@@ -10,7 +10,7 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { UserEmail } from '../domain/userEmail'
 import { UserPassword } from '../domain/userPassword'
 
-import RoleRepo from '../repos/roleRepo'
+import RoleRepo from '../repos/mongo/roleRepo'
 
 export class UserMap extends Mapper<User> {
     public static toDTO(user: User): IUserDTO {

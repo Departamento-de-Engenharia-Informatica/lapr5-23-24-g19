@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IBuildingPersistence } from '../../dataschema/IBuildingPersistence'
+import { IBuildingPersistence } from '../../dataschema/mongo/IBuildingPersistence'
 
 const Building = new mongoose.Schema(
     {

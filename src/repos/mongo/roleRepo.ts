@@ -1,12 +1,12 @@
 import { Service, Inject } from 'typedi'
 
-import IRoleRepo from '../services/IRepos/IRoleRepo'
-import { Role } from '../domain/role'
-import { RoleId } from '../domain/roleId'
-import { RoleMap } from '../mappers/RoleMap'
+import IRoleRepo from '../../services/IRepos/IRoleRepo'
+import { Role } from '../../domain/role'
+import { RoleId } from '../../domain/roleId'
+import { RoleMap } from '../../mappers/RoleMap'
 
 import { Document, FilterQuery, Model } from 'mongoose'
-import { IRolePersistence } from '../dataschema/IRolePersistence'
+import { IRolePersistence } from '../../dataschema/mongo/IRolePersistence'
 
 @Service()
 export default class RoleRepo implements IRoleRepo {

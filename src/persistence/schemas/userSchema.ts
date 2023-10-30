@@ -1,4 +1,4 @@
-import { IUserPersistence } from '../../dataschema/IUserPersistence'
+import { IUserPersistence } from '../../dataschema/mongo/IUserPersistence'
 import mongoose from 'mongoose'
 
 const User = new mongoose.Schema(

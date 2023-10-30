@@ -20,7 +20,7 @@ describe('Robot controller:', () => {
         let robotTypeSchema = require("../src/persistence/schemas/robotTypeSchema").default;
         Container.set("robotType", robotTypeSchema);
 
-        let robotTypeRepoClass = require("../src/repos/robotTypeRepo").default;
+        let robotTypeRepoClass = require("../src/repos/mongo/robotTypeRepo").default;
         let robotTypeRepo = Container.get(robotTypeRepoClass);
         Container.set("RobotTypeRepo", robotTypeRepo);
 

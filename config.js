@@ -78,19 +78,19 @@ export default {
     repos: {
         role: {
             name: 'RoleRepo',
-            path: '../repos/roleRepo',
+            path: '../repos/mongo/roleRepo',
         },
         user: {
             name: 'UserRepo',
-            path: '../repos/userRepo',
+            path: '../repos/mongo/userRepo',
         },
         building: {
             name: 'BuildingRepo',
-            path: '../repos/buildingRepo',
+            path: '../repos/mongo/buildingRepo',
         },
         floor: {
             name: 'FloorRepo',
-            path: '../repos/floorRepo'
+            path: '../repos/mongo/floorRepo'
         },
         elevator: {
             name: 'ElevatorRepo',
@@ -98,15 +98,15 @@ export default {
         },
         passage: {
             name: 'PassageRepo',
-            path: '../repos/passageRepo'
+            path: '../repos/mongo/passageRepo'
         },
         room: {
             name: 'RoomRepo',
-            path: '../repos/roomRepo'
+            path: '../repos/mongo/roomRepo'
         },
         robotType: {
             name: 'RobotTypeRepo',
-            path: '../repos/robotTypeRepo'
+            path: '../repos/mongo/robotTypeRepo'
         },
         robot: {
             name: 'RobotRepo',

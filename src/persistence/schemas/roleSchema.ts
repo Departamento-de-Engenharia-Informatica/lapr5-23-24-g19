@@ -1,4 +1,4 @@
-import { IRolePersistence } from '../../dataschema/IRolePersistence'
+import { IRolePersistence } from '../../dataschema/mongo/IRolePersistence'
 import mongoose from 'mongoose'
 
 const RoleSchema = new mongoose.Schema(

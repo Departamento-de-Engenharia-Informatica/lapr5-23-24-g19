@@ -1,12 +1,12 @@
-import config from "../../config";
+import config from "../../../config";
 import { Service, Inject } from 'typedi'
 import { Document, Model } from 'mongoose'
 
-import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence'
-import RobotType from '../domain/robotType/robotType'
-import { RobotTypeMap } from '../mappers/RobotTypeMap'
-import IRobotTypeRepo from '../services/IRepos/IRobotTypeRepo'
-import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
+import { IRobotTypePersistence } from '../../dataschema/mongo/IRobotTypePersistence'
+import RobotType from '../../domain/robotType/robotType'
+import { RobotTypeMap } from '../../mappers/RobotTypeMap'
+import IRobotTypeRepo from '../../services/IRepos/IRobotTypeRepo'
+import { RobotTypeCode } from '../../domain/robotType/robotTypeCode'
 
 @Service()
 export default class RobotTypeRepo implements IRobotTypeRepo {

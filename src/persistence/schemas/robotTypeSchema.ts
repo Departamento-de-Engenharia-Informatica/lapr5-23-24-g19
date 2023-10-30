@@ -1,5 +1,5 @@
 import { Schema, Document, model } from 'mongoose'
-import { IRobotTypePersistence } from '../../dataschema/IRobotTypePersistence'
+import { IRobotTypePersistence } from '../../dataschema/mongo/IRobotTypePersistence'
 
 const RobotType = new Schema(
     {

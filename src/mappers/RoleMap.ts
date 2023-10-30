@@ -1,7 +1,7 @@
 import { Mapper } from '../core/infra/Mapper'
 
 import { Document, Model } from 'mongoose'
-import { IRolePersistence } from '../dataschema/IRolePersistence'
+import { IRolePersistence } from '../dataschema/mongo/IRolePersistence'
 
 import IRoleDTO from '../dto/IRoleDTO'
 import { Role } from '../domain/role'

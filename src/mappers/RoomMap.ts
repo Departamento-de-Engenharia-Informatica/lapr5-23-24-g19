@@ -3,7 +3,7 @@ import { IRoomDTO } from '../dto/IRoomDTO'
 
 import Room from '../domain/room/room'
 import Container from 'typedi'
-import FloorRepo from '../repos/floorRepo'
+import FloorRepo from '../repos/mongo/floorRepo'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { BuildingCode } from '../domain/building/code'
 import { RoomDescription } from '../domain/room/description'
@@ -12,7 +12,7 @@ import { Coordinates } from '../domain/floor/Coordinates'
 import { RoomDimensions } from '../domain/room/roomDimensions'
 import { RoomCategory } from '../domain/room/roomCategory'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
-import { IRoomPersistence } from '../dataschema/IRoomPersistence'
+import { IRoomPersistence } from '../dataschema/mongo/IRoomPersistence'
 
 export class RoomMap extends Mapper<Room> {
     public static toDTO(room: Room): IRoomDTO {

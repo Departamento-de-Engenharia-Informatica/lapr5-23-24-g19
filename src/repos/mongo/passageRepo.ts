@@ -1,14 +1,14 @@
 import { Service, Inject, Container } from 'typedi'
 import { Document, Model } from 'mongoose'
-import { IPassagePersistence } from '../dataschema/IPassagePersistence'
-import IPassageRepo from '../services/IRepos/IPassageRepo'
-import { Passage } from '../domain/passage/passage'
-import { PassageMap } from '../mappers/PassageMap'
-import { Floor } from '../domain/floor/floor'
-import config from '../../config'
-import IFloorRepo from '../services/IRepos/IFloorRepo'
-import { IFloorPassageDomainDTO } from '../dto/IFloorPassageDomainDTO'
-import Building from '../domain/building/building'
+import { IPassagePersistence } from '../../dataschema/mongo/IPassagePersistence'
+import IPassageRepo from '../../services/IRepos/IPassageRepo'
+import { Passage } from '../../domain/passage/passage'
+import { PassageMap } from '../../mappers/PassageMap'
+import { Floor } from '../../domain/floor/floor'
+import config from '../../../config'
+import IFloorRepo from '../../services/IRepos/IFloorRepo'
+import { IFloorPassageDomainDTO } from '../../dto/IFloorPassageDomainDTO'
+import Building from '../../domain/building/building'
 
 @Service()
 export default class PassageRepo implements IPassageRepo {

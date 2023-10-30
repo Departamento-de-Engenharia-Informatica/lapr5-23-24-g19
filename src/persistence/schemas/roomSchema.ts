@@ -1,6 +1,6 @@
 import { Schema, Document, model } from 'mongoose'
 import IElevatorPersistence from '../../dataschema/mongo/IElevatorPersistence'
-import { IRoomPersistence } from '../../dataschema/IRoomPersistence'
+import { IRoomPersistence } from '../../dataschema/mongo/IRoomPersistence'
 
 const Room = new Schema(
     {

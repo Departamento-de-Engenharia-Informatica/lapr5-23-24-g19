@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IPassagePersistence } from '../../dataschema/IPassagePersistence'
+import { IPassagePersistence } from '../../dataschema/mongo/IPassagePersistence'
 
 const Passage = new mongoose.Schema(
     {

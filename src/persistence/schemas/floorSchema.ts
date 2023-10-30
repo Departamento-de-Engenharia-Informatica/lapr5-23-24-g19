@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IFloorPersistence } from '../../dataschema/IFloorPersistence'
+import { IFloorPersistence } from '../../dataschema/mongo/IFloorPersistence'
 
 const floorPropsSchema = new mongoose.Schema({
     dimensions: {
