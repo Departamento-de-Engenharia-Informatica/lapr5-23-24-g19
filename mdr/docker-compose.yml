@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+
+  robdrone-db:
+    image: mongo
+    restart: always
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: example
+      # MONGO_INITDB_DATABASE: 'prod'
+    ports:
+      - 27017:27017
+
+
+  robdrone-be:
+    build: './back-end'
+    container_name: 'robdrone-be'
+    environment:
+        NODE_ENV: 'production'
+        PORT: 4000
+        MONGODB_URI: 'mongodb://mongo:27017/prod'
+    ports:
+        - 4000:8080
+    links:
+        - robdrone-db
+
+# vim: ts=2 sts=2 sw=2
