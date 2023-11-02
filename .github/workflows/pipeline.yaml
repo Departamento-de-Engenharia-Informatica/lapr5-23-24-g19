@@ -1,0 +1,60 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint_and_test:
+    name: Linting and Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: MDR Lint and Test
+        run: |
+          cd mdr
+          npm install
+          npm run lint
+          npm test
+
+    # - name: Frontend Lint and Test
+    #   run: |
+    #     cd frontend
+    #     npm install
+    #     npm run lint
+    #     npm test
+
+  mdr_build:
+    name: MDR Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: MDR Build
+        run: |
+          cd mdr
+          npm install
+          npm run build
+
+# frontend_build:
+#   name: Frontend Build
+#   runs-on: ubuntu-latest
+
+#   steps:
+#     - name: Checkout Repository
+#       uses: actions/checkout@v2
+
+#     - name: Frontend Build
+#       run: |
+#         cd frontend
+#         npm install
+#         npm run build
