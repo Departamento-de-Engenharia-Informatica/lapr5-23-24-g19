@@ -1,0 +1,98 @@
+{
+    "maze": {
+        "size": { "width": 10, "depth": 10 },
+        "map": [
+            [3, 3, 2, 2, 2, 2, 3, 2, 2, 3, 1],
+            [1, 1, 3, 2, 1, 1, 2, 2, 1, 1, 1],
+            [1, 1, 2, 1, 1, 2, 2, 1, 1, 0, 1],
+            [1, 2, 3, 1, 2, 2, 1, 1, 2, 0, 1],
+            [3, 0, 0, 3, 1, 2, 0, 3, 1, 2, 1],
+            [1, 3, 0, 0, 0, 3, 1, 0, 1, 1, 1],
+            [1, 2, 1, 3, 2, 0, 2, 2, 1, 1, 1],
+            [3, 2, 0, 2, 1, 1, 3, 1, 2, 1, 1],
+            [1, 3, 0, 1, 2, 2, 0, 1, 2, 0, 1],
+            [1, 2, 2, 1, 1, 2, 3, 2, 0, 2, 1],
+            [2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0]
+        ],
+        "exitLocation": [9.5, 6.0]
+    },
+    "ground": {
+        "size": { "width": 10.0, "height": 0.0625, "depth": 10.0 },
+        "segments": { "width": 1, "height": 1, "depth": 1 },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_color_2k.jpg"
+            },
+            "ao": {
+                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_ao_2k.jpg",
+                "intensity": 1.0
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1.0,
+                "bias": 0.0
+            },
+            "normal": {
+                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_normal_opengl_2k.png",
+                "type": 0,
+                "scale": { "x": 2.0, "y": 2.0 }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1.0
+            },
+            "roughness": {
+                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_roughness_2k.jpg",
+                "rough": 1.0
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 1,
+        "repeat": { "u": 4.0, "v": 4.0 },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "wall": {
+        "segments": { "width": 1, "height": 1 },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_color_2k.jpg"
+            },
+            "ao": {
+                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_ao_2k.jpg",
+                "intensity": 1.0
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1.0,
+                "bias": 0.0
+            },
+            "normal": {
+                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_normal_opengl_2k.png",
+                "type": 0,
+                "scale": { "x": 2.0, "y": 2.0 }
+                },
+            "bump": {
+                "url": "",
+                "scale": 1.0
+            },
+            "roughness": {
+                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_roughness_2k.jpg",
+                "rough": 1.0
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 0,
+        "repeat": { "u": 2.0, "v": 1.0 },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "player": {
+        "initialPosition": [7.0, 6.0],
+        "initialDirection": 0.0
+    }
+}
