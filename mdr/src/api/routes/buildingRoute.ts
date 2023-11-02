@@ -8,11 +8,29 @@ import IFloorController from '../../controllers/IControllers/IFloorController'
 import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 import IRoomController from '../../controllers/IControllers/IRoomController'
+import multer from 'multer'
+import path from 'path'
 
 const route = Router()
 
 export default (app: Router) => {
     app.use('/buildings', route)
+
+    //TODO: verify if it is to use fileSystem
+    const storage = multer.diskStorage({
+        destination: (req, file, callback) => {
+            // Specify the directory where you want to store the uploaded files
+            callback(null, 'maps/');
+        },
+        filename: (req, file, callback) => {
+            // Use the original filename, but add a timestamp to make it unique
+            const timestamp = Date.now();
+            const extension = path.extname(file.originalname);
+            const uniqueFilename = `${timestamp}${extension}`;
+            callback(null, uniqueFilename);
+        },
+    });
+    const upload = multer({ storage: storage });
 
     const buildingController = Container.get(config.controllers.building.name) as IBuildingController
     const floorController = Container.get(config.controllers.floor.name) as IFloorController
@@ -223,26 +241,41 @@ export default (app: Router) => {
         '/:id/floors/:floorNumber/map',
         celebrate({
             body: Joi.object({
+              map: {
                 dimensions: Joi.object({
-                    length: Joi.number().required(),
-                    width: Joi.number().required(),
+                  length: Joi.number().required(),
+                  width: Joi.number().required(),
                 }),
                 mapContent: Joi.array().items(Joi.array().items(Joi.number().required())),
                 passages: Joi.array().items({
-                    x: Joi.number().required(),
-                    y: Joi.number().required(),
+                  x: Joi.number().required(),
+                  y: Joi.number().required(),
+                  orientation: Joi.string().required(),
+                  to: Joi.object({
+                    building: Joi.string().required(),
+                    floor: Joi.number().required(),
+                  }),
                 }),
                 elevators: Joi.array().items({
-                    x: Joi.number().required(),
-                    y: Joi.number().required(),
+                  x: Joi.number().required(),
+                  y: Joi.number().required(),
+                  orientation: Joi.string().required(),
+                  floors: Joi.array().items(Joi.number().required()),
                 }),
                 rooms: Joi.array().items({
-                    x: Joi.number().required(),
-                    y: Joi.number().required(),
+                  x: Joi.number().required(),
+                  y: Joi.number().required(),
+                  orientation: Joi.string().required(),
+                  name: Joi.string().required(),
                 }),
-            }),
-        }),
+              },
+            }).unknown(true), // This allows additional properties in the body          
+        }), upload.single('file'),
         (req, res, next) => floorController.updateMap(req, res, next),
+    )
+    route.get(
+        '/:id/floors/:floorNumber/map',
+        (req, res, next) => floorController.getMap(req, res, next),
     )
 
     route.get('/:id/floors/passages', (req, res, next) => floorController.floorsWithPassage(req, res, next))

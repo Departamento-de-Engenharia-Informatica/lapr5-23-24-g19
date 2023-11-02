@@ -6,34 +6,41 @@ import { MaxFloorDimensions } from '../building/maxFloorDimensions'
 import { Coordinates } from './Coordinates'
 
 export interface FloorMapProps {
-    dimensions: MaxFloorDimensions //Dimensions
-    mapContent: number[][]
+    path: string,
+    map?:{   
+        dimensions?: MaxFloorDimensions, //Dimensions
+        // mapContent: number[][],
 
-    passages: Coordinates[] //Coordinates
-    rooms: Coordinates[] //Coordinates
-    elevators: Coordinates[] //Coordinates
+        // passages: Coordinates[], //Coordinates
+        // rooms: Coordinates[], //Coordinates
+        // elevators: Coordinates[], //Coordinates
+    }
+    //textures
 }
 
 export class FloorMapContent extends ValueObject<FloorMapProps> {
 
-    get mapContent(): number[][] {
-        return this.props.mapContent
+    get path(): string{
+        return this.path
     }
+    // get mapContent(): number[][] {
+    //     return this.props.map.mapContent
+    // }
 
-    get passages(): Coordinates[] {
-        return this.props.passages
-    }
+    // get passages(): Coordinates[] {
+    //     return this.props.map.passages
+    // }
 
-    get elevators(): Coordinates[] {
-        return this.props.elevators
-    }
+    // get elevators(): Coordinates[] {
+    //     return this.props.map.elevators
+    // }
 
-    get rooms(): Coordinates[] {
-        return this.props.rooms
-    }
+    // get rooms(): Coordinates[] {
+    //     return this.props.map.rooms
+    // }
 
     get dimensions(): MaxFloorDimensions {
-        return this.props.dimensions
+        return this.props.map.dimensions
     }
 
     set dimensions(dimensions: MaxFloorDimensions){
@@ -46,12 +53,12 @@ export class FloorMapContent extends ValueObject<FloorMapProps> {
 
     public static create(props: FloorMapProps): Result<FloorMapContent> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.dimensions, argumentName: 'dimensions' },
-            { argument: props.mapContent, argumentName: 'mapContent' },
+            { argument: props.map.dimensions, argumentName: 'dimensions' },
+            // { argument: props.map.mapContent, argumentName: 'mapContent' },
         
-            { argument: props.elevators, argumentName: 'buildingDescription' },
-            { argument: props.passages, argumentName: 'buildingDescription' },
-            { argument: props.rooms, argumentName: 'buildingDescription' },
+            // { argument: props.map.elevators, argumentName: 'buildingDescription' },
+            // { argument: props.map.passages, argumentName: 'buildingDescription' },
+            // { argument: props.map.rooms, argumentName: 'buildingDescription' },
         ])
         if (guardResult.succeeded) {
             return Result.ok<FloorMapContent>(new FloorMapContent({ ...props }))

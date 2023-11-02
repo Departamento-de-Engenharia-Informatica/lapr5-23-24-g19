@@ -72,7 +72,7 @@ describe('Floor', () => {
         const result = Floor.create({
             building,
             floorNumber,
-            map: undefined
+            path: undefined
         })
 
         assert.isOk(result.isSuccess)

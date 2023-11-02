@@ -62,10 +62,14 @@ const Floor = new mongoose.Schema(
             required: false,
         },
         
-        map: {
-            type: floorPropsSchema,
-            required:false,
-        },
+        path: {
+            type: String,
+            required: false
+        }
+        // map: {
+        //     type: floorPropsSchema,
+        //     required:false,
+        // },
     },
 
     { timestamps: true },
