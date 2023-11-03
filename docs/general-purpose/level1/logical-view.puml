@@ -12,9 +12,13 @@ skinparam component {
     ArrowFontColor #777777
 }
 
-interface api
 component [<<system>>\nRobDroneGo] as comp
 
-comp - api
+comp -up- "Campus Management API"
+comp -down- "Campus Management UI"
+comp -up- "Fleet Management API"
+comp -down- "Fleet Management UI"
+comp -up- "Task Management API"
+comp -down- "Task Management UI"
 
 @enduml

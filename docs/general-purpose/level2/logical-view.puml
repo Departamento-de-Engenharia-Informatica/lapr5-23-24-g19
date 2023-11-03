@@ -13,9 +13,21 @@ skinparam component {
 }
 
 package "<<system>>\nRobDroneGo" {
-    [Master Data]
+    [Campus Management]
+    [Fleet Management]
+    [Task Management]
+    [Planning]
 }
 
-api -left- [Master Data]
+' interior
+' TODO
+
+' exterior
+[Campus Management] -up- "Campus Management API"
+[Campus Management] -down- "Campus Management UI"
+[Fleet Management] -up- "Fleet Management API"
+[Fleet Management] -down- "Fleet Management UI"
+[Task Management] -up- "Task Management API"
+[Task Management] -down- "Task Management UI"
 
 @enduml
