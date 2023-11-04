@@ -40,7 +40,7 @@ describe('Robot controller:', () => {
         sandbox.restore()
     })
 
-    describe('createRobot(): robotController + robotService integration test using spy on roleService', () => {
+    describe('createRobot(): robotController + robotService integration test using spy on robotService', () => {
         it('should work with correct values', async () => {
             const body = {
                 code: 'Robot12',
@@ -162,7 +162,7 @@ describe('Robot controller:', () => {
         })
     })
 
-    describe('inhibitRobot(): robotController + robotService integration test using spy on roleService', () => {
+    describe('inhibitRobot(): robotController + robotService integration test using spy on robotService', () => {
         it('should work with correct values', async () => {
             const body = {
                 id: 'Robot12',
@@ -273,7 +273,7 @@ describe('Robot controller:', () => {
             sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(404))
         })
     })
-    describe('getRobots(): robotController + robotService integration test using spy on roleService', () => {
+    describe('getRobots(): robotController + robotService integration test using spy on robotService', () => {
         it('should work if there are robot persisted', async () => {
             const req: Partial<Request> = {}
             const res: Partial<Response> = {

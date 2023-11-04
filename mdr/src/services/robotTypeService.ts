@@ -23,7 +23,7 @@ export default class RobotTypeService implements IRobotTypeService {
 
             let dtoTaskType: TaskType[]
             try {
-                dtoTaskType = dto.taskTypes.map(taskType => TaskType.toType(taskType))
+                dtoTaskType = dto.taskTypes.map((taskType) => TaskType.toType(taskType))
             } catch (e) {
                 return left({
                     errorCode: RobotTypeErrorCode.BussinessRuleViolation,

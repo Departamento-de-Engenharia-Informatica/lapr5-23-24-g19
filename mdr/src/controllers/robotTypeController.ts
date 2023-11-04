@@ -5,7 +5,7 @@ import config from '../../config'
 import IRobotTypeController from './IControllers/IRobotTypeController'
 import { IRobotTypeDTO } from '../dto/IRobotTypeDTO'
 import IRobotTypeService, { RobotTypeErrorCode, RobotTypeErrorResult } from '../services/IServices/IRobotTypeService'
-import {IRobotDTO} from "../dto/IRobotDTO";
+import { IRobotDTO } from '../dto/IRobotDTO'
 
 @Service()
 export default class RobotTypeController implements IRobotTypeController {
