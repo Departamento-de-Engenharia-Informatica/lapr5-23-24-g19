@@ -16,5 +16,7 @@ module.exports = {
         '@typescript-eslint/interface-name-prefix': 0,
         '@typescript-eslint/no-namespace': 0,
         '@typescript-eslint/no-explicit-any': ["off"],
+        '@typescript-eslint/no-unused-vars': ["off"],
+        '@typescript-eslint/no-var-requires': ["off"],
     },
 }

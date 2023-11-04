@@ -21,7 +21,7 @@ jobs:
         run: |
           cd mdr
           npm install
-          npm run lint
+          npm run lint:fix
           npm test
 
     # - name: Frontend Lint and Test
