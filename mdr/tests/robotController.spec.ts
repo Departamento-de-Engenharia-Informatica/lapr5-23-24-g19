@@ -273,4 +273,82 @@ describe('Robot controller:', () => {
             sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(404))
         })
     })
+    describe('getRobots(): robotController + robotService integration test using spy on roleService', () => {
+        it('should work if there are robot persisted', async () => {
+            const req: Partial<Request> = {}
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+                json: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            let robotRepo = Container.get('RobotRepo') as IRobotRepo
+            sandbox.stub(robotRepo, 'findAll').resolves([
+                {
+                    code: 'ROBOT123',
+                    nickname: 'test',
+                    type: '123h',
+                    serialNumber: 'SERIAL123',
+                    state: 'Disabled',
+                },
+            ] as unknown as Robot[])
+
+            sandbox.stub(RobotMap, 'toDTO').returns({
+                code: 'ROBOT123',
+                nickname: 'test',
+                typeCode: '123h',
+                serialNumber: 'SERIAL123',
+                state: 'Disabled',
+            })
+
+            const service = Container.get('RobotService') as IRobotService
+            const serviceSpy = sandbox.spy(service, 'getRobots')
+
+            const ctrl = new RobotController(service as IRobotService)
+
+            await ctrl.getRobots(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(serviceSpy)
+
+            sandbox.assert.calledOnce(res.json as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                res.json as sinon.SinonSpy,
+                sandbox.match([
+                    {
+                        code: 'ROBOT123',
+                        nickname: 'test',
+                        serialNumber: 'SERIAL123',
+                        state: 'Disabled',
+                        typeCode: '123h',
+                    },
+                ]),
+            )
+        })
+
+        it('should not work if robots are not found', async () => {
+            const req: Partial<Request> = {}
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+                json: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            let robotRepo = Container.get('RobotRepo') as IRobotRepo
+            sandbox.stub(robotRepo, 'findAll').resolves([])
+
+            const service = Container.get('RobotService') as IRobotService
+            const serviceSpy = sandbox.spy(service, 'getRobots')
+
+            const ctrl = new RobotController(service as IRobotService)
+
+            await ctrl.getRobots(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(serviceSpy)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(404))
+        })
+    })
 })

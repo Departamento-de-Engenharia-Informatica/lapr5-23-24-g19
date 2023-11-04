@@ -65,7 +65,7 @@ export default class RobotService implements IRobotService {
         if (code.isFailure) {
             return left({
                 errorCode: RobotErrorCode.BussinessRuleViolation,
-                message: code.errorValue().toString()
+                message: code.errorValue().toString(),
             })
         }
 
@@ -93,7 +93,7 @@ export default class RobotService implements IRobotService {
                     message: 'Robots not found',
                 })
             } else {
-                return right(robots.map(robot => RobotMap.toDTO(robot)))
+                return right(robots.map((robot) => RobotMap.toDTO(robot)))
             }
         } catch (e) {
             return left({
