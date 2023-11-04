@@ -28,7 +28,7 @@ component "<<system>>\nRobDroneGo" {
     }
 
     ' interior
-    [Planning] -- "Planning API"
+    [Planning Module] -- "Planning API"
     task --( "Planning API"
     task -- "Task API"
     fleet -- "Fleet API"
@@ -52,4 +52,35 @@ task -- p_task_api
 p_task_api -up- "Task Management API"
 p_task_ui -up- "Task Management UI"
 
+package system {
+    package "UI" {
+
+
+    }
+
+    package "Planning" {
+
+    }
+
+    package "MDV" {
+
+    }
+
+    package "MDR" {
+
+    }
+
+    "UI" .right.> "Planning"
+    "UI" .right.> "MDV"
+    "UI" .right.> "MDR"
+
+    "Planning" .down.> "MDV"
+    "MDV" .down.> "MDR"
+}
+
+"MDR" .up.> "manifests" task
+"MDR" .up.> "manifests" fleet
+"MDR" .up.> "manifests" campus
+
+"Planning" ..> "manifests" "Planning Module"
 @enduml

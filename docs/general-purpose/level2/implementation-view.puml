@@ -13,53 +13,29 @@ skinparam component {
 }
 
 package system {
-    package "Infrastructure" {
-        package "Persistence" {
-        }
-        package "Routes" {
-        }
+    package "UI" {
+
 
     }
 
-    package "Interface Adapters" {
-        package "Controllers" {
-        }
+    package "Planning" {
 
-        package "Repositories" {
-        }
     }
 
-    package "Application Services" {
-        package "App Services" {
-        }
+    package "MDV" {
+
     }
 
-    package "Entities/Core/Domain" {
-        package "Aggregates" {
-        }
+    package "MDR" {
 
-        package "Value Objects" {
-        }
-
-        package "Services" {
-        }
     }
 
-    package "DTO" {
-        package "DTO" as dto {
-        }
-    }
+    "UI" .right.> "Planning"
+    "UI" .right.> "MDV"
+    "UI" .right.> "MDR"
 
-    "Routes" ..> "Controllers"
-    "Controllers" ..> "App Services"
-    dto <.right. "Controllers"
-    "App Services" ..> "Aggregates"
-    "App Services" ..> "Value Objects"
-    "App Services" ..> "Services"
-    "App Services" .up.> dto
-    "Repositories" ..|> "App Services"
-    "Repositories" ..> "Persistence"
+    "Planning" .down.> "MDV"
+    "MDV" .down.> "MDR"
 }
 
 @enduml
-
