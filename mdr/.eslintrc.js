@@ -15,5 +15,6 @@ module.exports = {
         '@typescript-eslint/no-parameter-properties': 0,
         '@typescript-eslint/interface-name-prefix': 0,
         '@typescript-eslint/no-namespace': 0,
+        '@typescript-eslint/no-explicit-any': ["off"],
     },
 }
