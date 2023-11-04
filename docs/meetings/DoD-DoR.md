@@ -12,6 +12,8 @@ that the story is completed satisfactorily.
 
 - **Estimation and Sizing:** The story should be appropriately estimated and sized, allowing the team to understand the effort and time required for its completion.
 
+- **Review and Approval:** The work should undergo a review process and receive approval from the relevant stakeholders or team members before being considered ready.
+
 # Definition of Done (DoD)
 
 The Definition of Done (DoD) represents the criteria that must be fulfilled for a user story to be considered complete and ready for deployment.
