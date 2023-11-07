@@ -20,7 +20,7 @@ The Definition of Done (DoD) represents the criteria that must be fulfilled for 
 It acts as a checklist to guarantee that the team has met the necessary quality standards before considering the story as finished.
 Our DoD includes:
 
-- **Code Quality:** The code written should adhere to coding standards, be maintainable, and free from critical issues.
+- **Code Quality:** If applicable, the code written should adhere to coding standards, be maintainable, and free from critical issues.
 
 - **Testing:** Comprehensive testing needs to be performed, covering unit tests, integration tests, and any other relevant testing as specified in the DoR.
 
