@@ -1,40 +1,45 @@
 import * as THREE from "three";
-import { merge } from "./merge";
 import MultiTexturedMaterial from "./material";
 
-/*
- * parameters = {
- *  size: Vector3,
- *  segments: Vector3,
- *  materialParameters: {
- *   color: Color,
- *   mapUrl: String,
- *   aoMapUrl: String,
- *   aoMapIntensity: Float,
- *   displacementMapUrl: String,
- *   displacementScale: Float,
- *   displacementBias: Float,
- *   normalMapUrl: String,
- *   normalMapType: Integer,
- *   normalScale: Vector2,
- *   bumpMapUrl: String,
- *   bumpScale: Float,
- *   roughnessMapUrl: String,
- *   roughness: Float,
- *   wrapS: Integer,
- *   wrapT: Integer,
- *   repeat: Vector2,
- *   magFilter: Integer,
- *   minFilter: Integer
- *  },
- *  secondaryColor: Color
- * }
- */
+type materialParams = {
+    color: THREE.Color,
+    mapUrl: string,
+    aoMapUrl: string,
+    aoMapIntensity: number,
+    displacementMapUrl: string,
+    displacementScale: number,
+    displacementBias: number,
+    normalMapUrl: string,
+    normalMapType: number,
+    normalScale: THREE.Vector2,
+    bumpMapUrl: string,
+    bumpScale: number,
+    roughnessMapUrl: string,
+    roughness: number,
+    wrapS: number,
+    wrapT: number,
+    repeat: THREE.Vector2,
+    magFilter: number,
+    minFilter: number
+}
+
+type parameters = {
+    size: THREE.Vector3,
+    segments: THREE.Vector3,
+    materialParameters: materialParams,
+    secondaryColor: THREE.Color
+}
+
 
 export default class Ground extends THREE.Mesh {
-    constructor(parameters) {
+    get size(){return this.parameters.size}
+    get segments(){return this.parameters.segments}
+    get materialParameters(){return this.parameters.materialParameters}
+    get secondaryColor(){return this.parameters.secondaryColor}
+
+    constructor(private parameters:parameters) {
         super();
-        merge(this, parameters);
+        // merge(this, parameters);
 
         // Create the materials
         const primaryMaterial = new MultiTexturedMaterial(this.materialParameters);
@@ -44,7 +49,8 @@ export default class Ground extends THREE.Mesh {
         this.geometry = new THREE.BoxGeometry(this.size.x, this.size.y, this.size.z, this.segments.x, this.segments.y, this.segments.z);
         const uv = this.geometry.getAttribute("uv");
         const uv1 = uv.clone();
-        this.geometry.setAttribute("uv1", uv1); // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
+        // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
+        this.geometry.setAttribute("uv1", uv1);
         this.material = [
             secondaryMaterial, // Positive X
             secondaryMaterial, // Negative X

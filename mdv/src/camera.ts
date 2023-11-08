@@ -69,25 +69,31 @@ export default class Camera {
     get initialOrientation() { return this.parameters.initialOrientation }
     get initialZoom() { return this.parameters.initialZoom }
 
+    get backgroundColor() { return this.parameters.backgroundColor }
+    get frameColor() { return this.parameters.frameColor }
+    get dragOrResizeThreshold() { return this.parameters.dragOrResizeThreshold }
+
+
     public previousViewport: THREE.Vector2 = new THREE.Vector2()
 
     public viewportWidthMin: number = 0
     public viewportHeightMin: number = 0
+    get viewportSizeMin() { return this.parameters.viewportSizeMin }
 
     get snapPositions() { return this.parameters.snapPositions }
     get snapThreshold() { return this.parameters.snapThreshold }
 
-    get orientationMin(){return this.parameters.orientationMin}
-    get orientationMax(){return this.parameters.orientationMax}
-    get orientationStep() {return this.parameters.orientationStep}
+    get orientationMin() { return this.parameters.orientationMin }
+    get orientationMax() { return this.parameters.orientationMax }
+    get orientationStep() { return this.parameters.orientationStep }
 
-    get distanceMin(){return this.parameters.distanceMin}
-    get distanceMax(){return this.parameters.distanceMax}
-    get distanceStep() {return this.parameters.distanceStep}
+    get distanceMin() { return this.parameters.distanceMin }
+    get distanceMax() { return this.parameters.distanceMax }
+    get distanceStep() { return this.parameters.distanceStep }
 
-    get zoomMin(){return this.parameters.zoomMin}
-    get zoomMax(){return this.parameters.zoomMax}
-    get zoomStep() {return this.parameters.zoomStep}
+    get zoomMin() { return this.parameters.zoomMin }
+    get zoomMax() { return this.parameters.zoomMax }
+    get zoomStep() { return this.parameters.zoomStep }
 
     get view() {
         return this.parameters.view
@@ -402,7 +408,6 @@ export default class Camera {
         this.setProjectionParameters();
     }
 
-    get viewportSizeMin() { return this.parameters.viewportSizeMin }
     setViewport(viewport?: ViewPort) { // Expressed in fraction of window width and window height
         if (viewport !== undefined) {
             this.currentViewport = viewport;

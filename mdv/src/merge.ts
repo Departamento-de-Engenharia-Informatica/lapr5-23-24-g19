@@ -1,6 +1,6 @@
 import lodash from 'lodash';
 
-export function merge(object, ...sources) {
+export function merge(object:object, ...sources:object[]) {
     return lodash.mergeWith(object, ...sources, (objValue, srcValue, key, object, source) => {
         if (lodash.isArray(objValue)) { // Arrays must be concatenated
             return objValue.concat(srcValue);

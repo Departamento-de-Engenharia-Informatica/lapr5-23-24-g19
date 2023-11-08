@@ -1,19 +1,23 @@
 import * as THREE from "three";
-import { merge } from "./merge";
 
-/*
- * parameters = {
- *  enabled: Boolean,
- *  color: Color,
- *  densityMin: Float,
- *  densityMax: Float,
- *  densityStep: Float
- * }
- */
+type parameters = {
+    enabled: boolean,
+    color: THREE.Color,
+    densityMin: number,
+    densityMax: number,
+    densityStep: number
+}
+
 
 export default class Fog extends THREE.FogExp2 {
-    constructor(parameters) {
-        super();
-        merge(this, parameters);
+    get enabled() { return this.parameters.enabled }
+    // get color(){return this.parameters.color}
+    get densityMin() { return this.parameters.densityMin }
+    get densityMax() { return this.parameters.densityMax }
+    get densityStep() { return this.parameters.densityStep }
+
+    constructor(private parameters: parameters) {
+        super(parameters.color);
+        this.color = parameters.color
     }
 }

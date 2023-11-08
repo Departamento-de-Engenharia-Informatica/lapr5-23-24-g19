@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class CylinderHelper extends THREE.LineSegments {
-    constructor(color) {
+    constructor(color: THREE.Color) {
         super();
 
         this.geometry = new THREE.EdgesGeometry(new THREE.CylinderGeometry(1.0, 1.0, 2.0, 16, 1, true));
@@ -10,7 +10,7 @@ export class CylinderHelper extends THREE.LineSegments {
 }
 
 export class BoxHelper extends THREE.LineSegments {
-    constructor(color) {
+    constructor(color: THREE.Color) {
         super();
 
         this.geometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(2.0, 2.0, 2.0));
