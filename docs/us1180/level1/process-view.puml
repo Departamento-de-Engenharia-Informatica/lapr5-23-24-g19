@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : edit passage between two buildings
+    activate sys
+        sys --> usr : shows passages, requests one and update data
+    deactivate sys
+
+    usr -> sys : chooses passage and provides updated data
+    activate sys
+        sys --> usr : inform error/success
+    deactivate sys
+deactivate usr
+
+@enduml

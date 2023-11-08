@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : edit passage between two buildings
+    activate mng
+        mng --> usr : shows passages, requests one and update data
+    deactivate mng
+
+    usr -> mng : chooses passage and provides updated data
+    activate mng
+        mng --> usr : inform error/success
+    deactivate mng
+deactivate usr
+
+@enduml
