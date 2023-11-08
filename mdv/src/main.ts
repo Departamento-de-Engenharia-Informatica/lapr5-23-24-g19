@@ -1,9 +1,8 @@
-
 import * as THREE from "three";
 import Orientation from "./orientation";
 import ThumbRaiser from "./thumb_raiser";
 
-let thumbRaiser;
+let thumbRaiser: ThumbRaiser;
 
 function initialize() {
     // Create the game
@@ -250,11 +249,47 @@ function initialize() {
         { type: THREE.PCFSoftShadowMap }, // Shadows parameters
         {}, // Fog parameters
         {}, // Collision detection parameters
-        { view: "fixed", initialViewport: new THREE.Vector4(0.0, 1.0, 0.45, 0.5), initialDistance: 16.0, distanceMin: 8.0, distanceMax: 32.0, initialFogDensity: 0.05 }, // Fixed view camera parameters
-        { view: "first-person", initialViewport: new THREE.Vector4(1.0, 1.0, 0.55, 0.5), initialOrientation: new Orientation(0.0, -10.0), orientationMax: new Orientation(180.0, 90.0), initialFogDensity: 0.7 }, // First-person view camera parameters
-        { view: "third-person", initialViewport: new THREE.Vector4(0.0, 0.0, 0.55, 0.5), initialOrientation: new Orientation(0.0, -20.0), initialDistance: 2.0, distanceMin: 1.0, distanceMax: 4.0, initialFogDensity: 0.3 }, // Third-person view camera parameters
-        { view: "top", initialViewport: new THREE.Vector4(1.0, 0.0, 0.45, 0.5), initialOrientation: new Orientation(0.0, -90.0), initialDistance: 4.0, distanceMin: 1.0, distanceMax: 16.0, initialFogDensity: 0.2 }, // Top view camera parameters
-        { view: "mini-map", initialViewport: new THREE.Vector4(0.5, 0.5, 0.4, 0.4), initialOrientation: new Orientation(180.0, -90.0), initialZoom: 0.32, zoomMin: 0.32, zoomMax: 2.56 } // Mini-map view camera parameters
+        { // Fixed view camera parameters
+            view: "fixed",
+            initialViewport: new THREE.Vector4(0.0, 1.0, 0.45, 0.5),
+            initialDistance: 16.0,
+            distanceMin: 8.0,
+            distanceMax: 32.0,
+            initialFogDensity: 0.05
+        },
+        { // First-person view camera parameters
+            view: "first-person",
+            initialViewport: new THREE.Vector4(1.0, 1.0, 0.55, 0.5),
+            initialOrientation: new Orientation(0.0, -10.0),
+            orientationMax: new Orientation(180.0, 90.0),
+            initialFogDensity: 0.7
+        },
+        { // Third-person view camera parameters
+            view: "third-person",
+            initialViewport: new THREE.Vector4(0.0, 0.0, 0.55, 0.5),
+            initialOrientation: new Orientation(0.0, -20.0),
+            initialDistance: 2.0,
+            distanceMin: 1.0,
+            distanceMax: 4.0,
+            initialFogDensity: 0.3
+        },
+        { // Top view camera parameters
+            view: "top",
+            initialViewport: new THREE.Vector4(1.0, 0.0, 0.45, 0.5),
+            initialOrientation: new Orientation(0.0, -90.0),
+            initialDistance: 4.0,
+            distanceMin: 1.0,
+            distanceMax: 16.0,
+            initialFogDensity: 0.2
+        },
+        { // Mini-map view camera parameters
+            view: "mini-map",
+            initialViewport: new THREE.Vector4(0.5, 0.5, 0.4, 0.4),
+            initialOrientation: new Orientation(180.0, -90.0),
+            initialZoom: 0.32,
+            zoomMin: 0.32,
+            zoomMax: 2.56
+        }
     );
 }
 
