@@ -8,10 +8,10 @@ participant "<<system>>\n System RobDroneGo" as sys
 activate usr
     usr -> sys : list building floors with passage
     activate sys
-        sys --> usr : request building
+        sys --> usr : show buildings and requests one
     deactivate sys
 
-    usr -> sys : provides building
+    usr -> sys : choses building
     activate sys
         sys --> usr : inform error/show floors
     deactivate sys

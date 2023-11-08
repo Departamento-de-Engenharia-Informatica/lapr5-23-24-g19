@@ -8,10 +8,10 @@ participant "Campus Management" as mng
 activate usr
     usr -> mng : list building floors with passage
     activate mng
-        mng --> usr : request building
+        mng --> usr : show buildings and requests one
     deactivate mng
 
-    usr -> mng : provides building
+    usr -> mng : choses building
     activate mng
         mng --> usr : inform error/show floors
     deactivate mng
