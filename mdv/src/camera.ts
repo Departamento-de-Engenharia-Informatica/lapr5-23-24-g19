@@ -1,40 +1,112 @@
 import * as THREE from "three";
+import Orientation from "./orientation";
+import { Mouse } from "./thumb_raiser";
 
-/*
- * parameters = {
- *  view: String,
- *  backgroundColor: Color,
- *  frameColor: Color,
- *  initialViewport: Vector4,
- *  viewportSizeMin: Float,
- *  dragOrResizeThreshold: Float,
- *  snapThreshold: Float,
- *  snapPositions: [Float],
- *  initialTarget: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  orientationStep: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  distanceStep: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  zoomStep: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float,
- *  initialFogDensity: Float // Doesn't apply to mini-map camera
- * }
- */
+type ViewPort = THREE.Vector4
+type Target = THREE.Vector3
+type Distance = number
+type Projection = string
+
+type SnapPosition = {
+    size: number
+    currentPosition: number
+    minDelta: number
+    newPosition: number
+}
+
+type parameters = {
+    view: string,
+    backgroundColor: THREE.Color,
+    frameColor: THREE.Color,
+    initialViewport: THREE.Vector4,
+    viewportSizeMin: number,
+    dragOrResizeThreshold: number,
+    snapThreshold: number,
+    snapPositions: number[],
+    initialTarget: Target
+    initialOrientation: Orientation,
+    orientationMin: Orientation,
+    orientationMax: Orientation,
+    orientationStep: Orientation,
+    initialDistance: number,
+    distanceMin: number,
+    distanceMax: number,
+    distanceStep: number,
+    initialZoom: number,
+    zoomMin: number,
+    zoomMax: number,
+    zoomStep: number,
+    initialFov: number,
+    near: number,
+    far: number,
+    initialFogDensity: number // Doesn't apply to mini-map camera
+}
+
 
 export default class Camera {
-    constructor(parameters) {
-        for (const [key, value] of Object.entries(parameters)) {
-            this[key] = value;
-        }
+    public initialHalfSize: number
+    public playerRadius: number = 0
+    public playerOrientation: THREE.Quaternion
+    public perspective: THREE.PerspectiveCamera
+    public orthographic: THREE.OrthographicCamera
+    public fogDensity: number
+
+    public viewport: ViewPort = new THREE.Vector4()
+    public orientation: Orientation = new Orientation()
+    public target: Target = new THREE.Vector3()
+    public distance: Distance = 0
+    public aspectRatio: number = 19 / 6
+
+    public activeProjection: THREE.Camera = new THREE.Camera()
+    public projection: Projection = ""
+    public zoom: number = 0
+    get far() { return this.parameters.far }
+    get near() { return this.parameters.near }
+
+    public currentViewport: ViewPort = new THREE.Vector4()
+    get initialViewport() { return this.parameters.initialViewport }
+    get initialTarget() { return this.parameters.initialTarget }
+    get initialOrientation() { return this.parameters.initialOrientation }
+    get initialZoom() { return this.parameters.initialZoom }
+
+    public previousViewport: THREE.Vector2 = new THREE.Vector2()
+
+    public viewportWidthMin: number = 0
+    public viewportHeightMin: number = 0
+
+    get snapPositions() { return this.parameters.snapPositions }
+    get snapThreshold() { return this.parameters.snapThreshold }
+
+    get orientationMin(){return this.parameters.orientationMin}
+    get orientationMax(){return this.parameters.orientationMax}
+    get orientationStep() {return this.parameters.orientationStep}
+
+    get distanceMin(){return this.parameters.distanceMin}
+    get distanceMax(){return this.parameters.distanceMax}
+    get distanceStep() {return this.parameters.distanceStep}
+
+    get zoomMin(){return this.parameters.zoomMin}
+    get zoomMax(){return this.parameters.zoomMax}
+    get zoomStep() {return this.parameters.zoomStep}
+
+    get view() {
+        return this.parameters.view
+    }
+
+    get initialFogDensity() {
+        return this.parameters.initialFogDensity
+    }
+
+    get initialFov() {
+        return this.parameters.initialFov
+    }
+
+    get initialDistance() { return this.parameters.initialDistance }
+
+    constructor(private parameters: parameters) {
+        // for (const [key, value] of Object.entries(parameters)) {
+        //     this[key] = value;
+        // }
 
         // Compute half of the size of the target plane as a function of the camera's distance to the target and the field-of-view
         this.initialHalfSize = Math.tan(THREE.MathUtils.degToRad(this.initialFov / 2.0)) * this.initialDistance;
@@ -54,7 +126,7 @@ export default class Camera {
         this.initialize();
     }
 
-    percentageToPixels(viewport, windowWidth, windowHeight) { // Convert viewport position and size from % to pixels
+    percentageToPixels(viewport: ViewPort, windowWidth: number, windowHeight: number) { // Convert viewport position and size from % to pixels
         let width = viewport.width;
         let height = viewport.height;
         if (this.view != "mini-map") {
@@ -73,7 +145,7 @@ export default class Camera {
         return new THREE.Vector4(x, y, width, height);
     }
 
-    pixelsToPercentage(viewport, windowWidth, windowHeight) { // Convert viewport position and size from pixels to %
+    pixelsToPercentage(viewport: ViewPort, windowWidth: number, windowHeight: number) { // Convert viewport position and size from pixels to %
         const deltaWidth = windowWidth - viewport.width;
         const x = deltaWidth == 0 ? 0 : viewport.x / deltaWidth;
         const deltaHeight = windowHeight - viewport.height;
@@ -159,7 +231,7 @@ export default class Camera {
         this.orthographic.updateProjectionMatrix();
     }
 
-    setActiveProjection(projection) {
+    setActiveProjection(projection: Projection) {
         this.projection = projection;
         if (this.projection != "orthographic") {
             this.activeProjection = this.perspective;
@@ -191,25 +263,27 @@ export default class Camera {
         }
     }
 
-    roundViewport(viewport) {
+    roundViewport(viewport: ViewPort) {
         return new THREE.Vector4(Math.round(viewport.x), Math.round(viewport.y), Math.round(viewport.width), Math.round(viewport.height));
     }
 
-    snapPosition(data) {
+    snapPosition(data: SnapPosition) {
         const snapPositions = this.snapPositions.map(snapPosition => Math.round(snapPosition * data.size)); // Convert snap positions from % to pixels
         const deltaPositions = snapPositions.map(snapPosition => Math.abs(data.currentPosition - snapPosition));
         data.minDelta = Math.min(...deltaPositions);
         data.newPosition = data.minDelta < this.snapThreshold * data.size ? snapPositions[deltaPositions.indexOf(data.minDelta)] : data.currentPosition;
     }
 
-    snapViewport(frame) { // drag: "none"; resize: string identifying the pointed frame
-        let west, east;
+    snapViewport(frame: string) { // drag: "none"; resize: string identifying the pointed frame
+        let west: SnapPosition = {} as unknown as SnapPosition;
+        let east: SnapPosition = {} as unknown as SnapPosition;
+
         if (frame == "none" || frame.includes("west")) {
-            west = { size: window.innerWidth, currentPosition: this.viewport.x };
+            west = { size: window.innerWidth, currentPosition: this.viewport.x } as unknown as SnapPosition;
             this.snapPosition(west);
         }
         if (frame == "none" || frame.includes("east")) {
-            east = { size: window.innerWidth, currentPosition: (this.viewport.x + this.viewport.width) };
+            east = { size: window.innerWidth, currentPosition: (this.viewport.x + this.viewport.width) } as unknown as SnapPosition;
             this.snapPosition(east);
         }
         if (frame == "none") {
@@ -227,13 +301,14 @@ export default class Camera {
             this.viewport.width = east.newPosition - this.viewport.x;
         }
 
-        let south, north;
+        let south: SnapPosition = {} as unknown as SnapPosition;
+        let north: SnapPosition = {} as unknown as SnapPosition;
         if (frame == "none" || frame.includes("south")) {
-            south = { size: window.innerHeight, currentPosition: this.viewport.y };
+            south = { size: window.innerHeight, currentPosition: this.viewport.y } as unknown as SnapPosition;
             this.snapPosition(south);
         }
         if (frame == "none" || frame.includes("north")) {
-            north = { size: window.innerHeight, currentPosition: (this.viewport.y + this.viewport.height) };
+            north = { size: window.innerHeight, currentPosition: (this.viewport.y + this.viewport.height) } as unknown as SnapPosition;
             this.snapPosition(north);
         }
         if (frame == "none") {
@@ -252,7 +327,7 @@ export default class Camera {
         }
     }
 
-    dragViewport(mouse) {
+    dragViewport(mouse: Mouse) {
         const increment = mouse.currentPosition.clone().sub(mouse.initialPosition);
         this.viewport.x = THREE.MathUtils.clamp(this.previousViewport.x + increment.x, 0, window.innerWidth - this.viewport.width);
         this.viewport.y = THREE.MathUtils.clamp(this.previousViewport.y + increment.y, 0, window.innerHeight - this.viewport.height);
@@ -261,7 +336,7 @@ export default class Camera {
         this.currentViewport = this.pixelsToPercentage(this.viewport, window.innerWidth, window.innerHeight);
     }
 
-    resizeViewport(frame, mouse) {
+    resizeViewport(frame: string, mouse: Mouse) {
         const increment = mouse.currentPosition.clone().sub(mouse.initialPosition);
         switch (frame) {
             case "southwest":
@@ -327,7 +402,8 @@ export default class Camera {
         this.setProjectionParameters();
     }
 
-    setViewport(viewport) { // Expressed in fraction of window width and window height
+    get viewportSizeMin() { return this.parameters.viewportSizeMin }
+    setViewport(viewport?: ViewPort) { // Expressed in fraction of window width and window height
         if (viewport !== undefined) {
             this.currentViewport = viewport;
         }
@@ -340,34 +416,34 @@ export default class Camera {
         this.setProjectionParameters();
     }
 
-    setTarget(target) {
+    setTarget(target: Target) {
         this.target.copy(target);
         this.setViewingParameters();
     }
 
-    updateTarget(targetIncrement) {
+    updateTarget(targetIncrement: Target) {
         this.setTarget(this.target.add(targetIncrement));
     }
 
-    setOrientation(orientation) {
+    setOrientation(orientation: Orientation) {
         this.orientation.copy(orientation).clamp(this.orientationMin, this.orientationMax);
         this.setViewingParameters();
     }
 
-    updateOrientation(orientationIncrement) {
+    updateOrientation(orientationIncrement: Orientation) {
         this.setOrientation(this.orientation.add(orientationIncrement));
     }
 
-    setDistance(distance) {
+    setDistance(distance: Distance) {
         this.distance = THREE.MathUtils.clamp(distance, this.distanceMin, this.distanceMax);
         this.setViewingParameters();
     }
 
-    updateDistance(distanceIncrement) {
+    updateDistance(distanceIncrement: Distance) {
         this.setDistance(this.distance + distanceIncrement);
     }
 
-    setZoom(zoom) {
+    setZoom(zoom: number) {
         this.zoom = THREE.MathUtils.clamp(zoom, this.zoomMin, this.zoomMax);
         this.perspective.zoom = this.zoom;
         this.perspective.updateProjectionMatrix();
@@ -375,7 +451,7 @@ export default class Camera {
         this.orthographic.updateProjectionMatrix();
     }
 
-    updateZoom(zoomIncrement) {
+    updateZoom(zoomIncrement: number) {
         this.setZoom(this.zoom + zoomIncrement);
     }
 }

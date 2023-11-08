@@ -1,56 +1,118 @@
 import * as THREE from "three";
 
-/*
- * parameters = {
- *  enabled: Boolean,
- *  volume: Float,
- *  volumeMin: Float,
- *  volumeMax: Float,
- *  volumeStep: Float,
- *  introductionClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  idleClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  jumpClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  deathClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  danceClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  endClips: [{ url: String, position: String, referenceDistance: Float, loop: Boolean, volume: Float }],
- *  credits: String
- * }
- */
+type Clip = {
+    url: string,
+    position: string,
+    referenceDistance: number,
+    loop: boolean,
+    volume: number
+
+    // scuffed
+    source: THREE.PositionalAudio
+}
+
+type ClipType = Clip[]
+
+type parameters = {
+    enabled: boolean,
+    volume: number,
+    volumeMin: number,
+    volumeMax: number,
+    volumeStep: number,
+    introductionClips: Clip[],
+    idleClips: Clip[],
+    jumpClips: Clip[],
+    deathClips: Clip[],
+    danceClips: Clip[],
+    endClips: Clip[],
+    credits: string
+}
+
 
 export default class Audio {
-    constructor(parameters) {
-        for (const [key, value] of Object.entries(parameters)) {
-            this[key] = value;
-        }
+    private types: Clip[][]
 
-        const onLoad = function (clip, buffer) {
-            clip.source.setBuffer(buffer);
-            if (clip.position != "") {
-                clip.source.setRefDistance(clip.referenceDistance);
-            }
-            clip.source.setLoop(clip.loop);
-            clip.source.setVolume(clip.volume);
-            clipBalance--;
-        }
 
-        const onProgress = function (url, xhr) {
+    private get enabled() {
+        return this.parameters.enabled
+    }
+    private get volume() {
+        return this.parameters.volume
+    }
+
+    private _listener: THREE.AudioListener
+
+    get listener() {
+        return this._listener
+    }
+
+    get credits() {
+        return this.parameters.credits
+    }
+
+    get introductionClips() {
+        return this.parameters.introductionClips
+    }
+
+    get idleClips() {
+        return this.parameters.idleClips
+    }
+
+    get jumpClips() {
+        return this.parameters.jumpClips
+    }
+
+    get deathClips() {
+        return this.parameters.deathClips
+    }
+
+    get danceClips() {
+        return this.parameters.danceClips
+    }
+    get endClips() {
+        return this.parameters.endClips
+    }
+
+
+
+    private clipBalance: number = 0
+
+    onLoad(clip: Clip, buffer: AudioBuffer) {
+        clip.source.setBuffer(buffer);
+        if (clip.position != "") {
+            clip.source.setRefDistance(clip.referenceDistance);
+        }
+        clip.source.setLoop(clip.loop);
+        clip.source.setVolume(clip.volume);
+        this.clipBalance--;
+    }
+
+    loaded() {
+        return this.clipBalance == 0;
+    }
+
+    constructor(private parameters: parameters) {
+
+        // for (const [key, value] of Object.entries(parameters)) {
+        //     this[key] = value;
+        // }
+
+
+        const onProgress = function(url: string, xhr: ProgressEvent<EventTarget>) {
             console.log("Resource '" + url + "' " + (100.0 * xhr.loaded / xhr.total).toFixed(0) + "% loaded.");
         }
 
-        const onError = function (url, error) {
+        const onError = function(url: string, error: unknown) {
             console.error("Error loading resource '" + url + "' (" + error + ").");
         }
 
-        this.loaded = function () {
-            return clipBalance == 0;
-        }
 
         // Initialize clipBalance. It increases whenever a clip is found and decreases each time a clip is successfully loaded. When it reaches zero, all clips have been loaded
-        let clipBalance = 0;
+        this.clipBalance = 0
 
         // Create an audio listener and set the master volume
-        this.listener = new THREE.AudioListener();
-        this.listener.setMasterVolume(this.volume);
+        this._listener = new THREE.AudioListener();
+        this._listener.setMasterVolume(this.volume);
 
         // Create an audio buffer loader
         const loader = new THREE.AudioLoader();
@@ -59,14 +121,17 @@ export default class Audio {
         this.types = [this.introductionClips, this.idleClips, this.jumpClips, this.deathClips, this.danceClips, this.endClips];
         this.types.forEach(type => {
             type.forEach(clip => {
-                clipBalance++;
-                clip.source = clip.position == "" ? new THREE.Audio(this.listener) : new THREE.PositionalAudio(this.listener);
+                this.clipBalance++;
+                // NOTE: potential bug due to bug due to THREE.Audio not having setRefDistance()
+                clip.source = clip.position == ""
+                    ? new THREE.Audio(this._listener) as unknown as THREE.PositionalAudio
+                    : new THREE.PositionalAudio(this._listener);
                 loader.load(
                     //Resource URL
                     clip.url,
 
                     // onLoad callback
-                    buffer => onLoad(clip, buffer),
+                    buffer => this.onLoad(clip, buffer),
 
                     // onProgress callback
                     xhr => onProgress(clip.url, xhr),
@@ -78,7 +143,7 @@ export default class Audio {
         });
     }
 
-    play(type, interrupt) {
+    play(type: ClipType, interrupt: boolean) {
         if (this.enabled) {
             if (interrupt) {
                 this.stop(type);
@@ -90,7 +155,7 @@ export default class Audio {
         }
     }
 
-    stop(type) {
+    stop(type: ClipType) {
         type.forEach(clip => {
             if (clip.source.isPlaying) {
                 clip.source.stop();

@@ -345,7 +345,18 @@ import UserInterface from "./user_interface";
  * }
  */
 
+export type Mouse = {
+    initialPosition: THREE.Vector2 // Mouse position when a button is pressed
+    previousPosition: THREE.Vector2 // Previous mouse position
+    currentPosition: THREE.Vector2 // Current mouse position
+    actionInProgress: boolean // Dragging, resizing, orbiting around a target or panning the mini-map camera: true; otherwise: false
+    camera: string // Camera whose viewport is currently being pointed
+    frame: string// Viewport frame currently being pointed
+}
+
 export default class ThumbRaiser {
+    private audio: Audio
+
     constructor(generalParameters, audioParameters, cubeTexturesParameters, mazeParameters, playerParameters, ambientLightParameters, directionalLightParameters, spotLightParameters, flashLightParameters, shadowsParameters, fogParameters, collisionDetectionParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);

@@ -1,12 +1,24 @@
 import * as THREE from "three";
+import Player from "./player";
 
 export default class Animations {
-    constructor(object) {
+    private readonly states: string[]
+    private readonly emotes: string[]
+    private readonly mixer: THREE.AnimationMixer
+    private readonly actions: { [index: string]: THREE.AnimationAction }
+
+    private idleTime: number = 0.0;
+    private idleTimeLimit: number = THREE.MathUtils.randFloat(5.0, 10.0);
+
+    private _actionInProgress: boolean
+    private _activeName: string
+
+    constructor(object: Player) {
         this.states = ["Idle", "Walking", "Running", "Dance", "Death", "Sitting", "Standing"];
         this.emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
 
         this.mixer = new THREE.AnimationMixer(object);
-        this.actionInProgress = false;
+        this._actionInProgress = false;
 
         this.actions = {};
         for (let i = 0; i < object.animations.length; i++) {
@@ -19,36 +31,37 @@ export default class Animations {
             }
         }
         this.resetIdleTime();
-        this.activeName = "Idle";
-        this.actions[this.activeName].play();
+        this._activeName = "Idle";
+        this.actions[this._activeName].play();
     }
 
-    fadeToAction(name, duration) {
-        if (this.activeName != name && !this.actionInProgress) {
-            const previousName = this.activeName;
-            this.activeName = name;
+    fadeToAction(name: string, duration: number) {
+        if (this._activeName != name && !this._actionInProgress) {
+            const previousName = this._activeName;
+            this._activeName = name;
             this.actions[previousName].fadeOut(duration);
-            this.actions[this.activeName]
+            this.actions[this._activeName]
                 .reset()
                 .setEffectiveTimeScale(1)
                 .setEffectiveWeight(1)
                 .fadeIn(duration)
                 .play();
             // Some actions must not be interrupted
-            if (this.activeName != "Idle" && this.activeName != "Walking" && this.activeName != "Running") {
-                this.mixer.addEventListener("finished", event => this.actionFinished(event));
-                this.actionInProgress = true;
+            if (this._activeName != "Idle" && this._activeName != "Walking" && this._activeName != "Running") {
+                this.mixer.addEventListener("finished", () => this.actionFinished());
+                this._actionInProgress = true;
             }
-            if (this.activeName != "Idle") {
+            if (this._activeName != "Idle") {
                 this.resetIdleTime();
             }
         }
     }
 
     actionFinished() {
-        if (this.actionInProgress) {
-            this.actionInProgress = false;
-            this.mixer.removeEventListener("finished", this.actionInProgress);
+        if (this._actionInProgress) {
+            this._actionInProgress = false;
+            // TODO: err
+            this.mixer.removeEventListener("finished", this._actionInProgress);
         }
     }
 
@@ -57,7 +70,7 @@ export default class Animations {
         this.idleTimeLimit = THREE.MathUtils.randFloat(5.0, 10.0);
     }
 
-    updateIdleTime(deltaT) {
+    updateIdleTime(deltaT: number) {
         this.idleTime += deltaT;
     }
 
@@ -65,12 +78,20 @@ export default class Animations {
         return this.idleTime > this.idleTimeLimit;
     }
 
-    update(deltaT) {
+    update(deltaT: number) {
         if (this.mixer) {
             this.mixer.update(deltaT);
         }
-        if (this.activeName == "Idle") {
+        if (this._activeName == "Idle") {
             this.updateIdleTime(deltaT);
         }
+    }
+
+    get actionInProgress() {
+        return this._actionInProgress
+    }
+
+    get activeName() {
+        return this._activeName
     }
 }
