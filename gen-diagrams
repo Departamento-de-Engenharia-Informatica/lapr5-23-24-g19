@@ -1,0 +1,19 @@
+#!/bin/sh
+
+BASE="${1:-docs}"
+
+lastmod() {
+    stat --format '%Y' "$1"
+}
+
+while IFS= read -d $'\0' -r file; do
+    ext="${file#*.}"
+    svg="${file%.*}.svg"
+
+    if [ ! -f "${svg}" ] ||
+        [ "$(lastmod "${file}")" -gt "$(lastmod "${svg}")" ]
+    then
+        echo "Generating ${svg}..."
+        plantuml generate -tsvg "${file}"
+    fi
+done < <(find "${BASE}" -iname '*.puml' -print0)
