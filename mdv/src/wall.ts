@@ -1,41 +1,51 @@
 import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils"; // NOTE!!
-import { merge } from "./merge";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js"
 import MultiTexturedMaterial from "./material";
 
-/*
- * parameters = {
- *  size: Vector3,
- *  segments: Vector3,
- *  materialParameters: {
- *   color: Color,
- *   mapUrl: String,
- *   aoMapUrl: String,
- *   aoMapIntensity: Float,
- *   displacementMapUrl: String,
- *   displacementScale: Float,
- *   displacementBias: Float,
- *   normalMapUrl: String,
- *   normalMapType: Integer,
- *   normalScale: Vector2,
- *   bumpMapUrl: String,
- *   bumpScale: Float,
- *   roughnessMapUrl: String,
- *   roughness: Float,
- *   wrapS: Integer,
- *   wrapT: Integer,
- *   repeat: Vector2,
- *   magFilter: Integer,
- *   minFilter: Integer
- *  },
- *  secondaryColor: Color
- * }
- */
+type materialParams = {
+    color: THREE.Color;
+    mapUrl: string;
+    aoMapUrl: string;
+    aoMapIntensity: number;
+    displacementMapUrl: string;
+    displacementScale: number;
+    displacementBias: number;
+    normalMapUrl: string;
+    normalMapType: number;
+    normalScale: THREE.Vector2;
+    bumpMapUrl: string;
+    bumpScale: number;
+    roughnessMapUrl: string;
+    roughness: number;
+    wrapS: number;
+    wrapT: number;
+    repeat: THREE.Vector2;
+    magFilter: number;
+    minFilter: number;
+};
+
+type parameters = {
+    size: THREE.Vector3,
+    groundHeight: number
+    segments: THREE.Vector3,
+    materialParameters: materialParams,
+    secondaryColor: THREE.Color
+}
+
 
 export default class Wall extends THREE.Group {
-    constructor(parameters) {
+    get size() { return this.parameters.size }
+    get segments() { return this.parameters.segments }
+    get materialParameters() { return this.parameters.materialParameters }
+    get secondaryColor() { return this.parameters.secondaryColor }
+    get groundHeight() { return this.parameters.groundHeight }
+
+    public geometries: THREE.BufferGeometry[]
+    public materials: THREE.MeshStandardMaterial[]
+
+    constructor(private parameters: parameters) {
         super();
-        merge(this, parameters);
+        // merge(this, parameters);
         const halfGroundHeight = this.groundHeight / 2.0;
 
         this.geometries = [];
@@ -74,7 +84,21 @@ export default class Wall extends THREE.Group {
         geometries = [];
 
         // Create the two left faces (a four-triangle mesh)
-        let points = new Float32Array([
+        const leftGeo = this.leftFaces()
+        geometries.push(leftGeo);
+
+        // Create the two right faces (a four-triangle mesh)
+        geometries.push(this.rightFaces(leftGeo));
+
+        // Create the top face (a four-triangle mesh)
+        geometries.push(this.topFace());
+
+        this.geometries.push(BufferGeometryUtils.mergeGeometries(geometries, false));
+        this.materials.push(secondaryMaterial);
+    }
+
+    private leftFaces() {
+        const points = new Float32Array([
             -0.475, -0.25 - this.groundHeight, 0.025,
             -0.475, 0.25, 0.025,
             -0.5, 0.25, 0.0,
@@ -85,7 +109,7 @@ export default class Wall extends THREE.Group {
             -0.475, -0.25 - this.groundHeight, -0.025,
             -0.5, -0.25 - this.groundHeight, 0.0
         ]);
-        let normals = new Float32Array([
+        const normals = new Float32Array([
             -0.707, 0.0, 0.707,
             -0.707, 0.0, 0.707,
             -0.707, 0.0, 0.707,
@@ -96,24 +120,28 @@ export default class Wall extends THREE.Group {
             -0.707, 0.0, -0.707,
             -0.707, 0.0, -0.707
         ]);
-        let indices = [
+        const indices = [
             0, 1, 2,
             2, 3, 0,
             4, 5, 6,
             6, 7, 4
         ];
-        geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
+
+        // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
+        const geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3));
         geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
         geometry.setIndex(indices);
-        geometries.push(geometry);
 
-        // Create the two right faces (a four-triangle mesh)
-        geometry = geometry.clone();
+        return geometry
+    }
+    private rightFaces(geo: THREE.BufferGeometry) {
+        const geometry = geo.clone();
         geometry.applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI));
-        geometries.push(geometry);
 
-        // Create the top face (a four-triangle mesh)
-        points = new Float32Array([
+        return geometry
+    }
+    private topFace(){
+        const points = new Float32Array([
             -0.5, 0.25, 0.0,
             -0.475, 0.25, 0.025,
             -0.475, 0.25, -0.025,
@@ -121,7 +149,7 @@ export default class Wall extends THREE.Group {
             0.475, 0.25, -0.025,
             0.5, 0.25, 0.0
         ]);
-        normals = new Float32Array([
+        const normals = new Float32Array([
             0.0, 1.0, 0.0,
             0.0, 1.0, 0.0,
             0.0, 1.0, 0.0,
@@ -129,18 +157,16 @@ export default class Wall extends THREE.Group {
             0.0, 1.0, 0.0,
             0.0, 1.0, 0.0,
         ]);
-        indices = [
+        const indices = [
             0, 1, 2,
             2, 1, 3,
             3, 4, 2,
             4, 3, 5
         ];
-        geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
+        const geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
         geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
         geometry.setIndex(indices);
-        geometries.push(geometry);
 
-        this.geometries.push(BufferGeometryUtils.mergeGeometries(geometries, false));
-        this.materials.push(secondaryMaterial);
+        return geometry
     }
 }
