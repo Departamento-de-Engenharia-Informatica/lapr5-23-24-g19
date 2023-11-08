@@ -1,0 +1,30 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : create building
+    activate ui
+        ui --> usr : request data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : POST /buildings
+
+        activate md
+            note right of md : see US 150 documentation
+            md --> ui : error/success
+        deactivate md
+
+        ui --> usr : inform error/success
+    deactivate ui
+deactivate usr
+
+@enduml
