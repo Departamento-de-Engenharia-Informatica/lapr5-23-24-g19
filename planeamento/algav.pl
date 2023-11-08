@@ -185,4 +185,249 @@ counter([passag(_,_)|L],NElev,NPassage):-
 % -------------------------------------END SECOND PART--------------------------------
 % ------------------------------------------------------------------------------------
 
+% 7- We will represent a portion of the surface, for example, the 3rd floor of building B,
+%   using a matrix of cells, where 0 indicates that the robot can occupy the cell and 1 indicates an obstacle.
+%   We can assume that these cells are square
+
+%m(col,lin,valor)
+m(1,1,1).
+m(2,1,1).
+m(3,1,1).
+m(4,1,1).
+m(5,1,1).
+m(6,1,1).
+m(7,1,1).
+m(8,1,1).
+m(1,2,0).
+m(2,2,0).
+m(3,2,0).
+m(4,2,0).
+m(5,2,0).
+m(6,2,0).
+m(7,2,0).
+m(8,2,1).
+m(1,3,0).
+m(2,3,0).
+m(3,3,0).
+m(4,3,0).
+m(5,3,0).
+m(6,3,0).
+m(7,3,0).
+m(8,3,1).
+m(1,4,0).
+m(2,4,0).
+m(3,4,0).
+m(4,4,0).
+m(5,4,0).
+m(6,4,0).
+m(7,4,0).
+m(8,4,1).
+m(1,5,1).
+m(2,5,1).
+m(3,5,1).
+m(4,5,1).
+m(5,5,0).
+m(6,5,0).
+m(7,5,0).
+m(8,5,1).
+m(1,6,1).
+m(2,6,1).
+m(3,6,1).
+m(4,6,1).
+m(5,6,0).
+m(6,6,0).
+m(7,6,0).
+m(8,6,1).
+m(1,7,1).
+m(2,7,1).
+m(3,7,1).
+m(4,7,1).
+m(5,7,0).
+m(6,7,0).
+m(7,7,0).
+m(8,7,1)
+
+% 8- CREATE GRAPH
+% example: ?- create_graph(8,7).
+% example: ?- ligacel(A,B)
+
+:-dynamic ligacel/2.
+create_graph(_,0):-!.
+
+create_graph(Col,Lin):-
+    create_graph_lin(Col,Lin),
+    Lin1 is Lin-1,
+    create_graph(Col,Lin1).
+
+create_graph_lin(0,_):-!.
+
+create_graph_lin(Col,Lin):-m(Col,Lin,0),
+    !,
+    ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
+    ((m(ColS,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColS,Lin)));true)),
+    ((m(ColA,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColA,Lin)));true)),
+    ((m(Col,LinS,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinS)));true)),
+    ((m(Col,LinA,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinA)));true)),
+    Col1 is Col-1,
+    create_graph_lin(Col1,Lin).
+
+create_graph_lin(Col,Lin):-
+    Col1 is Col-1,
+    create_graph_lin(Col1,Lin).
+
+
+% 9- All possible paths inside floor
+% ?- findall(_,ligacel(_,_),L),length(L,Length).
+
+
+% 10- Find solutions to go from cell(x,y) to cell(x,y) using DFS
+% example: ?- dfs(cel(1,3),cel(6,7),L).
+
+dfs(Orig,Dest,Path):-
+dfs2(Orig,Dest,[Orig],Path).
+
+dfs2(Dest,Dest,LA,Path):-
+reverse(LA,Path).
+
+dfs2(Act,Dest,LA,Path):-ligacel(Act,X),\+ member(X,LA),
+dfs2(X,Dest,[X|LA],Path).
+
+
+% 11- We will also try to count the number of solutions by generating all of them into a list and then observing the size of the list.
+% ?- all_dfs(cel(1,3),cel(6,7),L),length(L,Length).
+
+all_dfs(Orig,Dest,LPath):-findall(Path,dfs(Orig,Dest,Path),LPath).
+
+
+% 12- To find out the best solution, that is, the solution (or one of the solutions) with the fewest number of steps
+% ?- better_dfs(cel(1,3),cel(6,7),L).
+
+better_dfs(Orig,Dest,Path):-all_dfs(Orig,Dest,LPath), shortlist(LPath,Path,_).
+
+shortlist([L],L,N):-!,length(L,N).
+
+shortlist([L|LL],Lm,Nm):-shortlist(LL,Lm1,Nm1),
+        length(L,NL),
+        ((NL<Nm1,!,Lm=L,Nm is NL);(Lm=Lm1,Nm is Nm1)).
+
+
+% 13- There are several other solutions with 10 elements; this will be easier to see using the Breadth-First Search(BFS)
+% example: ?- bfs(cel(1,3),cel(6,7),L).
+
+bfs(Orig,Dest,Path):-
+    bfs2(Dest,[[Orig]],Path).
+
+bfs2(Dest,[[Dest|T]|_],Path):-
+    reverse([Dest|T],Path).
+
+bfs2(Dest,[LA|Others],Path):-
+    LA=[Act|_],
+    findall([X|LA],
+        (Dest\==Act,ligacel(Act,X),\+ member(X,LA)),
+        News),
+    append(Others,News,All),
+    bfs2(Dest,All,Path).
+
+% ------------------------------------------------------------------------------------
+% -----------------------USER STORY 510-----------------------------------------------
+% ------------------------------------------------------------------------------------
+
+%Connect what was covered in the previous class with what was presented in this class.
+
+% In the previous class, we only discussed connections between buildings
+%    and floors using external linking passages or elevators.
+
+% Now, for each internal floor, it should be possible to reference rooms and offices, the access point to the elevator,
+%    and the access points to external linking passages that connect buildings.
+%    Note that a matrix will be required for each floor of the building.
+
+% Each of these references will be in a cell cel(Column, Row), with positions in front of the doors to access rooms and offices,
+%    the elevator, and access to the external linking passages.
+
+% We will have a matrix of cells for each floor and building
+%    (it is necessary to differentiate them; for example, facts like m/3 and ligacel/2 will require additional arguments).
+
+% Include diagonal movements. For example, a diagonal movement between neighboring cells cel(i, j) and cel(i+1, j+1),
+%    both with a value of 0, can only be made if cel(i, j+1) and cel(i+1, j) are also set to 0.
+
+% A movement in the horizontal or vertical direction counts as 1 unit, but a diagonal movement has a weight of sqrt(2)
+%    compared to the unit used for horizontal and vertical movements.
+
+
+% Example floor layout:
+% 1 1 1 1 1 1 1 1
+% 0 0 0 0 0 0 0 1
+% 0 0 0 0 0 0 0 1
+% 0 0 0 0 0 0 0 1
+% 1 1 1 1 0 0 0 1
+% 1 1 1 1 0 0 0 1
+% 1 1 1 1 0 0 0 1
+
+% Define dynamic predicates
+:- dynamic grid/1.
+:- dynamic access_point/1.
+
+
+assert(grid([[1, 1, 1, 1, 1, 1, 1, 1],
+             [0, 0, 0, 0, 0, 0, 0, 1],
+             [0, 0, 0, 0, 0, 0, 0, 1],
+             [0, 0, 0, 0, 0, 0, 0, 1],
+             [1, 1, 1, 1, 0, 0, 0, 1],
+             [1, 1, 1, 1, 0, 0, 0, 1],
+             [1, 1, 1, 1, 0, 1, 0, 1]])).
+
+% Define dynamic predicates
+:- dynamic grid/1.
+:- dynamic access_point/1.
+
+% Define the grid
+grid([
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 1, 0, 1]
+]).
+
+% Define access points
+access_point(cell(6, 7)).  % Access point between buildings.
+access_point(cell(1, 3)).  % Example: Access point between buildings.
+access_point(cell(3, 5)).  % Access point to rooms.
+access_point(cell(7, 2)).  % Access point to the elevator.
+
+% Define the rules for movement
+can_move(X/Y, X1/Y1) :-
+    grid(Grid),
+    nth0(X, Grid, Row),
+    nth0(X1, Grid, Row1),
+    element(Y, Row, 0),
+    element(Y1, Row1, 0).
+
+element(N, List, Elem) :- nth0(N, List, Elem).
+
+% Define DFS for pathfinding with access points
+dfst(Start, End, Path) :- dfst(Start, End, [], Path).
+
+dfst(End, End, Visited, [End|Visited]).
+dfst(Start, End, Visited, Path) :-
+    can_move(Start, Next),
+    \+ member(Next, Visited),
+    (
+        access_point(Next),
+        Path = [Next|Visited]
+        ;
+        dfst(Next, End, [Start|Visited], Path)
+    ).
+
+% Define a predicate to find a path
+find_path(Start, End, Path) :- dfst(Start, End, [], Path).
+
+% Example usage:
+% ?- find_path(cell(0, 0), cell(4, 4), Path).
+
+% ------------------------------------------------------------------------------------
+% -------------------------------------END THIRD PART--------------------------------
+% ------------------------------------------------------------------------------------
 
