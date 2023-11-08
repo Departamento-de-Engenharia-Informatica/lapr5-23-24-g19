@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : list building floors with passage
+    activate mng
+        mng --> usr : request building
+    deactivate mng
+
+    usr -> mng : provides building
+    activate mng
+        mng --> usr : inform error/show floors
+    deactivate mng
+deactivate usr
+
+@enduml
