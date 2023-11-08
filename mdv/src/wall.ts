@@ -25,16 +25,16 @@ type materialParams = {
 };
 
 type parameters = {
-    size: THREE.Vector3,
+    // size: THREE.Vector3,
     groundHeight: number
-    segments: THREE.Vector3,
+    segments: THREE.Vector2,
     materialParameters: materialParams,
     secondaryColor: THREE.Color
 }
 
 
 export default class Wall extends THREE.Group {
-    get size() { return this.parameters.size }
+    // get size() { return this.parameters.size }
     get segments() { return this.parameters.segments }
     get materialParameters() { return this.parameters.materialParameters }
     get secondaryColor() { return this.parameters.secondaryColor }

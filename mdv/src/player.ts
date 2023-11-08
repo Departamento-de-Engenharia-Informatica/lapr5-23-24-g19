@@ -74,12 +74,15 @@ export default class Player extends THREE.Group {
     public face: Face = new THREE.Object3D() as unknown as Face
     public headEnd: THREE.Object3D = new THREE.Object3D()
 
-    public cylinderHelper: CylinderHelper = new CylinderHelper(this.helpersColor)
-    public boxHelper: BoxHelper = new BoxHelper(this.helpersColor)
+    public cylinderHelper: CylinderHelper
+    public boxHelper: BoxHelper
 
     constructor(private parameters: parameters) {
         super();
         merge(this, { scale: parameters.scale })
+
+        this.cylinderHelper = new CylinderHelper(this.helpersColor)
+        this.boxHelper = new BoxHelper(this.helpersColor)
 
         // Convert default direction from degrees to radians
         this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection);
