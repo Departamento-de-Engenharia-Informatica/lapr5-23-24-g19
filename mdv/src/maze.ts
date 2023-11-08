@@ -8,7 +8,7 @@ import Wall from "./wall";
 type AABB = THREE.Box3[][][]
 type Position = { x: number, z: number }
 
-type parameters = {
+export type MazeParameters = {
     url: string,
     designCredits: string,
     texturesCredits: string,
@@ -94,7 +94,7 @@ export default class Maze extends THREE.Group {
     public initialPosition: THREE.Vector3 = new THREE.Vector3()
     public initialDirection: number = 0
 
-    constructor(private parameters: parameters) {
+    constructor(private parameters: MazeParameters) {
         super();
         // merge(this, parameters);
         merge(this, { scale: parameters.scale })

@@ -36,7 +36,7 @@ type KeyCodes = {
     thumbsUp: string;
 };
 
-type parameters = {
+export type PlayerParameters = {
     url: string,
     credits: string,
     scale: THREE.Vector3,
@@ -77,7 +77,9 @@ export default class Player extends THREE.Group {
     public cylinderHelper: CylinderHelper
     public boxHelper: BoxHelper
 
-    constructor(private parameters: parameters) {
+    get shiftKey() {return this.keyStates.shiftKey}
+
+    constructor(private parameters: PlayerParameters) {
         super();
         merge(this, { scale: parameters.scale })
 

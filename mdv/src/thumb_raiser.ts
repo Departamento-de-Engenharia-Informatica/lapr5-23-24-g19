@@ -18,14 +18,14 @@ import Stats from "three/examples/jsm/libs/stats.module.js";
 import Orientation from "./orientation";
 import { generalData, audioData, cubeTextureData, mazeData, playerData, ambientLightData, directionalLightData, spotLightData, flashLightData, shadowsData, fogData, collisionDetectionData, cameraData } from "./default_data.js";
 import { merge } from "./merge";
-import Audio from "./audio";
-import CubeTexture from "./cubetexture";
+import Audio, { AudioParameters } from "./audio";
+import CubeTexture, { CubeTextureParameters } from "./cubetexture";
 import Animations from "./animations";
-import Maze from "./maze";
-import Player from "./player";
-import { AmbientLight, DirectionalLight, SpotLight, FlashLight } from "./lights";
-import Fog from "./fog";
-import Camera from "./camera";
+import Maze, { MazeParameters } from "./maze";
+import Player, { PlayerParameters } from "./player";
+import { AmbientLight, DirectionalLight, SpotLight, FlashLight, AmbientLightParameters, DirectionalLightParameters, SpotLightParameters, FlashLightParameters } from "./lights";
+import Fog, { FogParameters } from "./fog";
+import Camera, { CameraParameters } from "./camera";
 import UserInterface from "./user_interface";
 
 /*
@@ -345,19 +345,100 @@ import UserInterface from "./user_interface";
  * }
  */
 
+type GeneralParameters = {
+    setDevicePixelRatio: boolean
+}
+type ShadowsParameters = {
+    enabled: boolean
+    type: number
+}
+type CollisionDetectionParameters = {
+    method: string,
+    boundingVolumes: { visible: boolean }
+}
+
 export type Mouse = {
     initialPosition: THREE.Vector2 // Mouse position when a button is pressed
     previousPosition: THREE.Vector2 // Previous mouse position
     currentPosition: THREE.Vector2 // Current mouse position
     actionInProgress: boolean // Dragging, resizing, orbiting around a target or panning the mini-map camera: true; otherwise: false
-    camera: string // Camera whose viewport is currently being pointed
+    camera: Camera|'none' // Camera whose viewport is currently being pointed
     frame: string// Viewport frame currently being pointed
 }
 
 export default class ThumbRaiser {
-    private audio: Audio
+    public audio: Audio
+    public cubeTexture: CubeTexture
+    public maze: Maze
+    public player: Player
 
-    constructor(generalParameters, audioParameters, cubeTexturesParameters, mazeParameters, playerParameters, ambientLightParameters, directionalLightParameters, spotLightParameters, flashLightParameters, shadowsParameters, fogParameters, collisionDetectionParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
+    public background: THREE.Scene
+    public frame: THREE.Scene
+    public camera2D: THREE.OrthographicCamera
+    public scene: THREE.Scene
+
+    public ambientLight: AmbientLight
+    public directionalLight: DirectionalLight
+    public spotLight: SpotLight
+    public flashLight: FlashLight
+
+    public fog: Fog
+
+    public fixedViewCamera: Camera
+    public firstPersonViewCamera: Camera
+    public thirdPersonViewCamera: Camera
+    public topViewCamera: Camera
+    public miniMapCamera: Camera
+
+    public statistics: Stats
+    public renderer: THREE.WebGLRenderer
+
+    private _gameRunning: boolean
+    get gameRunning(){return this._gameRunning}
+
+    // aaaaaa
+    public viewsPanel: HTMLElement
+    public view: HTMLElement
+    public projection: HTMLElement
+    public horizontal: HTMLElement
+    public vertical: HTMLElement
+    public distance: HTMLElement
+    public zoom: HTMLElement
+    public reset: HTMLElement
+    public resetAll: HTMLElement
+    public mouseHelpPanel: HTMLElement
+    public keyboardHelpPanel: HTMLElement
+    public creditsPanel: HTMLElement
+    public subwindowsPanel: HTMLElement
+    public realisticViewMode: {checkBox: HTMLElement }
+    public help:{checkbox: HTMLElement}
+
+    public visibleViewportCameras:Camera[]
+    public mouse:Mouse
+    public activeViewCamera:Camera = undefined as unknown as Camera
+    public userInterface:UserInterface = undefined as unknown as UserInterface
+    public clock:THREE.Clock = new THREE.Clock()
+    public animations: Animations= undefined as unknown as Animations
+
+    constructor(
+        private generalParameters:GeneralParameters,
+        private audioParameters: AudioParameters,
+        private cubeTexturesParameters: CubeTextureParameters,
+        private mazeParameters: MazeParameters,
+        private playerParameters: PlayerParameters,
+        private ambientLightParameters: AmbientLightParameters,
+        private directionalLightParameters: DirectionalLightParameters,
+        private spotLightParameters: SpotLightParameters,
+        private flashLightParameters: FlashLightParameters,
+        private shadowsParameters:ShadowsParameters,
+        private fogParameters: FogParameters,
+        private collisionDetectionParameters:CollisionDetectionParameters,
+        private fixedViewCameraParameters: CameraParameters,
+        private firstPersonViewCameraParameters: CameraParameters,
+        private thirdPersonViewCameraParameters: CameraParameters,
+        private topViewCameraParameters: CameraParameters,
+        private miniMapCameraParameters: CameraParameters) {
+
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
         this.cubeTexturesParameters = merge({}, cubeTextureData, cubeTexturesParameters);
@@ -377,7 +458,7 @@ export default class ThumbRaiser {
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
 
         // Set the game state
-        this.gameRunning = false;
+        this._gameRunning = false;
 
         // Create the audio listener, the audio sources and load the sound clips
         this.audio = new Audio(this.audioParameters);
@@ -394,11 +475,13 @@ export default class ThumbRaiser {
         this.background.add(square);
 
         // Create the frame (the edges of the same square)
-        const edges = new THREE.EdgesGeometry(geometry);
-        material = new THREE.LineBasicMaterial();
-        square = new THREE.LineSegments(edges, material);
-        square.position.set(0.5, 0.5, 0.0);
-        this.frame.add(square);
+        {
+            const edges = new THREE.EdgesGeometry(geometry);
+            const material = new THREE.LineBasicMaterial();
+            const square = new THREE.LineSegments(edges, material);
+            square.position.set(0.5, 0.5, 0.0);
+            this.frame.add(square);
+        }
 
         // Create the camera corresponding to the 2D scenes
         this.camera2D = new THREE.OrthographicCamera(0.0, 1.0, 1.0, 0.0, 0.0, 1.0);
@@ -447,26 +530,26 @@ export default class ThumbRaiser {
         }
         this.renderer.autoClear = false;
         this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = this.shadowsParameters.type;
+        this.renderer.shadowMap.type = this.shadowsParameters.type as THREE.ShadowMapType;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.domElement.id = "canvas";
         document.body.appendChild(this.renderer.domElement);
 
         // Get and configure the panels' <div> elements (with the exception of the user interface checkbox, which will be addressed later)
-        this.viewsPanel = document.getElementById("views-panel");
-        this.view = document.getElementById("view");
-        this.projection = document.getElementById("projection");
-        this.horizontal = document.getElementById("horizontal");
-        this.vertical = document.getElementById("vertical");
-        this.distance = document.getElementById("distance");
-        this.zoom = document.getElementById("zoom");
-        this.reset = document.getElementById("reset");
-        this.resetAll = document.getElementById("reset-all");
-        this.mouseHelpPanel = document.getElementById("mouse-help-panel");
-        this.keyboardHelpPanel = document.getElementById("keyboard-help-panel");
-        this.creditsPanel = document.getElementById("credits-panel");
-        this.subwindowsPanel = document.getElementById("subwindows-panel");
-        this.realisticViewMode = { checkBox: document.getElementById("realistic") };
+        this.viewsPanel = document.getElementById("views-panel")!;
+        this.view = document.getElementById("view")!;
+        this.projection = document.getElementById("projection")!
+        this.horizontal = document.getElementById("horizontal")!
+        this.vertical = document.getElementById("vertical")!
+        this.distance = document.getElementById("distance")!
+        this.zoom = document.getElementById("zoom")!
+        this.reset = document.getElementById("reset")!
+        this.resetAll = document.getElementById("reset-all")!
+        this.mouseHelpPanel = document.getElementById("mouse-help-panel")!
+        this.keyboardHelpPanel = document.getElementById("keyboard-help-panel")!
+        this.creditsPanel = document.getElementById("credits-panel")!
+        this.subwindowsPanel = document.getElementById("subwindows-panel")!
+        this.realisticViewMode = { checkBox: document.getElementById("realistic")! };
         this.realisticViewMode.checkBox.checked = false;
         this.fixedViewCamera.checkBox = document.getElementById("fixed");
         this.fixedViewCamera.checkBox.checked = true;
@@ -480,7 +563,7 @@ export default class ThumbRaiser {
         this.miniMapCamera.checkBox.checked = true;
         this.statistics.checkBox = document.getElementById("statistics");
         this.statistics.checkBox.checked = false;
-        this.help = { checkBox: document.getElementById("help") };
+        this.help = { checkBox: document.getElementById("help")! };
         this.help.checkBox.checked = false;
 
         // Create an ordered list containing the cameras whose viewports are currently visible
@@ -513,18 +596,18 @@ export default class ThumbRaiser {
         // Mouse help panel is static; so, it doesn't need to be built
 
         // Keyboard help panel
-        const table = document.getElementById("keyboard-help-table");
+        const table = document.getElementById("keyboard-help-table")! as HTMLTableElement;
         let i = 0;
         for (const key in this.player.keyCodes) {
             while (table.rows[i].cells.length < 2) {
                 i++;
             };
-            table.rows[i++].cells[0].innerHTML = this.player.keyCodes[key];
+            table.rows[i++].cells[0].innerHTML = this.player.keyCodes[key as keyof Player['keyCodes']];
         }
     }
 
     buildCreditsPanel() {
-        const table = document.getElementById("credits-table");
+        const table = document.getElementById("credits-table")! as HTMLTableElement ;
         while (table.rows.length > 1) {
             table.deleteRow(-1);
         };
@@ -553,7 +636,7 @@ export default class ThumbRaiser {
         this.zoom.value = this.activeViewCamera.zoom.toFixed(1);
     }
 
-    setCursor(action) {
+    setCursor(action:string) {
         let cursor;
         switch (action) {
             case "drag":
@@ -611,10 +694,10 @@ export default class ThumbRaiser {
                 cursor = "auto";
                 break;
         }
-        document.body.style.cursor = cursor;
+        document.body.style.cursor = cursor!;
     }
 
-    getPointedFrame(mouse, camera) {
+    getPointedFrame(mouse:Mouse, camera:Camera) {
         const deltaX = camera.dragOrResizeThreshold * window.innerWidth;
         const deltaY = camera.dragOrResizeThreshold * window.innerHeight;
         const west = mouse.currentPosition.x - camera.viewport.x <= deltaX;
@@ -654,7 +737,7 @@ export default class ThumbRaiser {
         }
     }
 
-    getPointedViewport(mouse) {
+    getPointedViewport(mouse:Mouse) {
         const cameras = (this.miniMapCamera.checkBox.checked ? [this.miniMapCamera] : []).concat(this.visibleViewportCameras);
         for (const camera of cameras) {
             if (mouse.currentPosition.x >= camera.viewport.x &&
@@ -689,7 +772,7 @@ export default class ThumbRaiser {
     }
 
     // Set the active view camera
-    setActiveViewCamera(camera) {
+    setActiveViewCamera(camera:Camera) {
         if (this.activeViewCamera !== undefined) {
             this.activeViewCamera.activeProjection.remove(this.audio.listener);
         }
@@ -1163,7 +1246,7 @@ export default class ThumbRaiser {
     }
 
     update() {
-        if (!this.gameRunning) {
+        if (!this._gameRunning) {
             if (this.audio.loaded() && this.maze.loaded && this.player.loaded) { // If all resources have been loaded
                 // Add positional audio sources to objects
                 const types = [this.audio.introductionClips, this.audio.idleClips, this.audio.jumpClips, this.audio.deathClips, this.audio.danceClips, this.audio.endClips];
@@ -1286,7 +1369,7 @@ export default class ThumbRaiser {
                 this.audio.play(this.audio.introductionClips, false);
 
                 // Start the game
-                this.gameRunning = true;
+                this._gameRunning = true;
             }
         }
         else {

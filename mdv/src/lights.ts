@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { merge } from "./merge";
 import Orientation from "./orientation";
 
-type ambientParameters = {
+export type AmbientLightParameters = {
     visible: boolean,
     color: THREE.Color,
     intensity: number,
@@ -16,7 +16,7 @@ export class AmbientLight extends THREE.AmbientLight {
     get intensityMax() { return this.parameters.intensityMax }
     get intensityStep() { return this.parameters.intensityStep }
 
-    constructor(private parameters: ambientParameters) {
+    constructor(private parameters: AmbientLightParameters) {
         super();
         // merge(this, parameters);
         this.visible = parameters.visible
@@ -25,7 +25,7 @@ export class AmbientLight extends THREE.AmbientLight {
     }
 }
 
-type directionalParameters = {
+export type DirectionalLightParameters = {
     visible: boolean,
     color: THREE.Color,
     intensity: number,
@@ -61,7 +61,7 @@ export class DirectionalLight extends THREE.DirectionalLight {
     get orientationMin() { return this.parameters.orientationMin }
     get orientationMax() { return this.parameters.orientationMax }
     get orientationStep() { return this.parameters.orientationStep }
-    constructor(private parameters: directionalParameters) {
+    constructor(private parameters: DirectionalLightParameters) {
         super();
         // merge(this, parameters);
         this.visible = parameters.visible
@@ -87,7 +87,7 @@ export class DirectionalLight extends THREE.DirectionalLight {
     }
 }
 
-type spotParameters = {
+export type SpotLightParameters = {
     visible: boolean,
     color: THREE.Color,
     intensity: number,
@@ -139,7 +139,7 @@ export class SpotLight extends THREE.SpotLight {
     get positionMax() { return this.parameters.positionMax }
     get positionStep() { return this.parameters.positionStep }
 
-    constructor(private parameters: spotParameters) {
+    constructor(private parameters: SpotLightParameters) {
         super();
         // merge(this, parameters);
         this.visible = parameters.visible
@@ -159,7 +159,7 @@ export class SpotLight extends THREE.SpotLight {
     }
 }
 
-type flashParameters = {
+export type FlashLightParameters = {
     visible: boolean,
     color: THREE.Color,
     intensity: number,
@@ -215,7 +215,7 @@ export class FlashLight extends THREE.SpotLight {
     public playerRadius: number
     private playerOrientation: THREE.Quaternion
 
-    constructor(private parameters: flashParameters) {
+    constructor(private parameters: FlashLightParameters) {
         super();
         // merge(this, parameters);
         this.visible = parameters.visible

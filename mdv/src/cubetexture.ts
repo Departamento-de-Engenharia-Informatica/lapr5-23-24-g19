@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type parameters = {
+export type CubeTextureParameters = {
     name: string,
     texturePath: string,
     texturePositiveXUrl: string,
@@ -25,7 +25,7 @@ export default class CubeTexture {
     get credits() {return this.parameters.credits}
     public textures: THREE.CubeTexture | null
 
-    constructor(private parameters: parameters) {
+    constructor(private parameters: CubeTextureParameters) {
         // for (const [key, value] of Object.entries(parameters)) {
         //     this[key] = value;
         // }

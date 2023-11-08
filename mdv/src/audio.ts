@@ -13,7 +13,7 @@ type Clip = {
 
 type ClipType = Clip[]
 
-type parameters = {
+export type AudioParameters = {
     enabled: boolean,
     volume: number,
     volumeMin: number,
@@ -91,7 +91,7 @@ export default class Audio {
         return this.clipBalance == 0;
     }
 
-    constructor(private parameters: parameters) {
+    constructor(private parameters: AudioParameters) {
 
         // for (const [key, value] of Object.entries(parameters)) {
         //     this[key] = value;

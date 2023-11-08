@@ -14,7 +14,7 @@ type SnapPosition = {
     newPosition: number
 }
 
-type parameters = {
+export type CameraParameters = {
     view: string,
     backgroundColor: THREE.Color,
     frameColor: THREE.Color,
@@ -109,7 +109,7 @@ export default class Camera {
 
     get initialDistance() { return this.parameters.initialDistance }
 
-    constructor(private parameters: parameters) {
+    constructor(private parameters: CameraParameters) {
         // for (const [key, value] of Object.entries(parameters)) {
         //     this[key] = value;
         // }

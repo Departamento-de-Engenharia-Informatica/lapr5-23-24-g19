@@ -2,12 +2,13 @@ import * as THREE from "three";
 import Orientation from "./orientation";
 import CubeTexture from "./cubetexture";
 import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js";
+import ThumbRaiser from "./thumb_raiser";
 
 export default class UserInterface extends GUI {
-    constructor(thumbRaiser) {
+    constructor(thumbRaiser:ThumbRaiser) {
         super();
 
-        const audioCallback = function (enabled) {
+        const audioCallback = function (enabled:boolean) {
             if (!enabled) {
                 thumbRaiser.audio.stopAll();
             }

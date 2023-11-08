@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type parameters = {
+export type FogParameters = {
     enabled: boolean,
     color: THREE.Color,
     densityMin: number,
@@ -16,7 +16,7 @@ export default class Fog extends THREE.FogExp2 {
     get densityMax() { return this.parameters.densityMax }
     get densityStep() { return this.parameters.densityStep }
 
-    constructor(private parameters: parameters) {
+    constructor(private parameters: FogParameters) {
         super(parameters.color);
         this.color = parameters.color
     }
