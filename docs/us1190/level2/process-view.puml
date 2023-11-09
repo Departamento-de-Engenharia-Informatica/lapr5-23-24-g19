@@ -1,0 +1,21 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : list passages between two buildings
+    activate mng
+        mng --> usr : shows buildings and requests two
+    deactivate mng
+
+    usr -> mng : chooses two buildings
+    activate mng
+        mng --> usr: shows passages between \nthose buildings \ inform error
+
+    deactivate mng
+deactivate usr
+
+@enduml

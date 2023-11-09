@@ -1,0 +1,33 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : list passages between two buildings
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right of md : see US 170
+            md --> ui : buildings
+        deactivate md
+
+        ui --> usr : shows buildings and requests two
+    deactivate ui
+
+    usr -> ui : chooses two buildings
+    activate ui
+        ui -> md : GET /passages
+        activate md
+            note right of md : see US 260
+            md --> ui : shows passages between\n those buildings
+        deactivate md
+
+        ui --> usr : inform error / shows passages between\n those buildings
+    deactivate ui
+deactivate usr
+
+@enduml
