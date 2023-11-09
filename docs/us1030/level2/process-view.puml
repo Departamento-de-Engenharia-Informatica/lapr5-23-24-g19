@@ -1,0 +1,17 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "Fleet Management" as mng
+
+activate usr
+    usr -> mng : list all fleet robots
+    activate mng
+        mng --> usr : inform error / shows robots
+    deactivate mng
+
+
+deactivate usr
+
+@enduml
