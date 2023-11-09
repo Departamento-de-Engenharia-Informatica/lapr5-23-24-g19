@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : create robottype
+    activate sys
+        sys --> usr : request data
+    deactivate sys
+
+    usr -> sys : provides data
+    activate sys
+        sys --> usr : inform error/success
+    deactivate sys
+deactivate usr
+
+@enduml
