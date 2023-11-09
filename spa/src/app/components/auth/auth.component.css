@@ -1,0 +1,26 @@
+.custom-dropdown {
+    width: 100%;
+    background-color: #d8aa21; /* Set the background color based on the provided RGB value */
+    background-opacity: 0.4; /* Adjust the opacity if needed */
+    border: 1px solid #ca9f1e92; /* Set the border color based on the provided RGB value */
+    border-radius: 0.25rem; /* Adjust the border-radius if needed */
+    color: #fff; /* Set the text color */
+    padding: 0.5rem 1rem; /* Adjust the padding as needed */
+    line-height: 1.5; /* Adjust the line height if needed */
+    outline: none; /* Remove the default outline on focus */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
+  .custom-dropdown:focus {
+    border-color: #5d5d5d; /* Set the focus border color */
+  }
+  
+  .drop-menu{
+    display: flex;
+    width: 66.666667%;
+    width: 100%;
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: flex-end;
+}

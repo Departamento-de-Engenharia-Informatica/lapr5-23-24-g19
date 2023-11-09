@@ -2,3 +2,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+:root {
+    --primary-color: #111827;
+    --secondary-color: #ffcc00;
+    --third-color: #1f2937
+    /* --accent-color: #e8e7fa;
+    --shadow-color: #E8E8E8; */
+}
+
+button.primary {
+    /* padding: 10px;
+    border: solid 1px var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px; */
+}
