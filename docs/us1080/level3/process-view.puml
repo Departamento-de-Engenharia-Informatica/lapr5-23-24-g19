@@ -18,7 +18,7 @@ activate usr
     activate ui
         ui -> md : GET /buildings/?minFloors={min}&maxFloors={max}
         activate md
-            note right: see us180 documentation
+            note right : see us180 documentation
             alt success
                 md --> ui : buildings
                 ui --> usr : lists buildings
