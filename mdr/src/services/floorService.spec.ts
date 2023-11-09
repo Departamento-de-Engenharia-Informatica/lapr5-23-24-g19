@@ -1,5 +1,4 @@
 import { assert } from 'chai'
-import { stubTrue } from 'lodash'
 import { describe, it } from 'mocha'
 import { createSandbox } from 'sinon'
 import Container from 'typedi'
