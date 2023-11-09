@@ -33,7 +33,7 @@ export default class RobotService implements IRobotService {
             if (!type) {
                 return left({
                     errorCode: RobotErrorCode.NotFound,
-                    message: `Could not find robot type: ${type}`,
+                    message: `Could not find robot type: ${dto.typeCode}`,
                 })
             }
 

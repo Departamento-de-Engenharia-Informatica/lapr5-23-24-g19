@@ -26,6 +26,9 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
 
     public async find(code: RobotTypeCode): Promise<RobotType> {
         const doc = await this.robotTypeSchema.findOne({ code: code.value })
+        if (!doc) {
+            return null
+        }
         return RobotTypeMap.toDomain(doc)
     }
 
