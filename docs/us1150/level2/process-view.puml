@@ -1,0 +1,25 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : edit elevator
+    activate mng
+        mng --> usr : show & request building
+    deactivate mng
+
+    usr -> mng : chooses building
+    activate mng
+        mng --> usr : show building elevators
+    deactivate mng
+
+    usr -> mng : chooses elevator & submits updated data
+    activate mng
+        mng --> usr : inform error/success
+    deactivate mng
+deactivate usr
+
+@enduml
