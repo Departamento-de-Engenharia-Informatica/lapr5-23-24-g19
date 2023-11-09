@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : inhibit robot
+    activate mng
+        mng --> usr : show available robots
+    deactivate mng
+
+    usr -> mng : chooses robot
+    activate mng
+        mng --> usr : inform error/success
+    deactivate mng
+deactivate usr
+
+@enduml
