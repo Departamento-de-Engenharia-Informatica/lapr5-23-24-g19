@@ -1,16 +1,26 @@
 #!/bin/sh
 
+[ "$1" = '-f' ] || [ "$1" = '--force' ] && { force=1 && shift 1; }
+
 BASE="${1:-docs}"
+
+[ ! -d "${BASE}" ] && {
+    echo "Could not find directory '${BASE}'. Aborting..." >&2
+    exit 1
+}
 
 lastmod() {
     stat --format '%Y' "$1"
 }
 
+trap 'exit 255' INT
+
 while IFS= read -d $'\0' -r file; do
     ext="${file#*.}"
     svg="${file%.*}.svg"
 
-    if [ ! -f "${svg}" ] ||
+    if [ "${force}" ] ||
+        [ ! -f "${svg}" ] ||
         [ "$(lastmod "${file}")" -gt "$(lastmod "${svg}")" ]
     then
         echo "Generating ${svg}..."
