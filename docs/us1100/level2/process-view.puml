@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mgm
+
+activate usr
+usr -> mgm : list floors from a building
+    activate mgm
+        mgm --> usr : requests data
+    deactivate mgm
+
+    usr -> mgm : provides data
+    activate mgm
+    alt success
+        mgm --> usr : lists floors
+    else error
+        mgm --> usr : informs error
+    end
+    deactivate mgm
+deactivate usr
+
+@enduml
