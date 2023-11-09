@@ -1,0 +1,34 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : list buildings between a minimum\nand maximum number of floors
+    activate ui
+        ui --> usr : request data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : GET /buildings/?minFloors={min}&maxFloors={max}
+        activate md
+            note right: see us180 documentation
+            alt success
+                md --> ui : buildings
+                ui --> usr : lists buildings
+            else error
+                md --> ui : error
+                ui --> usr : inform error
+            end
+        deactivate md
+    deactivate ui
+deactivate usr
+
+
+@enduml
