@@ -23,7 +23,7 @@ activate usr
         ui -> md : GET /passages
         activate md
             note right of md : see US 260
-            md --> ui : shows passages between\n those buildings
+            md --> ui : passages between\n buildings choosed
         deactivate md
 
         ui --> usr : inform error / shows passages between\n those buildings
