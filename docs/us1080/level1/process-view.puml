@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+usr -> sys : list buildings between a minimum\nand maximum number of floors
+    activate sys
+        sys --> usr : request data
+    deactivate sys
+
+    usr -> sys : provides data
+    activate sys
+    alt success
+        sys --> usr : lists buildings
+    else error
+        sys --> usr : inform error
+    end
+    deactivate sys
+deactivate usr
+
+@enduml
