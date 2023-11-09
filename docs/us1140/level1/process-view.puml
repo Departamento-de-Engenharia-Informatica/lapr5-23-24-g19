@@ -1,0 +1,22 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : list elevators inside building
+    activate sys
+        sys --> usr : shows buildings and request one
+    deactivate sys
+
+    usr -> sys : chooses building
+    activate sys
+        sys --> usr: inform error / shows elevators
+
+    deactivate sys
+
+deactivate usr
+
+@enduml
