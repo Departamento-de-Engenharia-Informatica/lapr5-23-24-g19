@@ -1,0 +1,43 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : create room
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right of md : see US 170
+            md --> ui : buildings
+        deactivate md
+
+        ui --> usr : shows buildings and request one
+    deactivate ui
+
+    usr -> ui : chooses building
+    activate ui
+        ui -> md : GET /buildings/{id}/floors
+        activate md
+            note right of md : see US 210
+            md --> ui : floors of building choosed
+        deactivate md
+
+        ui --> usr : shows floors and request data
+    deactivate ui
+
+    usr -> ui: choose floor and provides\n room data
+    activate ui
+        ui -> md : POST (/buildings/{buildingId}/floors/{floorNumber}/rooms)
+        activate md
+            note right of md : see US 310
+            md --> ui : error/success
+        deactivate md
+        ui --> usr : inform error/success
+    deactivate ui
+deactivate usr
+
+@enduml

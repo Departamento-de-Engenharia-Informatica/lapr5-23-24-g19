@@ -1,0 +1,26 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus Management" as mng
+
+activate usr
+    usr -> mng : create room
+    activate mng
+        mng --> usr : shows buildings and request one
+    deactivate mng
+
+    usr -> mng : chooses building
+    activate mng
+        mng --> usr: shows floors and request data
+
+    deactivate mng
+
+    usr -> mng : choose floor and provides\n room data
+    activate mng
+    mng --> usr : inform error/success
+    deactivate mng
+deactivate usr
+
+@enduml
