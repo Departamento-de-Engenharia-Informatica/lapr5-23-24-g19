@@ -3,18 +3,34 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mng
+participant "Campus UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Campus MD" as md
 
 activate usr
-    usr -> mng : create building
-    activate mng
-        mng --> usr : request data
-    deactivate mng
+    usr -> ui : create building
+    activate ui
+        ui --> usr : request data
+    deactivate ui
 
-    usr -> mng : provides data
-    activate mng
-        mng --> usr : inform error/success
-    deactivate mng
+    usr -> ui : provides data
+    activate ui
+        ui -> md : POST /buildings
+        activate md
+            note right of md : see US 150 documentation
+
+            alt building not created
+                md --> ui : 422: error
+                ui --> usr : informs error
+            else success
+                md --> ui : 201: elevator
+                ui --> usr : previews created building
+
+        deactivate md
+
+        end
+    deactivate ui
 deactivate usr
 
 @enduml

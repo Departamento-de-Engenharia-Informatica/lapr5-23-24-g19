@@ -6,14 +6,18 @@ actor "Campus Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : create building
+    usr -> sys : wants to create building
     activate sys
         sys --> usr : request data
     deactivate sys
 
     usr -> sys : provides data
     activate sys
-        sys --> usr : inform error/success
+        alt building not created
+            sys --> usr : informs error
+        else success
+            sys --> usr : previews created building
+    end
     deactivate sys
 deactivate usr
 
