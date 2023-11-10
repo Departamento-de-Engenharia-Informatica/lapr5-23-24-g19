@@ -3,22 +3,47 @@ autonumber
 
 actor "Fleet Manager" as usr
 
-participant "Fleet Management" as mgm
+participant "FE" as ui
+
+participant "MD" as md
 
 activate usr
-    usr -> mgm : create robot
-    activate mgm
-        mgm --> usr : requests data
-    deactivate mgm
+    usr -> ui : create robot
+    activate ui
+        ui -> md : GET /robottypes
+        activate md
+        alt robot type(s) not found
+        note right : see list-robotTypes documentation
+            md --> ui : 404: error
+            ui --> usr : informs error
+        else robot type(s) found
+            md --> ui : 200 : robotTypes
+        deactivate md
+        ui --> usr : requests robot type
+    deactivate ui
 
-    usr -> mgm : provides data
-    activate mgm
-    alt success
-        mgm --> usr : previews created robot
-    else error
-        mgm --> usr : informs error
-    end
-    deactivate mgm
+    usr -> ui : provides robot type
+    activate ui
+        ui --> usr : requests data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : POST /robots
+
+        activate md
+        note right of md : see us360 documentation
+        alt success
+            md --> ui : 201: robot
+            ui --> usr : previews created robot
+        else invalid data
+            md --> ui : 422: error
+            ui --> usr : informs error
+        deactivate md
+
+    deactivate ui
 deactivate usr
+end
+end
 
 @enduml

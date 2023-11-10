@@ -8,6 +8,14 @@ participant "<<system>>\n System RobDroneGo" as sys
 activate usr
     usr -> sys : create robot
     activate sys
+    alt robot type(s) not found
+        sys --> usr : informs error
+    else robot type(s) found
+        sys --> usr : requests robot type
+    deactivate sys
+
+    usr -> sys : provides robot type
+    activate sys
         sys --> usr : requests data
     deactivate sys
 
@@ -15,10 +23,11 @@ activate usr
     activate sys
     alt success
         sys --> usr : previews created robot
-    else error
+    else invalid data
         sys --> usr : informs error
-    end
     deactivate sys
 deactivate usr
+end
+end
 
 @enduml
