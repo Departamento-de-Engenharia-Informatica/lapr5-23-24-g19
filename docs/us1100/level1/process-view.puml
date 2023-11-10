@@ -6,16 +6,16 @@ actor "Campus Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-usr -> sys : list floors from a building
+usr -> sys : wants to list floors from a building
     activate sys
-        sys --> usr : requests data
+        sys --> usr : requests building
     deactivate sys
 
-    usr -> sys : provides data
+    usr -> sys : provides building
     activate sys
     alt success
         sys --> usr : lists floors
-    else error
+    else floor(s) not found
         sys --> usr : informs error
     end
     deactivate sys

@@ -3,22 +3,36 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mgm
+participant "Campus UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Campus MD" as md
 
 activate usr
-usr -> mgm : list floors from a building
-    activate mgm
-        mgm --> usr : requests data
-    deactivate mgm
+    usr -> ui : wants to list floors from a building
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right : see us170 documentation
+            md --> ui : buildings
+        deactivate md
+        ui --> usr : requests building
+    deactivate ui
 
-    usr -> mgm : provides data
-    activate mgm
-    alt success
-        mgm --> usr : lists floors
-    else error
-        mgm --> usr : informs error
-    end
-    deactivate mgm
+    usr -> ui : provides building
+    activate ui
+        ui -> md : GET /buildings/{code}/floors
+        activate md
+            note right : see us210 documentation
+            alt success
+                md --> ui : 200: floors
+                ui --> usr : lists floors
+            else floor(s) not found
+                md --> ui : 404: error
+                ui --> usr : informs error
+            end
+        deactivate md
+    deactivate ui
 deactivate usr
 
 @enduml
