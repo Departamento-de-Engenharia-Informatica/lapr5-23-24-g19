@@ -3,24 +3,62 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mng
+participant "Campus UI" as ui
+participant "Campus MD" as md
 
 activate usr
-    usr -> mng : create elevator
-    activate mng
-        mng --> usr : shows buildings and request one
-    deactivate mng
+    usr -> ui : create elevator
+    activate ui
+        ui -> md : GET /buildings
+        activate md
 
-    usr -> mng : chooses building
-    activate mng
-        mng --> usr: shows floors and request data
+         alt building not found
+                md --> ui : 404: error
+                ui --> usr :  informs error
+         else building found
+            note right of md : see US 170 documentation
+            md --> ui : 200: buildings
+            deactivate md
 
-    deactivate mng
+        ui --> usr : shows buildings and request one
+    deactivate ui
 
-    usr -> mng : chooses floors and provides\n elevator data
-    activate mng
-    mng --> usr : inform error/success
-    deactivate mng
+    usr -> ui : chooses building
+    activate ui
+        ui -> md : GET /buildings/{id}/floors
+        activate md
+
+        alt floors not found
+                md --> ui : 404: error
+                ui --> usr :  informs error
+        else floors found
+
+            note right of md : see US 210 documentation
+            md --> ui : 200: floors
+        deactivate md
+
+        ui --> usr : shows floors and request data
+    deactivate ui
+
+    usr -> ui: chooses floors and provides\n elevator data
+    activate ui
+        ui -> md : POST /buildings/{id}/elevators
+        activate md
+
+            alt elevator not created
+                 md --> ui : 422: error
+                 ui --> usr :  informs error
+            else elevator created successfully
+
+
+            note right of md : see US 270 documentation
+            md --> ui : 201: elevator
+        deactivate md
+        ui --> usr : preview elevator
+        end
+    end
+end
+    deactivate ui
 deactivate usr
 
 @enduml
