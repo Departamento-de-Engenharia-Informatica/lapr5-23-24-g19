@@ -3,22 +3,36 @@ autonumber
 
 actor "Fleet Manager" as usr
 
-participant "Fleet Management" as mgm
+participant "Fleet UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Fleet MD" as md
 
 activate usr
-    usr -> mgm : create robot type
-    activate mgm
-        mgm --> usr : requests data
-    deactivate mgm
+    usr -> ui : create robot type
+    activate ui
+        ui --> usr : requests data
+    deactivate ui
 
-    usr -> mgm : provides data
-    activate mgm
-    alt success
-        mgm --> usr : previews created robot type
-    else error
-        mgm --> usr : informs error
-    end
-    deactivate mgm
+    usr -> ui : provides data
+    activate ui
+        ui -> md : POST /robottypes
+
+        activate md
+        note right of md : see us350 documentation
+        alt success
+            md --> ui : 201: robotType
+            ui --> usr : previews created robot type
+        else robot type already exists
+            md --> ui : 412: error
+            ui --> usr : informs error
+        else robot type not created
+            md --> ui : 422: error
+            ui --> usr : informs error
+        end
+        deactivate md
+
+    deactivate ui
 deactivate usr
 
 @enduml

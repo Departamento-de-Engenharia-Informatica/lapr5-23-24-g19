@@ -15,7 +15,9 @@ activate usr
     activate sys
     alt success
         sys --> usr : previews created robot type
-    else error
+    else robot type already exists
+        sys --> usr : informs error
+    else robot type not created
         sys --> usr : informs error
     end
     deactivate sys
