@@ -3,10 +3,9 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
+participant "FE" as ui
 
-'TODO: call it just 'MD'?
-participant "Campus MD" as md
+participant "MD" as md
 
 activate usr
     usr -> ui : wants to list floors from a building
