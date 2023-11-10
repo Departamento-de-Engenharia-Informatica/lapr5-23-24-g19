@@ -1,0 +1,40 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "Fleet UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Fleet MD" as md
+
+activate usr
+    usr -> ui : create robot
+    activate ui
+        ui -> md : GET /robottypes
+        activate md
+        note right : to be impleted
+            md --> ui : robotTypes
+        deactivate md
+        ui --> usr : requests data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : POST /robots
+
+        activate md
+        note right of md : see us360 documentation
+        alt success
+            md --> ui : robot
+            ui --> usr : previews created robot
+        else error
+            md --> ui : error
+            ui --> usr : informs error
+        end
+        deactivate md
+
+    deactivate ui
+deactivate usr
+
+@enduml

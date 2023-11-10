@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "Fleet Management" as mgm
+
+activate usr
+    usr -> mgm : create robot
+    activate mgm
+        mgm --> usr : requests data
+    deactivate mgm
+
+    usr -> mgm : provides data
+    activate mgm
+    alt success
+        mgm --> usr : previews created robot
+    else error
+        mgm --> usr : informs error
+    end
+    deactivate mgm
+deactivate usr
+
+@enduml
