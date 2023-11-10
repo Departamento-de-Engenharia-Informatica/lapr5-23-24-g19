@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+
+participant "MD" as mdr
+
+
+activate mdr
+
+    [-> mdr: GET /robotTypes
+    alt unkown user
+            [<-- mdr  : 401: Unauthorized
+        else user not authorized
+            [<-- mdr  : 403: Forbidden
+        else user authorized
+
+
+    alt robot types not found
+        [<-- mdr  : 404: Not found
+    else robot types found
+        [<-- mdr  : 200: "OK" Successful
+    end
+
+    end
+
+deactivate mdr
+@enduml

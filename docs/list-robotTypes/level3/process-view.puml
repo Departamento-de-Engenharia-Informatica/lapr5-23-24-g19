@@ -1,0 +1,62 @@
+@startuml
+autonumber
+
+
+
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "Mapper" as map
+participant "dto:\nDTO" as dto
+participant "Repository" as repo
+database "Database" as db
+
+
+[-> r: GET /robotTypes
+    activate r
+note right : verify if user is a \nfleet manager
+    alt unkown user
+        [<-- r : 401: Unauthorized
+    else user not authorized
+        [<-- r : 403: Forbidden
+    else user authorized
+        r -> ctrl : getRobotTypes(req,res)
+        activate ctrl
+            ctrl -> svc : getRobotTypes()
+            activate svc
+                svc -> repo : findAll()
+                activate repo
+                    repo -> db: find()
+                    activate db
+                    deactivate db
+                deactivate repo
+
+                alt robot types not found
+                    svc --> ctrl : error
+                    ctrl --> r : error (404)
+                    [<-- r : 404: Not found
+                else robot types found
+
+                loop for each robotType
+
+                        svc -> map : toDTO(robotType)
+
+
+                    activate map
+                        map --> dto** : create(robotType)
+                        activate dto
+                            map --> svc : dto
+                        deactivate dto
+                    deactivate map
+                end loop
+                    svc --> ctrl : dto
+                    ctrl --> r : dto(200)
+                    [<-- r : 200: "OK" Successful
+                end
+            deactivate svc
+        deactivate ctrl
+        end
+    deactivate r
+
+@enduml

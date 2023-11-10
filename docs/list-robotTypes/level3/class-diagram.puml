@@ -1,0 +1,114 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+
+        package "Routes" {
+            class RouteRobotType
+        }
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IControllerRobotType
+            }
+
+            package "ImplControllers" {
+                class ControllerRobotType
+            }
+            ControllerRobotType -up-|> IControllerRobotType
+        }
+
+        package "Repositories" {
+            class RepoRobotType
+
+        }
+
+        RepoRobotType .up.> DBDriver
+
+
+        RouteRobotType ..> IControllerRobotType
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IAppServiceRobotType
+            }
+
+            package "ImplAppServices" {
+                class AppServiceRobotType
+            }
+
+            AppServiceRobotType --|> IAppServiceRobotType
+
+            package "IRepositories" {
+                interface IRepoRobotType
+
+            }
+
+            RepoRobotType --|> IRepoRobotType
+
+        }
+
+        ControllerRobotType ..> IAppServiceRobotType
+
+        AppServiceRobotType .up.> IRepoRobotType
+
+    }
+
+    package "Entities/Core/Domain" {
+        package "Aggregates" {
+
+
+            package "RobotType" as a_building {
+                entity RobotType <<root>> <<entity>>
+            }
+        }
+
+
+
+        package "Value Objects" {
+            package "RobotType" as vo_building {
+                class RobotTypeCode
+                class RobotTypeBrand
+                class RobotTypeModel
+                class TaskType
+            }
+        }
+
+        RobotType "1" --> "1" RobotTypeCode
+        RobotType "1" --> "1" RobotTypeBrand
+        RobotType "1" --> "1" RobotTypeModel
+        RobotType "1" ---> "*" TaskType
+
+        AppServiceRobotType ..> RobotType
+
+    }
+    package "DTO" {
+        interface IRobotTypeDTO
+
+        AppServiceRobotType -up-> IRobotTypeDTO
+        ControllerRobotType -up-> IRobotTypeDTO
+    }
+}
+
+@enduml

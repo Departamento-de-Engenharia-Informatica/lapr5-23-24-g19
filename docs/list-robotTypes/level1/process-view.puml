@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+
+participant "<<system>>\nSystem RobDroneGo" as sys
+
+
+[-> sys: GET /robottypes
+
+    activate sys
+
+    alt unkown user
+                [<-- sys : 401: Unauthorized
+            else user not authorized
+                [<-- sys : 403: Forbidden
+            else user authorized
+
+            alt robot types not found
+                [<-- sys : 404: Not found
+            else robot types found
+                [<-- sys : 200: "OK" Successful
+    end
+end
+deactivate sys
+
+
+@enduml
