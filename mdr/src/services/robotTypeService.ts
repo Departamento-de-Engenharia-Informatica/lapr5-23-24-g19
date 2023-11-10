@@ -54,4 +54,24 @@ export default class RobotTypeService implements IRobotTypeService {
             })
         }
     }
+
+    async getRobotTypes(): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO[]>> {
+        try {
+            const types = await this.robotTypeRepo.findAll()
+
+            if (types.length === 0) {
+                return left({
+                    errorCode: RobotTypeErrorCode.NotFound,
+                    message: 'Robots not found',
+                })
+            } else {
+                return right(types.map((type) => RobotTypeMap.toDTO(type)))
+            }
+        } catch (e) {
+            return left({
+                errorCode: RobotTypeErrorCode.BussinessRuleViolation,
+                message: e.message ?? e.toString(),
+            })
+        }
+    }
 }

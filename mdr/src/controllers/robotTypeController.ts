@@ -29,6 +29,22 @@ export default class RobotTypeController implements IRobotTypeController {
         }
     }
 
+    async getRobotTypes(_: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.getRobotTypes()
+
+            if (result.isLeft()) {
+                const err = result.value as RobotTypeErrorResult
+                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+            }
+
+            const message = result.value as IRobotTypeDTO
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     private resolveHttpCode(result: RobotTypeErrorCode) {
         let ret: number
         switch (result) {

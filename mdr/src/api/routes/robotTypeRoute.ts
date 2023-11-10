@@ -20,8 +20,16 @@ export default (app: Router) => {
                 code: Joi.string().required(),
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
-                taskTypes: Joi.array().items(Joi.string()).min(1).required()}),
-        }),middlewares.isAuth,middlewares.attachCurrentUser,middlewares.checkFleetManager,
+                taskTypes: Joi.array().items(Joi.string()).min(1).required(),
+            }),
+        }),
+        middlewares.isAuth,
+        middlewares.attachCurrentUser,
+        middlewares.checkFleetManager,
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
+    )
+
+    route.get('', middlewares.isAuth, middlewares.attachCurrentUser, middlewares.checkFleetManager, (req, res, next) =>
+        robotTypeController.getRobotTypes(req, res, next),
     )
 }

@@ -58,4 +58,13 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
         }
     }
 
+    public async findAll(): Promise<RobotType[]> {
+        const records = await this.robotTypeSchema.find()
+
+        if (records.length === 0) {
+            return [] // Return an empty array when there are no records
+        }
+        const robotTypeList = await Promise.all(records.map(record => RobotTypeMap.toDomain(record)))
+        return robotTypeList
+    }
 }
