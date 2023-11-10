@@ -1,0 +1,59 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as UI
+participant "Campus MD" as md
+
+activate usr
+    usr -> UI : update floor map
+    activate UI
+        UI -> md : GET /buildings
+        activate md
+            note right of md : see US 170
+            md --> UI : status
+            alt 404
+                UI --> usr: informs error
+            else 200
+                UI --> usr : shows buildings and request one
+
+        deactivate md
+    deactivate UI
+
+    usr -> UI : chooses building
+    activate UI
+        UI -> md : GET /buildings/{buildingCode}/floors
+        activate md
+            note right of md : see US 210
+            md --> UI : status
+        deactivate md
+            alt 404
+                UI --> usr: informs error
+            else 200
+                UI --> usr: shows floors
+    deactivate UI
+        usr -> UI : choose floor
+    activate UI
+        UI --> usr : request map
+    deactivate UI
+        usr -> UI : provides map
+    activate UI
+        UI -> md : PATCH /buildings/{buildingCode}/floors/{floorNumber}/map
+        activate md
+            note right of md : see US 310
+            md --> UI : status
+        deactivate md
+        alt 404
+            UI --> usr : informs error
+        else 400
+            UI --> usr : informs error
+        else 201
+            UI --> usr : shows map floor with map
+        end
+        end
+        end
+    deactivate UI
+deactivate usr
+
+@enduml
