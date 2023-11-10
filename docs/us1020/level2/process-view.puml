@@ -3,18 +3,29 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mng
+participant "Campus UI" as ui
+participant "Campus MD" as md
 
 activate usr
-    usr -> mng : inhibit robot
-    activate mng
-        mng --> usr : show available robots
-    deactivate mng
+    usr -> ui : inhibit robot
+    activate ui
+        ui -> md : GET /robots
+        activate md
+            md --> ui : robots
+        deactivate md
 
-    usr -> mng : chooses robot
-    activate mng
-        mng --> usr : inform error/success
-    deactivate mng
+        ui --> usr : show available robots
+    deactivate ui
+
+    usr -> ui : chooses robot
+    activate ui
+        ui -> md : PATCH /robots/{:code}
+        activate md
+            md --> ui : error/success
+        deactivate md
+
+        ui --> usr : inform error/success
+    deactivate ui
 deactivate usr
 
 @enduml
