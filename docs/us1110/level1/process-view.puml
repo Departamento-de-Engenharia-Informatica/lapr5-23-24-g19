@@ -6,18 +6,37 @@ actor "Campus Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : edit floor
+    usr -> sys : wants to edit floor
     activate sys
-        sys --> usr : requests data
+    alt building(s) not found
+        sys --> usr : informs error
+    else building(s) found
+
+        sys --> usr : requests building
     deactivate sys
+
+    usr -> sys : provides building
+    activate sys
+        alt floor(s) not found
+            sys --> usr : informs error
+        else floor(s) found
+            sys --> usr : requests floor
+            deactivate sys
+
+            usr -> sys : provides floor
+            activate sys
+                sys --> usr : requests data
+            deactivate sys
 
     usr -> sys : provides data
     activate sys
         alt success
             sys --> usr : previews edited floor information
-        else error
+        else bad floor parameters
             sys --> usr : informs error
         end
+    end
+end
     deactivate sys
 deactivate usr
 

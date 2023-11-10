@@ -1,0 +1,61 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "FE" as ui
+
+participant "MD" as md
+
+activate usr
+usr -> ui : wants to edit floor
+    activate ui
+        ui -> md : GET /buildings
+        alt building(s) not found
+            activate md
+                md --> ui : 404: error
+                note right : see us170 documentation
+            ui --> usr : informs error
+        else building(s) found
+                md --> ui : 200: buildings
+            deactivate md
+            ui --> usr : requests building
+        deactivate ui
+
+        usr -> ui : provides building
+        activate ui
+            ui -> md : GET /buildings/{id}/floors
+            alt floor(s) not found
+                activate md
+                md --> ui : 404: error
+                note right : see us210 documentation
+                ui --> usr : informs error
+            else floor(s) found
+                md --> ui : 200: floors
+            deactivate md
+            ui --> usr : requests floor
+            deactivate ui
+
+            usr -> ui : provides floor
+            activate ui
+            ui --> usr : requests data
+        deactivate ui
+
+        usr -> ui : provides data
+        activate ui
+            ui -> md : PUT /building/{id}/floors/{floor}
+            activate md
+            note right : see us200 documentation
+                alt success
+                    md --> ui : 201: floor
+                    ui --> usr : previews edited floor information
+                else bad floor parameters
+                    md --> ui : 422: error
+                    ui --> usr : informs error
+                end
+        end
+    end
+        deactivate md
+    deactivate ui
+deactivate usr
+@enduml
