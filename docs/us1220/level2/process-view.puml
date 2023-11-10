@@ -1,0 +1,53 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "UI" as ui
+participant "MD" as md
+participant "Planning" as pl
+
+activate usr
+    usr -> ui : Wants to list paths between two \nbuildings following a specific criteria
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right of md : see US 170 documentation
+
+        alt building(s) not found
+            md --> ui: 404: error
+            ui --> usr: informs error
+        else building(s) found
+            md --> ui : 200: buildings
+            deactivate md
+
+        ui --> usr : shows buildings and request two
+    deactivate ui
+
+    usr -> ui : chooses buildings
+    activate ui
+
+       ui -> md: GET /buildings/{b1Code}/paths/{b2Code}
+       activate md
+            md -> pl: optimize(b1,b2)
+            activate pl
+                pl -> md: getPassages(b1,b2)?
+                pl -> md: getFloors(b1,b2)?
+                pl -> md: getElevator(b1,b2)?
+
+
+                pl --> md: list of paths
+            deactivate pl
+
+            md --> ui : 200: list paths
+       deactivate md
+
+       ui --> usr : shows optimized paths
+
+
+
+    deactivate ui
+    end
+deactivate usr
+
+@enduml
