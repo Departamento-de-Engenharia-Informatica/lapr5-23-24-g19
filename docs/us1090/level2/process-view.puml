@@ -11,37 +11,44 @@ activate usr
 usr -> ui : wants to create floor
     activate ui
         ui -> md : GET /buildings
-        activate md
-            md --> ui : buildings
-            note right : see us170 documentation
-        deactivate md
-        ui --> usr : requests building
-    deactivate ui
+        alt building(s) not found
+            activate md
+                md --> ui : 404: error
+                note right : see us170 documentation
+            deactivate md
+            ui --> usr : informs error
+        else building(s) found
+            activate md
+                md --> ui : 200: buildings
+                note right : see us170 documentation
+            deactivate md
+            ui --> usr : requests building
+        deactivate ui
 
-    usr -> ui : provides building
-    activate ui
-        ui -> md : GET /buildings/{id}/floors
-        activate md
-            md --> ui : floors
-            note right : see us210 documentation
-        deactivate md
-        ui --> usr : requests data
-    deactivate ui
+        usr -> ui : provides building
+        activate ui
+            ui -> md : GET /buildings/{id}/floors
+            activate md
+                md --> ui : floors
+                note right : see us210 documentation
+            deactivate md
+            ui --> usr : requests data
+        deactivate ui
 
-    usr -> ui : provides data
-    activate ui
-        ui -> md : POST /building/{id}/floors
-        activate md
-        note right : see us190 documentation
-            alt success
-                md --> ui : 201: floor
-                ui --> usr : preview created floor information
-            else floor already exists
-                md --> ui : 422: error
-                ui --> usr : inform error
-            end
+        usr -> ui : provides data
+        activate ui
+            ui -> md : POST /building/{id}/floors
+            activate md
+            note right : see us190 documentation
+                alt success
+                    md --> ui : 201: floor
+                    ui --> usr : preview created floor information
+                else floor already exists
+                    md --> ui : 422: error
+                    ui --> usr : inform error
+                end
+        end
         deactivate md
     deactivate ui
 deactivate usr
-
 @enduml
