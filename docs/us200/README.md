@@ -26,7 +26,8 @@ Edit floor information
 ### Level 3
 
 - [Logical View](../general-purpose/level3/logical-view.svg)
-- [Process View](./level3/process-view.svg)
+- [Process View for PATCH](./level3/process-view-patch.svg)
+- [Process View for PUT](./level3/process-view-put.svg)
 - [Implementation View](../general-purpose/level3/implementation-view.svg)
 - [Class Diagram](./level3/class-diagram.svg)
 
@@ -78,5 +79,3 @@ Edit floor information
     + The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
 
 - DTO: DTO's are used to transfer information between the different layers
-
-
