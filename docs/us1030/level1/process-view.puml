@@ -6,9 +6,15 @@ actor "Fleet Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : list all fleet robots
+    usr -> sys : wants to list all fleet robots
     activate sys
-        sys --> usr : inform error / shows robots
+
+    alt robot(s) not found
+        sys --> usr: informs error
+    else robot(s) found
+        sys --> usr : shows robots
+
+    end
     deactivate sys
 
 

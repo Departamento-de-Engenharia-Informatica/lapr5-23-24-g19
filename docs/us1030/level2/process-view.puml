@@ -3,15 +3,29 @@ autonumber
 
 actor "Fleet Manager" as usr
 
-participant "Fleet Management" as mng
+participant "Fleet UI" as ui
+
+'TODO: call it just 'MD'?
+participant "Fleet MD" as md
 
 activate usr
-    usr -> mng : list all fleet robots
-    activate mng
-        mng --> usr : inform error / shows robots
-    deactivate mng
+    usr -> ui : wants to list all fleet robots
+    activate ui
 
+    ui -> md: GET /robots
+    activate md
+    note right of md : see US 380 documentation
 
+    alt robot(s) not found
+        md --> ui : 404: error
+        ui --> usr: informs error
+    else robot(s) found
+        md --> ui: 200: robots
+    deactivate md
+        ui --> usr : shows robots
+
+        end
+    deactivate ui
 deactivate usr
 
 @enduml
