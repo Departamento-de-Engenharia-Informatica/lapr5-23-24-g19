@@ -23,13 +23,13 @@ export default (app: Router) => {
                 taskTypes: Joi.array().items(Joi.string()).min(1).required(),
             }),
         }),
-        middlewares.isAuth,
-        middlewares.attachCurrentUser,
-        middlewares.checkFleetManager,
+        // middlewares.isAuth,
+        // middlewares.attachCurrentUser,
+        // middlewares.checkFleetManager,
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )
 
-    route.get('', middlewares.isAuth, middlewares.attachCurrentUser, middlewares.checkFleetManager, (req, res, next) =>
+    route.get('', (req, res, next) =>
         robotTypeController.getRobotTypes(req, res, next),
     )
 }

@@ -38,7 +38,7 @@ export default class RobotTypeController implements IRobotTypeController {
                 return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
             }
 
-            const message = result.value as IRobotTypeDTO
+            const message = result.value as IRobotTypeDTO[]
             return res.status(200).send(message)
         } catch (e) {
             return next(e)
