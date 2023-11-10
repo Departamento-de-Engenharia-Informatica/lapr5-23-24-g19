@@ -3,19 +3,53 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mng
+participant "Campus UI" as ui
+participant "Campus MD" as md
 
 activate usr
-    usr -> mng : list passages between two buildings
-    activate mng
-        mng --> usr : shows buildings and requests two
-    deactivate mng
+    usr -> ui : list passages between two buildings
+    activate ui
 
-    usr -> mng : chooses two buildings
-    activate mng
-        mng --> usr: shows passages between \nthose buildings \ inform error
+        ui -> md : GET /buildings
+        alt building(s) not found
+            activate md
+            note right of md : see US 170 documentation
+                md --> ui : 404: error
 
-    deactivate mng
+            ui --> usr : informs error
+
+        else buildings found
+            md --> ui : 200: buildings
+
+            deactivate md
+            ui --> usr : shows buildings and requests two
+    deactivate ui
+
+    usr -> ui : chooses two buildings
+    activate ui
+        ui -> md : GET /passages
+        activate md
+
+
+        alt same building
+            md --> ui : 412: error
+            ui --> usr: informs error
+        else different building
+
+        alt passages(s) not found
+                note right of md : see US 260 documentation
+                md --> ui: 404: error
+
+            ui --> usr : informs error
+        else passages found
+            md --> ui : 200: passages
+
+            deactivate md
+            ui --> usr : shows passages between\n two buildings
+            end
+        end
+    end
+    deactivate ui
 deactivate usr
 
 @enduml
