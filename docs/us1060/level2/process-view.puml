@@ -1,0 +1,26 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : list floors from a building
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right of md: see us170 documentation
+            md --> ui : statusCode
+            alt 404
+                ui --> usr : informs error
+            else 200
+                ui --> usr : buildings
+            end
+        deactivate md
+    deactivate ui
+deactivate usr
+
+@enduml
