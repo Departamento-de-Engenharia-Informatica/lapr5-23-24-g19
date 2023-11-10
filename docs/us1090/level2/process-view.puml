@@ -20,7 +20,6 @@ usr -> ui : wants to create floor
         else building(s) found
             activate md
                 md --> ui : 200: buildings
-                note right : see us170 documentation
             deactivate md
             ui --> usr : requests building
         deactivate ui
@@ -30,7 +29,7 @@ usr -> ui : wants to create floor
             ui -> md : GET /buildings/{id}/floors
             activate md
                 md --> ui : floors
-                note right : see us210 documentation
+                note right : see us210 documentation,\n\nin this case, if 404 is returned,\nfloors will be an empty list
             deactivate md
             ui --> usr : requests data
         deactivate ui
