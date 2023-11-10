@@ -1,0 +1,39 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : edit building
+    activate ui
+        ui -> md : GET /buildings
+            note right of md: see us170 documentation
+            activate md
+            md --> ui : status
+            deactivate md
+            alt 404
+                ui --> usr : informs error
+            else 200
+                ui --> usr : lists buildings
+    deactivate ui
+
+    usr -> ui : chooses building and provides updated data
+    activate ui
+        ui -> md : PUT/PATCH buildings/{buildingCode}
+            note right of md: see us160 documentation
+            activate md 
+                ui <-- md : status
+            deactivate md
+            alt 422
+                ui --> usr : informs error
+            else 201
+                ui --> usr : shows building edited
+            end
+            end
+    deactivate ui
+deactivate usr
+
+@enduml
