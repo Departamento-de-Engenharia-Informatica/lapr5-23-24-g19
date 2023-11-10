@@ -6,7 +6,7 @@ actor "Fleet Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : create robot type
+    usr -> sys : wants to create robot type
     activate sys
         sys --> usr : requests data
     deactivate sys
