@@ -3,18 +3,22 @@ autonumber
 
 actor "Fleet Manager" as usr
 
-participant "Fleet Management" as mng
+participant "Fleet Management" as mgm
 
 activate usr
-    usr -> mng : create robottype
-    activate mng
-        mng --> usr : request data
-    deactivate mng
+    usr -> mgm : create robot type
+    activate mgm
+        mgm --> usr : requests data
+    deactivate mgm
 
-    usr -> mng : provides data
-    activate mng
-        mng --> usr : inform error/success
-    deactivate mng
+    usr -> mgm : provides data
+    activate mgm
+    alt success
+        mgm --> usr : previews created robot type
+    else error
+        mgm --> usr : informs error
+    end
+    deactivate mgm
 deactivate usr
 
 @enduml
