@@ -1,0 +1,38 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+
+'TODO: call it just 'ui'?
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : edit floor
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            md --> ui : buildings
+            note right: see us170 documentation
+        deactivate md
+        ui --> usr : requests data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : PATCH /building/{id}/floors/{floor}
+        activate md
+        note right : see us200 documentation
+            alt success
+                md --> ui : floor
+                ui --> usr : previews edited floor information
+            else error
+                md --> ui : error
+                ui --> usr : informs error
+            end
+        deactivate md
+    deactivate ui
+deactivate usr
+
+@enduml
