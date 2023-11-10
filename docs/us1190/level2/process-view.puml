@@ -7,7 +7,7 @@ participant "Campus UI" as ui
 participant "Campus MD" as md
 
 activate usr
-    usr -> ui : list passages between two buildings
+    usr -> ui : wants to list passages between two buildings
     activate ui
 
         ui -> md : GET /buildings
@@ -18,7 +18,7 @@ activate usr
 
             ui --> usr : informs error
 
-        else buildings found
+        else building(s) found
             md --> ui : 200: buildings
 
             deactivate md
@@ -41,7 +41,7 @@ activate usr
                 md --> ui: 404: error
 
             ui --> usr : informs error
-        else passages found
+        else passage(s) found
             md --> ui : 200: passages
 
             deactivate md

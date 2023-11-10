@@ -7,15 +7,15 @@ participant "Campus UI" as ui
 participant "Campus MD" as md
 
 activate usr
-    usr -> ui : create elevator
+    usr -> ui : wants to create elevator
     activate ui
         ui -> md : GET /buildings
         activate md
 
-         alt building not found
+         alt building(s) not found
                 md --> ui : 404: error
                 ui --> usr :  informs error
-         else building found
+         else building(s) found
             note right of md : see US 170 documentation
             md --> ui : 200: buildings
             deactivate md
@@ -28,10 +28,10 @@ activate usr
         ui -> md : GET /buildings/{id}/floors
         activate md
 
-        alt floors not found
+        alt floor(s) not found
                 md --> ui : 404: error
                 ui --> usr :  informs error
-        else floors found
+        else floor(s) found
 
             note right of md : see US 210 documentation
             md --> ui : 200: floors

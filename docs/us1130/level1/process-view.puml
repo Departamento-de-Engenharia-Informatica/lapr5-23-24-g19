@@ -6,21 +6,21 @@ actor "Campus Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : create elevator
+    usr -> sys : wants to create elevator
     activate sys
 
-    alt building not found
+    alt building(s) not found
         sys --> usr : informs error
-    else building found
+    else building(s) found
         sys --> usr : shows buildings and request one
     deactivate sys
 
     usr -> sys : chooses building
     activate sys
 
-    alt floors not found
+    alt floor(s) not found
         sys --> usr : informs error
-    else floors found
+    else floor(s) found
         sys --> usr: shows floors and request data
     deactivate sys
 

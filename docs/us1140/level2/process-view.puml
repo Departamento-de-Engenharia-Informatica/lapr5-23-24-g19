@@ -3,20 +3,45 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mng
+participant "Campus UI" as ui
+participant "Campus MD" as md
 
 activate usr
-    usr -> mng : list elevators inside building
-    activate mng
-        mng --> usr : shows buildings and request one
-    deactivate mng
+    usr -> ui : wants to list elevators inside building
+    activate ui
+        ui -> md : GET /buildings
+        activate md
 
-    usr -> mng : chooses building
-    activate mng
-        mng --> usr: inform error / shows elevators
+        alt building(s) not found
+                md --> ui : 404: error
+                ui --> usr : informs error
+        else building(s) found
+                note right of md : see US 170 documentation
+                md --> ui : 200: buildings
+                 deactivate md
+                 ui --> usr : shows buildings and request one
+    deactivate ui
 
-    deactivate mng
 
+    usr -> ui : chooses building
+    activate ui
+        ui -> md : GET /buildings/{id}/elevators
+        activate md
+
+        alt elevator(s) not found
+            md --> ui : 404: error
+            ui --> usr : informs error
+        else elevator(s) found
+
+            note right of md : see US 290 documentation
+            md --> ui : 200: elevators
+        deactivate md
+
+        ui --> usr : shows elevators
+
+        end
+    end
+    deactivate ui
 deactivate usr
 
 @enduml
