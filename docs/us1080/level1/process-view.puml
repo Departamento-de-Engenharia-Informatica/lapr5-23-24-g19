@@ -6,7 +6,7 @@ actor "Campus Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-usr -> sys : list buildings between a minimum\nand maximum number of floors
+    usr -> sys : wants to list buildings between a minimum\nand maximum number of floors
     activate sys
         sys --> usr : request data
     deactivate sys

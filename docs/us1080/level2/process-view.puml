@@ -8,7 +8,7 @@ participant "FE" as ui
 participant "MD" as md
 
 activate usr
-    usr -> ui : list buildings between a minimum\nand maximum number of floors
+    usr -> ui : wants to list buildings between a minimum\nand maximum number of floors
     activate ui
         ui --> usr : requests data
     deactivate ui
