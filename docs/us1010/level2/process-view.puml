@@ -8,7 +8,7 @@ participant "FE" as ui
 participant "MD" as md
 
 activate usr
-    usr -> ui : create robot
+    usr -> ui : wants to create robot
     activate ui
         ui -> md : GET /robottypes
         activate md
