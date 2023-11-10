@@ -15,7 +15,7 @@ usr -> sys : list buildings between a minimum\nand maximum number of floors
     activate sys
     alt success
         sys --> usr : lists buildings
-    else error
+    else building(s) not found
         sys --> usr : inform error
     end
     deactivate sys

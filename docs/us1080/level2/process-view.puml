@@ -3,22 +3,31 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus Management" as mgm
+participant "FE" as ui
+
+participant "MD" as md
 
 activate usr
-usr -> mgm : list buildings between a minimum\nand maximum number of floors
-    activate mgm
-        mgm --> usr : request data
-    deactivate mgm
+    usr -> ui : list buildings between a minimum\nand maximum number of floors
+    activate ui
+        ui --> usr : requests data
+    deactivate ui
 
-    usr -> mgm : provides data
-    activate mgm
-    alt success
-        mgm --> usr : lists buildings
-    else error
-        mgm --> usr : inform error
-    end
-    deactivate mgm
+    usr -> ui : provides data
+    activate ui
+        ui -> md : GET /buildings/?minFloors={min}&maxFloors={max}
+        activate md
+            note right : see us180 documentation
+            alt success
+                md --> ui : 200: buildings
+                ui --> usr : lists buildings
+            else building(s) not found
+                md --> ui : 404: error
+                ui --> usr : informs error
+            end
+        deactivate md
+    deactivate ui
 deactivate usr
+
 
 @enduml
