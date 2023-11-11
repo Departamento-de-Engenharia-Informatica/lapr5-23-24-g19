@@ -3,8 +3,8 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
-participant "Campus MD" as md
+participant "Front-end" as ui
+participant "MD" as md
 
 activate usr
     usr -> ui : list building floors with passages
@@ -26,7 +26,7 @@ activate usr
             md --> ui : building floors with passages
         deactivate md
 
-        ui --> usr : inform error/show floors
+        ui --> usr : show floors with passages
     deactivate ui
 deactivate usr
 

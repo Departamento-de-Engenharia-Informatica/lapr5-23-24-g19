@@ -13,7 +13,7 @@ activate usr
 
     usr -> sys : choses building
     activate sys
-        sys --> usr : inform error/show floors
+        sys --> usr : show floors with passage
     deactivate sys
 deactivate usr
 
