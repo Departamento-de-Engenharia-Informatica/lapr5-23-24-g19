@@ -14,8 +14,8 @@ activate usr
     alt building(s) not found
             activate md
                 note right : see us170 documentation
-                md --> ui : 404: error
-                ui --> usr : informs error
+                md --> ui : 204: empty list
+                ui --> usr : informs building(s) not found
 
     else building(s) found
             md --> ui : 200: buildings
@@ -32,8 +32,8 @@ activate usr
                     md --> ui : 200: floors
                     ui --> usr : lists floors
                 else floor(s) not found
-                    md --> ui : 404: error
-                    ui --> usr : informs error
+                    md --> ui : 204: empty list
+                    ui --> usr : informs floor(s) not found
                 end
     end
         deactivate md

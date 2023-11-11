@@ -9,7 +9,7 @@ activate usr
 usr -> sys : wants to list floors from a building
     activate sys
 alt building(s) not found
-        sys --> usr : informs error
+    sys --> usr : informs buliding(s) not found
 else building(s) found
         sys --> usr : requests building
     deactivate sys
@@ -19,7 +19,7 @@ else building(s) found
     alt success
         sys --> usr : lists floors
     else floor(s) not found
-        sys --> usr : informs error
+        sys --> usr : informs floor(s) not found
     end
 end
     deactivate sys
