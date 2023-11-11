@@ -8,7 +8,7 @@ participant "<<system>>\n System RobDroneGo" as sys
 activate usr
     usr -> sys : wants to list buildings between a minimum\nand maximum number of floors
     activate sys
-        sys --> usr : request data
+        sys --> usr : requests data
     deactivate sys
 
     usr -> sys : provides data
@@ -16,7 +16,7 @@ activate usr
     alt success
         sys --> usr : lists buildings
     else building(s) not found
-        sys --> usr : inform error
+        sys --> usr : informs building(s) not found
     end
     deactivate sys
 deactivate usr
