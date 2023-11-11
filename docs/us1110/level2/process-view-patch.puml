@@ -13,9 +13,9 @@ usr -> ui : wants to edit floor
         ui -> md : GET /buildings
         alt building(s) not found
             activate md
-                md --> ui : 404: error
+                md --> ui : 204: empty list
                 note right : see us170 documentation
-            ui --> usr : informs error
+                ui --> usr : informs building(s) not found
         else building(s) found
                 md --> ui : 200: buildings
             deactivate md
@@ -27,9 +27,9 @@ usr -> ui : wants to edit floor
             ui -> md : GET /buildings/{id}/floors
             alt floor(s) not found
                 activate md
-                md --> ui : 404: error
+                md --> ui : 204: empty list
                 note right : see us210 documentation
-                ui --> usr : informs error
+                ui --> usr : informs floor(s) not found
             else floor(s) found
                 md --> ui : 200: floors
             deactivate md

@@ -9,7 +9,7 @@ activate usr
     usr -> sys : wants to edit floor
     activate sys
     alt building(s) not found
-        sys --> usr : informs error
+        sys --> usr : informs building(s) not found
     else building(s) found
 
         sys --> usr : requests building
@@ -18,7 +18,7 @@ activate usr
     usr -> sys : provides building
     activate sys
         alt floor(s) not found
-            sys --> usr : informs error
+            sys --> usr : informs floor(s) not found
         else floor(s) found
             sys --> usr : requests floor
             deactivate sys
