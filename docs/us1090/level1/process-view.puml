@@ -9,7 +9,7 @@ activate usr
     usr -> sys : wants to create floor
     activate sys
     alt building(s) not found
-        sys --> usr : informs error
+        sys --> usr : informs building(s) not found
     else building(s) found
         sys --> usr : requests building
         deactivate sys
@@ -24,7 +24,7 @@ activate usr
             alt success
                 sys --> usr : previews created floor information
             else floor already exists
-                sys --> usr : informs error
+                sys --> usr : informs floor already exists
             end
         deactivate sys
     end

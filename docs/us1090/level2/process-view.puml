@@ -13,10 +13,10 @@ usr -> ui : wants to create floor
         ui -> md : GET /buildings
         alt building(s) not found
             activate md
-                md --> ui : 404: error
+                md --> ui : 204: empty list
                 note right : see us170 documentation
             deactivate md
-            ui --> usr : informs error
+            ui --> usr : informs building(s) not found
         else building(s) found
             activate md
                 md --> ui : 200: buildings
@@ -29,7 +29,7 @@ usr -> ui : wants to create floor
             ui -> md : GET /buildings/{id}/floors
             activate md
                 md --> ui : floors
-                note right : see us210 documentation,\n\nin this case, if 404 is returned,\nfloors will be an empty list
+                note right : see us210 documentation,\n\nin this case, if 204 is returned,\nfloors will be an empty list
             deactivate md
             ui --> usr : requests data
         deactivate ui
@@ -44,7 +44,7 @@ usr -> ui : wants to create floor
                     ui --> usr : preview created floor information
                 else floor already exists
                     md --> ui : 422: error
-                    ui --> usr : inform error
+                    ui --> usr : inform floor already exists
                 end
         end
         deactivate md
