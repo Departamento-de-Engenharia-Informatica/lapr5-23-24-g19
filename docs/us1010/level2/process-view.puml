@@ -24,6 +24,11 @@ activate usr
 
     usr -> ui : provides robot type
     activate ui
+        ui -> md : GET /robots
+        activate md
+            md --> ui : robots
+            note right : see us380 documentation,\n\nin this case, if 404 is returned,\nrobots will be an empty list
+        deactivate md
         ui --> usr : requests data
     deactivate ui
 
