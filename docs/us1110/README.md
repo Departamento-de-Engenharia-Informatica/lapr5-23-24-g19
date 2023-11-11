@@ -62,7 +62,7 @@ This user story relies on three different API functionalities:
     PUT /buildings/{id}/floors/{floor}
     ```
 
-## 5. Design Patterns
+## 6. Design Patterns
 - Dependency inversion: Classes of one layer don't use specific implementations of a class from another layer (aside from domain); instead an interface defines a contract for how communications are made.
 
 - Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file.
