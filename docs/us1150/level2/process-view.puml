@@ -3,11 +3,11 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
-participant "Campus MD" as md
+participant "Front-end" as ui
+participant "MD" as md
 
 activate usr
-    usr -> ui : edit elevator
+    usr -> ui : wants to edit elevator
     activate ui
         ui -> md : GET /buildings
         activate md
@@ -19,13 +19,25 @@ activate usr
 
     usr -> ui : chooses building
     activate ui
-        ui -> md : GET /buildings/{:code}/elevators
+        ui -> md : GET /buildings/{:bCode}/elevators
         activate md
             md --> ui : building elevators
         deactivate md
 
         ui --> usr : show building elevators
     deactivate ui
+
+    alt
+        usr -> ui : wants to edit the elevator's floors
+        activate ui
+            ui -> md : GET /buildings/{:bCode}/floors
+            activate md
+                md --> ui : building floors
+            deactivate md
+
+            ui --> usr : shows building floors
+        deactivate ui
+    end
 
     usr -> ui : chooses elevator & submits updated data
     activate ui

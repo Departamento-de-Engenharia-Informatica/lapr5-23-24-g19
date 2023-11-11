@@ -16,6 +16,13 @@ activate usr
         sys --> usr : show building elevators
     deactivate sys
 
+    alt
+        usr -> sys : wants to edit the elevator's floors
+        activate sys
+            sys --> usr : shows building floors
+        deactivate sys
+    end
+
     usr -> sys : chooses elevator & submits updated data
     activate sys
         sys --> usr : inform error/success
