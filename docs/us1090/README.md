@@ -32,6 +32,7 @@ To successfully complete this user story, the following criteria must be met:
 - The user interface should present available buildings and prompt the user to select the desired building to create a floor.
 - After selecting the building, the user interface should display the existing floors within that building.
 - The displayed floors should be updated every time the user changes the desired building.
+- The displayed floors should be updated every time the user creates a new one.
 - The user should be prevented from submitting the form if a non-integer value is specified for the floor number.
 - The user should be able to submit the form without specifying a description.
 
