@@ -25,7 +25,7 @@ activate usr
         else robot type already exists
             md --> ui : 412: error
             ui --> usr : informs error
-        else robot type not created
+        else bad robot type parameters
             md --> ui : 422: error
             ui --> usr : informs error
         end

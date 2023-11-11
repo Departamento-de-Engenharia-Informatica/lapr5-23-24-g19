@@ -17,7 +17,7 @@ activate usr
         sys --> usr : previews created robot type
     else robot type already exists
         sys --> usr : informs error
-    else robot type not created
+    else bad robot type parameters
         sys --> usr : informs error
     end
     deactivate sys
