@@ -1,12 +1,12 @@
-# US1080
+# US1100
 
 ## 1. User Story Description
 
-This user story pertains to the functionality of listing buildings within a specified range of minimum and maximum floors.
+This user story focuses on the functionality of listing floors associated with a specified building.
 
 ## 2. Customer Specifications and Clarifications
 
-The customer has outlined that, upon input of minimum and maximum floor numbers, the system is expected to generate a list of buildings that adhere to the specified criteria.
+The customer has specified that the system should generate a comprehensive list of floors belonging to a building, as designated by the Campus Manager.
 
 ## 3. Diagrams
 
@@ -27,18 +27,22 @@ The customer has outlined that, upon input of minimum and maximum floor numbers,
 
 ## 4. Acceptance Criteria and Tests
 
-To successfully fulfill this user story, the following criteria must be met:
+To successfully complete this user story, the following criteria must be met:
 
-- The user should be prevented from submitting the form if the minimum floor input exceeds the maximum floor input.
-- The user should be prevented from submitting the form if anything other than an integer is entered.
-- The user interface must effectively present the buildings along with their respective specifications and details.
+- The user interface must adeptly present the floors, along with their respective specifications and details.
 
 ## 5. Dependencies
 
-This user case relies on [US180](../us180), which exposes the GET route of the backend API along with the required query string parameters:
+This user story relies on [US170](../us180), which provides the GET route for buildings in the backend API:
 
 ```
-GET /buildings/?minFloors={min}&maxFloors={max}
+GET /buildings
+```
+
+Additionally, this user story depends on [US210](../us210), responsible for exposing the GET route for floors from a specific building:
+
+```
+GET /buildings/{id}/floors
 ```
 
 ## 5. Design Patterns
