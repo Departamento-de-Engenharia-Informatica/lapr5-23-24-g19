@@ -3,10 +3,9 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
+participant "Front-end" as ui
 
-'TODO: call it just 'MD'?
-participant "Campus MD" as md
+participant "MD" as md
 
 activate usr
     usr -> ui : wants to create building
@@ -24,12 +23,11 @@ activate usr
                 md --> ui : 422: error
                 ui --> usr : informs error
             else success
-                md --> ui : 201: elevator
-                ui --> usr : previews created building
-
+                md --> ui : 201: building
+                ui --> usr : shows created building
+            end
         deactivate md
 
-        end
     deactivate ui
 deactivate usr
 

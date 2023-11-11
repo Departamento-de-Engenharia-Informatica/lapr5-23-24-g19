@@ -16,8 +16,8 @@ activate usr
         alt building not created
             sys --> usr : informs error
         else success
-            sys --> usr : previews created building
-    end
+            sys --> usr : shows created building
+        end
     deactivate sys
 deactivate usr
 
