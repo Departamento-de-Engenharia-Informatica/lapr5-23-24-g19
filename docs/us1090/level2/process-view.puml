@@ -41,10 +41,13 @@ usr -> ui : wants to create floor
             note right : see us190 documentation
                 alt success
                     md --> ui : 201: floor
-                    ui --> usr : preview created floor information
+                    ui --> usr : previews created floor information
                 else floor already exists
                     md --> ui : 422: error
-                    ui --> usr : inform floor already exists
+                    ui --> usr : informs error
+                else bad floor parameters
+                    md --> ui : 422: error
+                    ui --> usr : informs error
                 end
         end
         deactivate md

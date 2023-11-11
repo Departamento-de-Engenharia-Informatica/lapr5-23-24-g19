@@ -24,7 +24,9 @@ activate usr
             alt success
                 sys --> usr : previews created floor information
             else floor already exists
-                sys --> usr : informs floor already exists
+                sys --> usr : informs error
+            else bad floor paramaters
+                sys --> usr : informs error
             end
         deactivate sys
     end
