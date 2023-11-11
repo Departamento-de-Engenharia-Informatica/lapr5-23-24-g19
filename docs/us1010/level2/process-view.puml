@@ -14,8 +14,8 @@ activate usr
         activate md
         alt robot type(s) not found
         note right : see list-robotTypes documentation
-            md --> ui : 404: error
-            ui --> usr : informs error
+            md --> ui : 204: empty list
+            ui --> usr : informs robot type(s) not found
         else robot type(s) found
             md --> ui : 200 : robotTypes
         deactivate md
@@ -41,7 +41,7 @@ activate usr
         alt success
             md --> ui : 201: robot
             ui --> usr : previews created robot
-        else invalid data
+        else bad robot parameters
             md --> ui : 422: error
             ui --> usr : informs error
         deactivate md
