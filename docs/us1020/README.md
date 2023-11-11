@@ -8,7 +8,7 @@ The robot inhibiting process was already
 documented and implemented via an API as per [us370](../us370/README.md).
 
 Thus, this specific use case is solely concerned with the
-development of a user interface (UI) that the campus
+development of a user interface (UI) that the fleet
 manager can utilize.
 
 ## 2. Customer Specifications and Clarifications
