@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,32 +15,33 @@ import { Visualization3DComponent } from './components/visualization3-d/visualiz
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RouterModule } from '@angular/router';
 import { AuthComponent } from './components/auth/auth.component';
-
+import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BuildingComponent,
-    ElevatorComponent,
-    FloorComponent,
-    RoomComponent,
-    RobotComponent,
-    RobotTypeComponent,
-    PassageComponent,
-    PageNotFoundComponent,
-    Visualization3DComponent,
-    MainMenuComponent,
-    AuthComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    RouterModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        BuildingComponent,
+        ElevatorComponent,
+        FloorComponent,
+        RoomComponent,
+        RobotComponent,
+        RobotTypeComponent,
+        PassageComponent,
+        PageNotFoundComponent,
+        Visualization3DComponent,
+        MainMenuComponent,
+        AuthComponent,
+        ListFloorsComponent,
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        RouterModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
-
-
-export class AppModule { }
+export class AppModule {}
