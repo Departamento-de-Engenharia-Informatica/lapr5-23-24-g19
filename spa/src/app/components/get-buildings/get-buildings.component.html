@@ -1,0 +1,19 @@
+<!-- get-building.component.html -->
+
+
+<section class="text-gray-400 body-font bg-gray-900">
+  <div class="container px-5 py-20 mx-auto">
+    <div class="building-list">
+      <div *ngFor="let building of buildings" class="building-card">
+        <h2>{{ building.code }}</h2>
+        <p>{{ building.description }}</p>
+        <div class="dimension-box">
+          <span class="dimension-label">Length:</span> {{ building.maxFloorDimensions.length }}
+        </div>
+        <div class="dimension-box">
+          <span class="dimension-label">Width:</span> {{ building.maxFloorDimensions.width }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>  
