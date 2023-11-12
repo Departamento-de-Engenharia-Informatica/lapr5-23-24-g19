@@ -14,9 +14,13 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RouterModule } from '@angular/router';
-import { AuthComponent } from './components/auth/auth.component';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
+import { ContactInfoComponent } from './components/contact-info/contact-info.component';
+import { ModulesComponent } from './components/modules/modules.component';
+import { BuildingService } from './services/building.service';
+import { EditBuildingComponent } from './components/edit-building/edit-building.component';
 
 @NgModule({
     declarations: [
@@ -31,8 +35,11 @@ import { FormsModule } from '@angular/forms';
         PageNotFoundComponent,
         Visualization3DComponent,
         MainMenuComponent,
-        AuthComponent,
         ListFloorsComponent,
+        ModulesComponent,
+        ContactInfoComponent,
+        GetBuildingsComponent,
+        EditBuildingComponent
     ],
     imports: [
         BrowserModule,
@@ -40,8 +47,14 @@ import { FormsModule } from '@angular/forms';
         AppRoutingModule,
         HttpClientModule,
         RouterModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
-    providers: [],
+    providers: [
+      BuildingService
+    ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { 
+  public static baseUrl = 'http://localhost:4000/api'
+}

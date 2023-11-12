@@ -1,24 +1,37 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router'
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { AppModule } from '../app.module';
+import { Observable } from 'rxjs';
 
-interface BuildingProps{
+// interface BuildingProps{
+//   code:string
+// }
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+
+export interface BuildingDTO{
   code:string
+  name?:string
+  description?:string
+  maxFloorDimensions:{length:number,width:number}
+
 }
+@Injectable(
+  // {
+  // providedIn: AppModule
+// }
 
-@Injectable({
-  providedIn: 'root'
-})
+)
+
 export class BuildingService{
+  
 
-  // constructor(private fetchService:FetchDataServ) {}
+  constructor(private http:HttpClient) {}
 
-
-
-  // resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<BuildingProps> //| Promise<UserName> | UserName
-  // { 
-  //   return this.fetchService.getUser( route.params['id'] );
-  // }
+  getBuildings(): Observable<BuildingDTO[]> {
+    const url = `${AppModule.baseUrl}/buildings`
+    return this.http.get<BuildingDTO[]>(url,{observe:'body',responseType:'json'})
+  }
 }
