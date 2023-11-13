@@ -3,8 +3,8 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
-participant "Campus MD" as md
+participant "FE" as ui
+participant "MD" as md
 
 activate usr
     usr -> ui : wants to list passages between two buildings
@@ -14,9 +14,9 @@ activate usr
         alt building(s) not found
             activate md
             note right of md : see US 170 documentation
-                md --> ui : 404: error
+                md --> ui : 204: empty list
 
-            ui --> usr : informs error
+            ui --> usr : informs building(s) not found
 
         else building(s) found
             md --> ui : 200: buildings
@@ -27,20 +27,20 @@ activate usr
 
     usr -> ui : chooses two buildings
     activate ui
-        ui -> md : GET /passages
+        ui -> md : GET /passages/?building1={buildingCode}&building2={buildingCode}
         activate md
 
 
         alt same building
             md --> ui : 412: error
-            ui --> usr: informs error
+            ui --> usr: informs same building provided
         else different building
 
         alt passages(s) not found
                 note right of md : see US 260 documentation
-                md --> ui: 404: error
+                md --> ui: 204: empty list
 
-            ui --> usr : informs error
+            ui --> usr : informs passages(s) not found
         else passage(s) found
             md --> ui : 200: passages
 
