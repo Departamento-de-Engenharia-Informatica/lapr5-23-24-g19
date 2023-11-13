@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RouterModule } from '@angular/router';
-import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
+import { ListFloorsComponent } from './components/list-floors/list-floors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
 import { ContactInfoComponent } from './components/contact-info/contact-info.component';
@@ -39,7 +39,7 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
         ModulesComponent,
         ContactInfoComponent,
         GetBuildingsComponent,
-        EditBuildingComponent
+        EditBuildingComponent,
     ],
     imports: [
         BrowserModule,
@@ -48,13 +48,11 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
         HttpClientModule,
         RouterModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
-    providers: [
-      BuildingService
-    ],
+    providers: [BuildingService],
     bootstrap: [AppComponent],
 })
-export class AppModule { 
-  public static baseUrl = 'http://localhost:4000/api'
+export class AppModule {
+    public static baseUrl = 'http://localhost:4000/api';
 }

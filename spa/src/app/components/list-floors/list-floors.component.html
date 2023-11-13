@@ -33,7 +33,7 @@
         <div class="floor-list">
             <div *ngFor="let floor of floors" class="floor-card mb-8">
                 <h2>Floor {{ floor.floorNumber }}</h2>
-                <a>{{ floor.description || "No description specified" }}</a>
+                <p>{{ floor.description || "No description" }}</p>
             </div>
         </div>
     </div>

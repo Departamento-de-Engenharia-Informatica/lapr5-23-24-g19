@@ -9,12 +9,11 @@
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
-    min-width: 200px; /* Set a minimum width */
+    width: 200px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: var(--primary-color);
     color: white;
-    /* Adjust text color for better visibility on the primary background */
 }
 
 .floor-card h2 {
@@ -24,10 +23,10 @@
 
 .floor-card p {
     color: var(--secondary-color);
-    max-height: 3em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-height: 3em;
     /* Adjust the maximum height as needed */
 }
 
@@ -35,12 +34,4 @@
     white-space: normal;
     overflow: visible;
     text-overflow: inherit;
-}
-
-.vertical-center {
-    margin: 0;
-    position: absolute;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
 }
