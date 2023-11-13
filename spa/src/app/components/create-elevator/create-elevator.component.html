@@ -1,38 +1,45 @@
-<form [formGroup]="buildingForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
+<form [formGroup]="elevatorForm" (ngSubmit)="submitElevatorForm()" enctype="multipart/form-data">
     <div>
-      <div class="row">
-        <div>
-          <label for="selectedBuildingCode">Select Building</label>
-          <select id="selectedBuildingCode" formControlName="selectedBuildingCode" required>
-            <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}</option>
-          </select>
+        <div class="row">
+            <div>
+                <label for="selectedBuildingCode">Select Building</label>
+                <select id="selectedBuildingCode" formControlName="selectedBuildingCode" required>
+                    <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}</option>
+                </select>
+            </div>
+            <div>
+                <label for="selectedFloors">Select Floors</label>
+                <select id="selectedFloors" formControlName="selectedFloors" multiple required>
+                    <option *ngFor="let floor of floors" [value]="floor">{{ floor.floorNumber }}</option>
+                </select>
+            </div>
         </div>
-  
-        <div>
-          <label for="name">Name:</label>
-          <input id="name" type="text" formControlName="name" />
+
+        <div class="row">
+            <div>
+                <label for="identifier">Identifier:</label>
+                <input id="identifier" type="text" formControlName="identifier" />
+            </div>
+            <div>
+                <label for="brand">Brand:</label>
+                <input id="brand" type="text" formControlName="brand" />
+            </div>
         </div>
-      </div>
-  
-      <label for="description">Description:</label>
-      <textarea id="description" formControlName="description"></textarea>
-  
-      <div class="row">
-        <div>
-          <label for="length">Max Floor Length:</label>
-          <input id="length" type="number" formControlName="length" />
+
+        <div class="row">
+            <div>
+                <label for="model">Model:</label>
+                <input id="model" type="text" formControlName="model" />
+            </div>
+            <div>
+                <label for="serialNumber">Serial Number:</label>
+                <input id="serialNumber" type="text" formControlName="serialNumber" />
+            </div>
         </div>
-  
-        <div>
-          <label for="width">Max Floor Width:</label>
-          <input id="width" type="number" formControlName="width" />
-        </div>
-      </div>
-  
-      <label for="file">Upload File:</label>
-      <input id="file" type="file" (change)="onFileSelected($event)" />
-  
-      <button type="submit" [disabled]="buildingForm.invalid">Submit</button>
+
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+
+        <button type="submit" [disabled]="elevatorForm.invalid">Submit</button>
     </div>
-  </form>
-  
+</form>
