@@ -21,6 +21,8 @@ import { ContactInfoComponent } from './components/contact-info/contact-info.com
 import { ModulesComponent } from './components/modules/modules.component';
 import { BuildingService } from './services/building.service';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';
+import {ElevatorService} from "./services/elevator.service";
+import {CreateElevatorComponent} from "./components/create-elevator/create-elevator.component";
 
 @NgModule({
     declarations: [
@@ -40,6 +42,7 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
         ContactInfoComponent,
         GetBuildingsComponent,
         EditBuildingComponent,
+        CreateElevatorComponent,
     ],
     imports: [
         BrowserModule,
@@ -50,7 +53,7 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [BuildingService],
+    providers: [BuildingService,ElevatorService],
     bootstrap: [AppComponent],
 })
 export class AppModule {

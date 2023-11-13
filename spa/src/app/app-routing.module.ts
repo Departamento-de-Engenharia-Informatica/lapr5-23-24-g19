@@ -15,6 +15,7 @@ import { ListFloorsComponent } from './components/list-floors/list-floors.compon
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';
+import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
 
 export const routes: Routes = [
     { path: '', component: ModulesComponent, title: 'Home page' },
@@ -42,6 +43,11 @@ export const routes: Routes = [
         title: 'List Floors',
     },
     { path: 'elevators', component: ElevatorComponent },
+    {
+        path: 'elevators/create',
+        component: CreateElevatorComponent,
+        title: 'Create Elevator',
+    },
     { path: 'rooms', component: RoomComponent },
     { path: 'passages', component: PassageComponent },
     { path: 'robot-types', component: RobotTypeComponent },
