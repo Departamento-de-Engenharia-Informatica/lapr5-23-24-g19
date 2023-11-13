@@ -1,8 +1,15 @@
-# US1080
+# US1210
 
 ## 1. User Story Description
 
-This user story pertains to the functionality of listing buildings within a specified range of minimum and maximum floors.
+> As a Campus manager, I intend to create a room on a floor of a building.
+
+The room creation and persistence processes were already
+documented and implemented as per [us310](../us310/README.md).
+
+Thus, this specific use case is solely concerned with the
+development of a user interface (UI) that the campus
+manager can utilize.
 
 ## 2. Customer Specifications and Clarifications
 
@@ -29,16 +36,21 @@ The customer has outlined that, upon input of minimum and maximum floor numbers,
 
 To successfully fulfill this user story, the following criteria must be met:
 
-- The user should be prevented from submitting the form if the minimum floor input exceeds the maximum floor input.
-- The user should be prevented from submitting the form if anything other than an integer is entered.
-- The user interface must effectively present the buildings along with their respective specifications and details.
+- The user interface must effectively present the building along with their respective specifications and details.
+- The user interface must effectively present the floors inside the selected building along with their respective specifications and details.
+- When the user provides valid data, the room should
+  be successfully created (assuming no internal errors in the application backend)
+    + Similarly, if invalid data is provided, the user should
+      be informed of what went wrong
 
 ## 5. Dependencies
 
-This user case relies on [US180](../us180), which exposes the GET route of the backend API along with the required query string parameters:
+1. [US170](../us170), list buildings.
+2. [US210](../us210), list floor(s) inside a specific building.
+3. [US310](../us310),to create the elevator, which exposes the POST route of the backend API along with the required query string parameters:
 
-```json
-GET /buildings/?minFloors={min}&maxFloors={max}
+```
+POST /buildings/:buildingId/floors/:floorNumber/rooms
 ```
 
 ## 5. Design Patterns
