@@ -9,7 +9,7 @@ activate usr
     usr -> sys : wants to create room
     activate sys
         alt building(s) not found
-            sys --> usr: informs error
+            sys --> usr: informs building(s) not found
         else building(s) found
             sys --> usr : shows buildings and request one
     deactivate sys
@@ -17,7 +17,7 @@ activate usr
     usr -> sys : chooses building
     activate sys
         alt floors(s) not found
-            sys --> usr: informs error
+            sys --> usr: informs floors(s) not found
         else floors(s) found
             sys --> usr: shows floors and request data
     deactivate sys
