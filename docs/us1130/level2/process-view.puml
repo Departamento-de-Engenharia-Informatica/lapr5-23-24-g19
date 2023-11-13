@@ -13,8 +13,8 @@ activate usr
         activate md
 
          alt building(s) not found
-                md --> ui : 404: error
-                ui --> usr :  informs error
+                md --> ui : 204: empty list
+                ui --> usr :  informs building(s) not found
          else building(s) found
             note right of md : see US 170 documentation
             md --> ui : 200: buildings
@@ -29,8 +29,8 @@ activate usr
         activate md
 
         alt floor(s) not found
-                md --> ui : 404: error
-                ui --> usr :  informs error
+                md --> ui : 204: empty list
+                ui --> usr :  informs floor(s) not found
         else floor(s) found
 
             note right of md : see US 210 documentation
