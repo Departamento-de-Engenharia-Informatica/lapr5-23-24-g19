@@ -1,7 +1,7 @@
 <section class="text-gray-400 body-font bg-gray-900">
     <div class="container px-5 py-20 mx-auto flex flex-col items-center">
         <label for="building" class="text-lg text-gray-400 mb-4">
-            Building
+            Select Building
         </label>
 
         <div class="drop-menu mb-4">
@@ -12,7 +12,7 @@
                     class="vertical-center custom-dropdown"
                     [(ngModel)]="selectedBuilding"
                 >
-                    <option value="" disabled selected>Select an option</option>
+                    <option value="" disabled selected></option>
                     <option
                         *ngFor="let building of buildings"
                         [value]="building.code"
