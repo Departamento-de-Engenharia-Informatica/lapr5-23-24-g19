@@ -27,7 +27,7 @@ export default class FloorService implements IFloorService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
-    ) {}
+    ) { }
 
     public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
@@ -225,7 +225,7 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async uploadMap(dto: IFloorMapDTO): Promise<Either<ErrorResult,IFloorMapDTO>> {
+    public async uploadMap(dto: IFloorMapDTO,): Promise<Either<ErrorResult, IFloorMapDTO>> {
         try {
             const floor = await this.floorRepo.findByCodeNumber(
                 BuildingCode.create(dto.buildingCode).getValue(),
@@ -244,14 +244,12 @@ export default class FloorService implements IFloorService {
                     message: "Map does not meet requirements"
                 })
             }
-                
             if (!floor.addMap(map.getValue())) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
                     message: "Map too large"
                 })
             }
-
             const saved = await this.floorRepo.save(floor)
             return right(FloorMap.toDTOFloorMap(saved))
         } catch (e) {
@@ -259,18 +257,20 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    private createMap(dto:IFloorMapDTO):Result<FloorMapContent>{
+    private createMap(dto: IFloorMapDTO): Result<FloorMapContent> {
         const mapOrError = FloorMapContent.create({
-            dimensions: MaxFloorDimensions.create(dto.dimensions.length, dto.dimensions.width).getValue(),
-            mapContent: dto.mapContent,
-            passages: dto.passages.map(passage => Coordinates.create(passage.x, passage.y).getValue()),
-            elevators: dto.elevators.map(elevator => Coordinates.create(elevator.x, elevator.y).getValue()),
-            rooms: dto.rooms.map(room => Coordinates.create(room.x, room.y).getValue())
+            path:this.generateMapPath(dto.buildingCode,dto.floorNumber),
+            map: {
+                dimensions:MaxFloorDimensions.create(dto.map.dimensions.length, dto.map.dimensions.width).getValue(),
+                // mapContent: dto.map.mapContent,
+                // passages: dto.map.passages.map(passage => Coordinates.create(passage.x, passage.y).getValue()),
+                // elevators: dto.map.elevators.map(elevator => Coordinates.create(elevator.x, elevator.y).getValue()),
+                // rooms: dto.map. rooms.map(room => Coordinates.create(room.x, room.y).getValue())
+            }
         });
-        if(mapOrError.isSuccess){
+        if (mapOrError.isSuccess) {
             return Result.ok(mapOrError.getValue())
-        }else{
-
+        } else {
             return Result.fail("Map does not meet requirements")
         }
     }
@@ -284,5 +284,42 @@ export default class FloorService implements IFloorService {
 
         const floors = await this.passageRepo.floorsWithPassage(building)
         return Result.ok(floors.map(f => FloorPassageMap.toDTO(f)))
+    }
+
+    async getMap(dto: IFloorDTO): Promise<Either<ErrorResult, string>> {
+        const buildingCode = BuildingCode.create(dto.buildingCode)
+        const floorNumber = FloorNumber.create(dto.floorNumber)
+        try {
+            if (buildingCode.isFailure || floorNumber.isFailure) {
+                return left({
+                    errorCode: ErrorCode.BusinessRuleViolation,
+                    message: "Floor number or buildingCode do not meet requirements"
+                })
+            }
+
+            const floor = await this.floorRepo.findByCodeNumber(buildingCode.getValue(), floorNumber.getValue())
+            if (!floor) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Floor not found"
+                })
+            }else if(!floor.props.path){
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: "Floor does not have map yet"
+                })
+            }
+            return right(floor.props.path)
+        } catch (e) {
+            return left({
+                errorCode: ErrorCode.NotFound,
+                message: "Something unexcpected happen"
+            })
+        }
+
+    }
+
+    private generateMapPath(buildingCode:string, floorNumber:number):string{
+        return `${buildingCode}/${floorNumber}.json`
     }
 }

@@ -18,7 +18,7 @@ export default class FloorRepo implements IFloorRepo {
     constructor(
         @Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
         @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
-    ) {}
+    ) { }
 
     private createBaseQuery(): any {
         return {
@@ -113,7 +113,8 @@ export default class FloorRepo implements IFloorRepo {
                 floorDocument.floorNumber = rawFloor.floorNumber
                 floorDocument.buildingCode = rawFloor.buildingCode
                 floorDocument.description = rawFloor.description
-                floorDocument.map = rawFloor.map
+                floorDocument.path = rawFloor.path
+                // floorDocument.map = rawFloor.map
 
                 await floorDocument.save()
                 return FloorMap.toDomain(floorDocument)

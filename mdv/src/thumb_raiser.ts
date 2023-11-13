@@ -493,6 +493,7 @@ export default class ThumbRaiser {
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[this.cubeTexturesParameters.selected]);
 
         // Create the maze
+        // TODO: Update the maze here
         this.maze = new Maze(this.mazeParameters);
 
         // Create the player
@@ -1013,8 +1014,9 @@ export default class ThumbRaiser {
             }
             else if (event.code == this.player.keyCodes.thumbsUp) {
                 this.player.keyStates.thumbsUp = state;
+            }else{
+                this.player.shiftKey = event.shiftKey;
             }
-            this.player.shiftKey = event.shiftKey;
         }
     }
 
@@ -1268,10 +1270,10 @@ export default class ThumbRaiser {
                                 clip.source.position.set(position.x, position.y, position.z);
                             }
                         }
-                        else if (clip.position == "exit") { // Positional audio object (maze exit location)
-                            this.scene.add(clip.source);
-                            clip.source.position.set(this.maze.exitLocation.x, this.maze.exitLocation.y, this.maze.exitLocation.z);
-                        }
+                        // else if (clip.position == "exit") { // Positional audio object (maze exit location)
+                        //     this.scene.add(clip.source);
+                        //     clip.source.position.set(this.maze.exitLocation.x, this.maze.exitLocation.y, this.maze.exitLocation.z);
+                        // }
                         else if (clip.position == "initial") { // Positional audio object (player initial position)
                             this.scene.add(clip.source);
                             clip.source.position.set(this.maze.initialPosition.x, this.maze.initialPosition.y, this.maze.initialPosition.z);
@@ -1380,8 +1382,11 @@ export default class ThumbRaiser {
             // Update the player
             if (!this.animations.actionInProgress) {
                 // Check if the player found the exit
-                if (this.maze.foundExit(this.player.position)) {
-                    this.finalSequence();
+                if(false){
+                    // TODO: CHANGE THIS FOR PASSAGE/Elevator/
+                    // if (this.maze.foundExit(this.player.position)) {
+                    //     this.finalSequence();
+                    // }
                 }
                 else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;

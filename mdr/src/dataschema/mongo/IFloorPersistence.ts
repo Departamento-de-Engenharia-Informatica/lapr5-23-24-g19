@@ -3,25 +3,26 @@ export interface IFloorPersistence {
     buildingCode: string
     floorNumber: number
     description: string
-    map?:{
-        dimensions:{
-            length: number
-            width: number
-        }
+    path?:string
+    // map?:{
+        // dimensions:{
+        //     length: number
+        //     width: number
+        // }
         
-        mapContent: number[][]
-        passages?: {
-            x:number,
-            y:number
-        }[]
-        rooms?: {
-            x:number,
-            y:number
-        }[]
-        elevators?: {
-            x:number,
-            y:number
-        }[]
-    }
+        // mapContent: number[][]
+        // passages?: {
+        //     x:number,
+        //     y:number
+        // }[]
+        // rooms?: {
+        //     x:number,
+        //     y:number
+        // }[]
+        // elevators?: {
+        //     x:number,
+        //     y:number
+        // }[]
+    // }
 }
 

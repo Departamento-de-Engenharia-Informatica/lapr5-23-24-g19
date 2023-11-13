@@ -2,8 +2,9 @@ import * as THREE from "three";
 import Orientation from "./orientation";
 import ThumbRaiser from "./thumb_raiser";
 
-let thumbRaiser: ThumbRaiser;
+export const MDRUrl= "http://localhost:4000/api/"
 
+let thumbRaiser: ThumbRaiser;
 function initialize() {
     // Create the game
     thumbRaiser = new ThumbRaiser(
@@ -191,7 +192,7 @@ function initialize() {
             selected: 1
         }, // Cube texture parameters
         {
-            url: "./mazes/ckarzx_20x20_displacement.json",
+            url: MDRUrl,
             designCredits: "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
             texturesCredits: "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
             helpersColor: new THREE.Color(0xff0077)

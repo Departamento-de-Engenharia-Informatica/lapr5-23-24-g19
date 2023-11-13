@@ -4,6 +4,7 @@ import { OBB } from "three/examples/jsm/math/OBB.js";
 import { merge } from "./merge";
 import Ground from "./ground";
 import Wall from "./wall";
+import { MDRUrl } from "./main";
 
 type AABB = THREE.Box3[][][]
 type Position = { x: number, z: number }
@@ -16,11 +17,11 @@ export type MazeParameters = {
     helpersColor: THREE.Color
 }
 
-type MazeT = {
-    size: { width: number, depth: number }
-    map: number[][]
-    exitLocation: number[] // len = 2
-}
+// type MazeT = {
+//     size: { width: number, depth: number }
+//     map: number[][]
+//     exitLocation: number[] // len = 2
+// }
 
 type GroundT = {
     size: { width: number, height: number, depth: 20 },
@@ -62,8 +63,57 @@ type WallT = {
 
 }
 
-type MazeFile = {
-    maze: MazeT
+// type MazeFile = {
+//     maze: MazeT
+//     wall: WallT
+//     ground: GroundT
+//     player: {
+//         initialPosition: number[],
+//         initialDirection: number
+//     }
+// }
+
+export type FloorMapParameters = {
+    // buildingCode: string,
+    // floorNumber: number,
+    url: string,
+    designCredits: string,
+    texturesCredits: string,
+    scale: THREE.Vector3,
+    helpersColor: THREE.Color
+}
+
+type FloorMap = {
+    dimensions: { length: number, width: number, }
+    mapContent: number[][]
+    passages: {
+        x: number,
+        y: number,
+        orientation: string,
+        to: {
+            building: string,
+            floor: number
+        }
+    }[] //Coordinates
+
+    rooms: {
+        x: number,
+        y: number,
+        orientation: string,
+        name: string
+    }[] //Coordinates
+
+    elevators: {
+        x: number,
+        y: number,
+        orientation: string,
+        floors: number[]
+    }[] //Coordinates
+    exitLocation: number[] // len = 2
+}
+
+type MapFile = {
+    map: FloorMap
     wall: WallT
     ground: GroundT
     player: {
@@ -71,6 +121,7 @@ type MazeFile = {
         initialDirection: number
     }
 }
+
 
 // type MazeSize = { width:number, depth:number }
 // type ExitLocation = number[]
@@ -84,9 +135,9 @@ export default class Maze extends THREE.Group {
     private _loaded: boolean
     get loaded() { return this._loaded }
 
-    public size: MazeT['size'] = { width: 0, depth: 0 }
-    public halfSize: Maze['size'] = { width: 0, depth: 0 }
-    public map: MazeT['map'] = [[]]
+    public size: FloorMap['dimensions'] = { width: 0, length: 0 }
+    public halfSize: Maze['size'] = { width: 0, length: 0 }
+    public map: FloorMap['mapContent'] = [[]]
     public exitLocation: THREE.Vector3 = new THREE.Vector3()
     public aabb: AABB = []
 
@@ -101,11 +152,11 @@ export default class Maze extends THREE.Group {
         this._loaded = false;
 
 
-        const onProgress = function(url: string, xhr: ProgressEvent<EventTarget>) {
+        const onProgress = function (url: string, xhr: ProgressEvent<EventTarget>) {
             console.log("Resource '" + url + "' " + (100.0 * xhr.loaded / xhr.total).toFixed(0) + "% loaded.");
         }
 
-        const onError = function(url: string, error: unknown) {
+        const onError = function (url: string, error: unknown) {
             console.error("Error loading resource '" + url + "' (" + error + ").");
         }
 
@@ -119,29 +170,87 @@ export default class Maze extends THREE.Group {
         loader.setResponseType("json");
 
         // Load a maze description resource file
-        loader.load(
-            //Resource URL
-            this.url,
+        // TODO: NAPOLES CHANGE this to request based on building and floor 
+        // GET buildings/{buildingCode}/floors/{floorNumber}/map
 
-            // onLoad callback
-            description => this.onLoad(description as unknown as MazeFile),
+        const buildingCode = "K"
+        const floorNumber = 2
+        const urlResource = `${parameters.url}/buildings/${buildingCode}/floors/${floorNumber}/map`;  // replace with your API endpoint
 
-            // onProgress callback
-            xhr => onProgress(this.url, xhr),
+        fetch(urlResource, {
+            method: 'GET',
+            // headers: {
+                // 'Content-Type': 'application/json',  // set the content type if needed
+            // },
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // This returns a promise
+        }).then(data => {
+            // Parse the JSON data
+            const description = data as unknown as MapFile;
+            console.log(JSON.stringify(description,null,2))
+            this.onLoad(description);
+        }).catch(error => {
+            console.error('Fetch error:', error);
+            onError(urlResource, error); // You may need to adjust the arguments depending on the onError function
+        });
 
-            // onError callback
-            error => onError(this.url, error)
-        );
+        // loader.load(
+        //         //Resource URL
+        //         this.url,
+
+        //         // onLoad callback
+        //         description => this.onLoad(description as unknown as MapFile),
+
+        //         // onProgress callback
+        //         xhr => onProgress(this.url, xhr),
+
+        //         // onError callback
+        //         error => onError(this.url, error)
+        //     );
+    }
+
+    async getMap(buildingCode: String, floorNumber: number) {
+        try {
+            // 👇️ const response: Response
+            const response = await fetch(`${MDRUrl}buildings/${buildingCode}/floor/${floorNumber}/map`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            // 👇️ const result: GetUsersResponse
+            const result = (await response.json()) as MapFile;
+
+            // console.log('result is: ', JSON.stringify(result, null, 4));
+
+            return result;
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log('error message: ', error.message);
+                return error.message;
+            } else {
+                console.log('unexpected error: ', error);
+                return 'An unexpected error occurred';
+            }
+        }
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates
     cellToCartesian(position: number[]) {
-        return new THREE.Vector3((position[1] - this.halfSize.width + 0.5) * this.scale.x, 0.0, (position[0] - this.halfSize.depth + 0.5) * this.scale.z)
+        return new THREE.Vector3((position[1] - this.halfSize.width + 0.5) * this.scale.x, 0.0, (position[0] - this.halfSize.length + 0.5) * this.scale.z)
     }
 
     // Convert cartesian (x, y, z) coordinates to cell [row, column] coordinates
     cartesianToCell(position: THREE.Vector3) {
-        return [Math.floor(position.z / this.scale.z + this.halfSize.depth), Math.floor(position.x / this.scale.x + this.halfSize.width)];
+        return [Math.floor(position.z / this.scale.z + this.halfSize.length), Math.floor(position.x / this.scale.x + this.halfSize.width)];
     }
 
     // Detect collision with corners (method: BC/AABB)
@@ -253,22 +362,20 @@ export default class Maze extends THREE.Group {
     }
 
     foundExit(position: THREE.Vector3) {
-        return Math.abs(position.x - this.exitLocation.x) < 0.5 * this.scale.x && Math.abs(position.z - this.exitLocation.z) < 0.5 * this.scale.z
+        // return Math.abs(position.x - this.exitLocation.x) < 0.5 * this.scale.x && Math.abs(position.z - this.exitLocation.z) < 0.5 * this.scale.z
     };
 
-    onLoad(description: MazeFile) {
+    onLoad(description: MapFile) {
         const normalMapTypes = [THREE.TangentSpaceNormalMap, THREE.ObjectSpaceNormalMap];
         const wrappingModes = [THREE.ClampToEdgeWrapping, THREE.RepeatWrapping, THREE.MirroredRepeatWrapping];
         const magnificationFilters = [THREE.NearestFilter, THREE.LinearFilter];
         const minificationFilters = [THREE.NearestFilter, THREE.NearestMipmapNearestFilter, THREE.NearestMipmapLinearFilter, THREE.LinearFilter, THREE.LinearMipmapNearestFilter, THREE.LinearMipmapLinearFilter];
 
-
-
         // Store the maze's size, map and exit location
-        this.size = description.maze.size;
-        this.halfSize = { width: this.size.width / 2.0, depth: this.size.depth / 2.0 };
-        this.map = description.maze.map;
-        this.exitLocation = this.cellToCartesian(description.maze.exitLocation);
+        this.size = description.map.dimensions;
+        this.halfSize = { width: this.size.width / 2.0, length: this.size.length / 2.0 };
+        this.map = description.map.mapContent;
+        // this.exitLocation = this.cellToCartesian(description.map.exitLocation);
 
         // Create the helpers
         this.helper = new THREE.Group();
@@ -336,7 +443,7 @@ export default class Maze extends THREE.Group {
         geometries[0] = [];
         geometries[1] = [];
         this.aabb = [];
-        for (let i = 0; i <= this.size.depth; i++) { // In order to represent the southmost walls, the map depth is one row greater than the actual maze depth
+        for (let i = 0; i <= this.size.length; i++) { // In order to represent the southmost walls, the map depth is one row greater than the actual maze depth
             this.aabb[i] = [];
             for (let j = 0; j <= this.size.width; j++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
                 this.aabb[i][j] = [];
@@ -352,7 +459,7 @@ export default class Maze extends THREE.Group {
                     this.aabb[i][j][0] = new THREE.Box3();
                     for (let k = 0; k < 2; k++) {
                         geometry = wall.geometries[k].clone();
-                        geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(j - this.halfSize.width + 0.5, 0.25, i - this.halfSize.depth));
+                        geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(j - this.halfSize.width + 0.5, 0.25, i - this.halfSize.length));
                         geometry.computeBoundingBox();
                         geometry.boundingBox!.applyMatrix4(new THREE.Matrix4().makeScale(this.scale.x, this.scale.y, this.scale.z));
                         geometries[k].push(geometry);
@@ -365,7 +472,7 @@ export default class Maze extends THREE.Group {
                     for (let k = 0; k < 2; k++) {
                         geometry = wall.geometries[k].clone();
                         geometry.applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI / 2.0));
-                        geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(j - this.halfSize.width, 0.25, i - this.halfSize.depth + 0.5));
+                        geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(j - this.halfSize.width, 0.25, i - this.halfSize.length + 0.5));
                         geometry.computeBoundingBox();
                         geometry.boundingBox!.applyMatrix4(new THREE.Matrix4().makeScale(this.scale.x, this.scale.y, this.scale.z));
                         geometries[k].push(geometry);
