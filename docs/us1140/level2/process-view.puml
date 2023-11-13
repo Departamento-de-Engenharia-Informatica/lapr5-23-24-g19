@@ -3,8 +3,8 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
-participant "Campus MD" as md
+participant "FE" as ui
+participant "MD" as md
 
 activate usr
     usr -> ui : wants to list elevators inside building
@@ -13,8 +13,8 @@ activate usr
         activate md
 
         alt building(s) not found
-                md --> ui : 404: error
-                ui --> usr : informs error
+                md --> ui : 204: empty list
+                ui --> usr : informs building(s) not found
         else building(s) found
                 note right of md : see US 170 documentation
                 md --> ui : 200: buildings
@@ -29,8 +29,8 @@ activate usr
         activate md
 
         alt elevator(s) not found
-            md --> ui : 404: error
-            ui --> usr : informs error
+            md --> ui : 204: empty list
+            ui --> usr : informs elevator(s) not found
         else elevator(s) found
 
             note right of md : see US 290 documentation
