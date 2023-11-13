@@ -1,19 +1,20 @@
-# US1140
+# US1030
 
 ## 1. User Story Description
 
-> As a Campus manager, I intend to list elevators in a building.
+> As Fleet Manager, I intend to query all the robots in the fleet
 
-The list elevators inside building process was already
-documented and implemented as per [us290](../us290/README.md).
+The list robots process was already
+documented and implemented as per [us380](../us380/README.md).
 
 Thus, this specific use case is solely concerned with the
-development of a user interface (UI) that the campus
+development of a user interface (UI) that the fleet
 manager can utilize.
+
 
 ## 2. Customer Specifications and Clarifications
 
-Regarding what information should be presented when listing elevators, see [us290](../us290/README.md).
+Regarding what information should be presented when listing robots, see [us380](../us380/README.md).
 
 ## 3. Diagrams
 
@@ -38,19 +39,14 @@ Regarding what information should be presented when listing elevators, see [us29
 
 To successfully fulfill this user story, the following criteria must be met:
 
-- The user interface must effectively present the building along with their respective specifications and details.
-- The user interface must effectively present the elevators along with their respective specifications and details.
-
+- The user interface must effectively present the robots along with their respective specifications and details.
 
 ## 5. Dependencies
 
-This user story depends upon the following use cases:
-
-1. [US170](../us170), list buildings.
-2. [US290](../us290), which exposes the GET route of the backend API along with the required query string parameters:
+This user case relies on [US380](../us380), which exposes the GET route of the backend API along with the required query string parameters:
 
 ```
-GET /buildings/:id/elevators
+GET /robots
 ```
 
 ## 6. Design Patterns

@@ -13,7 +13,7 @@ manager can utilize.
 
 ## 2. Customer Specifications and Clarifications
 
-Regarding what information is required to create a building,
+Regarding what information is required to create a elevator,
 see [us270](../us270/README.md).
 
 ## 3. Diagrams

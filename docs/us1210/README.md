@@ -13,7 +13,8 @@ manager can utilize.
 
 ## 2. Customer Specifications and Clarifications
 
-The customer has outlined that, upon input of minimum and maximum floor numbers, the system is expected to generate a list of buildings that adhere to the specified criteria.
+Regarding what information is required to create a room,
+see [us310](../us310/README.md)
 
 ## 3. Diagrams
 

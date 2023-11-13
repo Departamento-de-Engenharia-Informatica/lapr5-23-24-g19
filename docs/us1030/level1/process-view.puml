@@ -10,7 +10,7 @@ activate usr
     activate sys
 
     alt robot(s) not found
-        sys --> usr: informs error
+        sys --> usr: informs robot(s) not found
     else robot(s) found
         sys --> usr : shows robots
 

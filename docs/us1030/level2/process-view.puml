@@ -3,10 +3,10 @@ autonumber
 
 actor "Fleet Manager" as usr
 
-participant "Fleet UI" as ui
+participant "FE" as ui
 
-'TODO: call it just 'MD'?
-participant "Fleet MD" as md
+
+participant "MD" as md
 
 activate usr
     usr -> ui : wants to list all fleet robots
@@ -17,8 +17,8 @@ activate usr
     note right of md : see US 380 documentation
 
     alt robot(s) not found
-        md --> ui : 404: error
-        ui --> usr: informs error
+        md --> ui : 204: empty
+        ui --> usr: informs robot(s) not found
     else robot(s) found
         md --> ui: 200: robots
     deactivate md
