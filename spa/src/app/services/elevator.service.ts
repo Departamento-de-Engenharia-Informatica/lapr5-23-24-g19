@@ -12,10 +12,14 @@ import { Observable } from 'rxjs';
 // })
 
 export interface ElevatorDTO{
-    code:string
-    name?:string
-    description?:string
-    maxFloorDimensions:{length:number,width:number}
+    buildingId: string
+    identifier: number
+    floors: number[]
+
+    brand?: string
+    model?: string
+    serialNumber?: string
+    description?: string
 
 }
 @Injectable(
@@ -30,8 +34,14 @@ export class ElevatorService{
 
     constructor(private http:HttpClient) {}
 
+
+    createElevator(elevator: ElevatorDTO): Observable<ElevatorDTO>{
+        const url = `${AppModule.baseUrl}/buildings/:id/elevators`
+        return this.http.post<ElevatorDTO>(url,{observe:'body',responseType:'json'})
+    }
+
     getElevators(): Observable<ElevatorDTO[]> {
-        const url = `${AppModule.baseUrl}/buildings`
+        const url = `${AppModule.baseUrl}/buildings/:id/elevators`
         return this.http.get<ElevatorDTO[]>(url,{observe:'body',responseType:'json'})
     }
 }
