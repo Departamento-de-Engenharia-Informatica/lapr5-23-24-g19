@@ -50,9 +50,14 @@ export class FloorService {
     }
 
     createFloor(dto: FloorAndBuildingDTO): Observable<FloorAndBuildingDTO> {
+        const floor: FloorDTO = {
+            floorNumber: dto.floorNumber,
+            description: dto.description,
+        };
+
         return this.http.post<FloorAndBuildingDTO>(
             `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors`,
-            JSON.stringify(dto),
+            JSON.stringify(floor),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
