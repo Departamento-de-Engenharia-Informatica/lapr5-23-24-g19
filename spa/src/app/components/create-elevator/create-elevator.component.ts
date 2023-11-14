@@ -32,7 +32,6 @@ export class CreateElevatorComponent {
         this.elevatorForm = this.fb.group({
             selectedBuildingCode: ['', Validators.required],
             selectedFloors: [[], Validators.required],
-            identifier: ['', Validators.required],
             brand: ['', Validators.required],
             model: ['', Validators.required],
             serialNumber: ['', Validators.required],
@@ -76,7 +75,6 @@ export class CreateElevatorComponent {
             )?.value;
             const selectedFloors =
                 this.elevatorForm.get('selectedFloors')?.value;
-            const identifier = this.elevatorForm.get('identifier')?.value;
             const brand = this.elevatorForm.get('brand')?.value;
             const model = this.elevatorForm.get('model')?.value;
             const serialNumber = this.elevatorForm.get('serialNumber')?.value;
@@ -86,7 +84,6 @@ export class CreateElevatorComponent {
             this.formSubmitted.emit({
                 selectedBuildingCode: selectedBuildingCode,
                 selectedFloors: selectedFloors,
-                identifier: identifier,
                 brand: brand,
                 model: model,
                 serialNumber: serialNumber,
