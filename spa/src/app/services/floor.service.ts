@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AppModule } from '../app.module';
 
 export interface FloorDTO {
     buildingCode: string;
@@ -19,18 +20,24 @@ export class FloorService {
     constructor(private http: HttpClient) {}
 
     getFloors(buildingCode: string): Observable<FloorDTO[]> {
-        const url = `http://localhost:4000/api/buildings/${buildingCode}/floors`;
-        return this.http.get<FloorDTO[]>(url, {
-            observe: 'body',
-            responseType: 'json',
-        });
+        return this.http.get<FloorDTO[]>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}/floors`,
+            {
+                observe: 'body',
+                responseType: 'json',
+            },
+        );
     }
 
     createFloor(dto: FloorDTO): Observable<FloorDTO> {
-        const url = `http://localhost:4000/api/buildings/${dto.buildingCode}/floors`;
-        return this.http.post<FloorDTO>(url, {
-            observe: 'body',
-            responseType: 'json',
-        });
+        return this.http.post<FloorDTO>(
+            `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        );
     }
 }
