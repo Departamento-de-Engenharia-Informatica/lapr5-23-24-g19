@@ -11,27 +11,25 @@ import { Observable } from 'rxjs';
 //   providedIn: 'root'
 // })
 
-export interface BuildingDTO{
-  code:string
-  name?:string
-  description?:string
-  maxFloorDimensions:{length:number,width:number}
-
+export interface BuildingDTO {
+    code: string;
+    name?: string;
+    description?: string;
+    maxFloorDimensions: { length: number; width: number };
 }
-@Injectable(
-  // {
-  // providedIn: AppModule
+
+@Injectable()
+// {
+// providedIn: AppModule
 // }
+export class BuildingService {
+    constructor(private http: HttpClient) {}
 
-)
-
-export class BuildingService{
-  
-
-  constructor(private http:HttpClient) {}
-
-  getBuildings(): Observable<BuildingDTO[]> {
-    const url = `${AppModule.baseUrl}/buildings`
-    return this.http.get<BuildingDTO[]>(url,{observe:'body',responseType:'json'})
-  }
+    getBuildings(): Observable<BuildingDTO[]> {
+        const url = `${AppModule.baseUrl}/buildings`;
+        return this.http.get<BuildingDTO[]>(url, {
+            observe: 'body',
+            responseType: 'json',
+        });
+    }
 }

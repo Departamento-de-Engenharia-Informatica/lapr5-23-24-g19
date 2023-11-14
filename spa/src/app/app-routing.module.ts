@@ -11,7 +11,7 @@ import { RoomComponent } from './components/room/room.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { AppComponent } from './app.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
-import { ListFloorsComponent } from './components/list-floors/list-floors.component';
+import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';

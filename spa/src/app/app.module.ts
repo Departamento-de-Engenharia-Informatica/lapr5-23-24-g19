@@ -14,15 +14,15 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RouterModule } from '@angular/router';
-import { ListFloorsComponent } from './components/list-floors/list-floors.component';
+import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
 import { ContactInfoComponent } from './components/contact-info/contact-info.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { BuildingService } from './services/building.service';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';
-import {ElevatorService} from "./services/elevator.service";
-import {CreateElevatorComponent} from "./components/create-elevator/create-elevator.component";
+import { ElevatorService } from './services/elevator.service';
+import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +53,7 @@ import {CreateElevatorComponent} from "./components/create-elevator/create-eleva
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [BuildingService,ElevatorService],
+    providers: [BuildingService, ElevatorService],
     bootstrap: [AppComponent],
 })
 export class AppModule {
