@@ -24,6 +24,7 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
 import { ElevatorService } from './services/elevator.service';
 import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
+import { CreateBuildingComponent } from './components/create-building/create-building.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { CreateFloorComponent } from './components/floor/create-floor/create-flo
         EditBuildingComponent,
         CreateElevatorComponent,
         CreateFloorComponent,
+        CreateBuildingComponent
     ],
     imports: [
         BrowserModule,
