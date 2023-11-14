@@ -4,22 +4,18 @@
             <div>
                 <label for="selectedBuildingCode">Select Building</label>
                 <select id="selectedBuildingCode" formControlName="selectedBuildingCode" required>
-                    <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}</option>
+                    <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}  </option>
                 </select>
             </div>
             <div>
                 <label for="selectedFloors">Select Floors</label>
                 <select id="selectedFloors" formControlName="selectedFloors" multiple required>
-                    <option *ngFor="let floor of floors" [value]="floor">{{ floor.floorNumber }}</option>
+                    <option *ngFor="let floor of floors" [value]="floor.floorNumber">{{ floor.floorNumber }} </option>
                 </select>
             </div>
         </div>
 
         <div class="row">
-            <div>
-                <label for="identifier">Identifier:</label>
-                <input id="identifier" type="text" formControlName="identifier" />
-            </div>
             <div>
                 <label for="brand">Brand:</label>
                 <input id="brand" type="text" formControlName="brand" />

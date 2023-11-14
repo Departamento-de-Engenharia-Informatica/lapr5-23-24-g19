@@ -20,7 +20,7 @@ export class CreateElevatorComponent {
     elevatorForm: UntypedFormGroup;
     buildings: BuildingDTO[] = [];
 
-    floors: Floor[] = [];
+    floors: FloorDTO[] = [];
     elevators: ElevatorDTO[] = [];
 
     constructor(
@@ -54,7 +54,7 @@ export class CreateElevatorComponent {
                 ) {
                     this.floorService
                         .getFloors(selectedBuildingCode)
-                        .subscribe((floorsList: Floor[]) => {
+                        .subscribe((floorsList: FloorDTO[]) => {
                             this.floors = floorsList;
                         });
                 } else {
