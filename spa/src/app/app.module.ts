@@ -22,7 +22,8 @@ import { ModulesComponent } from './components/modules/modules.component';
 import { BuildingService } from './services/building.service';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';
 import { ElevatorService } from './services/elevator.service';
-import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
+import { CreateElevatorComponent } from './components/elevator/create-elevator/create-elevator.component';
+import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component';
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
 
@@ -45,6 +46,7 @@ import { CreateBuildingComponent } from './components/create-building/create-bui
         GetBuildingsComponent,
         EditBuildingComponent,
         CreateElevatorComponent,
+        ListElevatorsComponent,
         CreateFloorComponent,
         CreateBuildingComponent
     ],

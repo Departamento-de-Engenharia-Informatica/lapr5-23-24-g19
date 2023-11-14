@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BuildingComponent } from './components/building/building.component';
-import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
+import { CreateElevatorComponent } from './components/elevator/create-elevator/create-elevator.component';
+import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component';
 import { EditBuildingComponent } from './components/edit-building/edit-building.component';
 import { ElevatorComponent } from './components/elevator/elevator.component';
 import { FloorComponent } from './components/floor/floor.component';
@@ -46,6 +47,11 @@ export const routes: Routes = [
         path: 'elevators/create',
         component: CreateElevatorComponent,
         title: 'Create Elevator',
+    },
+    {
+        path: 'elevators/list',
+        component: ListElevatorsComponent,
+        title: 'List Elevators',
     },
     { path: 'rooms', component: RoomComponent },
     { path: 'passages', component: PassageComponent },
