@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BuildingComponent } from './components/building/building.component';
-import { RobotComponent } from './components/robot/robot.component';
-import { FloorComponent } from './components/floor/floor.component';
-import { PassageComponent } from './components/passage/passage.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { RobotTypeComponent } from './components/robot-type/robot-type.component';
+import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
+import { EditBuildingComponent } from './components/edit-building/edit-building.component';
 import { ElevatorComponent } from './components/elevator/elevator.component';
-import { RoomComponent } from './components/room/room.component';
-import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
-import { AppComponent } from './app.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { FloorComponent } from './components/floor/floor.component';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
+import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { ModulesComponent } from './components/modules/modules.component';
-import { EditBuildingComponent } from './components/edit-building/edit-building.component';
-import { CreateElevatorComponent } from './components/create-elevator/create-elevator.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PassageComponent } from './components/passage/passage.component';
+import { RobotTypeComponent } from './components/robot-type/robot-type.component';
+import { RobotComponent } from './components/robot/robot.component';
+import { RoomComponent } from './components/room/room.component';
+import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 
 export const routes: Routes = [
     { path: '', component: ModulesComponent, title: 'Home page' },

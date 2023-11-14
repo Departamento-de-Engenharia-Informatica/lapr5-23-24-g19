@@ -3,7 +3,7 @@ import {
     BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
-import { Floor, FloorService } from 'src/app/services/floor.service';
+import { FloorDTO, FloorService } from 'src/app/services/floor.service';
 
 @Component({
     selector: 'app-list-floors',
@@ -12,7 +12,7 @@ import { Floor, FloorService } from 'src/app/services/floor.service';
 })
 export class ListFloorsComponent implements OnInit {
     selectedBuilding: string;
-    floors: Floor[];
+    floors: FloorDTO[];
     buildings: BuildingDTO[];
 
     constructor(
@@ -32,8 +32,10 @@ export class ListFloorsComponent implements OnInit {
 
     getFloors(buildingCode: string) {
         this.floors = [];
-        this.floorService.getFloors(buildingCode).subscribe((list: Floor[]) => {
-            this.floors = list;
-        });
+        this.floorService
+            .getFloors(buildingCode)
+            .subscribe((list: FloorDTO[]) => {
+                this.floors = list;
+            });
     }
 }
