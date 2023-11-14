@@ -137,7 +137,7 @@ export class CreateElevatorComponent implements OnInit,OnChanges{
 
             this.elevator = elevator;
             this.createdElevator = elevator;
-            //this.elevatorService.createElevator(elevator);
+            this.elevatorService.createElevator(elevator);
             this.formSubmitted.emit(elevator);
 
 

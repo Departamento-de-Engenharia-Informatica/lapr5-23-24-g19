@@ -26,6 +26,11 @@ import { CreateElevatorComponent } from './components/elevator/create-elevator/c
 import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component';
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
+import { PassageService } from './services/passage.service';
+import {
+    ListPassagesBetweenBuildingsComponent
+} from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
+
 
 @NgModule({
     declarations: [
@@ -48,7 +53,8 @@ import { CreateBuildingComponent } from './components/create-building/create-bui
         CreateElevatorComponent,
         ListElevatorsComponent,
         CreateFloorComponent,
-        CreateBuildingComponent
+        CreateBuildingComponent,
+        ListPassagesBetweenBuildingsComponent,
     ],
     imports: [
         BrowserModule,
@@ -59,7 +65,7 @@ import { CreateBuildingComponent } from './components/create-building/create-bui
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [BuildingService, ElevatorService],
+    providers: [BuildingService, ElevatorService, PassageService],
     bootstrap: [AppComponent],
 })
 export class AppModule {

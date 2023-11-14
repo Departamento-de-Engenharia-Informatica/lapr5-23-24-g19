@@ -91,12 +91,14 @@
     </div>
 </form>
 
-<div *ngIf="createdElevator" class="created-elevator-box">
-    <h2>Created Elevator</h2>
-    <p>Building ID: {{ createdElevator.buildingId }}</p>
-    <p>Floors: {{ createdElevator.floors.join(', ') }}</p>
-    <p>Brand: {{ createdElevator.brand }}</p>
-    <p>Model: {{ createdElevator.model }}</p>
-    <p>Serial Number: {{ createdElevator.serialNumber }}</p>
-    <p>Description: {{ createdElevator.description }}</p>
+<div class="elevator-list">
+    <div *ngIf="createdElevator" class="created-elevator-box">
+        <h2>Created Elevator</h2>
+        <p>Building ID: {{ createdElevator.buildingId }}</p>
+        <p>Floors: {{ createdElevator.floors.join(', ') }}</p>
+        <p>Brand: {{ createdElevator.brand }}</p>
+        <p>Model: {{ createdElevator.model }}</p>
+        <p>Serial Number: {{ createdElevator.serialNumber }}</p>
+        <p>Description: {{ createdElevator.description }}</p>
+    </div>
 </div>

@@ -1,0 +1,64 @@
+<section class="text-gray-400 body-font bg-gray-900">
+    <div class="container px-5 py-20 mx-auto flex flex-col items-center">
+        <label for="building" class="text-lg text-gray-400 mb-4">
+            Select Buildings
+        </label>
+
+        <div class="drop-menu mb-4">
+            <div class="relative sm:mb-2 flex-grow w-full">
+                <select
+                    id="building"
+                    name="building"
+                    class="vertical-center custom-dropdown"
+                    [(ngModel)]="selectedBuilding1"
+                >
+                    <option value="" disabled selected></option>
+                    <option
+                        *ngFor="let building of buildings"
+                        [value]="building.code"
+                    >
+                        {{ building.code }} - {{ building.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="drop-menu mb-4">
+            <div class="relative sm:mb-2 flex-grow w-full">
+                <select
+                    id="building"
+                    name="building"
+                    class="vertical-center custom-dropdown"
+                    [(ngModel)]="selectedBuilding2"
+                >
+                    <option value="" disabled selected></option>
+                    <option
+                        *ngFor="let building of buildings"
+                        [value]="building.code"
+                    >
+                        {{ building.code }} - {{ building.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <button
+            (click)="getPassagesBetweenBuildings(selectedBuilding1,selectedBuilding2)"
+            class="text-white bg-yellow-500 border-0 py-0 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg mb-4"
+        >
+            Get Passages
+        </button>
+
+        <div class="list-passages-between-buildings-list">
+            <div *ngFor="let passage of passages" class="list-passages-between-buildings-card mb-8">
+                <h2>Passages</h2>
+                <h3>Floor1</h3>
+                <p>buildingCode: {{ passage.floor1.buildingCode }}</p>
+                <p>floorNumber: {{ passage.floor1.floorNumber }}</p>
+                <h4>Floor2</h4>
+                <p>buildingCode: {{ passage.floor2.buildingCode }}</p>
+                <p>floorNumber: {{ passage.floor2.floorNumber }}</p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -16,6 +16,9 @@ import { RobotTypeComponent } from './components/robot-type/robot-type.component
 import { RobotComponent } from './components/robot/robot.component';
 import { RoomComponent } from './components/room/room.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
+import {
+    ListPassagesBetweenBuildingsComponent
+} from "./components/passage/list-passages-between-buildings/list-passages-between-buildings.component";
 
 export const routes: Routes = [
     { path: '', component: ModulesComponent, title: 'Home page' },
@@ -55,6 +58,11 @@ export const routes: Routes = [
     },
     { path: 'rooms', component: RoomComponent },
     { path: 'passages', component: PassageComponent },
+    {
+        path: 'passages/list-passages-between-buildings',
+        component: ListPassagesBetweenBuildingsComponent,
+        title: 'List passages between buildings',
+    },
     { path: 'robot-types', component: RobotTypeComponent },
     { path: 'robots', component: RobotComponent },
     { path: '3D-visualization', component: Visualization3DComponent },
