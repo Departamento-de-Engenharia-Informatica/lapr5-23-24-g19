@@ -1,18 +1,23 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
     BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
-import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
+import {
+    FloorAndBuildingDTO,
+    FloorService,
+    PatchFloorDTO,
+    PutFloorDTO,
+} from 'src/app/services/floor.service';
 
 @Component({
-    selector: 'app-create-floor',
-    templateUrl: './create-floor.component.html',
-    styleUrls: ['./create-floor.component.css'],
+    selector: 'app-edit-floor',
+    templateUrl: './edit-floor.component.html',
+    styleUrls: ['./edit-floor.component.css'],
 })
-export class CreateFloorComponent implements OnInit, OnChanges {
+export class EditFloorComponent {
     @Input() selectedBuilding: string;
-    @Input() createdFloor;
+    @Input() editedFloor: FloorAndBuildingDTO;
 
     buildings: BuildingDTO[];
     floors: FloorAndBuildingDTO[];
@@ -22,7 +27,7 @@ export class CreateFloorComponent implements OnInit, OnChanges {
         private floorService: FloorService,
     ) {
         this.selectedBuilding = '';
-        this.createdFloor = null as unknown as FloorAndBuildingDTO;
+        this.editedFloor = null as unknown as FloorAndBuildingDTO;
         this.buildings = [];
         this.floors = [];
     }
@@ -43,9 +48,19 @@ export class CreateFloorComponent implements OnInit, OnChanges {
         });
     }
 
-    createFloor(dto: FloorAndBuildingDTO) {
-        this.floorService.createFloor(dto).subscribe((floor: FloorAndBuildingDTO) => {
-            this.createdFloor = floor;
-        });
+    patchFloor(dto: PatchFloorDTO) {
+        this.floorService
+            .patchFloor(dto)
+            .subscribe((floor: FloorAndBuildingDTO) => {
+                this.editedFloor = floor;
+            });
+    }
+
+    putFloor(dto: PutFloorDTO) {
+        this.floorService
+            .putFloor(dto)
+            .subscribe((floor: FloorAndBuildingDTO) => {
+                this.editedFloor = floor;
+            });
     }
 }

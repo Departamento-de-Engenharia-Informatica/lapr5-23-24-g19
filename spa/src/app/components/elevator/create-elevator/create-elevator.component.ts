@@ -17,7 +17,7 @@ import {
     ElevatorDTO,
     ElevatorService,
 } from 'src/app/services/elevator.service';
-import { FloorDTO, FloorService } from 'src/app/services/floor.service';
+import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 
 @Component({
     selector: 'app-create-elevator',
@@ -35,7 +35,7 @@ export class CreateElevatorComponent implements OnInit,OnChanges{
     elevatorForm: UntypedFormGroup;
 
     buildings: BuildingDTO[] = [];
-    floors: FloorDTO[] = [];
+    floors: FloorAndBuildingDTO[] = [];
     elevator: ElevatorDTO;
 
     constructor(
@@ -80,7 +80,7 @@ export class CreateElevatorComponent implements OnInit,OnChanges{
         this.elevatorForm.get('selectedBuilding')?.valueChanges.subscribe((selectedBuilding) => {
             console.log('Selected Building Changed:', selectedBuilding);
             if (selectedBuilding.length !== 0) {
-                this.floorService.getFloors(selectedBuilding).subscribe((list: FloorDTO[]) => {
+                this.floorService.getFloors(selectedBuilding).subscribe((list: FloorAndBuildingDTO[]) => {
                     this.floors = list;
 
                 });

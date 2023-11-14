@@ -27,10 +27,8 @@ import { ListElevatorsComponent } from './components/elevator/list-elevators/lis
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
 import { PassageService } from './services/passage.service';
-import {
-    ListPassagesBetweenBuildingsComponent
-} from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
-
+import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
+import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
 
 @NgModule({
     declarations: [
@@ -55,6 +53,7 @@ import {
         CreateFloorComponent,
         CreateBuildingComponent,
         ListPassagesBetweenBuildingsComponent,
+        EditFloorComponent,
     ],
     imports: [
         BrowserModule,
