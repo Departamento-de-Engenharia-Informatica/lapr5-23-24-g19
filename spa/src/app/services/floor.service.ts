@@ -9,11 +9,6 @@ export interface FloorAndBuildingDTO {
     description?: string;
 }
 
-export interface FloorDTO {
-    floorNumber: number;
-    description?: string;
-}
-
 export interface PatchFloorDTO {
     buildingCode: string;
     oldFloorNumber: number;
@@ -30,6 +25,11 @@ export interface PutFloorDTO {
 
 interface PatchDTO {
     floorNumber?: number;
+    description?: string;
+}
+
+interface FloorDTO {
+    floorNumber: number;
     description?: string;
 }
 
