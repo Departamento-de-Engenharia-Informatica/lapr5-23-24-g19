@@ -13,7 +13,6 @@ import { Observable } from 'rxjs';
 
 export interface ElevatorDTO{
     buildingId: string
-    identifier: number
     floors: number[]
 
     brand?: string
