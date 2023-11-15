@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Data, Router } from '@angular/router';
-import { BuildingDTO } from 'src/app/services/building.service';
+import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
 
 @Component({
   selector: 'app-building',
@@ -9,12 +10,46 @@ import { BuildingDTO } from 'src/app/services/building.service';
 })
 
 
-export class BuildingComponent{
-  // selectedBuilding!: BuildingDTO;
+export class BuildingComponent {
+  show=false
 
-  // onBuildingEdited(editedBuilding: BuildingDTO) {
-  //   // Handle the edited building, e.g., update it in the list or perform any other action
-  //   console.log('Building Edited:', editedBuilding);
-  //   this.selectedBuilding = {} as BuildingDTO; // Clear the selected building after editing
-  // }
+  onClickCreate(){
+    this.show=true
+  }
+
+  onClickClose(){
+    this.show=false
+  }
+
+  
+  @Output() formSubmitted = new EventEmitter<any>();
+  buildingForm: UntypedFormGroup
+  buildings: BuildingDTO[] = []
+
+
+  constructor(private fb: FormBuilder, private service: BuildingService) {
+    service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
+      this.buildings = buildingsList;
+      });
+    this.buildingForm = this.fb.group({
+      selectedBuildingCode: [null, Validators.required],
+      name: [''],
+      description: [''],
+      length: [null, [Validators.required, Validators.min(0)]],
+      width: [null, [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  submitForm() {
+    if (this.buildingForm.valid) {
+      this.formSubmitted.emit(this.buildingForm.value);
+      this.buildingForm.reset();
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.buildingForm.patchValue({ file });
+  }
+
 }
