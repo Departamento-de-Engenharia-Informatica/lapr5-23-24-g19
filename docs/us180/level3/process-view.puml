@@ -29,11 +29,6 @@ activate r
                 repo --> svc : dto
             deactivate repo
 
-            alt building(s) not found
-                svc --> ctrl : error
-                ctrl --> r : error (404)
-                [<--r : 404: Not Found
-            else building(s) found
 
             loop for each buildingCode
                 svc -> repo : findByCode(buildingCode)
@@ -59,7 +54,6 @@ activate r
                 svc --> ctrl : dtoList
                 ctrl --> r : response
                 [<-- r : 200: OK
-            end
         deactivate svc
     deactivate ctrl
 deactivate r

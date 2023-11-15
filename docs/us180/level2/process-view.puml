@@ -7,11 +7,7 @@ participant "MD" as mdr
 [-> mdr: GET /buildings/?minFloors={min}&maxFloors={max}
 
 activate mdr
-    alt building(s) not found
-        [<-- mdr : response code 404
-    else building(s) found
         [<--mdr : response code 200
-    end
 deactivate mdr
 
 @enduml

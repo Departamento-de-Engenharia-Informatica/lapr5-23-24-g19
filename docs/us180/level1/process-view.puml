@@ -6,11 +6,7 @@ participant "<<system>>\nSystem RobDroneGo" as sys
  [-> sys: GET /buildings/?minFloors={min}&maxFloors={max}
 
 activate sys
-    alt building(s) not found
-        [<--sys : response code: 404
-    else building(s) found
         [<--sys : response code: 200
-    end
 deactivate sys
 
 
