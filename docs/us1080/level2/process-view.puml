@@ -22,8 +22,8 @@ activate usr
                 md --> ui : 200: buildings
                 ui --> usr : lists buildings
             else building(s) not found
-                md --> ui : 204: empty list
-                ui --> usr : informs building(s) not found
+                md --> ui : 200: empty list
+                ui --> usr : does not list anything
             end
         deactivate md
     deactivate ui

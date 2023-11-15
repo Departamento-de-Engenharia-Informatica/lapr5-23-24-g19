@@ -35,6 +35,12 @@ To successfully fulfill this user story, the following criteria must be met:
 -   The user should be prevented from submitting the form if anything other than an integer is entered.
 -   The user interface must effectively present the buildings along with their respective specifications and details.
 
+### 4.1 Outcomes
+
+The user story has been successfully implemented, adhering to all the specified criteria.
+Additionally, a value check has been implemented in the UI, turning input boxes red when invalid values are entered.
+The UI also includes functionality to filter the generated buildings by name and description.
+
 ## 5. Dependencies
 
 This user case relies on [US180](../us180), which exposes the GET route of the backend API along with the required query string parameters:
@@ -49,8 +55,8 @@ GET /buildings/?minFloors={min}&maxFloors={max}
 
 -   Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file.
 
--   Single Responsibility (partially) - for each domain entity, there is a dedicated controller, service, repository (interface) definition that deals with/processes/handles operations related to that domain entity, and no other.
+-   Single Responsibility (partially) - for each domain entity, there is a dedicated service definition that deals with/processes/handles operations related to that domain entity, and no other.
 
-    -   The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
+    -   The reason it is a partial use lies in the fact that each service could be broken down by use case rather than by entity
 
 -   DTO: DTO's are used to transfer information between the different layers

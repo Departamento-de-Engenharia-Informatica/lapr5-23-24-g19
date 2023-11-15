@@ -16,7 +16,7 @@ activate usr
     alt success
         sys --> usr : lists buildings
     else building(s) not found
-        sys --> usr : informs building(s) not found
+        sys --> usr : does not list anything
     end
     deactivate sys
 deactivate usr
