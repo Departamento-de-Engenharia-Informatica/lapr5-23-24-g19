@@ -1,0 +1,35 @@
+.feature {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.feature-border {
+    border: 1px solid rgba(55, 65, 81, 0.75);
+    padding: 1.5rem;
+    border-radius: 0.8rem;
+}
+
+.feature-box {
+    width: 33.333333%;
+    width: 50%;
+    padding: 1rem;
+}
+
+.feature-text {
+    font-size: 1.125rem;
+    color: #fff;
+    font-weight: 500;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+.feature-div {
+    width: 33.333333%;
+    padding: 1rem;
+}
