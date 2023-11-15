@@ -16,9 +16,8 @@ import { RobotTypeComponent } from './components/robot-type/robot-type.component
 import { RobotComponent } from './components/robot/robot.component';
 import { RoomComponent } from './components/room/room.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
-import {
-    ListPassagesBetweenBuildingsComponent
-} from "./components/passage/list-passages-between-buildings/list-passages-between-buildings.component";
+import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
+import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
 
 export const routes: Routes = [
     { path: '', component: ModulesComponent, title: 'Home page' },
@@ -34,6 +33,11 @@ export const routes: Routes = [
         path: 'buildings/list',
         component: GetBuildingsComponent,
         title: 'List Buildings',
+    },
+    {
+        path: 'buildings/list-by-floors',
+        component: ListBuildingsMinmaxFloorsComponent,
+        title: 'List Buildings by minimum and maximum number of Floors',
     },
     // children: [
     //   { path: 'list', component: GetBuildingsComponent,title: 'List of Buildings'},

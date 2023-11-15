@@ -8,7 +8,6 @@ import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { IBuildingEditDTO } from '../dto/IBuildingEditDTO'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
 
-
 @Service()
 export default class BuildingController implements IBuildingController {
     constructor(@Inject(config.services.building.name) private service: IBuildingService) {}
@@ -18,7 +17,7 @@ export default class BuildingController implements IBuildingController {
             const result = await this.service.createBuilding(req.body as IBuildingDTO)
 
             if (result.isLeft()) {
-                const error= result.value as ErrorResult
+                const error = result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
                 return res.status(ret).send(error.message)
             }
@@ -31,18 +30,18 @@ export default class BuildingController implements IBuildingController {
 
     public async putBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = req.body as IBuildingDTO;
-            dto.code = req.params.id;
+            const dto = req.body as IBuildingDTO
+            dto.code = req.params.id
             const result = await this.service.editBuilding(dto)
 
             if (result.isLeft()) {
-                const error= result.value as ErrorResult
+                const error = result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
                 return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO
-            return res.json(message).status(200);
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -54,15 +53,14 @@ export default class BuildingController implements IBuildingController {
             dto.code = req.params.id
             const result = await this.service.editBuilding(dto)
 
-
             if (result.isLeft()) {
-                const error= result.value as ErrorResult
+                const error = result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
                 return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO
-            return res.json(message).status(200);
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -72,13 +70,13 @@ export default class BuildingController implements IBuildingController {
         try {
             const result = await this.service.getBuildings()
             if (result.isLeft()) {
-                const error= result.value as ErrorResult
+                const error = result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
                 return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO[]
-            return res.json(message).status(200);
+            return res.json(message).status(200)
         } catch (e) {
             return next(e)
         }
@@ -90,27 +88,26 @@ export default class BuildingController implements IBuildingController {
             const maxFloors = parseInt(req.query.maxFloors.toString())
 
             if (minFloors > maxFloors) {
-                return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' });
+                return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' })
             }
 
             const dto = req.body as IBuildingMinMaxFloorsDTO
-            dto.minMaxFloors = {min: minFloors, max: maxFloors}
+            dto.minMaxFloors = { min: minFloors, max: maxFloors }
 
-            const result = await this.service.getBuildingsByFloors(dto);
+            const result = await this.service.getBuildingsByFloors(dto)
 
             if (result.isLeft()) {
-                const error= result.value as ErrorResult
+                const error = result.value as ErrorResult
                 let ret: number = this.resolveHttpCode(error.errorCode)
                 return res.status(ret).send(JSON.stringify(error.message))
             }
 
             const message = result.value as IBuildingDTO[]
-            return res.json(message).status(200);
+            return res.json(message).status(200)
         } catch (e) {
             throw e
         }
     }
-
 
     private resolveHttpCode(result: ErrorCode) {
         let ret: number
@@ -130,5 +127,4 @@ export default class BuildingController implements IBuildingController {
         }
         return ret
     }
-
 }

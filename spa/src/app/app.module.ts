@@ -29,6 +29,7 @@ import { CreateBuildingComponent } from './components/create-building/create-bui
 import { PassageService } from './services/passage.service';
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
+import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +55,7 @@ import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.com
         CreateBuildingComponent,
         ListPassagesBetweenBuildingsComponent,
         EditFloorComponent,
+        ListBuildingsMinmaxFloorsComponent,
     ],
     imports: [
         BrowserModule,

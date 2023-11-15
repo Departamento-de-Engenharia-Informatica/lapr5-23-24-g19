@@ -1,0 +1,55 @@
+/*building-list.component.css*/
+
+.building-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.building-card {
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.building-card h2 {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+.building-card p {
+    color: var(--secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 3em;
+}
+
+.building-card p:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+.dimension-box {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: var(--third-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+}
+
+.dimension-label {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.invalid-input {
+    border: 2px solid rgb(218, 62, 62);
+}

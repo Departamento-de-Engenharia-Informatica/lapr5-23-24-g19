@@ -57,7 +57,7 @@ export default class BuildingService implements IBuildingService {
         } catch (e) {
             return left({
                 errorCode: ErrorCode.BusinessRuleViolation,
-                message: e.message
+                message: e.message,
             })
         }
     }
@@ -96,7 +96,7 @@ export default class BuildingService implements IBuildingService {
                     message: 'Buildings not found',
                 })
             } else {
-                const dtoList = buildings.map(building => BuildingMap.toDTO(building))
+                const dtoList = buildings.map((building) => BuildingMap.toDTO(building))
                 return right(dtoList)
             }
         } catch (e) {
@@ -113,15 +113,8 @@ export default class BuildingService implements IBuildingService {
                 dto.minMaxFloors.max,
             )
 
-            if (buildingsAndFloorCount.length == 0) {
-                return left({
-                    errorCode: ErrorCode.NotFound,
-                    message: 'Buildings not found',
-                })
-            }
-
             const dtoList = await Promise.all(
-                buildingsAndFloorCount.map(async value => {
+                buildingsAndFloorCount.map(async (value) => {
                     const building = await this.buildingRepo.findByCode(value.buildingCode)
                     return BuildingFloorNumberMap.toDTO(building, value.floorCount)
                 }),
