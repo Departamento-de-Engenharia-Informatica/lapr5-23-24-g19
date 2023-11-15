@@ -18,6 +18,7 @@ import { RoomComponent } from './components/room/room.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
 import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
+import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
 
 export const routes: Routes = [
     { path: '', component: ModulesComponent, title: 'Home page' },
@@ -47,6 +48,11 @@ export const routes: Routes = [
     {
         path: 'floors/list',
         component: ListFloorsComponent,
+        title: 'List Floors',
+    },
+    {
+        path: 'floors/create',
+        component: CreateFloorComponent,
         title: 'List Floors',
     },
     { path: 'elevators', component: ElevatorComponent },

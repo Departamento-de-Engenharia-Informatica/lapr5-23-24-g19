@@ -1,38 +1,50 @@
-<form [formGroup]="buildingForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
+<form
+    [formGroup]="createFloorForm"
+    (ngSubmit)="submitForm()"
+    enctype="multipart/form-data"
+>
     <div>
-      <div class="row">
-        <div>
-          <label for="selectedBuildingCode">Select Building</label>
-          <select id="selectedBuildingCode" formControlName="selectedBuildingCode" required>
-            <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}</option>
-          </select>
+        <div class="row">
+            <div>
+                <label for="selectedBuildingCode">Select Building</label>
+                <select
+                    id="selectedBuildingCode"
+                    formControlName="selectedBuildingCode"
+                    required
+                >
+                    <option
+                        *ngFor="let building of buildings"
+                        [value]="building.code"
+                    >
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="name">Name:</label>
+                <input id="name" type="text" formControlName="name" />
+            </div>
         </div>
-  
-        <div>
-          <label for="name">Name:</label>
-          <input id="name" type="text" formControlName="name" />
+
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+
+        <div class="row">
+            <div>
+                <label for="length">Max Floor Length:</label>
+                <input id="length" type="number" formControlName="length" />
+            </div>
+
+            <div>
+                <label for="width">Max Floor Width:</label>
+                <input id="width" type="number" formControlName="width" />
+            </div>
         </div>
-      </div>
-  
-      <label for="description">Description:</label>
-      <textarea id="description" formControlName="description"></textarea>
-  
-      <div class="row">
-        <div>
-          <label for="length">Max Floor Length:</label>
-          <input id="length" type="number" formControlName="length" />
-        </div>
-  
-        <div>
-          <label for="width">Max Floor Width:</label>
-          <input id="width" type="number" formControlName="width" />
-        </div>
-      </div>
-  
-      <label for="file">Upload File:</label>
-      <input id="file" type="file" (change)="onFileSelected($event)" />
-  
-      <button type="submit" [disabled]="buildingForm.invalid">Submit</button>
+
+        <label for="file">Upload File:</label>
+        <input id="file" type="file" (change)="onFileSelected($event)" />
+
+        <button type="submit" [disabled]="buildingForm.invalid">Submit</button>
     </div>
-  </form>
-  
+</form>
