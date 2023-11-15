@@ -17,7 +17,7 @@
 }
 
 .feature-box {
-    width: 33.333333%;
+    width: 25%;
     width: 50%;
     padding: 1rem;
 }
@@ -30,6 +30,10 @@
     margin-bottom: 0.5rem;
 }
 .feature-div {
-    width: 33.333333%;
+    width: 25%;
     padding: 1rem;
+}
+.feature-div:hover {
+    transform: scale(1.1); /* Increase the size on hover */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
