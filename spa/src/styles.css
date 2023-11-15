@@ -5,6 +5,7 @@
 
 body {
     font-family: 'Be Vietnam Pro', sans-serif;
+    background-color: var(--primary-color);
 }
 :root {
     --primary-color: #111827;
@@ -20,4 +21,9 @@ button.primary {
     background: var(--primary-color);
     color: white;
     border-radius: 8px; */
+}
+
+.feature-div:hover {
+    transform: scale(1.1); /* Increase the size on hover */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
 }

@@ -7,7 +7,7 @@
     <header class="text-gray-400 bg-gray-900 body-font">
       <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
-          <a class="mr-5 hover:text-white">Buildings</a>
+          <a  class="mr-5 hover:text-white">Buildings</a>
           <a class="mr-5 hover:text-white">Floors</a>
           <a class="mr-5 hover:text-white">Elevators</a>
           <a class="hover:text-white">Robots</a>
@@ -19,17 +19,18 @@
           <a [routerLink]="['modules']" class="ml-3 text-xl xl:block lg:hidden">RobDroneGo</a>
         </a>
          <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-          <button class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">Button
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
+          <button onclick="history.back()" class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
+            <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
+              <path  fill="none" d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>                             
+            <a>Back</a>
           </button>
         </div>
       </div>
     </header>
-    <section class="text-gray-400 body-font bg-gray-900">
-      <router-outlet><!--AQUI ENTRA O BUFFER PARA O RESTO DA APPLICACAO--> </router-outlet>
-    </section>
   </div>
+  <section class="text-gray-400 body-font bg-gray-900">
+    <router-outlet><!--AQUI ENTRA O BUFFER PARA O RESTO DA APPLICACAO--> </router-outlet>
+  </section>
   <app-contact-info></app-contact-info>
 </main>

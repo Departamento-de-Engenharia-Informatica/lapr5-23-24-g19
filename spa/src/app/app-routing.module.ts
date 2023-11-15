@@ -8,7 +8,7 @@ import { ElevatorComponent } from './components/elevator/elevator.component';
 import { FloorComponent } from './components/floor/floor.component';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { CampusComponent } from './components/campus-menu/campus-menu.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PassageComponent } from './components/passage/passage.component';
@@ -19,16 +19,43 @@ import { Visualization3DComponent } from './components/visualization3-d/visualiz
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
 import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
+import { TaskMenuComponent } from './components/task-menu/task-menu.component';
+import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
+import { CreateBuildingComponent } from './components/create-building/create-building.component';
 
 export const routes: Routes = [
-    { path: '', component: ModulesComponent, title: 'Home page' },
+    { path: '', redirectTo: 'modules', pathMatch: "full" },
+    // { path: '', redirectTo: 'modules', },
+
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
-    { path: 'menu', component: MainMenuComponent, title: 'Home page' },
-    { path: 'buildings', component: BuildingComponent, title: 'Buildings' },
+    { path: 'campus', component: CampusComponent, title: 'Campus' },
+    { path: 'task', component: TaskMenuComponent, title: 'Tasks' },
+    { path: 'visualization', component: Visualization3DComponent, title: '3d-visualization' },
+    { path: 'fleet', component: FleetMenuComponent, title: 'Fleet' },
+
+    { path: 'fleet/robot-types', component: RobotTypeComponent },
+    { path: 'fleet/robots', component: RobotComponent },
+
+
+    {
+        path: 'buildings', component: BuildingComponent, title: 'Buildings'
+        // children: [
+        //     {
+        //         path: 'create',
+        //         component: EditBuildingComponent,
+        //         title: 'CreateBuilding',
+        //     },
+        // ]
+    },
     {
         path: 'buildings/edit',
         component: EditBuildingComponent,
         title: 'Edit Building',
+    },
+    {
+        path: 'buildings/create',
+        component: EditBuildingComponent,
+        title: 'Create Building',
     },
     {
         path: 'buildings/list',
@@ -40,10 +67,7 @@ export const routes: Routes = [
         component: ListBuildingsMinmaxFloorsComponent,
         title: 'List Buildings by minimum and maximum number of Floors',
     },
-    // children: [
-    //   { path: 'list', component: GetBuildingsComponent,title: 'List of Buildings'},
-    // ]},
-    //TODO: Properly route each component
+
     { path: 'floors', component: FloorComponent, title: 'Floors' },
     {
         path: 'floors/list',
@@ -55,14 +79,14 @@ export const routes: Routes = [
         component: CreateFloorComponent,
         title: 'List Floors',
     },
-    { path: 'elevators', component: ElevatorComponent },
+    { path: 'campus/elevators', component: ElevatorComponent },
     {
-        path: 'elevators/create',
+        path: 'campus/elevators/create',
         component: CreateElevatorComponent,
         title: 'Create Elevator',
     },
     {
-        path: 'elevators/list',
+        path: 'campus/elevators/list',
         component: ListElevatorsComponent,
         title: 'List Elevators',
     },
@@ -73,10 +97,6 @@ export const routes: Routes = [
         component: ListPassagesBetweenBuildingsComponent,
         title: 'List passages between buildings',
     },
-    { path: 'robot-types', component: RobotTypeComponent },
-    { path: 'robots', component: RobotComponent },
-    { path: '3D-visualization', component: Visualization3DComponent },
-    { path: 'campus', component: MainMenuComponent, title: 'Home page' },
     { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -84,4 +104,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

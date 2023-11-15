@@ -12,7 +12,7 @@ import { RobotTypeComponent } from './components/robot-type/robot-type.component
 import { PassageComponent } from './components/passage/passage.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { CampusComponent } from './components/campus-menu/campus-menu.component';
 import { RouterModule } from '@angular/router';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,6 +30,8 @@ import { PassageService } from './services/passage.service';
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
 import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
+import { TaskMenuComponent } from './components/task-menu/task-menu.component';
+import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +45,7 @@ import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-b
         PassageComponent,
         PageNotFoundComponent,
         Visualization3DComponent,
-        MainMenuComponent,
+        CampusComponent,
         ListFloorsComponent,
         ModulesComponent,
         ContactInfoComponent,
@@ -56,6 +58,8 @@ import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-b
         ListPassagesBetweenBuildingsComponent,
         EditFloorComponent,
         ListBuildingsMinmaxFloorsComponent,
+        TaskMenuComponent,
+        FleetMenuComponent,
     ],
     imports: [
         BrowserModule,
