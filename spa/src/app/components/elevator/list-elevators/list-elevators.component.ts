@@ -30,10 +30,10 @@ export class ListElevatorsComponent implements OnInit {
         });
     }
 
-    getElevators(buildingCode: string) {
+    getElevators() {
         this.elevators = [];
         this.elevatorService
-            .getElevators(buildingCode)
+            .getElevators(this.selectedBuilding)
             .subscribe((list: CreatedElevatorDTO[]) => {
                 this.elevators = list;
             });

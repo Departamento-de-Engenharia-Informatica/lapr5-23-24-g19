@@ -11,6 +11,7 @@
                     name="building"
                     class="vertical-center custom-dropdown"
                     [(ngModel)]="selectedBuilding"
+                        (ngModelChange)="getElevators()"
                 >
                     <option value="" disabled selected></option>
                     <option
@@ -23,12 +24,12 @@
             </div>
         </div>
 
-        <button
-            (click)="getElevators(selectedBuilding)"
+        <!-- <button
+            (click)="getElevators()"
             class="text-white bg-yellow-500 border-0 py-0 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg mb-4"
         >
             Get Elevators
-        </button>
+        </button> -->
 
         <div class="elevator-list">
             <div *ngFor="let elevator of elevators" class="elevator-card mb-8">

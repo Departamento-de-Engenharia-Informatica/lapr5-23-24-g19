@@ -34,7 +34,7 @@
         <div class="building-list">
             <div *ngFor="let building of buildings" class="building-card">
                 <h2>{{ building.code }}</h2>
-                <p>{{ building.description }}</p>
+                <p class="desc">{{ building.description }}</p>
                 <div class="dimension-box">
                     <span class="dimension-label">Length:</span>
                     {{ building.maxFloorDimensions.length }}
