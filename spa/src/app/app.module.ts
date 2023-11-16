@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +32,8 @@ import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.com
 import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
 import { TaskMenuComponent } from './components/task-menu/task-menu.component';
 import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
+import { environment } from 'src/environment/environment';
+import { environment as prod } from 'src/environment/environment.prod';
 
 @NgModule({
     declarations: [
@@ -74,8 +76,15 @@ import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component
     bootstrap: [AppComponent],
 })
 export class AppModule {
-
-    //TODO: Se não for passado por parametro o IP do server, usar localhost(vantagens para testar em produção)
-    public static baseUrl = 'http://localhost:4000/api';
-    public static visualizationUrl= 'http://localhost:5173/'
+    public static baseUrl: string;
+    public static visualizationUrl: string;
+    constructor(){
+        if(isDevMode()){
+            AppModule.baseUrl= environment.mdrUrl;
+            AppModule.visualizationUrl= environment.mdvUrl;
+        }else{
+            AppModule.baseUrl= prod.mdrUrl;
+            AppModule.visualizationUrl= prod.mdvUrl;
+        }
+    }
 }
