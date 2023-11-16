@@ -22,23 +22,30 @@ import { CreateFloorComponent } from './components/floor/create-floor/create-flo
 import { TaskMenuComponent } from './components/task-menu/task-menu.component';
 import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
+import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
+import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'modules', pathMatch: "full" },
+    { path: '', redirectTo: 'modules', pathMatch: 'full' },
     // { path: '', redirectTo: 'modules', },
 
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
     { path: 'task', component: TaskMenuComponent, title: 'Tasks' },
-    { path: 'visualization', component: Visualization3DComponent, title: '3d-visualization' },
+    {
+        path: 'visualization',
+        component: Visualization3DComponent,
+        title: '3d-visualization',
+    },
     { path: 'fleet', component: FleetMenuComponent, title: 'Fleet' },
 
     { path: 'fleet/robot-types', component: RobotTypeComponent },
     { path: 'fleet/robots', component: RobotComponent },
 
-
     {
-        path: 'buildings', component: BuildingComponent, title: 'Buildings'
+        path: 'buildings',
+        component: BuildingComponent,
+        title: 'Buildings',
         // children: [
         //     {
         //         path: 'create',
@@ -77,7 +84,17 @@ export const routes: Routes = [
     {
         path: 'floors/create',
         component: CreateFloorComponent,
-        title: 'List Floors',
+        title: 'Create Floor',
+    },
+    {
+        path: 'floors/patch',
+        component: PatchFloorComponent,
+        title: 'Patch Floor',
+    },
+    {
+        path: 'floors/put',
+        component: PutFloorComponent,
+        title: 'Put Floor',
     },
     { path: 'campus/elevators', component: ElevatorComponent },
     {
@@ -104,4 +121,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

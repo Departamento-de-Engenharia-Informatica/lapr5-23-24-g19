@@ -14,7 +14,7 @@ export interface FloorProps {
     floorNumber: FloorNumber
     description?: Description
     map?: FloorMapContent
-    path?:string
+    path?: string
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -57,24 +57,26 @@ export class Floor extends AggregateRoot<FloorProps> {
 
         if (!guardResult.succeeded) {
             return Result.fail<Floor>(guardResult.message)
-        }else{
+        } else {
             return Result.ok<Floor>(new Floor({ ...dto }, id))
-
         }
+    }
+
+    public removeDescription(): void {
+        this.props.description = undefined
     }
 
     public sameBuilding(floor2: Floor): boolean {
         return this.building.equals(floor2.building)
     }
 
-    public addMap(newMap: FloorMapContent): boolean{
-        if(this.building.fit(newMap.dimensions)){
+    public addMap(newMap: FloorMapContent): boolean {
+        if (this.building.fit(newMap.dimensions)) {
             // this.props.map = newMap
             this.props.path = newMap.props.path
             return true
-        }else{
+        } else {
             return false
         }
     }
-    
 }

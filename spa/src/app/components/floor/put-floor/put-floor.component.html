@@ -1,0 +1,68 @@
+<div class="mg-4">
+    <div class="container px-5 py-20 mx-auto">
+        <div class="relative w-full">
+            <div>
+                <form
+                    [formGroup]="putFloorForm"
+                    (ngSubmit)="onSubmit()"
+                    enctype="multipart/form-data"
+                >
+                    <div>
+                        <label for="selectedBuilding">Select Building</label>
+                        <select
+                            id="selectedBuilding"
+                            formControlName="buildingCode"
+                            [(ngModel)]="selectedBuilding"
+                            (ngModelChange)="listFloors()"
+                            required
+                        >
+                            <option
+                                *ngFor="let building of buildings"
+                                [value]="building.code"
+                            >
+                                {{ building.code }}
+                            </option>
+                        </select>
+
+                        <label for="oldFloorNumber">Floor number:</label>
+                        <input
+                            id="oldFloorNumber"
+                            (input)="filter($event)"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="number"
+                            formControlName="oldFloorNumber"
+                        />
+                        <label for="newFloorNumber">New floor number:</label>
+                        <input
+                            id="newFloorNumber"
+                            (input)="filter($event)"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="number"
+                            formControlName="newFloorNumber"
+                        />
+                        <label for="newDescription">Description:</label>
+                        <textarea
+                            id="newDescription"
+                            formControlName="newDescription"
+                        ></textarea>
+
+                        <button type="submit" [disabled]="putFloorForm.invalid">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col m-auto p-auto">
+        <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
+            <div class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10">
+                <div *ngFor="let floor of floors" class="floor-card">
+                    <h2>Floor {{ floor.floorNumber }}</h2>
+                    <p>{{ floor.description || "No description" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

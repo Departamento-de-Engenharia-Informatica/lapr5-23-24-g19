@@ -28,12 +28,13 @@ import { CreateFloorComponent } from './components/floor/create-floor/create-flo
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
 import { PassageService } from './services/passage.service';
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
-import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
+import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
 import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
 import { TaskMenuComponent } from './components/task-menu/task-menu.component';
 import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
 import { environment } from 'src/environment/environment';
 import { environment as prod } from 'src/environment/environment.prod';
+import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
 
 @NgModule({
     declarations: [
@@ -58,10 +59,11 @@ import { environment as prod } from 'src/environment/environment.prod';
         CreateFloorComponent,
         CreateBuildingComponent,
         ListPassagesBetweenBuildingsComponent,
-        EditFloorComponent,
+        PatchFloorComponent,
         ListBuildingsMinmaxFloorsComponent,
         TaskMenuComponent,
         FleetMenuComponent,
+        PutFloorComponent,
     ],
     imports: [
         BrowserModule,
@@ -78,13 +80,13 @@ import { environment as prod } from 'src/environment/environment.prod';
 export class AppModule {
     public static baseUrl: string;
     public static visualizationUrl: string;
-    constructor(){
-        if(isDevMode()){
-            AppModule.baseUrl= environment.mdrUrl;
-            AppModule.visualizationUrl= environment.mdvUrl;
-        }else{
-            AppModule.baseUrl= prod.mdrUrl;
-            AppModule.visualizationUrl= prod.mdvUrl;
+    constructor() {
+        if (isDevMode()) {
+            AppModule.baseUrl = environment.mdrUrl;
+            AppModule.visualizationUrl = environment.mdvUrl;
+        } else {
+            AppModule.baseUrl = prod.mdrUrl;
+            AppModule.visualizationUrl = prod.mdvUrl;
         }
     }
 }

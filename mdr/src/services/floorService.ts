@@ -27,7 +27,7 @@ export default class FloorService implements IFloorService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
-    ) { }
+    ) {}
 
     public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
@@ -37,7 +37,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building not found"
+                    message: 'Building not found',
                 })
             }
 
@@ -47,7 +47,7 @@ export default class FloorService implements IFloorService {
             if (floor) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: "Floor already exists"
+                    message: 'Floor already exists',
                 })
             }
 
@@ -61,7 +61,7 @@ export default class FloorService implements IFloorService {
                 if (description.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
-                        message: "Description not valid"
+                        message: 'Description not valid',
                     })
                 }
                 description = description.getValue()
@@ -70,13 +70,13 @@ export default class FloorService implements IFloorService {
             const floorOrError = Floor.create({
                 building: building,
                 floorNumber: FloorNumber.create(floorDTO.floorNumber).getValue(),
-                description: description
+                description: description,
             })
 
             if (floorOrError.error) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: "There was a problem while create the floor"
+                    message: 'There was a problem while create the floor',
                 })
             }
 
@@ -95,7 +95,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building not found"
+                    message: 'Building not found',
                 })
             }
 
@@ -106,7 +106,7 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floor not found"
+                    message: 'Floor not found',
                 })
             }
 
@@ -116,7 +116,7 @@ export default class FloorService implements IFloorService {
                 if (description.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
-                        message: "Floor description do not meet requirements"
+                        message: 'Floor description do not meet requirements',
                     })
                 }
 
@@ -129,7 +129,7 @@ export default class FloorService implements IFloorService {
                 if (newFloorNumber.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
-                        message: "Floor number do not meet requirements"
+                        message: 'Floor number do not meet requirements',
                     })
                 }
 
@@ -151,7 +151,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building not found"
+                    message: 'Building not found',
                 })
             }
 
@@ -162,20 +162,24 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floor not found"
+                    message: 'Floor not found',
                 })
             }
 
-            const description = dto.description && Description.create(dto.description)
+            if (dto.description) {
+                const description = Description.create(dto.description)
 
-            if (description.isFailure) {
+                if (description.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
-                        message: "Floor description do not meet requirements"
+                        message: 'Floor description do not meet requirements',
                     })
-            }
+                }
 
-            floor.description = description.getValue()
+                floor.description = description.getValue()
+            } else {
+                floor.removeDescription()
+            }
 
             if (dto.floorNumber) {
                 const newFloorNumber = FloorNumber.create(dto.floorNumber)
@@ -183,7 +187,7 @@ export default class FloorService implements IFloorService {
                 if (newFloorNumber.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
-                        message: "Floor number do not meet requirements"
+                        message: 'Floor number do not meet requirements',
                     })
                 }
 
@@ -205,7 +209,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Building not found"
+                    message: 'Building not found',
                 })
             }
 
@@ -214,7 +218,7 @@ export default class FloorService implements IFloorService {
             if (floors.length == 0) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floors not found"
+                    message: 'Floors not found',
                 })
             }
 
@@ -225,7 +229,7 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async uploadMap(dto: IFloorMapDTO,): Promise<Either<ErrorResult, IFloorMapDTO>> {
+    public async uploadMap(dto: IFloorMapDTO): Promise<Either<ErrorResult, IFloorMapDTO>> {
         try {
             const floor = await this.floorRepo.findByCodeNumber(
                 BuildingCode.create(dto.buildingCode).getValue(),
@@ -234,20 +238,20 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floor not found"
+                    message: 'Floor not found',
                 })
             }
             const map = this.createMap(dto)
             if (map.isFailure) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: "Map does not meet requirements"
+                    message: 'Map does not meet requirements',
                 })
             }
             if (!floor.addMap(map.getValue())) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: "Map too large"
+                    message: 'Map too large',
                 })
             }
             const saved = await this.floorRepo.save(floor)
@@ -259,19 +263,19 @@ export default class FloorService implements IFloorService {
 
     private createMap(dto: IFloorMapDTO): Result<FloorMapContent> {
         const mapOrError = FloorMapContent.create({
-            path:this.generateMapPath(dto.buildingCode,dto.floorNumber),
+            path: this.generateMapPath(dto.buildingCode, dto.floorNumber),
             map: {
-                dimensions:MaxFloorDimensions.create(dto.map.dimensions.length, dto.map.dimensions.width).getValue(),
+                dimensions: MaxFloorDimensions.create(dto.map.dimensions.length, dto.map.dimensions.width).getValue(),
                 // mapContent: dto.map.mapContent,
                 // passages: dto.map.passages.map(passage => Coordinates.create(passage.x, passage.y).getValue()),
                 // elevators: dto.map.elevators.map(elevator => Coordinates.create(elevator.x, elevator.y).getValue()),
                 // rooms: dto.map. rooms.map(room => Coordinates.create(room.x, room.y).getValue())
-            }
-        });
+            },
+        })
         if (mapOrError.isSuccess) {
             return Result.ok(mapOrError.getValue())
         } else {
-            return Result.fail("Map does not meet requirements")
+            return Result.fail('Map does not meet requirements')
         }
     }
 
@@ -283,7 +287,7 @@ export default class FloorService implements IFloorService {
         }
 
         const floors = await this.passageRepo.floorsWithPassage(building)
-        return Result.ok(floors.map(f => FloorPassageMap.toDTO(f)))
+        return Result.ok(floors.map((f) => FloorPassageMap.toDTO(f)))
     }
 
     async getMap(dto: IFloorDTO): Promise<Either<ErrorResult, string>> {
@@ -293,7 +297,7 @@ export default class FloorService implements IFloorService {
             if (buildingCode.isFailure || floorNumber.isFailure) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: "Floor number or buildingCode do not meet requirements"
+                    message: 'Floor number or buildingCode do not meet requirements',
                 })
             }
 
@@ -301,25 +305,24 @@ export default class FloorService implements IFloorService {
             if (!floor) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floor not found"
+                    message: 'Floor not found',
                 })
-            }else if(!floor.props.path){
+            } else if (!floor.props.path) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: "Floor does not have map yet"
+                    message: 'Floor does not have map yet',
                 })
             }
             return right(floor.props.path)
         } catch (e) {
             return left({
                 errorCode: ErrorCode.NotFound,
-                message: "Something unexcpected happen"
+                message: 'Something unexcpected happen',
             })
         }
-
     }
 
-    private generateMapPath(buildingCode:string, floorNumber:number):string{
+    private generateMapPath(buildingCode: string, floorNumber: number): string {
         return `${buildingCode}/${floorNumber}.json`
     }
 }

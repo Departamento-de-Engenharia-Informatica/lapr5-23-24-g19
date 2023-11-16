@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditFloorComponent } from './edit-floor.component';
+import { PatchFloorComponent } from './edit-floor.component';
 
 describe('EditFloorComponent', () => {
-  let component: EditFloorComponent;
-  let fixture: ComponentFixture<EditFloorComponent>;
+  let component: PatchFloorComponent;
+  let fixture: ComponentFixture<PatchFloorComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [EditFloorComponent]
+      declarations: [PatchFloorComponent]
     });
-    fixture = TestBed.createComponent(EditFloorComponent);
+    fixture = TestBed.createComponent(PatchFloorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

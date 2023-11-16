@@ -62,7 +62,7 @@ export class ListBuildingsMinmaxFloorsComponent {
     submitDisabled(): boolean {
         const min = this.filterForm.value.min as unknown as number;
         const max = this.filterForm.value.max as unknown as number;
-        return min < 1 || max < 1 || min > max;
+        return min < 0 || max < 0 || min > max;
     }
 
     isInvalid(controlName: string): boolean {
