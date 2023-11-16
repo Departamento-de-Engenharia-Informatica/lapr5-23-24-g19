@@ -74,5 +74,8 @@ import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component
     bootstrap: [AppComponent],
 })
 export class AppModule {
+
+    //TODO: Se não for passado por parametro o IP do server, usar localhost(vantagens para testar em produção)
     public static baseUrl = 'http://localhost:4000/api';
+    public static visualizationUrl= 'http://localhost:5173/'
 }

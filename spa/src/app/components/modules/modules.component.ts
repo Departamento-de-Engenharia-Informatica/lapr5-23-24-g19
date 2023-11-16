@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppModule } from 'src/app/app.module';
 
 @Component({
   selector: 'app-modules',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./modules.component.css']
 })
 export class ModulesComponent {
+
+  clickVisualization() {
+    window.open(AppModule.visualizationUrl);
+  }
 
 }

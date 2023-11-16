@@ -175,18 +175,15 @@ export default class Maze extends THREE.Group {
 
         const buildingCode = "K"
         const floorNumber = 2
-        const urlResource = `${parameters.url}/buildings/${buildingCode}/floors/${floorNumber}/map`;  // replace with your API endpoint
+        const urlResource = `${import.meta.env.VITE_MDR_URL}/buildings/${buildingCode}/floors/${floorNumber}/map`;
 
         fetch(urlResource, {
             method: 'GET',
-            // headers: {
-                // 'Content-Type': 'application/json',  // set the content type if needed
-            // },
         }).then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json(); // This returns a promise
+            return response.json();
         }).then(data => {
             // Parse the JSON data
             const description = data as unknown as MapFile;
@@ -194,53 +191,8 @@ export default class Maze extends THREE.Group {
             this.onLoad(description);
         }).catch(error => {
             console.error('Fetch error:', error);
-            onError(urlResource, error); // You may need to adjust the arguments depending on the onError function
+            onError(urlResource, error);
         });
-
-        // loader.load(
-        //         //Resource URL
-        //         this.url,
-
-        //         // onLoad callback
-        //         description => this.onLoad(description as unknown as MapFile),
-
-        //         // onProgress callback
-        //         xhr => onProgress(this.url, xhr),
-
-        //         // onError callback
-        //         error => onError(this.url, error)
-        //     );
-    }
-
-    async getMap(buildingCode: String, floorNumber: number) {
-        try {
-            // 👇️ const response: Response
-            const response = await fetch(`${MDRUrl}buildings/${buildingCode}/floor/${floorNumber}/map`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error! status: ${response.status}`);
-            }
-
-            // 👇️ const result: GetUsersResponse
-            const result = (await response.json()) as MapFile;
-
-            // console.log('result is: ', JSON.stringify(result, null, 4));
-
-            return result;
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log('error message: ', error.message);
-                return error.message;
-            } else {
-                console.log('unexpected error: ', error);
-                return 'An unexpected error occurred';
-            }
-        }
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates

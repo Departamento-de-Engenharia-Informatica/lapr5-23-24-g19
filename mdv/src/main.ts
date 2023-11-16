@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import Orientation from "./orientation";
 import ThumbRaiser from "./thumb_raiser";
-
-export const MDRUrl= "http://localhost:4000/api/"
+export const MDRUrl = "http://localhost:4000/api/"
 
 let thumbRaiser: ThumbRaiser;
 function initialize() {
@@ -192,7 +191,7 @@ function initialize() {
             selected: 1
         }, // Cube texture parameters
         {
-            url: MDRUrl,
+            url: import.meta.env.VITE_MDR_URL,
             designCredits: "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
             texturesCredits: "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
             helpersColor: new THREE.Color(0xff0077)
@@ -292,6 +291,9 @@ function initialize() {
             zoomMax: 2.56
         }
     );
+    console.log(`Vite runinng mode: {${import.meta.env.MODE}}`)
+    console.log(`MDR url in use: {${import.meta.env.VITE_MDR_URL}}`)
+    console.log(`App: {${import.meta.env.VITE_APP_TITLE}}`)
 }
 
 function animate() {
