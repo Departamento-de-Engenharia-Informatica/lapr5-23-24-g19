@@ -26,6 +26,7 @@ import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.
 import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
 import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
 import { CreateRoomComponent } from "./components/room/create-room/create-room.component";
+import { ListRoomsComponent } from "./components/room/list-rooms/list-rooms.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -118,6 +119,11 @@ export const routes: Routes = [
         path: 'campus/rooms/create',
         component: CreateRoomComponent,
         title: 'Create Room',
+    },
+    {
+        path: 'campus/rooms/list',
+        component: ListRoomsComponent,
+        title: 'List Rooms',
     },
     { path: 'passages', component: PassageComponent },
     {

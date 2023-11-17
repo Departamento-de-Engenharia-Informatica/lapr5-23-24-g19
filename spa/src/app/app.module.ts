@@ -39,6 +39,7 @@ import { ListRobotsComponent } from './components/robot/list-robots/list-robots.
 import { RobotService } from './services/robot.service';
 import { CreateRoomComponent } from './components/room/create-room/create-room.component';
 import { RoomService } from "./services/room.service";
+import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.component";
 
 @NgModule({
     declarations: [
@@ -70,6 +71,7 @@ import { RoomService } from "./services/room.service";
         PutFloorComponent,
         ListRobotsComponent,
         CreateRoomComponent,
+        ListRoomsComponent,
     ],
     imports: [
         BrowserModule,

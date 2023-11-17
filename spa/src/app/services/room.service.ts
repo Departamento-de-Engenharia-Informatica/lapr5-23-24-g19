@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppModule } from '../app.module';
-import {CreatedElevatorDTO} from "./elevator.service";
 
 export interface RoomDTO {
     name: string
@@ -22,12 +21,6 @@ export interface CreatedRoomDTO {
     positions: { x: number; y: number }
 }
 
-export interface FloorAndBuildingDTO {
-    buildingCode: string;
-    floorNumber: number;
-    description?: string;
-}
-
 @Injectable({
     providedIn: 'root',
 })
@@ -45,6 +38,11 @@ export class RoomService {
                 headers: { 'Content-type': 'application/json' },
             },
         );
+    }
+
+    getRooms(buildingCode: string, floorNumber: string ): Observable<CreatedRoomDTO[]> {
+        const url = `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
+        return this.http.get<CreatedRoomDTO[]>(url,{observe:'body',responseType:'json'})
     }
 
 
