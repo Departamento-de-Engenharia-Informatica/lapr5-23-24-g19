@@ -8,35 +8,34 @@ import {
     OnInit,
     Output
 } from '@angular/core';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import {
     BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
 import {
+    CreatedElevatorDTO,
     ElevatorDTO,
     ElevatorService,
 } from 'src/app/services/elevator.service';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
+import {RoomDTO} from "../../../services/room.service";
 
 @Component({
     selector: 'app-create-elevator',
     templateUrl: './create-elevator.component.html',
     styleUrls: ['./create-elevator.component.css'],
 })
-export class CreateElevatorComponent implements OnInit,OnChanges{
+export class CreateElevatorComponent implements OnInit{
 
-    @Input() selectedBuilding: string;
-    @Input() selectedFloors: string[];
-    @Input() createdElevator;
+    selectedBuilding: string = '';
+    selectedFloors: string[] = [];
+    createdElevator = null as unknown as CreatedElevatorDTO;
 
-    @Output() formSubmitted = new EventEmitter<any>();
-
-    elevatorForm: UntypedFormGroup;
+    createElevatorForm : FormGroup = null as unknown as FormGroup;
 
     buildings: BuildingDTO[] = [];
     floors: FloorAndBuildingDTO[] = [];
-    elevator: ElevatorDTO;
 
     constructor(
         private fb: FormBuilder,
@@ -45,107 +44,51 @@ export class CreateElevatorComponent implements OnInit,OnChanges{
         private elevatorService: ElevatorService,
     ) {
 
-        this.selectedBuilding = '';
-        this.selectedFloors = [];
-        this.createdElevator = null as unknown as ElevatorDTO;
-        this.elevator =  null as unknown as ElevatorDTO;
-        this.buildings = [];
-        this.floors = [];
-
-        this.elevatorForm = this.fb.group({
-            selectedBuilding: ['', Validators.required],
-            selectedFloors: [[], Validators.required],
+        this.createElevatorForm = this.fb.group({
+            buildingId: ['', Validators.required],
+            floors: [[], Validators.required],
             brand: ['', Validators.required],
             model: ['', Validators.required],
             serialNumber: ['', Validators.required],
             description: [''],
         });
 
-
-        /*this.elevatorForm.get('selectedBuilding')?.valueChanges.subscribe(value => {
-            console.log('Selected Building Changed:', value);
-        });
-
-        this.elevatorForm.get('selectedFloors')?.valueChanges.subscribe(value => {
-            console.log('Selected Floors Changed:', value);
-        });*/
-
-    }
-
-
-
-    ngOnChanges(): void {
-
-
-        this.elevatorForm.get('selectedBuilding')?.valueChanges.subscribe((selectedBuilding) => {
-            console.log('Selected Building Changed:', selectedBuilding);
-            if (selectedBuilding.length !== 0) {
-                this.floorService.getFloors(selectedBuilding).subscribe((list: FloorAndBuildingDTO[]) => {
-                    this.floors = list;
-
-                });
-            }
-        });
-    /*console.log("ola",this.selectedBuilding.length);
-        if (this.selectedBuilding.length !== 0) {
-            this.floorService
-                .getFloors(this.selectedBuilding)
-                .subscribe((list: FloorDTO[]) => {
-                    this.floors = list;
-                    console.log("Floors:", this.floors);
-                });
-        }*/
     }
 
     ngOnInit(): void {
         this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
             this.buildings = list;
         });
-
-        this.ngOnChanges();
-
     }
 
+    listFloors(): void {
+        if (this.selectedBuilding.length !== 0) {
+            this.floorService
+                .getFloors(this.selectedBuilding)
+                .subscribe((list: FloorAndBuildingDTO[]) => {
+                    this.floors = list;
+                });
+        }
+    }
 
+    onSubmit(): void {
 
-
-    submitElevatorForm() {
-
-        if (this.elevatorForm.valid) {
-            // Set values to the properties
-            const selectedBuilding = this.elevatorForm.get(
-                'selectedBuilding',
-            )?.value;
-            const selectedFloors =
-                this.elevatorForm.get('selectedFloors')?.value;
-            const brand = this.elevatorForm.get('brand')?.value;
-            const model = this.elevatorForm.get('model')?.value;
-            const serialNumber = this.elevatorForm.get('serialNumber')?.value;
-            const description = this.elevatorForm.get('description')?.value;
-
-            const elevator: ElevatorDTO = {
-                buildingId: selectedBuilding,
-                floors: selectedFloors,
-                brand: brand,
-                model: model,
-                serialNumber: serialNumber,
-                description: description,
-            };
-
-
-
-
-            this.elevator = elevator;
-            this.createdElevator = elevator;
-            this.elevatorService.createElevator(elevator);
-            this.formSubmitted.emit(elevator);
-
-
-            // Reset the form
-            this.elevatorForm.reset();
-
+        const dto: ElevatorDTO = {
+            buildingId: this.createElevatorForm.value.buildingId,
+            floors: this.createElevatorForm.value.floors,
+            brand: this.createElevatorForm.value.brand,
+            model: this.createElevatorForm.value.model,
+            serialNumber: this.createElevatorForm.value.serialNumber,
+            description: this.createElevatorForm.value.description,
 
         }
+
+        this.elevatorService
+            .createElevator(dto)
+            .subscribe((elevator: CreatedElevatorDTO) => {
+            this.createdElevator = elevator;
+        });
+
     }
 
 

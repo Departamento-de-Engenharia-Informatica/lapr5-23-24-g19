@@ -46,9 +46,19 @@ export class ElevatorService{
     constructor(private http:HttpClient) {}
 
 
-    createElevator(dto: ElevatorDTO): Observable<ElevatorDTO>{
+    createElevator(dto: ElevatorDTO): Observable<CreatedElevatorDTO>{
+
+        console.log("",dto.buildingId)
+        console.log("",dto.floors)
+        console.log("",dto.brand)
+        console.log("",dto.model)
+        console.log("",dto.serialNumber)
+        console.log("",dto.description)
+
+
+
         const url = `${AppModule.baseUrl}/buildings/${dto.buildingId}/elevators`
-        return this.http.post<ElevatorDTO>(url,{observe:'body',responseType:'json'})
+        return this.http.post<CreatedElevatorDTO>(url,{observe:'body',responseType:'json'})
     }
 
     getElevators(buildingCode: string): Observable<CreatedElevatorDTO[]> {

@@ -1,62 +1,43 @@
-<!--form [formGroup]="elevatorForm" (ngSubmit)="submitElevatorForm()" enctype="multipart/form-data">
-    <div>
-        <div class="row">
-            <div>
-                <label for="selectedBuildingCode">Select Building</label>
-                <select id="selectedBuildingCode" formControlName="selectedBuildingCode" required>
-                    <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}  </option>
-                </select>
-            </div>
-            <div>
-                <label for="selectedFloors">Select Floors</label>
-                <select id="selectedFloors" formControlName="selectedFloors" multiple required>
-                    <option *ngFor="let floor of floors" [value]="floor.floorNumber">{{ floor.floorNumber }} </option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row">
-            <div>
-                <label for="brand">Brand:</label>
-                <input id="brand" type="text" formControlName="brand" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div>
-                <label for="model">Model:</label>
-                <input id="model" type="text" formControlName="model" />
-            </div>
-            <div>
-                <label for="serialNumber">Serial Number:</label>
-                <input id="serialNumber" type="text" formControlName="serialNumber" />
-            </div>
-        </div>
-
-        <label for="description">Description:</label>
-        <textarea id="description" formControlName="description"></textarea>
-
-        <button type="submit" [disabled]="elevatorForm.invalid">Submit</button>
-    </div>
-</form-->
-
-
-
-
-
-<form [formGroup]="elevatorForm" (ngSubmit)="submitElevatorForm()" enctype="multipart/form-data">
+<form
+    [formGroup]="createElevatorForm"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data">
     <div>
         <div class="row">
             <div>
                 <label for="selectedBuilding">Select Building</label>
-                <select id="selectedBuilding" formControlName="selectedBuilding" required>
-                    <option *ngFor="let building of buildings" [value]="building.code">{{ building.code }}</option>
+                <select
+                    id="selectedBuilding"
+                    formControlName="buildingId"
+                    [(ngModel)]="selectedBuilding"
+                    (ngModelChange)="listFloors()"
+                    required
+                >
+                    <option
+                        *ngFor="let building of buildings"
+                        [value]="building.code"
+                    >
+                        {{ building.code }}
+                    </option>
                 </select>
             </div>
+
             <div>
-                <label for="selectedFloors">Select Floors</label>
-                <select id="selectedFloors" formControlName="selectedFloors" multiple required>
-                    <option *ngFor="let floor of floors" [value]="floor.floorNumber">{{ floor.floorNumber }}</option>
+                <label
+                    for="selectedFloors">
+                    Select Floors
+                </label>
+                <select
+                    id="selectedFloors"
+                    formControlName="floors"
+                    [(ngModel)]="selectedFloors"
+                    multiple required
+                >
+                    <option
+                        *ngFor="let floor of floors"
+                        [value]="floor.floorNumber"
+                    >
+                        {{ floor.floorNumber }}</option>
                 </select>
             </div>
         </div>
@@ -86,7 +67,7 @@
         </div>
 
         <div class="row">
-            <button type="submit" [disabled]="elevatorForm.invalid">Submit</button>
+            <button type="submit" [disabled]="createElevatorForm.invalid">Submit</button>
         </div>
     </div>
 </form>
