@@ -37,6 +37,8 @@ import { environment as prod } from 'src/environment/environment.prod';
 import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
 import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
 import { RobotService } from './services/robot.service';
+import { CreateRoomComponent } from './components/room/create-room/create-room.component';
+import { RoomService } from "./services/room.service";
 
 @NgModule({
     declarations: [
@@ -67,6 +69,7 @@ import { RobotService } from './services/robot.service';
         FleetMenuComponent,
         PutFloorComponent,
         ListRobotsComponent,
+        CreateRoomComponent,
     ],
     imports: [
         BrowserModule,
@@ -77,7 +80,11 @@ import { RobotService } from './services/robot.service';
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [BuildingService, ElevatorService, PassageService, RobotService],
+    providers: [BuildingService,
+                ElevatorService,
+                PassageService,
+                RobotService,
+                RoomService],
     bootstrap: [AppComponent],
 })
 export class AppModule {
