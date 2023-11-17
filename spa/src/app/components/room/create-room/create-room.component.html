@@ -1,0 +1,91 @@
+<div class="mg-4">
+    <div class="container px-5 py-20 mx-auto">
+        <div class="relative w-full">
+            <div>
+                <form
+                    [formGroup]="createRoomForm"
+                    (ngSubmit)="onSubmit()"
+                    enctype="multipart/form-data"
+                >
+                    <div>
+                        <label for="selectedBuilding">Select Building</label>
+                        <select
+                            id="selectedBuilding"
+                            formControlName="buildingCode"
+                            [(ngModel)]="selectedBuilding"
+                            (ngModelChange)="listFloors()"
+                            required
+                        >
+                            <option
+                                *ngFor="let building of buildings"
+                                [value]="building.code"
+                            >
+                                {{ building.code }} - {{building.description}}
+                            </option>
+                        </select>
+
+                        <label for="selectedFloors">Select Floor</label>
+                        <select id="selectedFloors" formControlName="selectedFloors" required>
+                            <option *ngFor="let floor of floors" [value]="floor.floorNumber">{{ floor.floorNumber }}</option>
+                        </select>
+
+                        <label for="name">Name:</label>
+                        <textarea
+                            id="name"
+                            formControlName="name"
+                        ></textarea>
+
+                        <label for="description">Description:</label>
+                        <textarea
+                            id="description"
+                            formControlName="description"
+                        ></textarea>
+
+                        <label for="category">Category:</label>
+                        <textarea
+                            id="category"
+                            formControlName="category"
+                        ></textarea>
+
+                        <label for="dimensions">Dimensions:</label>
+                        <div formGroupName="dimensions">
+                            <label for="length">Length:</label>
+                            <input id="length" type="number" formControlName="length" />
+
+                            <label for="width">Width:</label>
+                            <input id="width" type="number" formControlName="width" />
+                        </div>
+
+                        <label for="positions">Positions:</label>
+                        <div formGroupName="positions">
+                            <label for="x">X:</label>
+                            <input id="x" type="number" formControlName="x" />
+
+                            <label for="y">Y:</label>
+                            <input id="y" type="number" formControlName="y" />
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            [disabled]="createRoomForm.invalid"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col m-auto p-auto">
+        <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
+            <div class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10">
+                <div *ngIf="createdRoom" class="room-card">
+                    <h2>Room {{ createdRoom.name }}</h2>
+                    <p>{{ createdRoom.description || "No description" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
