@@ -5,6 +5,7 @@ import { Inject, Service } from 'typedi'
 import IElevatorController from './IControllers/IElevatorController'
 import IElevatorService, { ErrorResult, ErrorCode } from '../services/IServices/IElevatorService'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
+import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 
 @Service()
 export default class ElevatorController implements IElevatorController {
@@ -17,6 +18,7 @@ export default class ElevatorController implements IElevatorController {
             const body = req.body as IElevatorDTO
             body.buildingId = buildingId
 
+
             const result = await this.service.createElevator(body as IElevatorDTO)
 
             if (result.isLeft()) {
@@ -25,8 +27,8 @@ export default class ElevatorController implements IElevatorController {
                 return res.status(ret).send(error.message)
             }
 
-            const message = result.value as IElevatorDTO
-            return res.status(201).send(message)
+            const message = result.value as ICreatedElevatorDTO
+            return res.status(201).send(JSON.stringify(message))
         } catch (err) {
             return next(err)
         }

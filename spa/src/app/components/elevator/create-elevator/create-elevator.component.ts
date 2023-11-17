@@ -20,6 +20,7 @@ import {
 } from 'src/app/services/elevator.service';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 import {RoomDTO} from "../../../services/room.service";
+import {catchError, tap} from "rxjs";
 
 @Component({
     selector: 'app-create-elevator',
@@ -31,9 +32,7 @@ export class CreateElevatorComponent implements OnInit{
     selectedBuilding: string = '';
     selectedFloors: string[] = [];
     createdElevator = null as unknown as CreatedElevatorDTO;
-
     createElevatorForm : FormGroup = null as unknown as FormGroup;
-
     buildings: BuildingDTO[] = [];
     floors: FloorAndBuildingDTO[] = [];
 
@@ -74,7 +73,6 @@ export class CreateElevatorComponent implements OnInit{
     onSubmit(): void {
 
         const dto: ElevatorDTO = {
-            buildingId: this.createElevatorForm.value.buildingId,
             floors: this.createElevatorForm.value.floors,
             brand: this.createElevatorForm.value.brand,
             model: this.createElevatorForm.value.model,
@@ -83,8 +81,11 @@ export class CreateElevatorComponent implements OnInit{
 
         }
 
-        this.elevatorService
-            .createElevator(dto)
+        const buildingId = this.createElevatorForm.value.buildingId
+
+
+         this.elevatorService
+            .createElevator(buildingId,dto)
             .subscribe((elevator: CreatedElevatorDTO) => {
             this.createdElevator = elevator;
         });
