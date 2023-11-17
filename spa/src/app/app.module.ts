@@ -35,6 +35,8 @@ import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component
 import { environment } from 'src/environment/environment';
 import { environment as prod } from 'src/environment/environment.prod';
 import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
+import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
+import { RobotService } from './services/robot.service';
 
 @NgModule({
     declarations: [
@@ -64,6 +66,7 @@ import { PutFloorComponent } from './components/floor/put-floor/put-floor.compon
         TaskMenuComponent,
         FleetMenuComponent,
         PutFloorComponent,
+        ListRobotsComponent,
     ],
     imports: [
         BrowserModule,
@@ -74,7 +77,7 @@ import { PutFloorComponent } from './components/floor/put-floor/put-floor.compon
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [BuildingService, ElevatorService, PassageService],
+    providers: [BuildingService, ElevatorService, PassageService, RobotService],
     bootstrap: [AppComponent],
 })
 export class AppModule {

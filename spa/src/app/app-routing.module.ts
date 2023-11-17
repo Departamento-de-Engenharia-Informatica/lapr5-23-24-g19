@@ -24,6 +24,7 @@ import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component
 import { CreateBuildingComponent } from './components/create-building/create-building.component';
 import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
 import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
+import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -41,7 +42,11 @@ export const routes: Routes = [
 
     { path: 'fleet/robot-types', component: RobotTypeComponent },
     { path: 'fleet/robots', component: RobotComponent },
-
+    {
+        path: 'fleet/robots/list',
+        component: ListRobotsComponent,
+        title: 'List all robots in the fleet',
+    },
     {
         path: 'buildings',
         component: BuildingComponent,
