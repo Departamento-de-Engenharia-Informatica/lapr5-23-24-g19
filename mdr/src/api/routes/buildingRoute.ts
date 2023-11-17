@@ -215,6 +215,11 @@ export default (app: Router) => {
     )
 
     route.get(
+        '/:buildingId/floors/:floorNumber/rooms',
+        (req, res, next) => roomCtrl.getRooms(req, res, next),
+    )
+
+    route.get(
         '/:id/elevators',
         (req, res, next) => elevatorCtrl.getElevators(req, res, next),
     )
@@ -269,7 +274,7 @@ export default (app: Router) => {
                   name: Joi.string().required(),
                 }),
               },
-            }).unknown(true), // This allows additional properties in the body          
+            }).unknown(true), // This allows additional properties in the body
         }), upload.single('file'),
         (req, res, next) => floorController.updateMap(req, res, next),
     )
