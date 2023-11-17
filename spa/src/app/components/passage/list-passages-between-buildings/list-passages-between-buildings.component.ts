@@ -33,10 +33,10 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
 
     }
 
-    getPassagesBetweenBuildings(bCode1: string, bCode2: string) {
+    getPassagesBetweenBuildings() {
         this.passages = [];
         this.passageService
-            .getPassagesBetweenBuildings(bCode1,bCode2)
+            .getPassagesBetweenBuildings(this.selectedBuilding1,this.selectedBuilding2)
             .subscribe((list: PassageDTO[]) => {
                 this.passages = list;
             });

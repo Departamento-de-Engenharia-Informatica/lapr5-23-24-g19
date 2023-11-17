@@ -27,13 +27,31 @@ export class RoomService {
 
 
 
-    createRoom(dto: FloorAndBuildingDTO): Observable<RoomDTO> {
+    createRoom(dto: RoomDTO): Observable<RoomDTO> {
         /*const room: RoomDTO = {
             floorNumber: dto.floorNumber,
             description: dto.description,
         };*/
+
+
+        console.log("",dto.name)
+        console.log("",dto.buildingCode)
+        console.log("",dto.floorNumber)
+        console.log("",dto.description)
+        console.log("",dto.category)
+        console.log("",dto.dimensions)
+        console.log("",dto.positions)
+
         const url = `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.floorNumber}/rooms`
-        return this.http.post<RoomDTO>(url,{observe:'body',responseType:'json'})
+        return this.http.post<RoomDTO>(url,
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe:'body',
+                responseType:'json'
+            })
+
+
+
     }
 
 

@@ -30,6 +30,7 @@
                     name="building"
                     class="vertical-center custom-dropdown"
                     [(ngModel)]="selectedBuilding2"
+                    (ngModelChange)="getPassagesBetweenBuildings()"
                 >
                     <option value="" disabled selected></option>
                     <option
@@ -42,12 +43,6 @@
             </div>
         </div>
 
-        <button
-            (click)="getPassagesBetweenBuildings(selectedBuilding1,selectedBuilding2)"
-            class="text-white bg-yellow-500 border-0 py-0 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg mb-4"
-        >
-            Get Passages
-        </button>
 
         <div class="list-passages-between-buildings-list">
             <div *ngFor="let passage of passages" class="list-passages-between-buildings-card mb-8">
