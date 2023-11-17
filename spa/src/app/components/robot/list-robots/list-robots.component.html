@@ -1,0 +1,18 @@
+<section class="text-gray-400 body-font bg-gray-900">
+    <div class="container px-5 py-20 mx-auto flex flex-col items-center">
+        <div class="robot-list">
+            <div *ngFor="let robot of robots" class="robot-card mb-8">
+                <h2>Robots</h2>
+                <p>Code: {{ robot.code }}</p>
+                <p>Nickname: {{ robot.nickname }}</p>
+                <p>Typecode: {{ robot.typeCode }}</p>
+                <p>Serialnumber: {{ robot.serialNumber }}</p>
+                <p>Description: {{ robot.description }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
