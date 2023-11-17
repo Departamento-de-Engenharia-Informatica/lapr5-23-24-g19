@@ -3,14 +3,15 @@ import { Document, Model } from 'mongoose'
 import IRoomRepo from '../../services/IRepos/IRoomRepo'
 import { IRoomPersistence } from '../../dataschema/mongo/IRoomPersistence'
 import Room from '../../domain/room/room'
-import { RoomId } from '../../domain/room/roomId'
 import { RoomMap } from '../../mappers/RoomMap'
+import Building from '../../domain/building/building'
+import { Floor } from '../../domain/floor/floor'
 
 @Service()
 export default class RoomRepo implements IRoomRepo {
     private models: any
 
-    constructor(@Inject('roomSchema') private roomSchema: Model<IRoomPersistence & Document>) { }
+    constructor(@Inject('roomSchema') private roomSchema: Model<IRoomPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
@@ -26,7 +27,7 @@ export default class RoomRepo implements IRoomRepo {
     }
 
     public async save(room: Room): Promise<Room> {
-        const query = { name: room.name.value}
+        const query = { name: room.name.value }
 
         const roomDocument = await this.roomSchema.findOne(query)
 
@@ -39,17 +40,30 @@ export default class RoomRepo implements IRoomRepo {
                 roomDocument.description = rawFloor.description
                 roomDocument.dimensions = rawFloor.dimensions
                 roomDocument.position = rawFloor.position
-                
+
                 await roomDocument.save()
                 return RoomMap.toDomain(roomDocument)
             }
             const rawPassage = RoomMap.toPersistence(room)
             const passageCreated = await this.roomSchema.create(rawPassage)
-            
-            return RoomMap.toDomain(passageCreated)
 
+            return RoomMap.toDomain(passageCreated)
         } catch (err) {
             throw err
         }
+    }
+
+    async findAllInFloor(building: Building, floor: Floor): Promise<Room[]> {
+        const query = {
+            buildingCode: building.code.value,
+            floorNumber: floor.floorNumber.value,
+        }
+
+        const records = await this.roomSchema.find(query)
+
+        if (records.length === 0) {
+            return []
+        }
+        return await Promise.all(records.map(record => RoomMap.toDomain(record)))
     }
 }

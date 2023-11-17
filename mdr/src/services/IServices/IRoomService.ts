@@ -14,4 +14,5 @@ export type ErrorResult = {
 }
 export default interface IRoomService {
     createRoom(roomDTO: IRoomDTO): Promise<Either<ErrorResult, IRoomDTO>>
+    getRooms(roomDTO: IRoomDTO): Promise<Either<ErrorResult, IRoomDTO[]>>
 }

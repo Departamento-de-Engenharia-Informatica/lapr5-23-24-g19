@@ -14,11 +14,15 @@ import { RoomDimensions } from '../domain/room/roomDimensions'
 import { Coordinates } from '../domain/floor/Coordinates'
 import { RoomMap } from '../mappers/RoomMap'
 import { Either, Result, left, right } from '../core/logic/Result'
+import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
+import { ElevatorMap } from '../mappers/ElevatorMap'
+import IBuildingRepo from './IRepos/IBuildingRepo'
 
 @Service()
 export default class RoomService implements IRoomService {
     constructor(
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
+        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
@@ -65,6 +69,53 @@ export default class RoomService implements IRoomService {
                 errorCode: ErrorCode.BussinessRuleViolation,
                 message: 'Business rule violation',
             } as ErrorResult)
+            throw e
+        }
+    }
+
+    public async getRooms(dto: IRoomDTO): Promise<Either<ErrorResult, IRoomDTO[]>> {
+        try {
+            const bCode = BuildingCode.create(dto.buildingCode)
+
+            if (bCode.isFailure) {
+                return left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: 'Building code parameters do not meet requirements',
+                })
+            }
+
+            const building = await this.buildingRepo.findByCode(bCode.getValue())
+
+            if (building === null) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Building not found',
+                })
+            }
+
+            const fNumber = FloorNumber.create(dto.floorNumber)
+
+            const floor = await this.floorRepo.find(building, fNumber.getValue())
+
+            if (floor === null) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'floor not found',
+                })
+            }
+
+            const rooms = await this.roomRepo.findAllInFloor(building, floor)
+
+            if (rooms.length === 0) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'rooms not found',
+                })
+            } else {
+                const dtoList = await Promise.all(rooms.map(room => RoomMap.toDTO(room)))
+                return right(dtoList)
+            }
+        } catch (e) {
             throw e
         }
     }
