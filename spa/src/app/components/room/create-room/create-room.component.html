@@ -24,9 +24,18 @@
                             </option>
                         </select>
 
-                        <label for="selectedFloors">Select Floor</label>
-                        <select id="selectedFloors" formControlName="selectedFloors" required>
-                            <option *ngFor="let floor of floors" [value]="floor.floorNumber">{{ floor.floorNumber }}</option>
+                        <label for="selectedFloor">Select Floor</label>
+                        <select
+                            id="selectedFloor"
+                            formControlName="floorNumber"
+                            [(ngModel)]="selectedFloor"
+                        >
+                            <option
+                                *ngFor="let floor of floors"
+                                [value]="floor.floorNumber"
+                            >
+                                {{ floor.floorNumber }}
+                            </option>
                         </select>
 
                         <label for="name">Name:</label>
@@ -82,8 +91,20 @@
         <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
             <div class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10">
                 <div *ngIf="createdRoom" class="room-card">
-                    <h2>Room {{ createdRoom.name }}</h2>
-                    <p>{{ createdRoom.description || "No description" }}</p>
+                    <h2>Created Elevator</h2>
+                    <p>Name: {{ createdRoom.name }}</p>
+                    <p>Building Code: {{ createdRoom.buildingCode}}</p>
+                    <p>Floor: {{ createdRoom.floorNumber }}</p>
+                    <p>Description: {{ createdRoom.description }}</p>
+                    <p>Category: {{ createdRoom.category }}</p>
+                    <p>Dimensions:
+                        Length - {{ createdRoom.dimensions.length }},
+                        Width - {{ createdRoom.dimensions.width }}
+                    </p>
+                    <p>Positions:
+                        X - {{ createdRoom.positions.x }},
+                        Y - {{ createdRoom.positions.y }}
+                    </p>
                 </div>
             </div>
         </div>

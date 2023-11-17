@@ -12,6 +12,7 @@ import {RoomDTO, RoomService} from 'src/app/services/room.service';
 export class CreateRoomComponent implements OnInit{
 
     selectedBuilding: string = '';
+    selectedFloor: string = '';
     createdRoom = null as unknown as RoomDTO;
     createRoomForm: FormGroup = null as unknown as FormGroup;
 
