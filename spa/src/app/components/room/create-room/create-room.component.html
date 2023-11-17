@@ -51,18 +51,34 @@
                         ></textarea>
 
                         <label for="category">Category:</label>
-                        <textarea
-                            id="category"
-                            formControlName="category"
-                        ></textarea>
+                        <select id="category"
+                                formControlName="category"
+                                [(ngModel)]="createRoomForm.value.category"
+                                required
+                        >
+                            <option
+                                *ngFor="let category of categoryTypes"
+                                [value]="category"
+                            >
+                                {{ category }}
+                            </option>
+                        </select>
 
                         <label for="dimensions">Dimensions:</label>
                         <div formGroupName="dimensions">
                             <label for="length">Length:</label>
-                            <input id="length" type="number" formControlName="length" />
+                            <input
+                                id="length"
+                                type="number"
+                                formControlName="length"
+                            />
 
                             <label for="width">Width:</label>
-                            <input id="width" type="number" formControlName="width" />
+                            <input
+                                id="width"
+                                type="number"
+                                formControlName="width"
+                            />
                         </div>
 
                         <label for="positions">Positions:</label>

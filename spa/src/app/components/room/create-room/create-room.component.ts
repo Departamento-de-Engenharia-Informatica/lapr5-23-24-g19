@@ -4,14 +4,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
 import {CreatedRoomDTO, RoomDTO, RoomService} from 'src/app/services/room.service';
 
+enum CategoryType{
+    GABINETE = "GABINETE",
+    ANFITEATRO = "ANFITEATRO",
+    LABORATORIO = "LABORATORIO",
+    OUTRO = "OUTRO"
+}
+
 @Component({
   selector: 'app-create-room',
   templateUrl: './create-room.component.html',
   styleUrls: ['./create-room.component.css']
 })
-
-
-
 
 export class CreateRoomComponent implements OnInit{
 
@@ -20,6 +24,7 @@ export class CreateRoomComponent implements OnInit{
     createdRoom = null as unknown as CreatedRoomDTO;
     createRoomForm: FormGroup = null as unknown as FormGroup;
 
+    categoryTypes = Object.values(CategoryType);
     buildings: BuildingDTO[] = [];
     floors: FloorAndBuildingDTO[] = [];
 
@@ -36,8 +41,8 @@ export class CreateRoomComponent implements OnInit{
             description: ['', Validators.required],
             category: ['', Validators.required],
             dimensions: this.formBuilder.group({
-                length: [null, [Validators.min(0), Validators.required]],
-                width: [null, [Validators.min(0), Validators.required]]
+                length: [null, [Validators.min(1), Validators.required]],
+                width: [null, [Validators.min(1), Validators.required]]
             }),
             positions: this.formBuilder.group({
                 x: [null, [Validators.required]],
