@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppModule } from '../app.module';
-import { Observable } from 'rxjs';
+import {Observable, tap} from 'rxjs';
 
 // interface BuildingProps{
 //   code:string
@@ -12,9 +12,7 @@ import { Observable } from 'rxjs';
 // })
 
 export interface ElevatorDTO{
-    buildingId: string
     floors: number[]
-
     brand?: string
     model?: string
     serialNumber?: string
@@ -46,19 +44,17 @@ export class ElevatorService{
     constructor(private http:HttpClient) {}
 
 
-    createElevator(dto: ElevatorDTO): Observable<CreatedElevatorDTO>{
+    createElevator(buildingId: string, dto: ElevatorDTO): Observable<CreatedElevatorDTO>{
 
-        console.log("",dto.buildingId)
-        console.log("",dto.floors)
-        console.log("",dto.brand)
-        console.log("",dto.model)
-        console.log("",dto.serialNumber)
-        console.log("",dto.description)
+        return this.http.post<CreatedElevatorDTO>(
+            `${AppModule.baseUrl}/buildings/${buildingId}/elevators`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+            },
+        );
 
 
-
-        const url = `${AppModule.baseUrl}/buildings/${dto.buildingId}/elevators`
-        return this.http.post<CreatedElevatorDTO>(url,{observe:'body',responseType:'json'})
     }
 
     getElevators(buildingCode: string): Observable<CreatedElevatorDTO[]> {

@@ -2,8 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppModule } from '../app.module';
+import {CreatedElevatorDTO} from "./elevator.service";
 
 export interface RoomDTO {
+    name: string
+    description: string
+    category: string
+    dimensions: { length: number; width: number }
+    positions: { x: number; y: number }
+}
+
+export interface CreatedRoomDTO {
     name: string
     buildingCode: string
     floorNumber: number
@@ -27,31 +36,15 @@ export class RoomService {
 
 
 
-    createRoom(dto: RoomDTO): Observable<RoomDTO> {
-        /*const room: RoomDTO = {
-            floorNumber: dto.floorNumber,
-            description: dto.description,
-        };*/
+    createRoom(buildingCode: string, floorNumber: string, dto: RoomDTO): Observable<CreatedRoomDTO> {
 
-
-        console.log("",dto.name)
-        console.log("",dto.buildingCode)
-        console.log("",dto.floorNumber)
-        console.log("",dto.description)
-        console.log("",dto.category)
-        console.log("",dto.dimensions)
-        console.log("",dto.positions)
-
-        const url = `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.floorNumber}/rooms`
-        return this.http.post<RoomDTO>(url,
+        return this.http.post<CreatedRoomDTO>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`,
+            JSON.stringify(dto),
             {
                 headers: { 'Content-type': 'application/json' },
-                observe:'body',
-                responseType:'json'
-            })
-
-
-
+            },
+        );
     }
 
 

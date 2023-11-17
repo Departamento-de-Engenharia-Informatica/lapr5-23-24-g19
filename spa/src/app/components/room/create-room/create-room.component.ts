@@ -2,18 +2,22 @@ import {Component, OnInit} from '@angular/core';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
-import {RoomDTO, RoomService} from 'src/app/services/room.service';
+import {CreatedRoomDTO, RoomDTO, RoomService} from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-create-room',
   templateUrl: './create-room.component.html',
   styleUrls: ['./create-room.component.css']
 })
+
+
+
+
 export class CreateRoomComponent implements OnInit{
 
     selectedBuilding: string = '';
     selectedFloor: string = '';
-    createdRoom = null as unknown as RoomDTO;
+    createdRoom = null as unknown as CreatedRoomDTO;
     createRoomForm: FormGroup = null as unknown as FormGroup;
 
     buildings: BuildingDTO[] = [];
@@ -61,8 +65,6 @@ export class CreateRoomComponent implements OnInit{
     onSubmit(): void {
         const dto: RoomDTO = {
             name: this.createRoomForm.value.name,
-            buildingCode: this.createRoomForm.value.buildingCode,
-            floorNumber: this.createRoomForm.value.floorNumber,
             description: this.createRoomForm.value.description,
             category: this.createRoomForm.value.category,
             dimensions: {
@@ -75,9 +77,12 @@ export class CreateRoomComponent implements OnInit{
             }
         };
 
+        const buildingCode = this.createRoomForm.value.buildingCode
+        const floorNumber = this.createRoomForm.value.floorNumber
+
         this.roomService
-            .createRoom(dto)
-            .subscribe((room: RoomDTO) => {
+            .createRoom(buildingCode,floorNumber,dto)
+            .subscribe((room: CreatedRoomDTO) => {
                 this.createdRoom = room;
             });
     }
