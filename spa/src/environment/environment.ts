@@ -1,7 +1,8 @@
 export const environment = {
     production: false,
     apiKey: 'devKey',
-    mdrUrl: 'http://localhost:4000/api',
+    mdrServerUrl: 'http://localhost:4000',
     mdvUrl: 'http://localhost:5173/'
+    
   };
   

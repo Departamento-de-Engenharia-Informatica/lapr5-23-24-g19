@@ -40,7 +40,7 @@ import { CreateRoomComponent } from './components/room/create-room/create-room.c
 import { RoomService } from "./services/room.service";
 import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.component";
 import { ErrorMessageService } from './services/error-message.service';
-import { ErrorPopupComponent } from './components/error-popup/error-popup.component';
+import { MessagePopupComponent } from './components/message-popup/message-popup.component';
 import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
 
 @NgModule({
@@ -73,7 +73,7 @@ import { GetBuildingsComponent } from './components/building/get-buildings/get-b
         ListRobotsComponent,
         CreateRoomComponent,
         ListRoomsComponent,
-        ErrorPopupComponent,
+        MessagePopupComponent,
         GetBuildingsComponent
     ],
     imports: [

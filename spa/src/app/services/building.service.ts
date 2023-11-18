@@ -13,9 +13,14 @@ import { Observable } from 'rxjs';
 
 export interface BuildingDTO {
     code: string;
+    name: string;
+    description: string;
+    maxFloorDimensions: { length: number; width: number };
+}
+export interface EditBuildingDTO {
     name?: string;
     description?: string;
-    maxFloorDimensions: { length: number; width: number };
+    maxFloorDimensions?: { length: number; width: number };
 }
 
 export interface BuildingByFloorsDTO {
@@ -36,7 +41,7 @@ export interface MinMaxDTO {
 // providedIn: AppModule
 // }
 export class BuildingService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getBuildings(): Observable<BuildingDTO[]> {
         const url = `${AppModule.baseUrl}/buildings`;
@@ -70,4 +75,37 @@ export class BuildingService {
             },
         );
     }
+    putBuilding(building: EditBuildingDTO, buildingCode: String): Observable<BuildingDTO> {
+        return this.http.put<BuildingDTO>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}`,
+            JSON.stringify(cleanObject(building)),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
+    }
+    patchBuilding(building: EditBuildingDTO, buildingCode: String): Observable<BuildingDTO> {
+        return this.http.patch<BuildingDTO>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}`,
+            JSON.stringify(cleanObject(building)),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
+    }
+}
+function cleanObject(obj: any) {
+    const cleanedObj = {} as any;
+
+    for (const key in obj) {
+        if (obj[key] !== null && obj[key] !== undefined && obj[key] != '') {
+            cleanedObj[key] = obj[key];
+        }
+    }
+
+    return cleanedObj;
 }
