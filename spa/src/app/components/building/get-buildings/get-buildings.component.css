@@ -17,6 +17,10 @@
     background-color: var(--primary-color);
     color: white;
 }
+.building-card:hover{
+    transform: scale(1.1); /* Increase the size on hover */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
 
 .building-card h2 {
     margin-bottom: 8px;
