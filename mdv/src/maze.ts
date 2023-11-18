@@ -156,11 +156,11 @@ export default class Maze extends THREE.Group {
         // TODO: NAPOLES CHANGE this to request based on building and floor
         // GET buildings/{buildingCode}/floors/{floorNumber}/map
 
-        const buildingCode = 'K';
-        const floorNumber = 2;
-        const urlResource = `${import.meta.env.VITE_MDR_URL}/buildings/${buildingCode}/floors/${floorNumber}/map`;
+        // const buildingCode = 'K';
+        // const floorNumber = 2;
+        // const urlResource = `${import.meta.env.VITE_MDR_URL}/buildings/${buildingCode}/floors/${floorNumber}/map`;
 
-        this.fetchMap(urlResource);
+        this.fetchMap(parameters.url);
     }
 
     async fetchMap(url: string) {
