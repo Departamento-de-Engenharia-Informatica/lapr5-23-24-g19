@@ -124,20 +124,24 @@ export default class Maze extends THREE.Group {
     public initialPosition: THREE.Vector3 = new THREE.Vector3();
     public initialDirection: number = 0;
 
+    private onError(url: string, error: unknown) {
+        console.error("Error loading resource '" + url + "' (" + error + ').');
+    }
+    private onProgress(url: string, xhr: ProgressEvent<EventTarget>) {
+        console.log(
+            "Resource '" +
+                url +
+                "' " +
+                ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
+                '% loaded.',
+        );
+    }
+
     constructor(private parameters: MazeParameters) {
         super();
         // merge(this, parameters);
         merge(this, { scale: parameters.scale });
         this._loaded = false;
-
-
-        const onProgress = function (url: string, xhr: ProgressEvent<EventTarget>) {
-            console.log("Resource '" + url + "' " + (100.0 * xhr.loaded / xhr.total).toFixed(0) + "% loaded.");
-        }
-
-        const onError = function (url: string, error: unknown) {
-            console.error("Error loading resource '" + url + "' (" + error + ").");
-        }
 
         // The cache must be enabled; additional information available at https://threejs.org/docs/api/en/loaders/FileLoader.html
         THREE.Cache.enabled = true;
@@ -156,22 +160,25 @@ export default class Maze extends THREE.Group {
         const floorNumber = 2;
         const urlResource = `${import.meta.env.VITE_MDR_URL}/buildings/${buildingCode}/floors/${floorNumber}/map`;
 
-        fetch(urlResource, {
-            method: 'GET',
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        this.fetchMap(urlResource);
+    }
+
+    async fetchMap(url: string) {
+        const response = await fetch(url);
+        if (response.ok) {
+            try {
+                const description = (await response.json()) as MapFile;
+                console.log(JSON.stringify(description, null, 2));
+                this.onLoad(description);
+            } catch (e) {
+                console.error('Fetch error:', e);
+                this.onError(url, e);
             }
-            return response.json();
-        }).then(data => {
-            // Parse the JSON data
-            const description = data as unknown as MapFile;
-            console.log(JSON.stringify(description,null,2))
-            this.onLoad(description);
-        }).catch(error => {
-            console.error('Fetch error:', error);
-            onError(urlResource, error);
-        });
+        } else {
+            console.error(
+                `Error fetching map @ ${url}: ${await response.text()}`,
+            );
+        }
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates
