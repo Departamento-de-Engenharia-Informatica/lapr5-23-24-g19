@@ -13,10 +13,9 @@ import { PassageComponent } from './components/passage/passage.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
 import { CampusComponent } from './components/campus-menu/campus-menu.component';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
 import { ContactInfoComponent } from './components/contact-info/contact-info.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { BuildingService } from './services/building.service';
@@ -40,6 +39,9 @@ import { RobotService } from './services/robot.service';
 import { CreateRoomComponent } from './components/room/create-room/create-room.component';
 import { RoomService } from "./services/room.service";
 import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.component";
+import { ErrorMessageService } from './services/error-message.service';
+import { ErrorPopupComponent } from './components/error-popup/error-popup.component';
+import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
 
 @NgModule({
     declarations: [
@@ -57,7 +59,6 @@ import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.compon
         ListFloorsComponent,
         ModulesComponent,
         ContactInfoComponent,
-        GetBuildingsComponent,
         EditBuildingComponent,
         CreateElevatorComponent,
         ListElevatorsComponent,
@@ -72,6 +73,8 @@ import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.compon
         ListRobotsComponent,
         CreateRoomComponent,
         ListRoomsComponent,
+        ErrorPopupComponent,
+        GetBuildingsComponent
     ],
     imports: [
         BrowserModule,
@@ -80,25 +83,29 @@ import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.compon
         HttpClientModule,
         RouterModule,
         FormsModule,
-        ReactiveFormsModule,
+        ReactiveFormsModule
     ],
     providers: [BuildingService,
                 ElevatorService,
                 PassageService,
                 RobotService,
-                RoomService],
+                RoomService,
+                ErrorMessageService],
     bootstrap: [AppComponent],
 })
 export class AppModule {
     public static baseUrl: string;
+    public static mdrUrl: string;
     public static visualizationUrl: string;
-    constructor() {
-        if (isDevMode()) {
-            AppModule.baseUrl = environment.mdrUrl;
-            AppModule.visualizationUrl = environment.mdvUrl;
-        } else {
-            AppModule.baseUrl = prod.mdrUrl;
-            AppModule.visualizationUrl = prod.mdvUrl;
+    constructor(){
+        if(isDevMode()){
+            AppModule.baseUrl= `${environment.mdrServerUrl}/api`;
+            AppModule.mdrUrl= environment.mdrServerUrl;
+            AppModule.visualizationUrl= environment.mdvUrl;
+        }else{
+            AppModule.baseUrl= `${environment.mdrServerUrl}/api`;
+            AppModule.mdrUrl= prod.mdrServerUrl;
+            AppModule.visualizationUrl= prod.mdvUrl;
         }
     }
 }

@@ -119,8 +119,8 @@ export default (app: Router) => {
         '/:id',
         celebrate({
             body: Joi.object({
-                name: Joi.string().required(),
-                description: Joi.string().required(),
+                name: Joi.string(),
+                description: Joi.string(),
                 maxFloorDimensions: Joi.object({
                     length: Joi.number()
                         .integer()

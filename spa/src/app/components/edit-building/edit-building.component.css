@@ -29,7 +29,6 @@ select {
     justify-content: space-between;
     width: 100%;
     margin-bottom: 16px;
-    /* Adjust as needed for spacing between the rows */
 }
 
 .row div {
@@ -42,14 +41,12 @@ select {
     margin-bottom: 16px;
 }
 
-
 button {
     padding: 10px 20px;
     background-color: var(--third-color);
     color: var(--secondary-color);
     border: none;
     border-radius: 4px;
-    cursor: pointer;
     margin: 0 auto;
     display: block;
 }
@@ -59,4 +56,25 @@ button:disabled {
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
+}
+.checkbox-row {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the checkbox container horizontally */
+    margin-top: 10px; /* Adjust the margin as needed */
+}
+
+#overrideConfirmation {
+    margin-top: 8px;
+    width: 20px;
+}
+.invalid-input {
+    border: 2px solid rgb(218, 62, 62);
 }

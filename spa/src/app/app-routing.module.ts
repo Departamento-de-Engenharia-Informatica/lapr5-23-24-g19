@@ -7,7 +7,7 @@ import { EditBuildingComponent } from './components/edit-building/edit-building.
 import { ElevatorComponent } from './components/elevator/elevator.component';
 import { FloorComponent } from './components/floor/floor.component';
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
-import { GetBuildingsComponent } from './components/get-buildings/get-buildings.component';
+import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
 import { CampusComponent } from './components/campus-menu/campus-menu.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -21,7 +21,6 @@ import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-b
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
 import { TaskMenuComponent } from './components/task-menu/task-menu.component';
 import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
-import { CreateBuildingComponent } from './components/create-building/create-building.component';
 import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
 import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
 import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
@@ -133,7 +132,6 @@ export const routes: Routes = [
     },
     { path: '**', component: PageNotFoundComponent },
 ];
-
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
