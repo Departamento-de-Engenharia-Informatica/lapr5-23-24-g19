@@ -74,10 +74,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_color_2k.jpg"
+                "url": "./textures/floor-wood/wood_floor_diff_2k.png"
             },
             "ao": {
-                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_ao_2k.jpg",
+                "url": "./textures/floor-wood/wood_floor_ao_2k.png",
                 "intensity": 1
             },
             "displacement": {
@@ -86,7 +86,7 @@
                 "bias": 0
             },
             "normal": {
-                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_normal_opengl_2k.png",
+                "url": "./textures/floor-wood/wood_floor_nor_gl_2k.png",
                 "type": 0,
                 "scale": {
                     "x": 2,
@@ -98,7 +98,7 @@
                 "scale": 1
             },
             "roughness": {
-                "url": "./textures/ground_0003_2k_372HqZ/ground_0003_roughness_2k.jpg",
+                "url": "./textures/floor-wood/wood_floor_rough_2k.png",
                 "rough": 1
             }
         },
@@ -120,10 +120,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_color_2k.jpg"
+                "url": "./textures/wall-plastered/plastered_wall_diff_2k.png"
             },
             "ao": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_ao_2k.jpg",
+                "url": "./textures/wall-plastered/plastered_wall_ao_2k.png",
                 "intensity": 1
             },
             "displacement": {
@@ -132,7 +132,7 @@
                 "bias": 0
             },
             "normal": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_normal_opengl_2k.png",
+                "url": "./textures/wall-plastered/plastered_wall_nor_gl_2k.png",
                 "type": 0,
                 "scale": {
                     "x": 2,
@@ -144,7 +144,7 @@
                 "scale": 1
             },
             "roughness": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_roughness_2k.jpg",
+                "url": "./textures/wall-plastered/plastered_wall_rough_2k.png",
                 "rough": 1
             }
         },
@@ -204,7 +204,7 @@
         "minFilter": 5,
         "secondaryColor": "0x6b554b"
     },
-    "room": {
+    "door": {
         "segments": {
             "width": 1,
             "height": 1
@@ -212,10 +212,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_color_2k.jpg"
+                "url": "./textures/door-wood/Wood026_2K-PNG_Color.png"
             },
             "ao": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_ao_2k.jpg",
+                "url": "",
                 "intensity": 1
             },
             "displacement": {
@@ -224,7 +224,7 @@
                 "bias": 0
             },
             "normal": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_normal_opengl_2k.png",
+                "url": "./textures/door-wood/Wood026_2K-PNG_NormalGL.png",
                 "type": 0,
                 "scale": {
                     "x": 2,
@@ -236,7 +236,7 @@
                 "scale": 1
             },
             "roughness": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_roughness_2k.jpg",
+                "url": "./textures/door-wood/Wood026_2K-PNG_Roughness.png",
                 "rough": 1
             }
         },
