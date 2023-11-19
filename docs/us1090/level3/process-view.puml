@@ -1,0 +1,149 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "dto:\nDTO" as dto
+
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+usr -> view : wants to create floor
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+        alt building(s) not found
+            activate md
+                note right : see us170 documentation
+                md --> http : 200: empty list
+                http --> svc : observable
+                svc --> ctrl : []
+                ctrl --> ctrl : buildings = []
+                ctrl --> view : buildings
+                view --> usr : does not list anything
+        else building(s) found
+                md --> http : 200: buildings
+            deactivate md
+            http --> svc : observable
+            deactivate http
+
+            loop for each building
+                svc --> dto** : create()
+                activate dto
+                    dto --> svc : dto
+                deactivate dto
+            end
+
+            svc --> ctrl : dto[]
+            deactivate svc
+
+            ctrl --> ctrl : buildings = dto[]
+            ctrl --> view : buildings
+            deactivate ctrl
+
+            view --> usr : requests building
+        deactivate view
+
+        usr -> view : provides building
+        activate view
+            view -> ctrl : listFloors()
+            activate ctrl
+                ctrl -> svc : listFloors()
+                activate svc
+                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                    activate http
+                        http -> md : GET /buildings/{id}/floors
+            activate md
+                md --> http : 200: floors
+                note right : see us210 documentation
+                deactivate md
+                    http --> svc : observable
+                    deactivate http
+
+                    loop for each floor
+                        svc --> dto** : create()
+                        activate dto
+                            dto --> svc : dto
+                        deactivate dto
+                    end
+
+                    svc --> ctrl : dto[]
+                deactivate svc
+
+                ctrl --> ctrl : floors = dto[]
+                ctrl --> view : floors
+            deactivate ctrl
+            view --> usr : requests data
+        deactivate view
+
+        usr -> view : provides data
+        activate view
+            view -> ctrl : onSubmit()
+            activate ctrl
+                ctrl --> dto** : create()
+                activate dto
+                    dto --> ctrl : dto
+                deactivate dto
+
+                ctrl -> svc : createFloor()
+                activate svc
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+
+                    svc -> http : post({baseURL}/buildings/{buildingCode}/floors)
+                    activate http
+                        http -> md : POST /buildings/{id}/floors
+            activate md
+                note right : see us190 documentation
+                alt success
+                    md --> http : 201: floor
+
+                    http --> svc : observable
+
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+
+                    svc --> ctrl : dto
+
+                ctrl --> ctrl : createdFloor = dto
+                ctrl --> view : createdFloor
+                view --> usr : previews created floor information
+
+                else floor already exists
+                    md --> http : 422: error
+                    http --> svc : null
+                    svc --> ctrl : null
+                    ctrl --> ctrl : createdFloor = null
+                    ctrl --> view : createdFloor
+                    view --> usr : informs error
+                else bad floor parameters
+                    md --> http : 422: error
+                    deactivate md
+                    http --> svc : null
+                    deactivate http
+                    svc --> ctrl : null
+                    deactivate svc
+                    ctrl --> ctrl : createdFloor = null
+                    ctrl --> view : createdFloor
+                    deactivate ctrl
+                    view --> usr : informs error
+                    deactivate view
+
+                    deactivate usr
+                end
+            end
+@enduml
