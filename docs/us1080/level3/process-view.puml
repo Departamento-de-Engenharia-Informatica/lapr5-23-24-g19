@@ -1,0 +1,85 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "dto:\nDTO" as dto
+
+participant "HTTP Params" as params
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+    usr -> view : wants to list buildings between a minimum\nand maximum number of floors
+    activate view
+        view --> usr : requests data
+    deactivate view
+
+    usr -> view : provides data
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+            ctrl --> dto** : create()
+            activate dto
+                dto --> ctrl : dto
+            deactivate dto
+
+            ctrl -> svc : getBuildingsByFloors()
+            activate svc
+                svc --> params** : create()
+                activate params
+                    svc -> params : set(minFloors)
+                    svc -> params : set(maxFloors)
+                deactivate params
+
+                svc -> http : get({baseURL}/buildings/)
+                activate http
+                    http -> md : GET /buildings/?minFloors={min}&maxFloors={max}
+                    activate md
+                        note right : see us180 documentation
+                        alt success
+                            md --> http : 200: buildings
+                            http --> svc : observable
+
+                            loop for each building
+                                svc --> dto** : create()
+                                activate dto
+                                    dto --> svc : dto
+                                deactivate dto
+                            end
+
+                            svc --> ctrl : dto[]
+                            ctrl --> view : buildings
+                            view --> usr : lists buildings
+                        else building(s) not found
+                            md --> http : 200: empty list
+                            http --> svc : observable
+
+                            svc --> dto** : create()
+                            activate dto
+                                dto --> svc : dto
+                            deactivate dto
+
+                            svc --> ctrl : empty list
+                            ctrl --> view : buildings
+                            view --> usr : does not list anything
+                        end
+                    deactivate md
+                deactivate http
+            deactivate svc
+        deactivate ctrl
+
+
+
+
+
+
+    deactivate view
+deactivate usr
+
+
+@enduml
