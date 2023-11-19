@@ -1,9 +1,11 @@
+import * as Main from './main';
 import * as THREE from 'three';
 import Orientation from './orientation';
 import CubeTexture from './cubetexture';
 import { GUI } from 'lil-gui';
 import ThumbRaiser from './thumb_raiser';
 import Maze from './maze';
+import { floor } from 'lodash';
 
 export default class UserInterface extends GUI {
     constructor(private thumbRaiser: ThumbRaiser) {
@@ -36,29 +38,93 @@ export default class UserInterface extends GUI {
             light.position.set(position.x, position.y, position.z);
         };
 
-        this.resetUserInterface = function () {
-            this.reset();
-            thumbRaiser.fixedViewCamera.fogDensity =
-                thumbRaiser.fixedViewCamera.initialFogDensity;
-            thumbRaiser.firstPersonViewCamera.fogDensity =
-                thumbRaiser.firstPersonViewCamera.initialFogDensity;
-            thumbRaiser.thirdPersonViewCamera.fogDensity =
-                thumbRaiser.thirdPersonViewCamera.initialFogDensity;
-            thumbRaiser.topViewCamera.fogDensity =
-                thumbRaiser.topViewCamera.initialFogDensity;
-            this.fogParameters.density =
-                thumbRaiser.activeViewCamera.fogDensity;
-        };
-
         const fontSize = '1.5vmin';
 
+        this.title('RobDroneGo');
         this.domElement.style.position = 'absolute';
         this.domElement.style.right = '0.5vw';
         this.domElement.style.top = '1.0vh';
         this.domElement.style.fontSize = fontSize;
 
+        // Campus
+        const campusFolder = this.addFolder('Campus');
+        campusFolder.domElement.style.fontSize = fontSize;
+        campusFolder.close();
+
+        const travelFolder = campusFolder.addFolder('Travel');
+        travelFolder.domElement.style.fontSize = fontSize;
+
+        let buildings: string[] = [];
+        let floors: number[] = [];
+        let newMap: string = '';
+
+        const options = {
+            building: [],
+            floor: [],
+            Travel: function () {
+                const building = optionsBuildings.getValue();
+                const floor = optionsFloors.getValue();
+                if (newMap !== '' && building && floor) {
+                    alert(
+                        `Not yet implemented\nBuilding: ${building} | Floor: ${floor}`,
+                    );
+
+                    // const mazeParams = {
+                    //     url: newMap,
+                    //     designCredits:
+                    //         "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
+                    //     texturesCredits:
+                    //         "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+                    //     scale: new THREE.Vector3(1.0, 1.0, 1.0),
+                    //     helpersColor: new THREE.Color(0xff0077),
+                    // };
+                    // thumbRaiser.maze = new Maze(mazeParams);
+                    // // Main.newMap(newMap);
+                    // Main.animate();
+                    // thumbRaiser.update();
+                }
+            },
+        };
+
+        const optionsBuildings = travelFolder.add(
+            options,
+            'building',
+            buildings,
+        );
+
+        const optionsFloors = travelFolder.add(options, 'floor', floors);
+
+        optionsBuildings.onChange((val: string) => {
+            this.updateFloors(val).then((codes) => {
+                floors = codes;
+                optionsFloors.options(floors);
+                optionsFloors.setValue('');
+            });
+        });
+
+        optionsFloors.onChange((floor: number) => {
+            const building = optionsBuildings.getValue();
+            this.getFloorMapUrl(building, floor).then((map) => {
+                if (map !== '') newMap = map;
+            });
+        });
+
+        travelFolder.add(options, 'Travel');
+
+        travelFolder.onOpenClose(() => {
+            this.updateBuildings().then((codes) => {
+                buildings = codes;
+                optionsBuildings.options(buildings);
+            });
+        });
+        travelFolder.close();
+
+        const settings = this.addFolder('Settings');
+        settings.domElement.style.fontSize = fontSize;
+        settings.close();
+
         // Create the audio folder
-        const audioFolder = this.addFolder('Audio');
+        const audioFolder = settings.addFolder('Audio');
         audioFolder.domElement.style.fontSize = fontSize;
         audioFolder
             .add(thumbRaiser.audio, 'enabled')
@@ -77,7 +143,7 @@ export default class UserInterface extends GUI {
         audioFolder.close();
 
         // Create the skyboxes folder and add cube textures
-        const skyboxesFolder = this.addFolder('Skyboxes');
+        const skyboxesFolder = settings.addFolder('Skyboxes');
         skyboxesFolder.domElement.style.fontSize = fontSize;
         const cubeTexturesParameters = {
             name: thumbRaiser.cubeTexturesParameters.skyboxes[
@@ -100,7 +166,7 @@ export default class UserInterface extends GUI {
         skyboxesFolder.close();
 
         // Create the character folder
-        const characterFolder = this.addFolder('Character');
+        const characterFolder = settings.addFolder('Character');
         characterFolder.domElement.style.fontSize = fontSize;
 
         // Create the emotes folder and add emotes
@@ -137,7 +203,7 @@ export default class UserInterface extends GUI {
         characterFolder.close();
 
         // Create the lights folder
-        const lightsFolder = this.addFolder('Lights');
+        const lightsFolder = settings.addFolder('Lights');
         lightsFolder.domElement.style.fontSize = fontSize;
 
         // Create the ambient light folder
@@ -375,13 +441,13 @@ export default class UserInterface extends GUI {
         lightsFolder.close();
 
         // Create the shadows folder
-        const shadowsFolder = this.addFolder('Shadows');
+        const shadowsFolder = settings.addFolder('Shadows');
         shadowsFolder.domElement.style.fontSize = fontSize;
         shadowsFolder.add(thumbRaiser.shadowsParameters, 'enabled').listen();
         shadowsFolder.close();
 
         // Create the fog folder
-        const fogFolder = this.addFolder('Fog');
+        const fogFolder = settings.addFolder('Fog');
         fogFolder.domElement.style.fontSize = fontSize;
         this.fogParameters = {
             color: '#' + new THREE.Color(thumbRaiser.fog.color).getHexString(),
@@ -407,7 +473,9 @@ export default class UserInterface extends GUI {
         fogFolder.close();
 
         // Create the collision detection folder
-        const collisionDetectionFolder = this.addFolder('Collision detection');
+        const collisionDetectionFolder = settings.addFolder(
+            'Collision detection',
+        );
         collisionDetectionFolder.domElement.style.fontSize = fontSize;
         const collisionDetectionParameters = {
             method:
@@ -437,52 +505,22 @@ export default class UserInterface extends GUI {
             .listen();
         collisionDetectionFolder.close();
 
-        const campusFolder = this.addFolder('Campus');
-        campusFolder.domElement.style.fontSize = fontSize;
-
-        let buildings: string[] = [];
-
-        let floors: number[] = [];
-
-        const options = {
-            building: [],
-            floor: [],
-            Travel: function () {
-                alert('not yet implemented');
-            },
-        };
-
-        const optionsBuildings = campusFolder.add(
-            options,
-            'building',
-            buildings,
-        );
-
-        const optionsFloors = campusFolder.add(options, 'floor', floors);
-
-        let selectedBuilding: string;
-        optionsBuildings.onChange((val) => {
-            selectedBuilding = val;
-            this.updateFloors(val).then((codes) => {
-                floors = codes;
-                optionsFloors.options(floors);
-            });
-        });
-
-        const optionsTravel = campusFolder.add(options, 'Travel');
-
-        campusFolder.onOpenClose(() => {
-            this.updateBuildings().then((codes) => {
-                buildings = codes;
-                optionsBuildings.options(buildings);
-            });
-        });
-        campusFolder.close();
-
         // Create the reset button
         this.add({ reset: () => this.resetUserInterface() }, 'reset');
 
         this.close();
+    }
+
+    resetUserInterface() {
+        this.reset();
+        this.thumbRaiser.fixedViewCamera.fogDensity =
+            this.thumbRaiser.fixedViewCamera.initialFogDensity;
+        this.thumbRaiser.firstPersonViewCamera.fogDensity =
+            this.thumbRaiser.firstPersonViewCamera.initialFogDensity;
+        this.thumbRaiser.thirdPersonViewCamera.fogDensity =
+            this.thumbRaiser.thirdPersonViewCamera.initialFogDensity;
+        this.thumbRaiser.topViewCamera.fogDensity =
+            this.thumbRaiser.topViewCamera.initialFogDensity;
     }
 
     async updateBuildings(): Promise<string[]> {
@@ -535,37 +573,11 @@ export default class UserInterface extends GUI {
         }
     }
 
-    // async travel(building: string, floorNumber: number) {
-    //     if (buddilding === undefined || floorNumber === undefined) return;
-    //     const url = `${
-    //         import.meta.env.VITE_MDR_URL
-    //     }/buildings/${building}/floors/${floorNumber}/map`;
-    //     try {
-    //         const response = await fetch(url);
-    //
-    //         if (!response.ok) {
-    //             throw new Error(
-    //                 `Error fetching map @ ${url}: ${await response.text()}`,
-    //             );
-    //         }
-    //
-    //         const destination = await response.json();
-    //
-    //         console.log(destination);
-    //         this.thumbRaiser.maze = new Maze({
-    //             url,
-    //             designCredits:
-    //                 "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
-    //             texturesCredits:
-    //                 "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-    //             helpersColor: new THREE.Color(0xff0077),
-    //             scale: new THREE.Vector3(1.0, 1.0, 1.0),
-    //         });
-    //     } catch (error) {
-    //         console.error('Fetch error:', error);
-    //         return []; // or handle the error as appropriate for your use case
-    //     }
-    // }
+    async getFloorMapUrl(building: string, floor: number): Promise<string> {
+        return `${
+            import.meta.env.VITE_MDR_URL
+        }/buildings/${building}/floors/${floor}/map`;
+    }
 
     setVisibility(visible) {
         if ('show' in this && 'hide' in this) {

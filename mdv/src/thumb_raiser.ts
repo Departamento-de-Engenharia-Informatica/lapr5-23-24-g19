@@ -50,7 +50,6 @@ import {
 import Fog, { FogParameters } from './fog';
 import Camera, { CameraParameters } from './camera';
 import UserInterface from './user_interface';
-import CampusInterface from './campus_interface.js';
 
 /*
  * generalParameters = {
@@ -443,8 +442,6 @@ export default class ThumbRaiser {
     public mouse: Mouse;
     public activeViewCamera: Camera = undefined as unknown as Camera;
     public userInterface: UserInterface = undefined as unknown as UserInterface;
-    public campusInterface: CampusInterface =
-        undefined as unkown as CampusInterface;
     public clock: THREE.Clock = new THREE.Clock();
     public animations: Animations = undefined as unknown as Animations;
 

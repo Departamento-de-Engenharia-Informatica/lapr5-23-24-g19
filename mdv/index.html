@@ -1,452 +1,476 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <title>Thumb Raiser (20 x 20)</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 640 512'%3E
+    <head>
+        <meta charset="utf-8" />
+        <title>Thumb Raiser (20 x 20)</title>
+        <link
+            rel="icon"
+            href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 640 512'%3E
         %3Cstyle%3Esvg{fill:%23ff8040}%3C/style%3E
         %3Cpath d='M320 0c17.7 0 32 14.3 32 32V96H472c39.8 0 72 32.2 72 72V440c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72H288V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H208zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H304zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H400zM264 256a40 40 0 1 0 -80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224H64V416H48c-26.5 0-48-21.5-48-48V272c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H576V224h16z'/%3E
-    %3C/svg%3E" type="image/svg+xml">
-    <style>
-        body {
-            margin: 0;
-        }
+    %3C/svg%3E"
+            type="image/svg+xml"
+        />
+        <style>
+            body {
+                margin: 0;
+            }
 
-        #container {
-            position: absolute;
-            left: 50.0vw;
-            top: 50.0vh;
-            z-index: 1;
-            font-family: Arial, sans-serif;
-        }
+            #container {
+                position: absolute;
+                left: 50vw;
+                top: 50vh;
+                z-index: 1;
+                font-family: Arial, sans-serif;
+            }
 
-        #views-panel {
-            position: absolute;
-            left: -50.0vmin;
-            top: -49.0vh;
-            width: 100.0vmin;
-            font-size: 1.5vmin;
-            color: white;
-        }
+            #views-panel {
+                position: absolute;
+                left: -50vmin;
+                top: -49vh;
+                width: 100vmin;
+                font-size: 1.5vmin;
+                color: white;
+            }
 
-        #mouse-help-panel {
-            display: none;
-            position: absolute;
-            left: -50.0vmin;
-            top: -8.0vmin;
-            width: 100.0vmin;
-            font-size: 1.3vmin;
-            color: white;
-        }
+            #mouse-help-panel {
+                display: none;
+                position: absolute;
+                left: -50vmin;
+                top: -8vmin;
+                width: 100vmin;
+                font-size: 1.3vmin;
+                color: white;
+            }
 
-        #keyboard-help-panel {
-            display: none;
-            position: absolute;
-            left: -50.0vmin;
-            top: -35.75vmin;
-            width: 100.0vmin;
-            font-size: 1.3vmin;
-            color: white;
-        }
+            #keyboard-help-panel {
+                display: none;
+                position: absolute;
+                left: -50vmin;
+                top: -35.75vmin;
+                width: 100vmin;
+                font-size: 1.3vmin;
+                color: white;
+            }
 
-        #credits-panel {
-            display: none;
-            position: absolute;
-            left: -50.0vmin;
-            top: -8.0vmin;
-            width: 100.0vmin;
-            font-size: 1.3vmin;
-            color: white;
-        }
+            #credits-panel {
+                display: none;
+                position: absolute;
+                left: -50vmin;
+                top: -8vmin;
+                width: 100vmin;
+                font-size: 1.3vmin;
+                color: white;
+            }
 
-        #subwindows-panel {
-            position: absolute;
-            left: -49.5vw;
-            bottom: -49.0vh;
-            font-size: 1.5vmin;
-            color: white;
-        }
+            #subwindows-panel {
+                position: absolute;
+                left: -49.5vw;
+                bottom: -49vh;
+                font-size: 1.5vmin;
+                color: white;
+            }
 
-        table {
-            margin: auto;
-            border: 1px solid black;
-        }
+            table {
+                margin: auto;
+                border: 1px solid black;
+            }
 
-        table.views {
-            text-align: right;
-            background-color: #44444470;
-        }
+            table.views {
+                text-align: right;
+                background-color: #44444470;
+            }
 
-        table.mouse-help {
-            text-align: center;
-            width: 50vmin;
-            background-color: #44444450;
-        }
+            table.mouse-help {
+                text-align: center;
+                width: 50vmin;
+                background-color: #44444450;
+            }
 
-        table.keyboard-help {
-            width: 50vmin;
-            background-color: #44444450;
-        }
+            table.keyboard-help {
+                width: 50vmin;
+                background-color: #44444450;
+            }
 
-        table.credits {
-            width: 50vmin;
-            background-color: #44444450;
-        }
+            table.credits {
+                width: 50vmin;
+                background-color: #44444450;
+            }
 
-        table.subwindows {
-            text-align: right;
-            background-color: #44444470;
-        }
+            table.subwindows {
+                text-align: right;
+                background-color: #44444470;
+            }
 
-        th,
-        td {
-            overflow: hidden;
-            border: 1px solid black;
-        }
+            th,
+            td {
+                overflow: hidden;
+                border: 1px solid black;
+            }
 
-        a {
-            color: white;
-        }
+            a {
+                color: white;
+            }
 
-        #view,
-        #projection {
-            width: 18ch;
-            font-size: 1.5vmin;
-        }
+            #view,
+            #projection {
+                width: 18ch;
+                font-size: 1.5vmin;
+            }
 
-        #horizontal,
-        #vertical,
-        #distance,
-        #zoom {
-            width: 10ch;
-            font-size: 1.5vmin;
-        }
+            #horizontal,
+            #vertical,
+            #distance,
+            #zoom {
+                width: 10ch;
+                font-size: 1.5vmin;
+            }
 
-        #reset,
-        #reset-all {
-            width: 16ch;
-            font-size: 1.5vmin;
-        }
+            #reset,
+            #reset-all {
+                width: 16ch;
+                font-size: 1.5vmin;
+            }
 
-        input:invalid {
-            background-color: pink;
-        }
+            input:invalid {
+                background-color: pink;
+            }
 
-        .checkbox-red {
-            accent-color: red;
-        }
+            .checkbox-red {
+                accent-color: red;
+            }
 
-        canvas {
-            display: block;
-        }
-    </style>
-</head>
+            canvas {
+                display: block;
+            }
+        </style>
+    </head>
 
-<body>
-    <div id="container">
-        <div id="views-panel">
-            <table class="views">
-                <tr>
-                    <td>
-                        View:
-                        <select id="view">
-                            <option value="fixed">Fixed</option>
-                            <option value="first">First-person</option>
-                            <option value="third">Third-person</option>
-                            <option value="top">Top</option>
-                        </select>
-                    </td>
-                    <td>
-                        Orientation (h):
-                        <input type="number" id="horizontal" required>
-                    </td>
-                    <td>
-                        Orientation (v):
-                        <input type="number" id="vertical" required>
-                    </td>
-                    <td>
-                        <input type="button" id="reset" value="Reset view">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Projection:
-                        <select id="projection">
-                            <option value="perspective">Perspective</option>
-                            <option value="orthographic">Orthographic</option>
-                        </select>
-                    </td>
-                    <td>
-                        Distance:
-                        <input type="number" id="distance" required>
-                    </td>
-                    <td>
-                        Zoom:
-                        <input type="number" id="zoom" required>
-                    </td>
-                    <td>
-                        <input type="button" id="reset-all" value="Reset all views">
-                    </td>
-                </tr>
-            </table>
+    <body>
+        <div id="container">
+            <div id="views-panel">
+                <table class="views">
+                    <tr>
+                        <td>
+                            View:
+                            <select id="view">
+                                <option value="fixed">Fixed</option>
+                                <option value="first">First-person</option>
+                                <option value="third">Third-person</option>
+                                <option value="top">Top</option>
+                            </select>
+                        </td>
+                        <td>
+                            Orientation (h):
+                            <input type="number" id="horizontal" required />
+                        </td>
+                        <td>
+                            Orientation (v):
+                            <input type="number" id="vertical" required />
+                        </td>
+                        <td>
+                            <input
+                                type="button"
+                                id="reset"
+                                value="Reset view"
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Projection:
+                            <select id="projection">
+                                <option value="perspective">Perspective</option>
+                                <option value="orthographic">
+                                    Orthographic
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            Distance:
+                            <input type="number" id="distance" required />
+                        </td>
+                        <td>
+                            Zoom:
+                            <input type="number" id="zoom" required />
+                        </td>
+                        <td>
+                            <input
+                                type="button"
+                                id="reset-all"
+                                value="Reset all views"
+                            />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="mouse-help-panel">
+                <table class="mouse-help" id="mouse-help-table">
+                    <tr>
+                        <th colspan="5" style="font-size: 2vmin">
+                            Help - Mouse
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>View</th>
+                        <th>Primary button</th>
+                        <th>Secondary button</th>
+                        <th>Shift-wheel</th>
+                        <th>Wheel</th>
+                    </tr>
+                    <tr>
+                        <td>Fixed</td>
+                        <td>Drag / resize</td>
+                        <td>Orbit</td>
+                        <td>Dolly</td>
+                        <td>Zoom</td>
+                    </tr>
+                    <tr>
+                        <td>First-person</td>
+                        <td>Drag / resize</td>
+                        <td>Orbit</td>
+                        <td>n/a</td>
+                        <td>Zoom</td>
+                    </tr>
+                    <tr>
+                        <td>Third-person</td>
+                        <td>Drag / resize</td>
+                        <td>Orbit</td>
+                        <td>Dolly</td>
+                        <td>Zoom</td>
+                    </tr>
+                    <tr>
+                        <td>Top</td>
+                        <td>Drag / resize</td>
+                        <td>Orbit</td>
+                        <td>Dolly</td>
+                        <td>Zoom</td>
+                    </tr>
+                    <tr>
+                        <td>Mini-map</td>
+                        <td>Drag / resize</td>
+                        <td>Pan</td>
+                        <td>n/a</td>
+                        <td>Zoom</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="keyboard-help-panel">
+                <table class="keyboard-help" id="keyboard-help-table">
+                    <tr>
+                        <th colspan="2" style="font-size: 2vmin">
+                            Help - Keyboard
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Set view mode
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Stabilized view mode / realistic view mode</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Display / select / hide views
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Fixed view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>First-person view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Third-person view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Top view</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Display / hide subwindows and bounding volumes
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Mini-map</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Statistics</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>User interface</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Help and credits</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Bounding volumes</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Turn on / off lights, shadows and fog
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Ambient light</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Directional light</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Spotlight</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Flashlight</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Shadows</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Fog</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Move character
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Turn left slowly / quickly (with shift key)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Turn right slowly / quickly (with shift key)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Walk / run (with shift key) backward</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Walk / run (with shift key) forward</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">
+                            Emote character
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Jump</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Wave</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Punch</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Thumbs up</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="credits-panel">
+                <table class="credits" id="credits-table">
+                    <tr>
+                        <th style="font-size: 2vmin">Credits</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="subwindows-panel">
+                <table class="subwindows">
+                    <tr>
+                        <td>
+                            Realistic view mode:
+                            <input type="checkbox" id="realistic" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Fixed view:
+                            <input type="checkbox" id="fixed" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            First-person view:
+                            <input type="checkbox" id="first-person" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Third-person view:
+                            <input type="checkbox" id="third-person" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Top view:
+                            <input type="checkbox" id="top" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mini-map:
+                            <input type="checkbox" id="mini-map" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Statistics:
+                            <input type="checkbox" id="statistics" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            User interface:
+                            <input type="checkbox" id="user-interface" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Help and credits:
+                            <input type="checkbox" id="help" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div id="mouse-help-panel">
-            <table class="mouse-help" id="mouse-help-table">
-                <tr>
-                    <th colspan="5" style="font-size: 2.0vmin">
-                        Help - Mouse
-                    </th>
-                </tr>
-                <tr>
-                    <th>View</th>
-                    <th>Primary button</th>
-                    <th>Secondary button</th>
-                    <th>Shift-wheel</th>
-                    <th>Wheel</th>
-                </tr>
-                <tr>
-                    <td>Fixed</td>
-                    <td>Drag / resize</td>
-                    <td>Orbit</td>
-                    <td>Dolly</td>
-                    <td>Zoom</td>
-                </tr>
-                <tr>
-                    <td>First-person</td>
-                    <td>Drag / resize</td>
-                    <td>Orbit</td>
-                    <td>n/a</td>
-                    <td>Zoom</td>
-                </tr>
-                <tr>
-                    <td>Third-person</td>
-                    <td>Drag / resize</td>
-                    <td>Orbit</td>
-                    <td>Dolly</td>
-                    <td>Zoom</td>
-                </tr>
-                <tr>
-                    <td>Top</td>
-                    <td>Drag / resize</td>
-                    <td>Orbit</td>
-                    <td>Dolly</td>
-                    <td>Zoom</td>
-                </tr>
-                <tr>
-                    <td>Mini-map</td>
-                    <td>Drag / resize</td>
-                    <td>Pan</td>
-                    <td>n/a</td>
-                    <td>Zoom</td>
-                </tr>
-            </table>
-        </div>
-        <div id="keyboard-help-panel">
-            <table class="keyboard-help" id="keyboard-help-table">
-                <tr>
-                    <th colspan="2" style="font-size: 2.0vmin">
-                        Help - Keyboard
-                    </th>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Set view mode</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Stabilized view mode / realistic view mode</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Display / select / hide views</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Fixed view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>First-person view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Third-person view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Top view</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Display / hide subwindows and bounding volumes</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Mini-map</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Statistics</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>User interface</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Help and credits</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Bounding volumes</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Turn on / off lights, shadows and fog
-                    </th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Ambient light</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Directional light</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Spotlight</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Flashlight</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Shadows</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Fog</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Move character</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Turn left slowly / quickly (with shift key)</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Turn right slowly / quickly (with shift key)</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Walk / run (with shift key) backward</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Walk / run (with shift key) forward</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Emote character</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jump</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Wave</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Punch</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Thumbs up</td>
-                </tr>
-            </table>
-        </div>
-        <div id="credits-panel">
-            <table class="credits" id="credits-table">
-                <tr>
-                    <th style="font-size: 2.0vmin">
-                        Credits
-                    </th>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-            </table>
-        </div>
-        <div id="subwindows-panel">
-            <table class="subwindows">
-                <tr>
-                    <td>
-                        Realistic view mode:
-                        <input type="checkbox" id="realistic">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Fixed view:
-                        <input type="checkbox" id="fixed">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        First-person view:
-                        <input type="checkbox" id="first-person">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Third-person view:
-                        <input type="checkbox" id="third-person">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Top view:
-                        <input type="checkbox" id="top">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Mini-map:
-                        <input type="checkbox" id="mini-map">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Statistics:
-                        <input type="checkbox" id="statistics">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        User interface:
-                        <input type="checkbox" id="user-interface">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Help and credits:
-                        <input type="checkbox" id="help">
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-    <script type="module" src="/src/main.ts"></script>
-</body>
-
+        <script
+            async
+            src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+        ></script>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
 </html>
