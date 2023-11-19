@@ -12,7 +12,7 @@
                     class="vertical-center custom-dropdown"
                     [(ngModel)]="selectedBuilding"
                 >
-                    <option value="" disabled selected></option>
+                    <option value disabled selected></option>
                     <option
                         *ngFor="let building of buildings"
                         [value]="building.code"
