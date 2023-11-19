@@ -14,6 +14,7 @@
 // User interaction
 
 import * as THREE from 'three';
+import { loader } from './main.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import Orientation from './orientation';
 import {
@@ -574,7 +575,7 @@ export default class ThumbRaiser {
 
         // Create the maze
         // TODO: Update the maze here
-        this.maze = new Maze(this.mazeParameters);
+        this.maze = new Maze(this.mazeParameters, loader);
 
         // Create the player
         this.player = new Player(this.playerParameters);
@@ -1604,7 +1605,7 @@ export default class ThumbRaiser {
                 }
 
                 // Create the user interface
-                this.userInterface = new UserInterface(this);
+                this.userInterface = new UserInterface(this, loader);
 
                 // Get and configure the user interface checkbox
                 this.userInterface.checkBox =

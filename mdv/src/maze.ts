@@ -6,6 +6,7 @@ import Ground from './ground';
 import Wall from './wall';
 import { MDRUrl } from './main';
 import { Elevator, Passage, Room } from './map-components';
+import { Loader } from './loader';
 
 type AABB = THREE.Box3[][][];
 type Position = { x: number; z: number };
@@ -137,7 +138,10 @@ export default class Maze extends THREE.Group {
         );
     }
 
-    constructor(private parameters: MazeParameters) {
+    constructor(
+        private parameters: MazeParameters,
+        private loader:Loader
+    ) {
         super();
         // merge(this, parameters);
         merge(this, { scale: parameters.scale });
@@ -147,10 +151,10 @@ export default class Maze extends THREE.Group {
         THREE.Cache.enabled = true;
 
         // Create a resource file loader
-        const loader = new THREE.FileLoader();
+        // const loader = new THREE.FileLoader();
 
         // Set the response type: the resource file will be parsed with JSON.parse()
-        loader.setResponseType('json');
+        // loader.setResponseType('json');
 
         // Load a maze description resource file
         // TODO: NAPOLES CHANGE this to request based on building and floor
@@ -164,21 +168,10 @@ export default class Maze extends THREE.Group {
     }
 
     async fetchMap(url: string) {
-        const response = await fetch(url);
-        if (response.ok) {
-            try {
-                const description = (await response.json()) as MapFile;
-                console.log(JSON.stringify(description, null, 2));
-                this.onLoad(description);
-            } catch (e) {
-                console.error('Fetch error:', e);
-                this.onError(url, e);
-            }
-        } else {
-            console.error(
-                `Error fetching map @ ${url}: ${await response.text()}`,
-            );
-        }
+        const description = await this.loader.load<MapFile>(url)
+
+        console.log(JSON.stringify(description, null, 2));
+        this.onLoad(description);
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates

@@ -6,9 +6,13 @@ import { GUI } from 'lil-gui';
 import ThumbRaiser from './thumb_raiser';
 import Maze from './maze';
 import { floor } from 'lodash';
+import { Loader } from './loader';
 
 export default class UserInterface extends GUI {
-    constructor(private thumbRaiser: ThumbRaiser) {
+    constructor(
+        private thumbRaiser: ThumbRaiser,
+        private loader: Loader
+    ) {
         super();
 
         const audioCallback = function (enabled: boolean) {
@@ -524,52 +528,37 @@ export default class UserInterface extends GUI {
     }
 
     async updateBuildings(): Promise<string[]> {
+        type Building = { code: string }
+
         const url = `${import.meta.env.VITE_MDR_URL}/buildings`;
         try {
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(
-                    `Error fetching map @ ${url}: ${await response.text()}`,
-                );
-            }
-
-            const data = await response.json();
+            const data = await this.loader.load<Building[]>(url)
 
             const codes = data.map((item) => {
                 return item.code;
             });
 
             return codes;
-        } catch (error) {
-            console.error('Fetch error:', error);
-            return []; // or handle the error as appropriate for your use case
+        } catch (_) {
+            return []
         }
     }
 
     async updateFloors(building: string): Promise<number[]> {
-        const url = `${
-            import.meta.env.VITE_MDR_URL
-        }/buildings/${building}/floors`;
+        type Floor = { floorNumber: number }
+        const url = `${import.meta.env.VITE_MDR_URL
+            }/buildings/${building}/floors`;
+
         try {
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(
-                    `Error fetching map @ ${url}: ${await response.text()}`,
-                );
-            }
-
-            const data = await response.json();
+            const data = await this.loader.load<Floor[]>(url)
 
             const codes = data.map((item) => {
                 return item.floorNumber;
             });
 
             return codes;
-        } catch (error) {
-            console.error('Fetch error:', error);
-            return []; // or handle the error as appropriate for your use case
+        } catch (_) {
+            return []
         }
     }
 

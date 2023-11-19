@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import Orientation from './orientation';
 import ThumbRaiser from './thumb_raiser';
+import { Loader, NodeLoader } from './loader';
 export const MDRUrl = 'http://localhost:4000/api/';
+
+
+export const loader:Loader = new NodeLoader()
 
 let thumbRaiser: ThumbRaiser;
 function initialize() {
