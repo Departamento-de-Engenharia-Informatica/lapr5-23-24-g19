@@ -1,0 +1,54 @@
+<form [formGroup]="passageForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
+<div class="introduce">
+    <div class="row">
+        <div>
+            <label for="buildingCode">Select Building</label>
+            <select id="building1" formControlName="building1" required (change)="onBuilding1Selected($event)">
+                <option *ngFor="let building of buildings" [value]="building.code">
+                    {{ building.code }}
+                </option>
+
+            </select>
+        </div>
+        <div>
+            <label for="buildingCode">Select Floor</label>
+            <select id="floor1" formControlName="floor1" required>
+                <ng-container *ngIf="noFloors1() else floorsOptions">
+                    <option style="color: red" disabled>No floors found</option>
+                </ng-container>
+                <ng-template #floorsOptions>
+                    <option *ngFor="let floor of floors1" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div>
+            <label for="buildingCode">Select Building</label>
+            <select id="building2" formControlName="building2" required (change)="onBuilding2Selected($event)">
+                <option *ngFor="let building of buildings" [value]="building.code">
+                    {{ building.code }}
+                </option>
+
+            </select>
+        </div>
+        <div>
+            <label for="buildingCode">Select Floor</label>
+            <select id="floor2" formControlName="floor2" required>
+                <ng-container *ngIf="noFloors2() else floorsOptions2">
+                    <option style="color: red" disabled>No floors found</option>
+                </ng-container>
+                <ng-template #floorsOptions2>
+                    <option *ngFor="let floor of floors2" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+</div>
+    <button type="submit" [disabled]="this.passageForm.invalid">Submit</button>
+</form>

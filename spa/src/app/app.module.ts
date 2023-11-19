@@ -42,6 +42,8 @@ import {ListRoomsComponent} from "./components/room/list-rooms/list-rooms.compon
 import { ErrorMessageService } from './services/error-message.service';
 import { MessagePopupComponent } from './components/message-popup/message-popup.component';
 import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
+import { UpdateMapComponent } from './components/floor/update-map/update-map.component';
+import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component';
 
 @NgModule({
     declarations: [
@@ -74,7 +76,9 @@ import { GetBuildingsComponent } from './components/building/get-buildings/get-b
         CreateRoomComponent,
         ListRoomsComponent,
         MessagePopupComponent,
-        GetBuildingsComponent
+        GetBuildingsComponent,
+        UpdateMapComponent,
+        CreatePassageComponent
     ],
     imports: [
         BrowserModule,
@@ -83,7 +87,8 @@ import { GetBuildingsComponent } from './components/building/get-buildings/get-b
         HttpClientModule,
         RouterModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        
     ],
     providers: [BuildingService,
                 ElevatorService,

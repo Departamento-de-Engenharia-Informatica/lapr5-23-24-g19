@@ -26,6 +26,8 @@ import { PutFloorComponent } from './components/floor/put-floor/put-floor.compon
 import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
 import { CreateRoomComponent } from "./components/room/create-room/create-room.component";
 import { ListRoomsComponent } from "./components/room/list-rooms/list-rooms.component";
+import { UpdateMapComponent } from './components/floor/update-map/update-map.component';
+import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -93,6 +95,11 @@ export const routes: Routes = [
         title: 'Create Floor',
     },
     {
+        path: 'floors/update-map',
+        component: UpdateMapComponent,
+        title: 'Update map',
+    },
+    {
         path: 'floors/patch',
         component: PatchFloorComponent,
         title: 'Patch Floor',
@@ -124,11 +131,16 @@ export const routes: Routes = [
         component: ListRoomsComponent,
         title: 'List Rooms',
     },
-    { path: 'passages', component: PassageComponent },
+    { path: 'campus/passages', component: PassageComponent },
     {
-        path: 'passages/list-passages-between-buildings',
+        path: 'campus/passages/list-passages-between-buildings',
         component: ListPassagesBetweenBuildingsComponent,
         title: 'List passages between buildings',
+    },
+    {
+        path: 'campus/passages/create',
+        component: CreatePassageComponent,
+        title: 'Create Passage',
     },
     { path: '**', component: PageNotFoundComponent },
 ];
