@@ -1,0 +1,36 @@
+<div class="mg-4">
+    <div class="container px-5 py-20 mx-auto">
+      <div class="relative w-full">
+        <div>
+          <form [formGroup]="updateMapForm">
+            <div>
+              <label for="buildingCode">Select Building</label>
+              <select id="buildingCode" formControlName="buildingCode" (change)="listFloors()" required>
+                <option *ngFor="let building of buildings" [value]="building.code">
+                  {{ building.code }}
+                </option>
+              </select>
+  
+              <label for="floorNumber">Select Floor:</label>
+              <select id="floorNumber" formControlName="floorNumber" required>
+                <ng-container *ngIf="!hasFloors(); else floorsOptions">
+                  <option style="color: red" disabled>No floors found</option>
+                </ng-container>
+                <ng-template #floorsOptions>
+                  <option *ngFor="let floor of floors" [value]="floor.floorNumber">
+                    {{ floor.floorNumber }}
+                  </option>
+                </ng-template>
+              </select>
+  
+              <label for="mapFile">Upload File:</label>
+              <input type="file" id="mapFile" formControlName="mapFile" (change)="onFileSelected($event)" />
+  
+              <button type="button" (click)="submitForm()" [disabled]="updateMapForm.invalid">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

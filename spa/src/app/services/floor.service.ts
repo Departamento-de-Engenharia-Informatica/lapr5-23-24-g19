@@ -28,6 +28,10 @@ interface PatchDTO {
     description?: string;
 }
 
+export interface UpdateMapDTO{
+    map:string;
+}
+
 interface FloorDTO {
     floorNumber: number;
     description?: string;
@@ -92,6 +96,18 @@ export class FloorService {
         return this.http.put<FloorAndBuildingDTO>(
             `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
             JSON.stringify(edit),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        );
+    }
+    updateMap(dto: UpdateMapDTO,buildingCode: String, floorNumber:number): Observable<UpdateMapDTO> {
+
+        return this.http.patch<UpdateMapDTO>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
+            JSON.stringify(dto.map),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
