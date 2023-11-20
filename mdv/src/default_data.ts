@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import Orientation from "./orientation";
+import { ElevatorParams } from "./elevator";
 
 export const generalData = {
     setDevicePixelRatio: false
@@ -57,7 +58,7 @@ export const playerData = {
     keyCodes: { realisticViewMode: "KeyR", fixedView: "Digit1", firstPersonView: "Digit2", thirdPersonView: "Digit3", topView: "Digit4", miniMap: "KeyM", statistics: "KeyZ", userInterface: "KeyU", help: "KeyH", boundingVolumes: "KeyB", ambientLight: "KeyA", directionalLight: "KeyD", spotLight: "KeyS", flashLight: "KeyF", shadows: "KeyX", fog: "KeyG", left: "ArrowLeft", right: "ArrowRight", backward: "ArrowDown", forward: "ArrowUp", jump: "KeyJ", yes: "KeyY", no: "KeyN", wave: "KeyW", punch: "KeyP", thumbsUp: "KeyT" }
 }
 
-export const elevatorData = {
+export const elevatorData: ElevatorParams = {
     modelUri: './models/gltf/elevator/elevator.glb',
     scale: new THREE.Vector3(0.2, 0.2, 0.2),
     helpersColor: new THREE.Color(0xffffff),

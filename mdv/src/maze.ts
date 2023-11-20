@@ -4,9 +4,11 @@ import { OBB } from 'three/examples/jsm/math/OBB.js';
 import { merge } from './merge';
 import Ground from './ground';
 import Wall from './wall';
+import Elevator from './elevator'
 import { MDRUrl } from './main';
-import { Elevator, Passage, Room } from './map-components';
+import { Elevator as ElevatorComp, Passage, Room } from './map-components';
 import { Loader } from './loader';
+import { elevatorData } from './default_data'
 
 type AABB = THREE.Box3[][][];
 type Position = { x: number; z: number };
@@ -78,7 +80,7 @@ type FloorMap = {
 
     rooms: Room[]; //Coordinates
 
-    elevators: Elevator[]; //Coordinates
+    elevators: ElevatorComp[]; //Coordinates
     exitLocation: number[]; // len = 2
 };
 
@@ -650,6 +652,8 @@ export default class Maze extends THREE.Group {
             ),
         });
 
+        const elevator = this.loadElevator(description.elevator)
+
         // Build the maze
         let geometry: THREE.BufferGeometry;
         let geometries: THREE.BufferGeometry[][] = [];
@@ -753,5 +757,15 @@ export default class Maze extends THREE.Group {
         this.initialDirection = description.player.initialDirection;
 
         this._loaded = true;
+    }
+
+    private loadElevator(data: ElevatorT): Elevator {
+        const params = {
+            ...elevatorData,
+            modelUri: data.modelUri,
+            credits: data.credits
+        }
+
+        return new Elevator(params)
     }
 }
