@@ -9,7 +9,6 @@ import { BuildingService } from 'src/app/services/building.service'
     styleUrls: ['./create-building.component.css'],
 })
 export class CreateBuildingComponent {
-    show = false
     form: UntypedFormGroup
 
     @Output() buildingCreated = new EventEmitter<BuildingDTO | undefined>()
@@ -43,14 +42,5 @@ export class CreateBuildingComponent {
                 // TODO: clear form
             })
         }
-    }
-
-    // TODO: abstract popup away
-    closePopup() {
-        this.show = false
-    }
-
-    openPopup() {
-        this.show = true
     }
 }

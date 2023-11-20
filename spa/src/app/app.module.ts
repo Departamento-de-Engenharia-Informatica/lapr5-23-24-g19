@@ -44,6 +44,7 @@ import { MessagePopupComponent } from './components/message-popup/message-popup.
 import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component';
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component';
+import { PopupComponent } from './components/popup/popup.component';
 
 @NgModule({
     declarations: [
@@ -78,7 +79,8 @@ import { CreatePassageComponent } from './components/passage/create-passage/crea
         MessagePopupComponent,
         GetBuildingsComponent,
         UpdateMapComponent,
-        CreatePassageComponent
+        CreatePassageComponent,
+        PopupComponent
     ],
     imports: [
         BrowserModule,
