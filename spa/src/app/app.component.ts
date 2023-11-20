@@ -22,7 +22,7 @@ export class AppComponent {
   
   checkBackendStatus(): void {
     interval(3000).pipe(
-      switchMap(() => this.http.get(`${AppModule.mdrUrl}/api/status`).pipe(
+      switchMap(() => this.http.get(`${AppModule.mdrUrl}/status`).pipe(
         catchError(() => {
           console.log('Backend is down');
           this.isBackendUp=false
