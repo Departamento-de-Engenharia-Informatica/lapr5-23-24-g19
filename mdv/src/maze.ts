@@ -52,13 +52,14 @@ type WallT = BaseComponent & {
     segments: { width: number; height: number };
 };
 
-type DoorT = BaseComponent & {
-    segments: { width: number; height: number };
-};
+type Model3D = {
+    modelUri: string
+    credits?: string
+}
 
-type ElevatorT = BaseComponent & {
-    segments: { width: number; height: number };
-};
+type DoorT = Model3D
+type ElevatorT = Model3D
+
 
 export type FloorMapParameters = {
     // buildingCode: string,

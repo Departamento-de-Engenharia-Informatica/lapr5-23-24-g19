@@ -175,96 +175,10 @@
         "secondaryColor": "0x6b554b"
     },
     "elevator": {
-        "segments": {
-            "width": 1,
-            "height": 1
-        },
-        "primaryColor": "0xffffff",
-        "maps": {
-            "color": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_color_2k.jpg"
-            },
-            "ao": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_ao_2k.jpg",
-                "intensity": 1
-            },
-            "displacement": {
-                "url": "",
-                "scale": 1,
-                "bias": 0
-            },
-            "normal": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_normal_opengl_2k.png",
-                "type": 0,
-                "scale": {
-                    "x": 2,
-                    "y": 2
-                }
-            },
-            "bump": {
-                "url": "",
-                "scale": 1
-            },
-            "roughness": {
-                "url": "./textures/concrete_0007_2k_xtGY5J/concrete_0007_roughness_2k.jpg",
-                "rough": 1
-            }
-        },
-        "wrapS": 1,
-        "wrapT": 0,
-        "repeat": {
-            "u": 2,
-            "v": 1
-        },
-        "magFilter": 1,
-        "minFilter": 5,
-        "secondaryColor": "0x6b554b"
+        "modelUri": "./models/gltf/elevator/elevator.glb"
     },
     "door": {
-        "segments": {
-            "width": 1,
-            "height": 1
-        },
-        "primaryColor": "0xffffff",
-        "maps": {
-            "color": {
-                "url": "./textures/door-wood/Wood026_2K-PNG_Color.png"
-            },
-            "ao": {
-                "url": "",
-                "intensity": 1
-            },
-            "displacement": {
-                "url": "",
-                "scale": 1,
-                "bias": 0
-            },
-            "normal": {
-                "url": "./textures/door-wood/Wood026_2K-PNG_NormalGL.png",
-                "type": 0,
-                "scale": {
-                    "x": 2,
-                    "y": 2
-                }
-            },
-            "bump": {
-                "url": "",
-                "scale": 1
-            },
-            "roughness": {
-                "url": "./textures/door-wood/Wood026_2K-PNG_Roughness.png",
-                "rough": 1
-            }
-        },
-        "wrapS": 1,
-        "wrapT": 0,
-        "repeat": {
-            "u": 2,
-            "v": 1
-        },
-        "magFilter": 1,
-        "minFilter": 5,
-        "secondaryColor": "0x6b554b"
+        "modelUri": "./models/gltf/door/door.glb"
     },
     "player": {
         "initialPosition": [1, 1],
