@@ -1,68 +1,100 @@
 <div *ngIf="show" class="overlay"></div>
 <section class="text-gray-400 bg-gray-900 body-font">
-    <section class="text-gray-400 body-font bg-gray-900">
-    </section>
-    <div> 
+    <section class="text-gray-400 body-font bg-gray-900"></section>
+    <div>
         <button
             (click)="onClickCreate()"
-            class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">    
+            class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
             <a>Create</a>
         </button>
-        
+
         <div *ngIf="show" class="form-popup" id="myForm">
             <form
-            [formGroup]="buildingForm"
-            (ngSubmit)="submitForm()"
-            enctype="multipart/form-data"
-        >
-            <div class="form-container">
-                <div class="row">
-                    <div>
-                        <label for="selectedBuildingCode">Select Building</label>
-                        <select 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            id="selectedBuildingCode"
-                            formControlName="selectedBuildingCode"
-                            required
-                        >
-                            <option 
-                                *ngFor="let building of buildings"
-                                [value]="building.code"
+                [formGroup]="buildingForm"
+                (ngSubmit)="submitForm()"
+                enctype="multipart/form-data"
+            >
+                <div class="form-container">
+                    <div class="row">
+                        <div>
+                            <label for="selectedBuildingCode"
+                                >Select Building</label
                             >
-                                {{ building.code }}
-                            </option>
-                        </select>
+                            <select
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="selectedBuildingCode"
+                                formControlName="selectedBuildingCode"
+                                required
+                            >
+                                <option
+                                    *ngFor="let building of buildings"
+                                    [value]="building.code"
+                                >
+                                    {{ building.code }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="name">Name:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="name"
+                                type="text"
+                                formControlName="name"
+                            />
+                        </div>
                     </div>
-        
-                    <div >
-                        <label for="name" >Name:</label>
-                        <input  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="name" type="text" formControlName="name" />
+
+                    <label for="description">Description:</label>
+                    <textarea
+                        id="description"
+                        formControlName="description"
+                    ></textarea>
+
+                    <div class="row">
+                        <div>
+                            <label for="length">Max Floor Length:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="length"
+                                type="number"
+                                formControlName="length"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="width">Max Floor Width:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="width"
+                                type="number"
+                                formControlName="width"
+                            />
+                        </div>
                     </div>
+
+                    <label for="file">Upload File:</label>
+                    <input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        id="file"
+                        type="file"
+                        (change)="onFileSelected($event)"
+                    />
+
+                    <button type="submit" [disabled]="buildingForm.invalid">
+                        Submit
+                    </button>
+                    <button
+                        type="button"
+                        class="btn cancel"
+                        (click)="onClickClose()"
+                    >
+                        Close
+                    </button>
                 </div>
-        
-                <label for="description">Description:</label>
-                <textarea id="description" formControlName="description"></textarea>
-        
-                <div class="row">
-                    <div>
-                        <label for="length">Max Floor Length:</label>
-                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="length" type="number" formControlName="length" />
-                    </div>
-        
-                    <div>
-                        <label for="width">Max Floor Width:</label>
-                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="width" type="number" formControlName="width" />
-                    </div>
-                </div>
-        
-                <label for="file">Upload File:</label>
-                <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="file" type="file" (change)="onFileSelected($event)" />
-        
-                <button type="submit" [disabled]="buildingForm.invalid">Submit</button>
-                <button type="button" class="btn cancel" (click)="onClickClose()">Close</button>
-            </div>
-        </form>
-        
+            </form>
         </div>
     </div>
 
