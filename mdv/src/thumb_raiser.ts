@@ -1500,6 +1500,55 @@ export default class ThumbRaiser {
         this.audio.play(this.audio.endClips, false);
     }
 
+    removeAudioSources() {
+        const types = [
+            this.audio.introductionClips,
+            this.audio.idleClips,
+            this.audio.jumpClips,
+            this.audio.deathClips,
+            this.audio.danceClips,
+            this.audio.endClips,
+        ];
+        types.forEach((type) => {
+            type.forEach((clip) => {
+                let position = clip.position.split(' ');
+                if (position.length == 4 && position[0] == 'scene') {
+                    // Positional audio object (scene specific position in cartesian coordinates)
+                    position = position.slice(1).map(Number);
+                    if (
+                        !Number.isNaN(position[0]) &&
+                        !Number.isNaN(position[1]) &&
+                        !Number.isNaN(position[2])
+                    ) {
+                        this.scene.remove(clip.source);
+                    }
+                } else if (position.length == 3 && position[0] == 'maze') {
+                    // Positional audio object (maze specific position in cell coordinates)
+                    position = position.slice(1).map(Number);
+                    if (
+                        !Number.isNaN(position[0]) &&
+                        !Number.isNaN(position[1])
+                    ) {
+                        this.scene.remove(clip.source);
+                    }
+                } else if (clip.position == 'initial') {
+                    // Positional audio object (player initial position)
+                    this.scene.remove(clip.source);
+                } else if (clip.position == 'player') {
+                    // Positional audio object (player current position)
+                    this.player.remove(clip.source);
+                } else if (clip.position == 'spotlight') {
+                    // Positional audio object (spotlight current position)
+                    this.spotLight.remove(clip.source);
+                }
+            });
+        });
+    }
+
+    stop() {
+        this._gameRunning = false;
+    }
+
     update() {
         if (!this._gameRunning) {
             if (this.audio.loaded() && this.maze.loaded && this.player.loaded) {

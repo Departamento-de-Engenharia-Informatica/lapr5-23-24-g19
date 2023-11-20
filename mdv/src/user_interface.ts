@@ -7,11 +7,12 @@ import ThumbRaiser from './thumb_raiser';
 import Maze from './maze';
 import { floor } from 'lodash';
 import { Loader } from './loader';
+import Player from './player';
 
 export default class UserInterface extends GUI {
     constructor(
         private thumbRaiser: ThumbRaiser,
-        private loader: Loader
+        private loader: Loader,
     ) {
         super();
 
@@ -69,23 +70,24 @@ export default class UserInterface extends GUI {
                 const building = optionsBuildings.getValue();
                 const floor = optionsFloors.getValue();
                 if (newMap !== '' && building && floor) {
-                    alert(
-                        `Not yet implemented\nBuilding: ${building} | Floor: ${floor}`,
-                    );
+                    const mazeParams = {
+                        url: newMap,
+                        designCredits:
+                            "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
+                        texturesCredits:
+                            "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+                        scale: new THREE.Vector3(1.0, 1.0, 1.0),
+                        helpersColor: new THREE.Color(0xff0077),
+                    };
 
-                    // const mazeParams = {
-                    //     url: newMap,
-                    //     designCredits:
-                    //         "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
-                    //     texturesCredits:
-                    //         "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-                    //     scale: new THREE.Vector3(1.0, 1.0, 1.0),
-                    //     helpersColor: new THREE.Color(0xff0077),
-                    // };
-                    // thumbRaiser.maze = new Maze(mazeParams);
-                    // // Main.newMap(newMap);
-                    // Main.animate();
-                    // thumbRaiser.update();
+                    thumbRaiser.removeAudioSources();
+                    thumbRaiser.scene.remove(thumbRaiser.maze);
+                    thumbRaiser.stop();
+
+                    thumbRaiser.maze = new Maze(mazeParams, loader);
+                    thumbRaiser.update();
+                } else {
+                    alert('Both building and floor should be selected');
                 }
             },
         };
@@ -115,11 +117,10 @@ export default class UserInterface extends GUI {
 
         travelFolder.add(options, 'Travel');
 
-        travelFolder.onOpenClose(() => {
-            this.updateBuildings().then((codes) => {
-                buildings = codes;
-                optionsBuildings.options(buildings);
-            });
+        travelFolder.onOpenClose(async () => {
+            const codes = await this.updateBuildings();
+            buildings = codes;
+            optionsBuildings.options(buildings);
         });
         travelFolder.close();
 
@@ -528,11 +529,11 @@ export default class UserInterface extends GUI {
     }
 
     async updateBuildings(): Promise<string[]> {
-        type Building = { code: string }
+        type Building = { code: string };
 
         const url = `${import.meta.env.VITE_MDR_URL}/buildings`;
         try {
-            const data = await this.loader.load<Building[]>(url)
+            const data = await this.loader.load<Building[]>(url);
 
             const codes = data.map((item) => {
                 return item.code;
@@ -540,17 +541,18 @@ export default class UserInterface extends GUI {
 
             return codes;
         } catch (_) {
-            return []
+            return [];
         }
     }
 
     async updateFloors(building: string): Promise<number[]> {
-        type Floor = { floorNumber: number }
-        const url = `${import.meta.env.VITE_MDR_URL
-            }/buildings/${building}/floors`;
+        type Floor = { floorNumber: number };
+        const url = `${
+            import.meta.env.VITE_MDR_URL
+        }/buildings/${building}/floors`;
 
         try {
-            const data = await this.loader.load<Floor[]>(url)
+            const data = await this.loader.load<Floor[]>(url);
 
             const codes = data.map((item) => {
                 return item.floorNumber;
@@ -558,7 +560,7 @@ export default class UserInterface extends GUI {
 
             return codes;
         } catch (_) {
-            return []
+            return [];
         }
     }
 

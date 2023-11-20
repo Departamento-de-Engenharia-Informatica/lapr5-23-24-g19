@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export interface Loader {
     load<T>(url: string): Promise<T>;
@@ -9,7 +9,7 @@ export class NodeLoader implements Loader {
 
     async load<T>(url: string): Promise<T> {
         if (!!this.cache[url]) {
-            return Promise.resolve(this.cache as T);
+            return Promise.resolve(this.cache[url] as T);
         }
 
         return await fetch(url)
@@ -39,4 +39,3 @@ export class ThreeLoader implements Loader {
         return this.loader.loadAsync(url) as T;
     }
 }
-
