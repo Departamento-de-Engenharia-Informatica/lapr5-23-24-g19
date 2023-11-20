@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {
-    BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
 import {ElevatorDTO, ElevatorService, CreatedElevatorDTO} from 'src/app/services/elevator.service';
 import {CreatedRoomDTO, RoomService} from "../../../services/room.service";
 import {FloorAndBuildingDTO, FloorService} from "../../../services/floor.service";
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
 
 @Component({
     selector: 'app-list-rooms',

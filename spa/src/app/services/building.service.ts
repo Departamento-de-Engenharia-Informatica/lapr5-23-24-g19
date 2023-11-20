@@ -2,6 +2,7 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppModule } from '../app.module';
 import { Observable } from 'rxjs';
+import { BuildingDTO } from '../dto/BuildingDTO'
 
 // interface BuildingProps{
 //   code:string
@@ -11,12 +12,12 @@ import { Observable } from 'rxjs';
 //   providedIn: 'root'
 // })
 
-export interface BuildingDTO {
-    code: string;
-    name: string;
-    description: string;
-    maxFloorDimensions: { length: number; width: number };
-}
+// export interface BuildingDTO {
+//     code: string
+//     name: string
+//     description: string
+//     maxFloorDimensions: { length: number; width: number }
+// }
 export interface EditBuildingDTO {
     name?: string;
     description?: string;

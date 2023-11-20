@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
+import { BuildingService } from 'src/app/services/building.service';
+
 import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 @Component({
@@ -31,7 +33,7 @@ export class EditBuildingComponent {
             width: [null, [Validators.min(1)]],
             overrideConfirmation: [false]
         });
-        
+
         //se for para usar o url
         // const selectedBuilding = this.getBuilding(this.buildingCode);
         // this.buildingForm = this.fb.group({
@@ -143,7 +145,7 @@ export class EditBuildingComponent {
 
     formValid(): boolean {
         const buildingCodeValid = this.buildingForm.get('buildingCode')!.value != null;
-        
+
         if (this.buildingForm.get('overrideConfirmation')!.value) {
             const lengthValid = (this.buildingForm.get('length')!.value != null)
             const widthValid = (this.buildingForm.get('width')!.value != null)

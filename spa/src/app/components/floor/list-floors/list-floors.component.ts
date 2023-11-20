@@ -5,8 +5,8 @@ import {
     OnInit,
     SimpleChanges,
 } from '@angular/core';
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
 import {
-    BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
 import {

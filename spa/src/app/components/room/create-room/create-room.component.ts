@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
+import { BuildingService } from 'src/app/services/building.service';
 import {CreatedRoomDTO, RoomDTO, RoomService} from 'src/app/services/room.service';
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
 
 enum CategoryType{
     GABINETE = "GABINETE",

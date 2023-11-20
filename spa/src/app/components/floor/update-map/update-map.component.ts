@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
-import { BuildingDTO, BuildingService } from 'src/app/services/building.service';
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
+import { BuildingService } from 'src/app/services/building.service';
 import { FloorAndBuildingDTO, FloorService, UpdateMapDTO } from 'src/app/services/floor.service';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
 import {
-    BuildingDTO,
     BuildingService,
 } from 'src/app/services/building.service';
 import {

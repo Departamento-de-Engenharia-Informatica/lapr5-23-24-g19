@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import {
-    BuildingDTO,
+
     BuildingService,
 } from 'src/app/services/building.service';
 import {
@@ -21,6 +21,7 @@ import {
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 import {RoomDTO} from "../../../services/room.service";
 import {catchError, tap} from "rxjs";
+import { BuildingDTO } from 'src/app/dto/BuildingDTO';
 
 @Component({
     selector: 'app-create-elevator',
