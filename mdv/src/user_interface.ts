@@ -81,7 +81,12 @@ export default class UserInterface extends GUI {
                     };
 
                     thumbRaiser.removeAudioSources();
+
                     thumbRaiser.scene.remove(thumbRaiser.maze);
+
+                    thumbRaiser.maze.disposeGround();
+                    thumbRaiser.maze.disposeWalls();
+
                     thumbRaiser.stop();
 
                     thumbRaiser.maze = new Maze(mazeParams, loader);

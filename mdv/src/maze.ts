@@ -125,6 +125,9 @@ export default class Maze extends THREE.Group {
     public initialPosition: THREE.Vector3 = new THREE.Vector3();
     public initialDirection: number = 0;
 
+    private wall?: Wall;
+    private ground?: Ground;
+
     private onError(url: string, error: unknown) {
         console.error("Error loading resource '" + url + "' (" + error + ').');
     }
@@ -140,7 +143,7 @@ export default class Maze extends THREE.Group {
 
     constructor(
         private parameters: MazeParameters,
-        private loader:Loader
+        private loader: Loader,
     ) {
         super();
         // merge(this, parameters);
@@ -168,10 +171,18 @@ export default class Maze extends THREE.Group {
     }
 
     async fetchMap(url: string) {
-        const description = await this.loader.load<MapFile>(url)
+        const description = await this.loader.load<MapFile>(url);
 
         console.log(JSON.stringify(description, null, 2));
         this.onLoad(description);
+    }
+
+    disposeWalls() {
+        this.wall?.disposeWalls();
+    }
+
+    disposeGround() {
+        this.ground?.disposeGround();
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates
@@ -549,7 +560,7 @@ export default class Maze extends THREE.Group {
         this.helper = new THREE.Group();
 
         // Create the ground
-        const ground = new Ground({
+        this.ground = new Ground({
             size: new THREE.Vector3(
                 description.ground.size.width,
                 description.ground.size.height,
@@ -594,10 +605,10 @@ export default class Maze extends THREE.Group {
                 parseInt(description.ground.secondaryColor, 16),
             ),
         });
-        this.add(ground);
+        this.add(this.ground);
 
         // Create a wall
-        const wall = new Wall({
+        this.wall = new Wall({
             groundHeight: description.ground.size.height,
             segments: new THREE.Vector2(
                 description.wall.segments.width,
@@ -661,7 +672,7 @@ export default class Maze extends THREE.Group {
                 if (this.map[i][j] == 2 || this.map[i][j] == 3) {
                     this.aabb[i][j][0] = new THREE.Box3();
                     for (let k = 0; k < 2; k++) {
-                        geometry = wall.geometries[k].clone();
+                        geometry = this.wall.geometries[k].clone();
                         geometry.applyMatrix4(
                             new THREE.Matrix4().makeTranslation(
                                 j - this.halfSize.width + 0.5,
@@ -690,7 +701,7 @@ export default class Maze extends THREE.Group {
                 if (this.map[i][j] == 1 || this.map[i][j] == 3) {
                     this.aabb[i][j][1] = new THREE.Box3();
                     for (let k = 0; k < 2; k++) {
-                        geometry = wall.geometries[k].clone();
+                        geometry = this.wall.geometries[k].clone();
                         geometry.applyMatrix4(
                             new THREE.Matrix4().makeRotationY(Math.PI / 2.0),
                         );
@@ -728,7 +739,7 @@ export default class Maze extends THREE.Group {
                 geometries[i],
                 false,
             );
-            mesh = new THREE.Mesh(mergedGeometry, wall.materials[i]);
+            mesh = new THREE.Mesh(mergedGeometry, this.wall.materials[i]);
             mesh.castShadow = true;
             mesh.receiveShadow = true;
             this.add(mesh);
