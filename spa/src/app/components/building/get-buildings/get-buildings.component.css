@@ -17,7 +17,7 @@
     background-color: var(--primary-color);
     color: white;
 }
-.building-card:hover{
+.building-card:hover {
     transform: scale(1.1); /* Increase the size on hover */
     transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
@@ -53,4 +53,3 @@
     font-weight: bold;
     color: var(--secondary-color);
 }
-

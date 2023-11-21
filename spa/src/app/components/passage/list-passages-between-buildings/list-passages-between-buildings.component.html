@@ -13,10 +13,7 @@
                     [(ngModel)]="selectedBuilding1"
                 >
                     <option value="" disabled selected></option>
-                    <option
-                        *ngFor="let building of buildings"
-                        [value]="building.code"
-                    >
+                    <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }} - {{ building.name }}
                     </option>
                 </select>
@@ -33,19 +30,18 @@
                     (ngModelChange)="getPassagesBetweenBuildings()"
                 >
                     <option value="" disabled selected></option>
-                    <option
-                        *ngFor="let building of buildings"
-                        [value]="building.code"
-                    >
+                    <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }} - {{ building.name }}
                     </option>
                 </select>
             </div>
         </div>
 
-
         <div class="list-passages-between-buildings-list">
-            <div *ngFor="let passage of passages" class="list-passages-between-buildings-card mb-8">
+            <div
+                *ngFor="let passage of passages"
+                class="list-passages-between-buildings-card mb-8"
+            >
                 <h2>Passages</h2>
                 <h3>Floor1</h3>
                 <p>buildingCode: {{ passage.floor1.buildingCode }}</p>

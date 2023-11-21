@@ -1,54 +1,93 @@
 <main>
-  <div class="text-gray-400 body-font bg-gray-900">
-    <!-- <a [routerLink]="['menu']" class="flex flex-wrap w-full flex-col items-center text-center">
+    <div class="text-gray-400 body-font bg-gray-900">
+        <!-- <a [routerLink]="['menu']" class="flex flex-wrap w-full flex-col items-center text-center">
       <p class="sm:text-3xl text-2xl font-medium title-font text-white">RobDroneGo</p>
       <img class="brand-logo" src="/assets/logo.svg" alt="RobDroneGo" aria-hidden="true"> -->
-    <!-- </a> -->
-    <header class="text-gray-400 bg-gray-900 body-font">
-      <div class="container mx-auto flex space-x-5  p-5 flex-col md:flex-row items-center">
-        <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
-          <a [routerLink]="['campus']" class="mr-5 hover:text-white">Campus</a>
-          <a [routerLink]="['fleet']" class="mr-5 hover:text-white">Fleet</a>
-          <a [routerLink]="['task']" class="mr-5 hover:text-white">Task</a>
-          <a [routerLink]="['visualization']" class="hover:text-white">Visualization</a>
-        </nav>
-        <a [routerLink]="['modules']"
-          class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-white lg:items-center lg:justify-center mb-4 md:mb-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full"
-            viewBox="0 0 24 24">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-          </svg>
-          <a class="ml-3 mr-3 text-xl xl:block lg:hidden">RobDroneGo</a>
-          <!-- <svg " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="green" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" class="w-4 h-4" viewBox="0 0 24 24"> -->
-          <!-- <svg *ngIf="isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em" -->
-          <svg *ngIf="isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em"
-            viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-            <path fill="green"
-              d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z" />
-          </svg>
-          <svg *ngIf="!isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em"
-            viewBox="0 0 640 512">
-            <path fill="red"
-              d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z" />
-          </svg>
-        </a>
-        <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-          <button onclick="history.back()"
-            class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
-            <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="none" d="M19 12H5M12 19l-7-7 7-7"></path>
-            </svg>
-            <a>Back</a>
-          </button>
-        </div>
-      </div>
-    </header>
-  </div>
-  <section class="text-gray-400 body-font bg-gray-900">
-    <router-outlet><!--AQUI ENTRA O BUFFER PARA O RESTO DA APPLICACAO--> </router-outlet>
-  </section>
-  <app-error-popup class="error-popup"></app-error-popup>
-  <app-contact-info></app-contact-info>
+        <!-- </a> -->
+        <header class="text-gray-400 bg-gray-900 body-font">
+            <div
+                class="container mx-auto flex space-x-5 p-5 flex-col md:flex-row items-center"
+            >
+                <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+                    <a [routerLink]="['campus']" class="mr-5 hover:text-white">Campus</a>
+                    <a [routerLink]="['fleet']" class="mr-5 hover:text-white">Fleet</a>
+                    <a [routerLink]="['task']" class="mr-5 hover:text-white">Task</a>
+                    <a [routerLink]="['visualization']" class="hover:text-white"
+                        >Visualization</a
+                    >
+                </nav>
+                <a
+                    [routerLink]="['modules']"
+                    class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-white lg:items-center lg:justify-center mb-4 md:mb-0"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                        ></path>
+                    </svg>
+                    <a class="ml-3 mr-3 text-xl xl:block lg:hidden">RobDroneGo</a>
+                    <!-- <svg " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="green" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" class="w-4 h-4" viewBox="0 0 24 24"> -->
+                    <!-- <svg *ngIf="isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em" -->
+                    <svg
+                        *ngIf="isBackendUp"
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="1.25em"
+                        viewBox="0 0 640 512"
+                    >
+                        <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            fill="green"
+                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"
+                        />
+                    </svg>
+                    <svg
+                        *ngIf="!isBackendUp"
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="1.25em"
+                        viewBox="0 0 640 512"
+                    >
+                        <path
+                            fill="red"
+                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"
+                        />
+                    </svg>
+                </a>
+                <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+                    <button
+                        onclick="history.back()"
+                        class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                        >
+                            <path fill="none" d="M19 12H5M12 19l-7-7 7-7"></path>
+                        </svg>
+                        <a>Back</a>
+                    </button>
+                </div>
+            </div>
+        </header>
+    </div>
+    <section class="text-gray-400 body-font bg-gray-900">
+        <router-outlet
+            ><!--AQUI ENTRA O BUFFER PARA O RESTO DA APPLICACAO-->
+        </router-outlet>
+    </section>
+    <app-error-popup class="error-popup"></app-error-popup>
+    <app-contact-info></app-contact-info>
 </main>

@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing'
 
-import { ElevatorService } from './elevator.service';
+import { ElevatorService } from './elevator.service'
 
 describe('ElevatorService', () => {
-    let service: ElevatorService;
+    let service: ElevatorService
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
-        service = TestBed.inject(ElevatorService);
-    });
+        TestBed.configureTestingModule({})
+        service = TestBed.inject(ElevatorService)
+    })
 
     it('should be created', () => {
-        expect(service).toBeTruthy();
-    });
-});
+        expect(service).toBeTruthy()
+    })
+})

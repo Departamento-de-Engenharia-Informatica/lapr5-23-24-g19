@@ -1,16 +1,16 @@
-form{
+form {
     align-items: center;
     margin-top: 20px;
     width: 60%;
     margin: 0 auto;
 }
 
-.introduce{
-        display: flex;
-        align-items: center;
-        margin-top: 20px;
-        width: 60%;
-        margin: 0 auto;
+.introduce {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    width: 60%;
+    margin: 0 auto;
 }
 label {
     margin-bottom: 8px;
@@ -36,7 +36,6 @@ select {
     margin-bottom: 16px;
 } */
 
-
 button {
     padding: 10px 20px;
     background-color: var(--third-color);
@@ -46,7 +45,6 @@ button {
     margin: 0 auto;
     display: block;
 }
-
 
 button:disabled {
     background-color: #ccc;
@@ -61,7 +59,7 @@ button:disabled {
 .row {
     flex-direction: column;
     justify-content: space-between;
-    
+
     width: 100%;
     margin-right: 3%;
     margin-left: 3%;
@@ -92,7 +90,7 @@ button:disabled {
     margin-bottom: 8px;
 }
 
-button[type="submit"] {
+button[type='submit'] {
     width: 20%; /* Adjust the width as needed */
     margin: 0 auto; /* Center the button horizontally */
     margin-top: 25px; /* Add some top margin for spacing */

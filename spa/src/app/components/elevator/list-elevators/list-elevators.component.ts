@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { BuildingDTO } from 'src/app/dto/BuildingDTO';
+import { Component, OnInit } from '@angular/core'
+import { BuildingDTO } from 'src/app/dto/BuildingDTO'
+import { BuildingService } from 'src/app/services/building.service'
 import {
-    BuildingService,
-} from 'src/app/services/building.service';
-import {ElevatorDTO, ElevatorService, CreatedElevatorDTO} from 'src/app/services/elevator.service';
+    ElevatorDTO,
+    ElevatorService,
+    CreatedElevatorDTO,
+} from 'src/app/services/elevator.service'
 
 @Component({
     selector: 'app-list-elevators',
@@ -11,31 +13,31 @@ import {ElevatorDTO, ElevatorService, CreatedElevatorDTO} from 'src/app/services
     styleUrls: ['./list-elevators.component.css'],
 })
 export class ListElevatorsComponent implements OnInit {
-    selectedBuilding: string;
-    elevators: CreatedElevatorDTO[];
-    buildings: BuildingDTO[];
+    selectedBuilding: string
+    elevators: CreatedElevatorDTO[]
+    buildings: BuildingDTO[]
 
     constructor(
         private buildingService: BuildingService,
         private elevatorService: ElevatorService,
     ) {
-        this.elevators = [];
-        this.buildings = [];
-        this.selectedBuilding = '';
+        this.elevators = []
+        this.buildings = []
+        this.selectedBuilding = ''
     }
 
     ngOnInit(): void {
         this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
-            this.buildings = list;
-        });
+            this.buildings = list
+        })
     }
 
     getElevators() {
-        this.elevators = [];
+        this.elevators = []
         this.elevatorService
             .getElevators(this.selectedBuilding)
             .subscribe((list: CreatedElevatorDTO[]) => {
-                this.elevators = list;
-            });
+                this.elevators = list
+            })
     }
 }

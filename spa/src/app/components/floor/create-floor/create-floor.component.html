@@ -37,10 +37,7 @@
                             formControlName="description"
                         ></textarea>
 
-                        <button
-                            type="submit"
-                            [disabled]="createFloorForm.invalid"
-                        >
+                        <button type="submit" [disabled]="createFloorForm.invalid">
                             Submit
                         </button>
                     </div>
@@ -54,7 +51,7 @@
             <div class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10">
                 <div *ngFor="let floor of floors" class="floor-card">
                     <h2>Floor {{ floor.floorNumber }}</h2>
-                    <p>{{ floor.description || "No description" }}</p>
+                    <p>{{ floor.description || 'No description' }}</p>
                 </div>
             </div>
         </div>

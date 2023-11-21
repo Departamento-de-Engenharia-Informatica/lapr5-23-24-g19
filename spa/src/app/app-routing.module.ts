@@ -1,33 +1,33 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { BuildingComponent } from './components/building/building.component';
-import { CreateElevatorComponent } from './components/elevator/create-elevator/create-elevator.component';
-import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component';
-import { EditBuildingComponent } from './components/edit-building/edit-building.component';
-import { ElevatorComponent } from './components/elevator/elevator.component';
-import { FloorComponent } from './components/floor/floor.component';
-import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component';
-import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component';
-import { CampusComponent } from './components/campus-menu/campus-menu.component';
-import { ModulesComponent } from './components/modules/modules.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { PassageComponent } from './components/passage/passage.component';
-import { RobotTypeComponent } from './components/robot-type/robot-type.component';
-import { RobotComponent } from './components/robot/robot.component';
-import { RoomComponent } from './components/room/room.component';
-import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component';
-import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
-import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component';
-import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
-import { TaskMenuComponent } from './components/task-menu/task-menu.component';
-import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component';
-import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
-import { PutFloorComponent } from './components/floor/put-floor/put-floor.component';
-import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component';
-import { CreateRoomComponent } from "./components/room/create-room/create-room.component";
-import { ListRoomsComponent } from "./components/room/list-rooms/list-rooms.component";
-import { UpdateMapComponent } from './components/floor/update-map/update-map.component';
-import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { BuildingComponent } from './components/building/building.component'
+import { CreateElevatorComponent } from './components/elevator/create-elevator/create-elevator.component'
+import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component'
+import { EditBuildingComponent } from './components/edit-building/edit-building.component'
+import { ElevatorComponent } from './components/elevator/elevator.component'
+import { FloorComponent } from './components/floor/floor.component'
+import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component'
+import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component'
+import { CampusComponent } from './components/campus-menu/campus-menu.component'
+import { ModulesComponent } from './components/modules/modules.component'
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component'
+import { PassageComponent } from './components/passage/passage.component'
+import { RobotTypeComponent } from './components/robot-type/robot-type.component'
+import { RobotComponent } from './components/robot/robot.component'
+import { RoomComponent } from './components/room/room.component'
+import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component'
+import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component'
+import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-buildings-minmax-floors/list-buildings-minmax-floors.component'
+import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component'
+import { TaskMenuComponent } from './components/task-menu/task-menu.component'
+import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component'
+import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component'
+import { PutFloorComponent } from './components/floor/put-floor/put-floor.component'
+import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component'
+import { CreateRoomComponent } from './components/room/create-room/create-room.component'
+import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.component'
+import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
+import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -143,7 +143,7 @@ export const routes: Routes = [
         title: 'Create Passage',
     },
     { path: '**', component: PageNotFoundComponent },
-];
+]
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],

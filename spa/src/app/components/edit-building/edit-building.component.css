@@ -51,7 +51,6 @@ button {
     display: block;
 }
 
-
 button:disabled {
     background-color: #ccc;
     color: #666;
@@ -59,7 +58,7 @@ button:disabled {
 }
 .checkbox-row {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: space-between;
     padding: 10px;
 }

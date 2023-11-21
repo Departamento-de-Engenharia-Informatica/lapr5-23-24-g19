@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RobotDTO, RobotService } from 'src/app/services/robot.service';
-
+import { Component, OnInit } from '@angular/core'
+import { RobotDTO, RobotService } from 'src/app/services/robot.service'
 
 @Component({
     selector: 'app-list-robots',
@@ -8,19 +7,15 @@ import { RobotDTO, RobotService } from 'src/app/services/robot.service';
     styleUrls: ['./list-robots.component.css'],
 })
 export class ListRobotsComponent implements OnInit {
-    robots: RobotDTO[];
+    robots: RobotDTO[]
 
-    constructor(
-        private robotService: RobotService
-    ) {
-        this.robots = [];
+    constructor(private robotService: RobotService) {
+        this.robots = []
     }
 
     ngOnInit(): void {
         this.robotService.getRobots().subscribe((list: RobotDTO[]) => {
-            this.robots = list;
-        });
+            this.robots = list
+        })
     }
-
-
 }

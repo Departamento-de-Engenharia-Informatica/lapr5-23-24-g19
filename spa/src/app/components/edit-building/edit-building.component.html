@@ -3,46 +3,72 @@
         <div class="row">
             <div>
                 <label for="buildingCode">Select Building</label>
-                <select id="buildingCode" formControlName="buildingCode" required (change)="onBuildingSelected($event)">
+                <select
+                    id="buildingCode"
+                    formControlName="buildingCode"
+                    required
+                    (change)="onBuildingSelected($event)"
+                >
                     <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }}
                     </option>
-
                 </select>
             </div>
 
             <div>
                 <label for="name">Name:</label>
-                <input id="name" type="text" formControlName="name" placeholder={{building.name}} />
+                <input
+                    id="name"
+                    type="text"
+                    formControlName="name"
+                    placeholder="{{ building.name }}"
+                />
             </div>
         </div>
 
         <label for="description">Description:</label>
-        <textarea id="description" formControlName="description" placeholder={{building.description}}></textarea>
+        <textarea
+            id="description"
+            formControlName="description"
+            placeholder="{{ building.description }}"
+        ></textarea>
 
         <div class="row">
             <div>
                 <label for="length">Max Floor Length:</label>
-                <input [ngClass]="{
-                    'invalid-input': isInvalid('length')
-                }" id="length" type="number" formControlName="length"
-                    placeholder={{building.maxFloorDimensions.length}} />
+                <input
+                    [ngClass]="{
+                        'invalid-input': isInvalid('length')
+                    }"
+                    id="length"
+                    type="number"
+                    formControlName="length"
+                    placeholder="{{ building.maxFloorDimensions.length }}"
+                />
             </div>
 
             <div>
                 <label for="width">Max Floor Width:</label>
-                <input [ngClass]="{
+                <input
+                    [ngClass]="{
                         'invalid-input': isInvalid('width')
-                    }" id="width" type="number" formControlName="width"
-                    placeholder={{building.maxFloorDimensions.width}} />
+                    }"
+                    id="width"
+                    type="number"
+                    formControlName="width"
+                    placeholder="{{ building.maxFloorDimensions.width }}"
+                />
             </div>
         </div>
         <div class="checkbox-container">
-            <input type="checkbox" formControlName="overrideConfirmation" id="overrideConfirmation" />
+            <input
+                type="checkbox"
+                formControlName="overrideConfirmation"
+                id="overrideConfirmation"
+            />
             <label for="overrideConfirmation">Override</label>
         </div>
         <button *ngIf="formValid()" type="submit">Submit</button>
         <button *ngIf="!formValid()" type="submit" [disabled]="true">Submit</button>
-
     </div>
 </form>

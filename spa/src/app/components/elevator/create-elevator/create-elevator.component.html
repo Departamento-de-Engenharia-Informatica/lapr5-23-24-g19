@@ -1,7 +1,8 @@
 <form
     [formGroup]="createElevatorForm"
     (ngSubmit)="onSubmit()"
-    enctype="multipart/form-data">
+    enctype="multipart/form-data"
+>
     <div>
         <div class="row">
             <div>
@@ -13,35 +14,27 @@
                     (ngModelChange)="listFloors()"
                     required
                 >
-                    <option
-                        *ngFor="let building of buildings"
-                        [value]="building.code"
-                    >
+                    <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }}
                     </option>
                 </select>
             </div>
 
             <div>
-                <label
-                    for="selectedFloors">
-                    Select Floors
-                </label>
+                <label for="selectedFloors"> Select Floors </label>
                 <select
                     id="selectedFloors"
                     formControlName="floors"
                     [(ngModel)]="selectedFloors"
-                    multiple required
+                    multiple
+                    required
                 >
-                    <option
-                        *ngFor="let floor of floors"
-                        [value]="floor.floorNumber"
-                    >
-                        {{ floor.floorNumber }}</option>
+                    <option *ngFor="let floor of floors" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
                 </select>
             </div>
         </div>
-
 
         <div class="row">
             <div>

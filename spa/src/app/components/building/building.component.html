@@ -1,9 +1,6 @@
 <section class="text-gray-400 bg-gray-900 body-font">
     <section class="text-gray-400 body-font bg-gray-900"></section>
 
-    <app-create-building
-        (buildingCreated)="list.listBuildings()"
-    >
-    </app-create-building>
+    <app-create-building (buildingCreated)="list.listBuildings()"> </app-create-building>
     <app-get-buildings #list></app-get-buildings>
 </section>

@@ -33,11 +33,11 @@ export class CreateBuildingComponent {
                 description: this.form.value.description,
                 maxFloorDimensions: {
                     length: this.form.value.length,
-                    width: this.form.value.width
-                }
+                    width: this.form.value.width,
+                },
             }
 
-            this.svc.createBuilding(dto).subscribe(building => {
+            this.svc.createBuilding(dto).subscribe((building) => {
                 this.buildingCreated.emit(building)
                 // TODO: clear form
             })

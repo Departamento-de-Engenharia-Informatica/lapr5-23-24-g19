@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
-  selector: 'app-task-menu',
-  templateUrl: './task-menu.component.html',
-  styleUrls: ['./task-menu.component.css']
+    selector: 'app-task-menu',
+    templateUrl: './task-menu.component.html',
+    styleUrls: ['./task-menu.component.css'],
 })
-export class TaskMenuComponent {
-
-}
+export class TaskMenuComponent {}

@@ -10,7 +10,7 @@ body {
 :root {
     --primary-color: #111827;
     --secondary-color: #ffcc00;
-    --third-color: #1f2937
+    --third-color: #1f2937;
     /* --accent-color: #e8e7fa;
     --shadow-color: #E8E8E8; */
 }
@@ -27,9 +27,9 @@ button.primary {
     transform: scale(1.1); /* Increase the size on hover */
     transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
-.error-popup{
+.error-popup {
     position: fixed;
     bottom: 0;
     right: 0px;
     z-index: 5;
-  }
+}

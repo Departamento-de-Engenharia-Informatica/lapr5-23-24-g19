@@ -42,7 +42,6 @@ select {
     margin-bottom: 16px;
 }
 
-
 button {
     padding: 10px 20px;
     background-color: var(--third-color);
@@ -54,20 +53,17 @@ button {
     display: block;
 }
 
-
 button:disabled {
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
 }
 
-
 .elevator-list {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
-
 
 .elevator-card {
     border: 1px solid var(--third-color);

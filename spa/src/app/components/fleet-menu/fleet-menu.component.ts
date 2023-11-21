@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
-  selector: 'app-fleet-menu',
-  templateUrl: './fleet-menu.component.html',
-  styleUrls: ['./fleet-menu.component.css']
+    selector: 'app-fleet-menu',
+    templateUrl: './fleet-menu.component.html',
+    styleUrls: ['./fleet-menu.component.css'],
 })
-export class FleetMenuComponent {
-
-}
+export class FleetMenuComponent {}

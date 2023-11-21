@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
-  selector: 'app-robot',
-  templateUrl: './robot.component.html',
-  styleUrls: ['./robot.component.css']
+    selector: 'app-robot',
+    templateUrl: './robot.component.html',
+    styleUrls: ['./robot.component.css'],
 })
-export class RobotComponent {
-
-}
+export class RobotComponent {}

@@ -20,7 +20,7 @@
                                 *ngFor="let building of buildings"
                                 [value]="building.code"
                             >
-                                {{ building.code }} - {{building.description}}
+                                {{ building.code }} - {{ building.description }}
                             </option>
                         </select>
 
@@ -39,10 +39,7 @@
                         </select>
 
                         <label for="name">Name:</label>
-                        <textarea
-                            id="name"
-                            formControlName="name"
-                        ></textarea>
+                        <textarea id="name" formControlName="name"></textarea>
 
                         <label for="description">Description:</label>
                         <textarea
@@ -51,10 +48,11 @@
                         ></textarea>
 
                         <label for="category">Category:</label>
-                        <select id="category"
-                                formControlName="category"
-                                [(ngModel)]="createRoomForm.value.category"
-                                required
+                        <select
+                            id="category"
+                            formControlName="category"
+                            [(ngModel)]="createRoomForm.value.category"
+                            required
                         >
                             <option
                                 *ngFor="let category of categoryTypes"
@@ -67,18 +65,10 @@
                         <label for="dimensions">Dimensions:</label>
                         <div formGroupName="dimensions">
                             <label for="length">Length:</label>
-                            <input
-                                id="length"
-                                type="number"
-                                formControlName="length"
-                            />
+                            <input id="length" type="number" formControlName="length" />
 
                             <label for="width">Width:</label>
-                            <input
-                                id="width"
-                                type="number"
-                                formControlName="width"
-                            />
+                            <input id="width" type="number" formControlName="width" />
                         </div>
 
                         <label for="positions">Positions:</label>
@@ -90,11 +80,7 @@
                             <input id="y" type="number" formControlName="y" />
                         </div>
 
-
-                        <button
-                            type="submit"
-                            [disabled]="createRoomForm.invalid"
-                        >
+                        <button type="submit" [disabled]="createRoomForm.invalid">
                             Submit
                         </button>
                     </div>
@@ -109,17 +95,17 @@
                 <div *ngIf="createdRoom" class="room-card">
                     <h2>Created Room</h2>
                     <p>Name: {{ createdRoom.name }}</p>
-                    <p>Building Code: {{ createdRoom.buildingCode}}</p>
+                    <p>Building Code: {{ createdRoom.buildingCode }}</p>
                     <p>Floor: {{ createdRoom.floorNumber }}</p>
                     <p>Description: {{ createdRoom.description }}</p>
                     <p>Category: {{ createdRoom.category }}</p>
-                    <p>Dimensions:
-                        Length - {{ createdRoom.dimensions.length }},
-                        Width - {{ createdRoom.dimensions.width }}
+                    <p>
+                        Dimensions: Length - {{ createdRoom.dimensions.length }}, Width -
+                        {{ createdRoom.dimensions.width }}
                     </p>
-                    <p>Positions:
-                        X - {{ createdRoom.positions.x }},
-                        Y - {{ createdRoom.positions.y }}
+                    <p>
+                        Positions: X - {{ createdRoom.positions.x }}, Y -
+                        {{ createdRoom.positions.y }}
                     </p>
                 </div>
             </div>
