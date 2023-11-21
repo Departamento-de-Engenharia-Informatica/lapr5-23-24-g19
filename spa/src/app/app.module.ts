@@ -24,7 +24,7 @@ import { ElevatorService } from './services/elevator.service';
 import { CreateElevatorComponent } from './components/elevator/create-elevator/create-elevator.component';
 import { ListElevatorsComponent } from './components/elevator/list-elevators/list-elevators.component';
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component';
-import { CreateBuildingComponent } from './components/create-building/create-building.component';
+import { CreateBuildingComponent } from './components/building/create-building/create-building.component';
 import { PassageService } from './services/passage.service';
 import { ListPassagesBetweenBuildingsComponent } from './components/passage/list-passages-between-buildings/list-passages-between-buildings.component';
 import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component';
@@ -90,7 +90,7 @@ import { PopupComponent } from './components/popup/popup.component';
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        
+
     ],
     providers: [BuildingService,
                 ElevatorService,
