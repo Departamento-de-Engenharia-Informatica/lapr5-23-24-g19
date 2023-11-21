@@ -6,17 +6,9 @@ import { Result } from '../../core/logic/Result'
 
 import Building, { BuildingProps } from '../building/building'
 
-
 import { Floor } from '../floor/floor'
-import { BuildingDescription, BuildingDescription as Description } from '../building/description'
+import { BuildingDescription as Description } from '../building/description'
 import { FloorNumber, FloorNumber as Number } from '../floor/floorNumber'
-import { FloorMap } from '../../mappers/FloorMap'
-import { FloorMapContent, FloorMapProps } from './floorMap'
-import { IFloorMapDTO } from '../../dto/IFloorMapDTO'
-import { BuildingCode } from '../building/code'
-import { BuildingName } from '../building/name'
-import { MaxFloorDimensions } from '../building/maxFloorDimensions'
-import { Coordinates } from './Coordinates'
 
 describe('Floor', () => {
     const sinon = createSandbox()

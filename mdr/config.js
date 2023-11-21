@@ -53,6 +53,10 @@ export default {
             name: 'FloorController',
             path: '../controllers/floorController'
         },
+        floorMap: {
+            name: 'FloorMapController',
+            path: '../controllers/floorMapController'
+        },
         elevator: {
             name: 'ElevatorController',
             path: '../controllers/elevatorController'
@@ -170,6 +174,10 @@ export default {
             name: 'FloorService',
             path: '../services/floorService'
         },
+        floorMap: {
+            name: 'FloorMapService',
+            path: '../services/floorMapService'
+        },
         elevator: {
             name: 'ElevatorService',
             path: '../services/elevatorService',
@@ -195,4 +203,10 @@ export default {
             path: '../services/taskService'
         },
     },
+
+    storage: {
+        name: 'NodeDiskStorage',
+        path: '../fs/nodeDiskStorage',
+        prefix: './filesystem'
+    }
 }

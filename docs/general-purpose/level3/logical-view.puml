@@ -32,6 +32,7 @@ component system {
     }
 
     portin " " as port1
+    portout " " as port2
 
     [Routing] -- port1
     [Persistence] --( "Data Model API"
@@ -58,6 +59,7 @@ component system {
     [Domain Model (DDD)] -up- "Model API"
 
 }
+"FS API" -- port2
 "MDR API" -- port1
 
 @enduml

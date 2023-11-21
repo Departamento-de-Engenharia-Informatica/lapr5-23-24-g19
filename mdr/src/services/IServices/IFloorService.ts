@@ -1,7 +1,6 @@
 import { Either, Result } from '../../core/logic/Result'
 import { IBuildingCodeDTO } from '../../dto/IBuildingCodeDTO'
 import { IFloorDTO } from '../../dto/IFloorDTO'
-import { IFloorMapDTO } from '../../dto/IFloorMapDTO'
 import { IFloorPassageDTO } from '../../dto/IFloorPassageDTO'
 import { IUpdateFloorDTO } from '../../dto/IUpdateFloorDTO'
 
@@ -16,11 +15,9 @@ export type ErrorResult = {
 }
 
 export default interface IFloorService {
-    getMap(dto: IFloorDTO): Promise<Either<ErrorResult,String>>
     createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Either<ErrorResult, IFloorDTO>>
     patchFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     putFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>>
     floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>>
-    uploadMap(floorMapDto: IFloorMapDTO): Promise<Either<ErrorResult,IFloorDTO>>
 }

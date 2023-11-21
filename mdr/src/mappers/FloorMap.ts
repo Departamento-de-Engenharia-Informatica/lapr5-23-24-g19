@@ -9,9 +9,6 @@ import Container from 'typedi'
 import BuildingRepo from '../repos/mongo/buildingRepo'
 import { Description } from '../domain/description'
 import { IFloorMapDTO } from '../dto/IFloorMapDTO'
-import { FloorMapContent, FloorMapProps } from '../domain/floor/floorMap'
-import { MaxFloorDimensions } from '../domain/building/maxFloorDimensions'
-import { Coordinates } from '../domain/floor/Coordinates'
 
 export class FloorMap extends Mapper<Floor> {
     public static toDTO(Floor: Floor): IFloorDTO {
@@ -54,7 +51,7 @@ export class FloorMap extends Mapper<Floor> {
                 floorNumber: FloorNumber.create(raw.floorNumber).getValue(),
                 description: description,
                 building: building,
-                path: path 
+                path: path
             },
             new UniqueEntityID(raw.domainId),
         )
@@ -104,7 +101,7 @@ export class FloorMap extends Mapper<Floor> {
                 }),
             }
         }*/
-        
+
     }
 
     public static toDTOFloorMap(floor: Floor): IFloorMapDTO {
@@ -128,7 +125,7 @@ export class FloorMap extends Mapper<Floor> {
             // rooms: map.rooms.map((room) => {
             //     return { x: room.x, y: room.y }
             // }),
-        // 
+        //
         } as IFloorMapDTO
     }
 }

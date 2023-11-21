@@ -18,6 +18,9 @@ package system {
 
         package "Persistence" {
         }
+
+        package "FileSystem Driver" {
+        }
     }
 
     package "Interface Adapters" {
@@ -31,6 +34,9 @@ package system {
 
         package "Repositories" {
         }
+
+        package "FileSystemStorage" {
+        }
     }
 
     package "Application Services" {
@@ -42,6 +48,9 @@ package system {
             }
 
             package "IRepositories" {
+            }
+
+            package "IFileSystemStorage" {
             }
         }
     }
@@ -64,7 +73,8 @@ package system {
     "ImplControllers" .up.|> "IControllers"
     "ImplControllers" .down.> "IAppServices"
     "ImplAppServices" .left.|> "IAppServices"
-    "ImplAppServices" .right.> "IRepositories"
+    "ImplAppServices" .left.> "IRepositories"
+    "ImplAppServices" .right.> "IFileSystemStorage"
     "ImplAppServices" .down.> "Aggregates"
     "ImplAppServices" .down.> "Value Objects"
     "ImplAppServices" .down.> "Services"
@@ -72,6 +82,9 @@ package system {
     "ImplControllers" .up.> dto
     "Repositories" .up.> "Persistence"
     "Repositories" .down.|> "IRepositories"
+
+    "FileSystemStorage" .up.> "FileSystem Driver"
+    "FileSystemStorage" .down.|> "IFileSystemStorage"
 }
 
 @enduml

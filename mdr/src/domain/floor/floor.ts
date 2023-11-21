@@ -7,13 +7,13 @@ import { FloorNumber } from './floorNumber'
 
 import Building from '../building/building'
 import { Description } from '../description'
-import { FloorMapContent } from './floorMap'
+// import { FloorMapContent } from './floorMap'
 
 export interface FloorProps {
     building: Building
     floorNumber: FloorNumber
     description?: Description
-    map?: FloorMapContent
+    // map?: FloorMapContent
     path?: string
 }
 
@@ -29,6 +29,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     get floorNumber(): FloorNumber {
         return this.props.floorNumber
     }
+
     // get map(): FloorMapContent {
     //     return this.props.map
     // }
@@ -39,6 +40,14 @@ export class Floor extends AggregateRoot<FloorProps> {
 
     get description(): Description {
         return this.props.description
+    }
+
+    get mapPath() {
+        return this.props.path
+    }
+
+    private set path(fp: string) {
+        this.props.path = fp
     }
 
     set description(description: Description) {
@@ -70,13 +79,9 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.building.equals(floor2.building)
     }
 
-    public addMap(newMap: FloorMapContent): boolean {
-        if (this.building.fit(newMap.dimensions)) {
-            // this.props.map = newMap
-            this.props.path = newMap.props.path
-            return true
-        } else {
-            return false
-        }
+    public addMap(newMap: string): boolean {
+        this.path = newMap
+
+        return true
     }
 }
