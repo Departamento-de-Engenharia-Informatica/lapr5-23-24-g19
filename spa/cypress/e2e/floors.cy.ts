@@ -23,11 +23,11 @@ describe('Floors e2e tests', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('/floors')
+        cy.visit('/floors/list')
     })
 
     it('has the correct title', () => {
-        cy.title().should('equal', 'Floors')
+        cy.title().should('equal', 'List Floors')
     })
 
     it('should have an empty selected building', () => {
@@ -35,12 +35,10 @@ describe('Floors e2e tests', () => {
     })
 
     it('should initially have an empty floor list', () => {
-        cy.get('#listFloorsComp').get('.floor-card').should('not.exist')
+        cy.get('.floor-card').should('not.exist')
     })
 
     it('should select a building and display floors', () => {
-        const listFloors = cy.get('#listFloorsComp')
-
         cy.wait('@getBuildings')
         cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
             body: [
@@ -53,12 +51,13 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsPhysics')
 
         cy.get('#building').select('P')
+        cy.get('button').contains('Get Floors').click()
 
         cy.wait('@getFloorsPhysics')
 
-        listFloors.get('.floor-card').should('exist')
-        listFloors.get('.floor-card').should('contain.text', 'Floor 2')
-        listFloors.get('.floor-card').should('contain.text', 'Physics Labs')
+        cy.get('.floor-card').should('exist')
+        cy.get('.floor-card').should('contain.text', 'Floor 2')
+        cy.get('.floor-card').should('contain.text', 'Physics Labs')
 
         cy.intercept('GET', 'http://localhost:4000/api/buildings/C/floors', {
             body: [
@@ -76,18 +75,17 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsChemistry')
 
         cy.get('#building').select('C')
+        cy.get('button').contains('Get Floors').click()
         cy.wait('@getFloorsChemistry')
 
-        listFloors.get('.floor-card').should('exist')
-        listFloors.get('.floor-card').should('contain.text', 'Floor 1')
-        listFloors.get('.floor-card').should('contain.text', 'Chemistry Labs')
-        listFloors.get('.floor-card').should('contain.text', 'Floor 2')
-        listFloors.get('.floor-card').should('contain.text', 'Chemistry Research')
+        cy.get('.floor-card').should('exist')
+        cy.get('.floor-card').should('contain.text', 'Floor 1')
+        cy.get('.floor-card').should('contain.text', 'Chemistry Labs')
+        cy.get('.floor-card').should('contain.text', 'Floor 2')
+        cy.get('.floor-card').should('contain.text', 'Chemistry Research')
     })
 
     it('should handle floors with empty descriptions', () => {
-        const listFloors = cy.get('#listFloorsComp')
-
         cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
             body: [
                 {
@@ -99,10 +97,11 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsEmptyDescription')
 
         cy.get('#building').select('P')
+        cy.get('button').contains('Get Floors').click()
 
         cy.wait('@getFloorsEmptyDescription')
 
-        listFloors.get('.floor-card').should('exist')
-        listFloors.get('.floor-card').should('contain.text', 'No description')
+        cy.get('.floor-card').should('exist')
+        cy.get('.floor-card').should('contain.text', 'No description')
     })
 })

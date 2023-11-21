@@ -9,7 +9,7 @@ import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.servic
     styleUrls: ['./list-floors.component.css'],
 })
 export class ListFloorsComponent implements OnInit, OnChanges {
-    @Input() selectedBuilding: string
+    selectedBuilding: string
     floors: FloorAndBuildingDTO[]
     allFloors: FloorAndBuildingDTO[]
     buildings: BuildingDTO[]
