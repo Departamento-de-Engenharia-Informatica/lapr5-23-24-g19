@@ -1,0 +1,149 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "dto:\nDTO" as dto
+
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+usr -> view : wants to create room
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+        alt building(s) not found
+            activate md
+                note right : see us170 documentation
+                md --> http : 200: empty list
+                http --> svc : observable
+                svc --> ctrl : []
+                ctrl --> ctrl : buildings = []
+                ctrl --> view : buildings
+                view --> usr : does not list anything
+        else building(s) found
+                md --> http : 200: buildings
+            deactivate md
+            http --> svc : observable
+            deactivate http
+
+            loop for each building
+                svc --> dto** : create()
+                activate dto
+                    dto --> svc : dto
+                deactivate dto
+            end
+
+            svc --> ctrl : dto[]
+            deactivate svc
+
+            ctrl --> ctrl : buildings = dto[]
+            ctrl --> view : buildings
+            deactivate ctrl
+
+            view --> usr : shows buildings and \nrequest one
+        deactivate view
+
+        usr -> view : chooses building
+        activate view
+            view -> ctrl : listFloors()
+            activate ctrl
+                ctrl -> svc : listFloors()
+                activate svc
+                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                    activate http
+                        http -> md : GET /buildings/{id}/floors
+            activate md
+             alt floors(s) not found
+                activate md
+                    note right : see us210 documentation
+                    md --> http : 200: empty list
+                    http --> svc : observable
+                    svc --> ctrl : []
+                    ctrl --> ctrl : floors = []
+                    ctrl --> view : floors
+                    view --> usr : does not list anything
+             else floor(s) found
+                md --> http : 200: floors
+                deactivate md
+                    http --> svc : observable
+                    deactivate http
+
+                    loop for each floor
+                        svc --> dto** : create()
+                        activate dto
+                            dto --> svc : dto
+                        deactivate dto
+                    end
+
+                    svc --> ctrl : dto[]
+                deactivate svc
+
+                ctrl --> ctrl : floors = dto[]
+                ctrl --> view : floors
+            deactivate ctrl
+            view --> usr : shows floors and \nrequest data
+        deactivate view
+
+        usr -> view : chooses floors and\nprovides room data
+        activate view
+            view -> ctrl : onSubmit()
+            activate ctrl
+                ctrl --> dto** : create()
+                activate dto
+                    dto --> ctrl : dto
+                deactivate dto
+
+                ctrl -> svc : createRoom(buildingCode, floorNumber, dto)
+                activate svc
+
+                    svc -> http : post({baseURL}/buildings/{buildingCode}/floors/{floorNumber}/rooms)
+                    activate http
+                        http -> md : POST /buildings/{buildingId}/floors/{floorNumber}/rooms
+            activate md
+                note right : see us310 documentation
+                alt room not created
+                    md --> http : 422: error
+                    http --> svc : null
+                    svc --> ctrl : null
+                    ctrl --> ctrl : createdRoom = null
+                    ctrl --> view : createdRoom
+                    view --> usr : informs error
+
+                else room created successfully
+
+                    md --> http : 201: room
+                    http --> svc : observable
+
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+
+                    svc --> ctrl : dto
+
+                    ctrl --> ctrl : createdRoom = dto
+                    ctrl --> view : createdRoom
+                    view --> usr : previews created \nroom information
+
+                    deactivate md
+                    deactivate http
+                    deactivate svc
+                    deactivate ctrl
+                    deactivate view
+
+                    deactivate usr
+                end
+            end
+            end
+@enduml
