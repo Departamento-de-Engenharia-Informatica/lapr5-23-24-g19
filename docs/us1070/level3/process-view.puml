@@ -1,0 +1,80 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+usr -> view : wants to list buildings
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+                note right : see us170 documentation
+            activate md
+                md --> http : 200
+                deactivate md
+                http --> svc : observable
+                deactivate http
+                svc --> ctrl : buildings
+        alt buildings empty
+                deactivate svc
+                ctrl --> view : error message
+                view --> usr : shows error message
+        else building(s) found
+            ctrl --> view : buildings
+            deactivate ctrl
+            view --> usr : shows buildings
+            deactivate
+        deactivate view
+        usr -> view : chooses building and provides data
+        activate view
+            view -> ctrl : buildingData
+            activate ctrl
+                ctrl -> svc : editBuilding()
+                alt override
+                activate svc
+                    svc -> http : patch({baseURL}/buildings/{buildingCode}
+                    activate http
+                        http -> md : PATCH /buildings/{buildingCode}
+                        activate md
+                            md --> http : status code
+                        deactivate md
+                    deactivate http
+                else
+                svc -> http : put({baseURL}/buildings/{buildingCode}
+                    activate http
+                        http -> md : PUT /buildings/{buildingCode}
+                            md --> http : status code
+
+                end
+                note right : see us160 documentation
+                    http --> svc : observable
+                    deactivate http
+                    alt status==200
+                    svc --> ctrl : building
+
+                ctrl --> view : building
+                view --> usr : shows building
+                else
+                    svc --> ctrl : error message
+                    deactivate svc
+                ctrl --> view : error message
+                deactivate ctrl
+            view --> usr : shows error message
+            deactivate view
+        deactivate usr
+    end
+    end
+@enduml

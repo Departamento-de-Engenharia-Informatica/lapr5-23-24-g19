@@ -24,7 +24,7 @@ activate usr
     activate ui
         ui -> md : PUT/PATCH buildings/{buildingCode}
             note right of md: see us160 documentation
-            activate md 
+            activate md
                 ui <-- md : status
             deactivate md
             alt 422
