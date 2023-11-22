@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
-import { BuildingDTO } from 'src/app/dto/BuildingDTO'
-import { BuildingService } from 'src/app/services/building.service'
+import { ErrorMessageService } from 'src/app/services/error-message.service'
 
 @Component({
     selector: 'app-floor',
@@ -8,17 +7,6 @@ import { BuildingService } from 'src/app/services/building.service'
     styleUrls: ['./floor.component.css'],
 })
 export class FloorComponent {
-    selectedBuilding: string
-    buildings: BuildingDTO[]
-
-    constructor(private buildingService: BuildingService) {
-        this.buildings = []
-        this.selectedBuilding = ''
-    }
-
-    ngOnInit(): void {
-        this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
-            this.buildings = list
-        })
-    }
+    constructor(private errorsvc: ErrorMessageService) {}
+    // TODO err messages
 }

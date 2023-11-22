@@ -56,7 +56,6 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsPhysics')
 
         cy.get('#building').select('P')
-        cy.get('button').contains('Get Floors').click()
 
         cy.wait('@getFloorsPhysics')
 
@@ -80,7 +79,6 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsChemistry')
 
         cy.get('#building').select('C')
-        cy.get('button').contains('Get Floors').click()
         cy.wait('@getFloorsChemistry')
 
         cy.get('.floor-card').should('exist')
@@ -102,7 +100,6 @@ describe('Floors e2e tests', () => {
         }).as('getFloorsEmptyDescription')
 
         cy.get('#building').select('P')
-        cy.get('button').contains('Get Floors').click()
 
         cy.wait('@getFloorsEmptyDescription')
 

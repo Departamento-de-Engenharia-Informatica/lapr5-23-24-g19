@@ -16,8 +16,15 @@
     color: white;
 }
 
+.floor-card:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
 .floor-card h2 {
     margin-bottom: 8px;
+    font-weight: bolder;
+    font-size: larger;
     color: var(--secondary-color);
 }
 
@@ -27,7 +34,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     max-height: 3em;
-    /* Adjust the maximum height as needed */
 }
 
 .floor-card p:hover {
@@ -35,9 +41,20 @@
     overflow: visible;
     text-overflow: inherit;
 }
+
+.flex {
+    justify-content: space-between; /* Add space between the two elements */
+}
+
+label {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
 select {
     width: 100%;
-    padding: 8px;
+    padding: 8px 10px;
+    margin-bottom: 16px;
     border: 1px solid var(--third-color);
     border-radius: 4px;
     background-color: var(--primary-color);

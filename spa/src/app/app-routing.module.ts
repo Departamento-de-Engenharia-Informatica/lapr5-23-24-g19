@@ -51,6 +51,7 @@ export const routes: Routes = [
         component: ListRobotsComponent,
         title: 'List all robots in the fleet',
     },
+
     {
         path: 'campus/buildings',
         component: BuildingComponent,
@@ -76,36 +77,42 @@ export const routes: Routes = [
                 component: ListBuildingsMinmaxFloorsComponent,
                 title: 'List Buildings by minimum and maximum number of Floors',
             },
-        ]
+        ],
     },
 
+    {
+        path: 'floors',
+        component: FloorComponent,
+        title: 'Floors',
+        children: [
+            {
+                path: 'list',
+                component: ListFloorsComponent,
+                title: 'List Floors',
+            },
+            {
+                path: 'create',
+                component: CreateFloorComponent,
+                title: 'Create Floor',
+            },
+            {
+                path: 'update-map',
+                component: UpdateMapComponent,
+                title: 'Update map',
+            },
+            {
+                path: 'patch',
+                component: PatchFloorComponent,
+                title: 'Patch Floor',
+            },
+            {
+                path: 'floors/put',
+                component: PutFloorComponent,
+                title: 'Put Floor',
+            },
+        ],
+    },
 
-    { path: 'floors', component: FloorComponent, title: 'Floors' },
-    {
-        path: 'floors/list',
-        component: ListFloorsComponent,
-        title: 'List Floors',
-    },
-    {
-        path: 'floors/create',
-        component: CreateFloorComponent,
-        title: 'Create Floor',
-    },
-    {
-        path: 'floors/update-map',
-        component: UpdateMapComponent,
-        title: 'Update map',
-    },
-    {
-        path: 'floors/patch',
-        component: PatchFloorComponent,
-        title: 'Patch Floor',
-    },
-    {
-        path: 'floors/put',
-        component: PutFloorComponent,
-        title: 'Put Floor',
-    },
     { path: 'campus/elevators', component: ElevatorComponent },
     {
         path: 'campus/elevators/create',
