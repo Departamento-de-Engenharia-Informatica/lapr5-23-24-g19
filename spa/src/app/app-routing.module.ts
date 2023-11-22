@@ -78,7 +78,7 @@ export const routes: Routes = [
             },
         ]
     },
-    
+
 
     { path: 'floors', component: FloorComponent, title: 'Floors' },
     {
@@ -130,7 +130,7 @@ export const routes: Routes = [
     },
     { path: 'campus/passages', component: PassageComponent },
     {
-        path: 'campus/passages/list-passages-between-buildings',
+        path: 'campus/passages/list',
         component: ListPassagesBetweenBuildingsComponent,
         title: 'List passages between buildings',
     },

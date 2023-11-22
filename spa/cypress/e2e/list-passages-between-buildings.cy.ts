@@ -1,6 +1,6 @@
-describe('Passages e2e tests', () => {
+describe('List Passages e2e tests', () => {
     beforeEach(() => {
-        cy.intercept('GET', 'http://localhost:4200/api/buildings', {
+        cy.intercept('GET', 'http://localhost:4000/api/buildings', {
             body: [
                 {
                     code: 'P',
@@ -23,26 +23,25 @@ describe('Passages e2e tests', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('/campus/passages/list-passages-between-buildings');
+        cy.visit('/campus/passages/list');
     });
 
     it('has the correct title', () => {
         cy.title().should('equal', 'List passages between buildings');
     });
 
-    it('should have empty selected buildings', () => {
-        cy.get('#building').eq(0).should('have.value', null);
-        cy.get('#building1').eq(0).should('have.value', null);
+    it('should have an empty selected buildings', () => {
+        cy.get('#building').should('have.value', null);
+        cy.get('#building1').should('have.value', null);
     });
 
-    it('should initially have no passages displayed', () => {
+    it('should initially have an empty passages list', () => {
         cy.get('.list-passages-between-buildings-card').should('not.exist');
     });
 
     it('should select buildings and display passages', () => {
-        const listPassages = cy.get('.list-passages-between-buildings-list');
-
-        cy.intercept('GET', 'http://localhost:4200/api/passages', {
+        cy.wait('@getBuildings')
+        cy.intercept('GET', 'http://localhost:4000/api/passages/?building1=P&building2=O', {
             body: [
                 {
                     floor1: {
@@ -55,21 +54,96 @@ describe('Passages e2e tests', () => {
                     },
                 },
             ],
-        }).as('getPassages');
+        }).as('getPassagesPO');
 
 
-        cy.get('#building').eq(0).select('P');
-        cy.get('#building1').eq(0).select('O');
+        cy.get('#building').select('P');
+
+        cy.get('#building1').select('O');
+        cy.wait('@getPassagesPO');
 
 
-
-        listPassages.get('.list-passages-between-buildings-card').should('exist');
-        listPassages.get('h3').should('contain.text', 'Floor1');
-        listPassages.get('h4').should('contain.text', 'Floor2');
-        listPassages.get('p').should('contain.text', 'buildingCode: O');
-        listPassages.get('p').should('contain.text', 'floorNumber: 2');
-        listPassages.get('p').should('contain.text', 'buildingCode: P');
-        listPassages.get('p').should('contain.text', 'floorNumber: 3');
+        cy.get('.list-passages-between-buildings-card').should('exist');
+        cy.get('h2').should('contain.text', 'Passage');
+        cy.get('p').should('contain.text', 'buildingCode: O');
+        cy.get('p').should('contain.text', 'floorNumber: 2');
+        cy.get('p').should('contain.text', 'buildingCode: P');
+        cy.get('p').should('contain.text', 'floorNumber: 3');
     });
 
+    it('should handle multiple passages', () => {
+        cy.intercept('GET', 'http://localhost:4000/api/passages/?building1=P&building2=O', {
+            body: [
+                {
+                    floor1: {
+                        buildingCode: 'O',
+                        floorNumber: 2,
+                    },
+                    floor2: {
+                        buildingCode: 'P',
+                        floorNumber: 3,
+                    },
+                },
+                {
+                    floor1: {
+                        buildingCode: 'O',
+                        floorNumber: 2,
+                    },
+                    floor2: {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                    },
+                },
+                {
+                    floor1: {
+                        buildingCode: 'O',
+                        floorNumber: 1,
+                    },
+                    floor2: {
+                        buildingCode: 'P',
+                        floorNumber: 2,
+                    },
+                },
+                {
+                    floor1: {
+                        buildingCode: 'O',
+                        floorNumber: 4,
+                    },
+                    floor2: {
+                        buildingCode: 'P',
+                        floorNumber: 5,
+                    },
+                },
+            ],
+        }).as('getMultiplePassages');
+
+        cy.get('#building').select('P');
+        cy.get('#building1').select('O');
+        cy.wait('@getMultiplePassages');
+
+        cy.get('.list-passages-between-buildings-card').should('exist');
+
+        cy.get('h2').should('contain.text', 'Passage');
+
+        cy.get('p').should('contain.text', 'buildingCode: O');
+        cy.get('p').should('contain.text', 'floorNumber: 2');
+        cy.get('p').should('contain.text', 'buildingCode: P');
+        cy.get('p').should('contain.text', 'floorNumber: 3');
+
+        cy.get('p').should('contain.text', 'buildingCode: O');
+        cy.get('p').should('contain.text', 'floorNumber: 2');
+        cy.get('p').should('contain.text', 'buildingCode: P');
+        cy.get('p').should('contain.text', 'floorNumber: 1');
+
+        cy.get('p').should('contain.text', 'buildingCode: O');
+        cy.get('p').should('contain.text', 'floorNumber: 1');
+        cy.get('p').should('contain.text', 'buildingCode: P');
+        cy.get('p').should('contain.text', 'floorNumber: 2');
+
+
+        cy.get('p').should('contain.text', 'buildingCode: O');
+        cy.get('p').should('contain.text', 'floorNumber: 4');
+        cy.get('p').should('contain.text', 'buildingCode: P');
+        cy.get('p').should('contain.text', 'floorNumber: 5');
+    });
 });

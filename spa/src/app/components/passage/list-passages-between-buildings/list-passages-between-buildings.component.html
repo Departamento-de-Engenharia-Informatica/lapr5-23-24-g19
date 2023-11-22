@@ -63,7 +63,8 @@
                 (input)="filter($event)"
                 placeholder="Search passages"
                 type="text"
-                [disabled]="selectedBuilding1 === '' || selectedBuilding2 === ''"
+                [disabled]="selectedBuilding1 === '' "
+                [disabled]="selectedBuilding2 === '' "
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
         </div>
@@ -73,11 +74,9 @@
                 *ngFor="let passage of passages"
                 class="list-passages-between-buildings-card mb-8"
             >
-                <h2>Passages</h2>
-                <h3>Floor1</h3>
+                <h2>Passage</h2>
                 <p>buildingCode: {{ passage.floor1.buildingCode }}</p>
                 <p>floorNumber: {{ passage.floor1.floorNumber }}</p>
-                <h4>Floor2</h4>
                 <p>buildingCode: {{ passage.floor2.buildingCode }}</p>
                 <p>floorNumber: {{ passage.floor2.floorNumber }}</p>
             </div>
