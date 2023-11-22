@@ -56,7 +56,7 @@ export class CreateFloorComponent implements OnInit {
 
         this.floorService.createFloor(dto).subscribe((floor: FloorAndBuildingDTO) => {
             this.createdFloor = floor
-            this.listFloors()
+            this.createFloorForm.reset({ buildingCode: floor.buildingCode })
         })
     }
 }
