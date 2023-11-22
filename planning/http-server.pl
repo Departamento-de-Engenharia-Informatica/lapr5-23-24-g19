@@ -20,7 +20,7 @@
 
 :- use_module(algorithms, [
     criteria/1,
-    compute_path/4
+    compute_paths/4
 ]).
 
 %%%%%%
@@ -35,6 +35,7 @@ stop_server :-
     retract(port(Port)),
     http_stop_server(Port, _).
 
+%% Routes
 
 :- http_handler('/api/comm-test', comm_test, [ method(get) ]).
 
@@ -48,7 +49,7 @@ path_criteria(_Request) :-
     reply_json(JSON).
 
 
-% should've been a GET
+% should be a /GET
 % method(post) does not work
 :- http_handler('/api/paths/', get_paths, [method(*)]).
 
@@ -62,7 +63,7 @@ get_paths(Request) :-
     Orig = (Start.building, Start.floor, Start.coordinates.x, Start.coordinates.y),
     Dest = (Goal.building, Goal.floor, Goal.coordinates.x, Goal.coordinates.y),
 
-    compute_path(Orig, Dest, Crit, Path),
+    compute_paths(Orig, Dest, Crit, Path),
 
     prolog_to_json(Path, JSON),
     reply_json(JSON).
