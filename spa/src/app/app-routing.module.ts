@@ -52,7 +52,7 @@ export const routes: Routes = [
         title: 'List all robots in the fleet',
     },
     {
-        path: 'buildings',
+        path: 'campus/buildings',
         component: BuildingComponent,
         title: 'Buildings',
         children: [
