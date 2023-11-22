@@ -2,7 +2,7 @@
 
 ## 1. User Story Description
 
-This user story pertains to the functionality of create a room on a given floor.
+This user story pertains to the functionality of upload a map on a given floor.
 
 ## 2. Customer Specifications and Clarifications
 
