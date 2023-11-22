@@ -29,6 +29,7 @@ import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.comp
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
 import { CreateBuildingComponent } from './components/building/create-building/create-building.component'
+import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -101,14 +102,9 @@ export const routes: Routes = [
                 title: 'Update map',
             },
             {
-                path: 'patch',
-                component: PatchFloorComponent,
-                title: 'Patch Floor',
-            },
-            {
-                path: 'floors/put',
-                component: PutFloorComponent,
-                title: 'Put Floor',
+                path: 'edit',
+                component: EditFloorComponent,
+                title: 'Edit Floor',
             },
         ],
     },

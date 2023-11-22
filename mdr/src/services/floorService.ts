@@ -37,7 +37,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Building not found',
+                    message: `Building ${buildingCode} not found`,
                 })
             }
 
@@ -47,7 +47,7 @@ export default class FloorService implements IFloorService {
             if (floor) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: 'Floor already exists',
+                    message: `Floor ${floorDTO.floorNumber} already exists in building ${buildingCode}`,
                 })
             }
 
@@ -76,7 +76,7 @@ export default class FloorService implements IFloorService {
             if (floorOrError.error) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
-                    message: 'There was a problem while create the floor',
+                    message: 'There was a problem while creating the floor',
                 })
             }
 
@@ -95,7 +95,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Building not found',
+                    message: `Building ${dto.buildingCode} not found`,
                 })
             }
 
@@ -106,7 +106,7 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Floor not found',
+                    message: `Floor ${dto.oldFloorNumber} not found in building ${dto.buildingCode}`,
                 })
             }
 
@@ -123,13 +123,22 @@ export default class FloorService implements IFloorService {
                 floor.description = description.getValue()
             }
 
-            if (dto.floorNumber) {
+            if (dto.floorNumber !== undefined && dto.floorNumber !== null) {
                 const newFloorNumber = FloorNumber.create(dto.floorNumber)
 
                 if (newFloorNumber.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
                         message: 'Floor number do not meet requirements',
+                    })
+                }
+
+                const newFloor = await this.floorRepo.findByCodeNumber(buildingCode, newFloorNumber.getValue())
+
+                if (newFloor !== null) {
+                    return left({
+                        errorCode: ErrorCode.NotFound,
+                        message: `Floor ${dto.floorNumber} already exists in building ${dto.buildingCode}`,
                     })
                 }
 
@@ -151,7 +160,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Building not found',
+                    message: `Building ${dto.buildingCode} not found`,
                 })
             }
 
@@ -162,7 +171,7 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Floor not found',
+                    message: `Floor ${dto.oldFloorNumber} not found in building ${dto.buildingCode}`,
                 })
             }
 
@@ -181,13 +190,22 @@ export default class FloorService implements IFloorService {
                 floor.removeDescription()
             }
 
-            if (dto.floorNumber) {
+            if (dto.floorNumber !== undefined && dto.floorNumber !== null) {
                 const newFloorNumber = FloorNumber.create(dto.floorNumber)
 
                 if (newFloorNumber.isFailure) {
                     return left({
                         errorCode: ErrorCode.BusinessRuleViolation,
                         message: 'Floor number do not meet requirements',
+                    })
+                }
+
+                const newFloor = await this.floorRepo.findByCodeNumber(buildingCode, newFloorNumber.getValue())
+
+                if (newFloor !== null) {
+                    return left({
+                        errorCode: ErrorCode.NotFound,
+                        message: `Floor ${dto.floorNumber} already exists in building ${dto.buildingCode}`,
                     })
                 }
 
@@ -209,7 +227,7 @@ export default class FloorService implements IFloorService {
             if (!building) {
                 return left({
                     errorCode: ErrorCode.NotFound,
-                    message: 'Building not found',
+                    message: `Building ${buildingCode} not found`,
                 })
             }
 
