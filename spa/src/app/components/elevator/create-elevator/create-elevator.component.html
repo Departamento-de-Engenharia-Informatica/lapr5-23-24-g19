@@ -60,13 +60,18 @@
         </div>
 
         <div class="row">
-            <button type="submit" [disabled]="createElevatorForm.invalid">Submit</button>
+            <button
+                type="submit"
+                [disabled]="createElevatorForm.invalid"
+            >
+                Submit
+            </button>
         </div>
     </div>
 </form>
 
 <div class="elevator-list">
-    <div *ngIf="createdElevator" class="created-elevator-box">
+    <div *ngIf="createdElevator" class="elevator-card p">
         <h2>Created Elevator</h2>
         <p>Building ID: {{ createdElevator.buildingId }}</p>
         <p>Identifier: {{ createdElevator.identifier }}</p>

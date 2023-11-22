@@ -1,12 +1,6 @@
 import {
-    ChangeDetectionStrategy,
     Component,
-    DoCheck,
-    EventEmitter,
-    Input,
-    OnChanges,
     OnInit,
-    Output,
 } from '@angular/core'
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms'
 import { BuildingService } from 'src/app/services/building.service'
@@ -16,8 +10,6 @@ import {
     ElevatorService,
 } from 'src/app/services/elevator.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
-import { RoomDTO } from '../../../services/room.service'
-import { catchError, tap } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 
 @Component({
@@ -80,6 +72,7 @@ export class CreateElevatorComponent implements OnInit {
             .createElevator(buildingId, dto)
             .subscribe((elevator: CreatedElevatorDTO) => {
                 this.createdElevator = elevator
+                this.createElevatorForm.reset();
             })
     }
 }

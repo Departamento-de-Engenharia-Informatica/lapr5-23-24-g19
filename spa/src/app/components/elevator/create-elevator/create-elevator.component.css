@@ -76,3 +76,16 @@ button:disabled {
     background-color: var(--primary-color);
     color: white;
 }
+
+.elevator-card p {
+    color: var(--secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 3em;
+}
+
+.elevator-card h2 {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
