@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
@@ -54,9 +54,30 @@ export class CreateFloorComponent implements OnInit {
         const description = this.createFloorForm.value.description
         if (description !== '') dto.description = description
 
-        this.floorService.createFloor(dto).subscribe((floor: FloorAndBuildingDTO) => {
-            this.createdFloor = floor
-            this.createFloorForm.reset({ buildingCode: floor.buildingCode })
-        })
+        this.floorService.createFloor(dto).subscribe(
+            (floor: FloorAndBuildingDTO) => {
+                this.createdFloor = floor
+
+                let alertMessage = `Floor created successfully!\nFloor number: ${floor.floorNumber}`
+
+                if (floor.description) {
+                    alertMessage += `\nDescription: ${floor.description}`
+                }
+
+                alert(alertMessage)
+
+                this.createFloorForm.reset({
+                    buildingCode: this.selectedBuilding,
+                    description: '',
+                })
+            },
+            (error) => {
+                alert(error.error)
+                this.createFloorForm.reset({
+                    buildingCode: this.selectedBuilding,
+                    description: '',
+                })
+            },
+        )
     }
 }
