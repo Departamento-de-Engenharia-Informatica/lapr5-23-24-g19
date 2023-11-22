@@ -1,33 +1,34 @@
-<!-- <section class="text-gray-400 bg-gray-900 body-font"> -->
-<!--     <div class="container px-5 mx-auto"> -->
-<!--         <div class="form-container"> -->
-<!--             <label for="building" class="text-lg text-gray-400 mb-4"> -->
-<!--                 Select Building -->
-<!--             </label> -->
-<!---->
-<!--             <div class="drop-menu mb-4"> -->
-<!--                 <div class="relative sm:mb-2 flex-grow w-full"> -->
-<!--                     <select -->
-<!--                         id="building" -->
-<!--                         name="building" -->
-<!--                         class="vertical-center custom-dropdown" -->
-<!--                         [(ngModel)]="selectedBuilding" -->
-<!--                     > -->
-<!--                         <option value disabled selected></option> -->
-<!--                         <option -->
-<!--                             *ngFor="let building of buildings" -->
-<!--                             [value]="building.code" -->
-<!--                         > -->
-<!--                             {{ building.code }} - {{ building.name }} -->
-<!--                         </option> -->
-<!--                     </select> -->
-<!--                 </div> -->
-<!--             </div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!---->
-<!--     <app-list-floors -->
-<!--         [selectedBuilding]="selectedBuilding" -->
-<!--         id="listFloorsComp" -->
-<!--     ></app-list-floors> -->
-<!-- </section> -->
+<section class="text-gray-400 bg-gray-900 body-font" style="margin-bottom: 20px">
+    <section
+        class="text-gray-400 body-font bg-gray-900"
+        style="display: flex; margin-left: 25%; margin-right: 25%"
+    >
+        <div class="top-menu">
+            <div>
+                <a [routerLink]="['create']">
+                    <button class="button-top-menu" id="create" type="button">
+                        Create
+                    </button>
+                </a>
+            </div>
+            <div>
+                <a [routerLink]="['edit']">
+                    <button class="button-top-menu" id="edit" type="button">Edit</button>
+                </a>
+            </div>
+            <div>
+                <a [routerLink]="['list']">
+                    <button class="button-top-menu" id="list" type="button">List</button>
+                </a>
+            </div>
+            <div>
+                <a [routerLink]="['update-map']">
+                    <button class="button-top-menu" id="list" type="button">
+                        Update Map
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+</section>
+<router-outlet></router-outlet>

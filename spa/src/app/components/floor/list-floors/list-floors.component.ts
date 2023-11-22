@@ -8,7 +8,7 @@ import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.servic
     templateUrl: './list-floors.component.html',
     styleUrls: ['./list-floors.component.css'],
 })
-export class ListFloorsComponent implements OnInit, OnChanges {
+export class ListFloorsComponent implements OnInit {
     selectedBuilding: string
     floors: FloorAndBuildingDTO[]
     allFloors: FloorAndBuildingDTO[]
@@ -34,16 +34,6 @@ export class ListFloorsComponent implements OnInit, OnChanges {
         this.floors = []
         this.floorService
             .getFloors(buildingCode)
-            .subscribe((list: FloorAndBuildingDTO[]) => {
-                this.allFloors = list
-                this.floors = this.allFloors
-            })
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        this.floors = []
-        this.floorService
-            .getFloors(this.selectedBuilding)
             .subscribe((list: FloorAndBuildingDTO[]) => {
                 this.allFloors = list
                 this.floors = this.allFloors
