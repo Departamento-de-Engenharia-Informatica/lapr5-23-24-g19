@@ -99,8 +99,11 @@ export class UpdateMapComponent {
                 this.updateMapForm.value.floorNumber,
             )
             .subscribe((map: UpdateMapDTO) => {
-                console.log('Map', JSON.stringify(map, null, 2))
                 // setSucessMessage()
             })
+    }
+
+    checkValid(){
+        return this.mapFile!=null && this.mapFile!=undefined && this.mapFile!='' 
     }
 }

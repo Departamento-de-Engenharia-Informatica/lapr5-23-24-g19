@@ -1,5 +1,10 @@
+
 describe('Floors e2e tests', () => {
     beforeEach(() => {
+        cy.intercept('GET', `http://localhost:4000/status`, {
+            statusCode:200
+        }).as('getBuildings')
+
         cy.intercept('GET', `http://localhost:4000/api/buildings`, {
             body: [
                 {
