@@ -1,0 +1,41 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+usr -> view : wants to list buildings
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+                note right : see us170 documentation
+            activate md
+                md --> http : 200
+                deactivate md
+                http --> svc : observable
+                deactivate http
+                svc --> ctrl : buildings
+        alt buildings empty
+                deactivate svc
+                ctrl --> view : buildings
+                view --> usr : informs there are no buildings
+        else building(s) found
+            ctrl --> view : buildings
+            deactivate ctrl
+            view --> usr : shows buildings
+            deactivate view
+        end
+@enduml
