@@ -24,7 +24,7 @@ export class CreateFloorComponent implements OnInit {
     ) {
         this.createFloorForm = this.formBuilder.group({
             buildingCode: [null, [Validators.required]],
-            floorNumber: [null, [Validators.min(0), Validators.required]],
+            floorNumber: [null, [Validators.required]],
             description: '',
         })
     }
