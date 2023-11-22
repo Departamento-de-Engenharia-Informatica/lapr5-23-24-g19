@@ -48,10 +48,6 @@ export class CreatePassageComponent {
             console.log('Can not be the same building')
             // send error message(deveria fazer o pedido para o backend e se der erro mostrar?)
         }
-        console.log('BUilding1', this.passageForm.value.building1)
-        console.log('BUilding2', this.passageForm.value.building2)
-        console.log('floor1', this.passageForm.value.floor1)
-        console.log('floor2', this.passageForm.value.floor2)
         const dto = {
             floor1: {
                 buildingCode: this.passageForm.value.building1,

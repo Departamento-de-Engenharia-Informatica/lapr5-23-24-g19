@@ -29,7 +29,6 @@ export class PassageService {
     }
 
     postPassage(dto: PassageDTO): Observable<PassageDTO> {
-        console.log('post')
         return this.http
             .post<PassageDTO>(`${AppModule.baseUrl}/passages`, JSON.stringify(dto), {
                 headers: { 'Content-type': 'application/json' },
