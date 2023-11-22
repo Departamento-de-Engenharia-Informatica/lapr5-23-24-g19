@@ -1,5 +1,10 @@
 % vim: ft=prolog
 
+:- module('http-server', [
+    create_server/1,
+    stop_server/0
+]).
+
 :- use_module(library(http/http_cors)).
 :- use_module(library(http/http_client)).
 :- use_module(library(http/thread_httpd)).
