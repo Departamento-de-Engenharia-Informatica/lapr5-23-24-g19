@@ -1,17 +1,24 @@
 % vim: ft=prolog
 
-:- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_cors)).
-:- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_client)).
-:- use_module(library(http/http_json)).
+:- use_module(library(http/thread_httpd)).
+:- use_module(library(http/http_dispatch)).
 
+:- use_module(library(http/http_json)).
 :- use_module(library(http/json_convert)).
 
 :- use_module(library(settings)).
 
 :- use_module(library(dicts)).
 
+
+:- use_module(algorithms, [
+    criteria/1,
+    compute_path/4
+]).
+
+%%%%%%
 
 :- set_setting(http:cors, [*]).
 
@@ -23,8 +30,6 @@ stop_server :-
     retract(port(Port)),
     http_stop_server(Port, _).
 
-
-criteria([ 'least-elevators', 'least-buildings' ]).
 
 :- http_handler('/api/comm-test', comm_test, [ method(get) ]).
 
@@ -43,12 +48,16 @@ path_criteria(_Request) :-
 :- http_handler('/api/paths/', get_paths, [method(*)]).
 
 get_paths(Request) :-
-    % http_read_json_dict(Request, Dict),
-    http_read_json_dict(Request, Data),
+    http_read_json_dict(Request, Body),
 
-    prolog_to_json('mandou', JSON),
+    Start = Body.start,
+    Goal = Body.goal,
+    Crit = Body.criteria,
 
+    Orig = (Start.building, Start.floor, Start.coordinates.x, Start.coordinates.y),
+    Dest = (Goal.building, Goal.floor, Goal.coordinates.x, Goal.coordinates.y),
+
+    compute_path(Orig, Dest, Crit, Path),
+
+    prolog_to_json(Path, JSON),
     reply_json(JSON).
-
-
-
