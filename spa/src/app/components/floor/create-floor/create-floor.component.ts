@@ -11,7 +11,6 @@ import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.servic
 })
 export class CreateFloorComponent implements OnInit {
     selectedBuilding: string = ''
-    createdFloor = null as unknown as FloorAndBuildingDTO
     createFloorForm: FormGroup = null as unknown as FormGroup
 
     buildings: BuildingDTO[] = []
@@ -56,8 +55,6 @@ export class CreateFloorComponent implements OnInit {
 
         this.floorService.createFloor(dto).subscribe(
             (floor: FloorAndBuildingDTO) => {
-                this.createdFloor = floor
-
                 let alertMessage = `Floor created successfully!\nFloor number: ${floor.floorNumber}`
 
                 if (floor.description) {
