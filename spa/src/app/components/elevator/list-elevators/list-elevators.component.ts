@@ -15,6 +15,7 @@ import {
 export class ListElevatorsComponent implements OnInit {
     selectedBuilding: string
     elevators: CreatedElevatorDTO[]
+    allElevators: CreatedElevatorDTO[]
     buildings: BuildingDTO[]
 
     constructor(
@@ -22,6 +23,7 @@ export class ListElevatorsComponent implements OnInit {
         private elevatorService: ElevatorService,
     ) {
         this.elevators = []
+        this.allElevators = []
         this.buildings = []
         this.selectedBuilding = ''
     }
@@ -37,7 +39,21 @@ export class ListElevatorsComponent implements OnInit {
         this.elevatorService
             .getElevators(this.selectedBuilding)
             .subscribe((list: CreatedElevatorDTO[]) => {
-                this.elevators = list
+                this.allElevators = list
+                this.elevators = this.allElevators
             })
+    }
+
+    filter(event: Event) {
+        const prop = (event.target as HTMLInputElement).value.trim().toLowerCase()
+        if (prop.length === 0) {
+            this.elevators = this.allElevators
+        } else {
+            this.elevators = this.allElevators.filter(
+                (b) =>
+                    b.identifier.toString().includes(prop) ||
+                    (prop.length > 2 && b.description?.toLowerCase().includes(prop)),
+            )
+        }
     }
 }
