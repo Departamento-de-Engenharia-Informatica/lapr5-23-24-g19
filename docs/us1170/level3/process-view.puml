@@ -1,0 +1,103 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "HTTP Driver" as http
+
+participant "MD" as md
+
+activate usr
+usr -> view : wants to list buildings
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+                note right : see us170 documentation
+            activate md
+                md --> http : 200
+                deactivate md
+                http --> svc : observable
+                deactivate http
+                svc --> ctrl : buildings
+        alt buildings empty
+                deactivate svc
+                ctrl --> view : error message
+                view --> usr : shows error message
+        else building(s) found
+            ctrl --> view : buildings
+            deactivate ctrl
+            view --> usr : shows buildings
+            deactivate
+        deactivate view
+        usr -> view : chooses building
+        note right
+            the following is the process when
+            each of the building is chosen
+        end note
+        activate view
+            view -> ctrl : listFloors(building)
+            activate ctrl
+                ctrl -> svc : listFloors(building)
+                activate svc
+                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                    activate http
+                        http -> md : GET /buildings/{id}/floors
+            activate md
+                md --> http : 200
+                note right : see us210 documentation
+                deactivate md
+                    http --> svc : observable
+                    deactivate http
+                    svc --> ctrl : floors
+                    alt floors is empty
+                        ctrl --> view : floors not found
+                        view --> usr : shows error
+                    else floors found
+                deactivate svc
+
+                ctrl --> view : floors
+            deactivate ctrl
+            view --> usr : requests floor
+        deactivate view
+
+        usr -> view : submit after choosing floors
+        activate view
+            view -> ctrl : formData
+            activate ctrl
+                ctrl -> svc : createPassage()
+                activate svc
+                    svc -> http : post({baseURL}/passages)
+                    activate http
+                        http -> md : POST /passages
+                        activate md
+                            md --> http : status code
+                        deactivate md
+                note right : see us160 documentation
+                    http --> svc : observable
+                    deactivate http
+                    alt status==200
+                    svc --> ctrl : map
+
+                ctrl --> view : map
+                view --> usr : shows success message
+                else
+                    svc --> ctrl : error message
+                    deactivate svc
+                ctrl --> view : error message
+                deactivate ctrl
+            view --> usr : shows error message
+            deactivate view
+        deactivate usr
+    end
+    end
+    end
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+activate usr
+    usr -> ui : wants to create passage
+    activate ui
+        alt buildings not found
+            ui --> usr: informs error   
+        else buildings found
+        alt only exists 1 building
+            ui --> usr: informs error   
+        else 2 or more buildings
+            ui --> usr : shows buildings and request one
+    deactivate ui
+
+    usr -> ui : chooses building1
+    activate ui
+        alt floors not found
+            ui --> usr: informs error
+        else floors found
+        ui --> usr : shows floors and request data
+    deactivate ui
+
+    usr -> ui: chooses floor1 
+        activate ui
+        ui --> usr : shows buildings and request one
+        deactivate ui
+    usr -> ui : chooses building2
+    activate ui
+        alt floors not found
+            ui --> usr: informs error
+        else floors found
+        ui --> usr : shows floors and request data
+
+    usr -> ui: choose floor2
+            alt passage not created
+                ui --> usr: informs error
+            else passage created successfully
+        ui --> usr : previews created passage
+                end
+            end
+        end
+    deactivate ui 
+    end
+    end
+deactivate usr
+
+@enduml

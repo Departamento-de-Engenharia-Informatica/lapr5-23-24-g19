@@ -1,0 +1,85 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "Campus UI" as ui
+participant "Campus MD" as md
+
+activate usr
+    usr -> ui : wants to create passage
+    activate ui
+        ui -> md : GET /buildings
+        activate md
+            note right of md : see US 170 documentation
+
+        alt buildings not found
+            md --> ui: 404: error
+            ui --> usr: informs error
+        else buildings found
+            md --> ui : 200: buildings
+            alt only 1 building
+                ui --> usr: informs error
+                else 2 or more buildings
+            deactivate md
+
+        ui --> usr : shows buildings and request one
+    deactivate ui
+
+    usr -> ui : chooses building1
+    activate ui
+        ui -> md : GET /buildings/{buildingCode}/floors
+        activate md
+            note right of md : see US 210 documentation
+
+            alt floors not found
+                md --> ui: 404: error
+                ui --> usr: informs error
+            else floors found
+                md --> ui : 200: floors
+                deactivate md
+
+        ui --> usr : shows floors and request data
+    deactivate ui
+
+    usr -> ui: chooses floor1 
+        activate ui
+        ui --> usr : shows buildings and request one
+        deactivate ui
+    usr -> ui : chooses building2
+    activate ui
+        ui -> md : GET /buildings/{buildingCode}/floors
+        activate md
+            note right of md : see US 210 documentation
+
+            alt floors not found
+                md --> ui: 404: error
+                ui --> usr: informs error
+            else floors found
+                md --> ui : 200: floors
+                deactivate md
+
+        ui --> usr : shows floors and request data
+
+    usr -> ui: choose floor2
+    ui -> md : POST /passages
+        activate md
+            note right of md : see US 240 documentation
+
+            alt passage not created
+                md --> ui: 422: error
+                ui --> usr: informs error
+            else passage created successfully
+                md --> ui : 201: passage
+                deactivate md
+        ui --> usr : previews created passage
+
+                end
+            end
+        end
+        end
+    deactivate ui 
+    end
+deactivate usr
+
+@enduml
