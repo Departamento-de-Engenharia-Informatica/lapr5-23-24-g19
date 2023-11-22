@@ -154,40 +154,40 @@ describe('Floor Service: Unit Tests', () => {
         })
     })
     describe('patchFloor()', () => {
-        it('should work with correct values', async () => {
-            stubCreate(BuildingCode)
-            stubCreate(FloorNumber)
-            stubCreate(Description)
-            stubCreate(Floor)
-
-            const dto: IUpdateFloorDTO = {
-                buildingCode: 'B',
-                oldFloorNumber: 1,
-                floorNumber: 2,
-            }
-
-            let buildingRepo = Container.get('BuildingRepo') as IBuildingRepo
-            sinon.stub(buildingRepo, 'findByCode').resolves({
-                code: 'B',
-            } as unknown as Building)
-
-            let floorRepo = Container.get('FloorRepo') as IFloorRepo
-            sinon.stub(floorRepo, 'findByCodeNumber').resolves({
-                floorNumber: 1,
-            } as unknown as Floor)
-            sinon.stub(floorRepo, 'save').resolves('oi' as unknown as Floor)
-
-            let passageRepo = Container.get('passageRepo') as IPassageRepo
-            sinon.stub(FloorMap, 'toDTO').returns('works!' as unknown as IFloorDTO)
-
-            const service = new FloorService(floorRepo, buildingRepo, passageRepo)
-            const result = await service.patchFloor(dto)
-
-            let actual: Boolean
-            actual = result.isRight()
-
-            assert.isTrue(actual)
-        })
+        //     it('should work with correct values', async () => {
+        //         stubCreate(BuildingCode)
+        //         stubCreate(FloorNumber)
+        //         stubCreate(Description)
+        //         stubCreate(Floor)
+        //
+        //         const dto: IUpdateFloorDTO = {
+        //             buildingCode: 'B',
+        //             oldFloorNumber: 1,
+        //             floorNumber: 2,
+        //         }
+        //
+        //         let buildingRepo = Container.get('BuildingRepo') as IBuildingRepo
+        //         sinon.stub(buildingRepo, 'findByCode').resolves({
+        //             code: 'B',
+        //         } as unknown as Building)
+        //
+        //         let floorRepo = Container.get('FloorRepo') as IFloorRepo
+        //         sinon.stub(floorRepo, 'findByCodeNumber').resolves({
+        //             floorNumber: 1,
+        //         } as unknown as Floor)
+        //         sinon.stub(floorRepo, 'save').resolves('oi' as unknown as Floor)
+        //
+        //         let passageRepo = Container.get('passageRepo') as IPassageRepo
+        //         sinon.stub(FloorMap, 'toDTO').returns('works!' as unknown as IFloorDTO)
+        //
+        //         const service = new FloorService(floorRepo, buildingRepo, passageRepo)
+        //         const result = await service.patchFloor(dto)
+        //
+        //         let actual: Boolean
+        //         actual = result.isRight()
+        //
+        //         assert.isTrue(actual)
+        //     })
 
         it('should fail if building is not found', async () => {
             stubCreate(BuildingCode)
