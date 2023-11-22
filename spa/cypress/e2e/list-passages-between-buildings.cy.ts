@@ -31,8 +31,8 @@ describe('Passages e2e tests', () => {
     });
 
     it('should have empty selected buildings', () => {
+        cy.get('#building').eq(0).should('have.value', null);
         cy.get('#building1').eq(0).should('have.value', null);
-        cy.get('#building2').eq(0).should('have.value', null);
     });
 
     it('should initially have no passages displayed', () => {
@@ -58,8 +58,8 @@ describe('Passages e2e tests', () => {
         }).as('getPassages');
 
 
-        cy.get('#building1').eq(0).select('P');
-        cy.get('#building2').eq(0).select('O');
+        cy.get('#building').eq(0).select('P');
+        cy.get('#building1').eq(0).select('O');
 
 
 
