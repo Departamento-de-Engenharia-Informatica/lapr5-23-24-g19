@@ -24,6 +24,8 @@
 
 .building-card h2 {
     margin-bottom: 8px;
+    font-weight: bolder;
+    font-size: larger;
     color: var(--secondary-color);
 }
 

@@ -33,3 +33,37 @@ button.primary {
     right: 0px;
     z-index: 5;
 }
+
+.button-top-menu {
+    padding: 10px 20px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 15px;
+    cursor: pointer;
+    display: block;
+    margin: 5px;
+    width: 150px;
+    box-sizing: border-box;
+}
+
+.button-top-menu:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease; /* Move the transition property here */
+    background-color: var(--hover-color);
+    color: var(--hover-text-color);
+    border: 2px solid var(--hover-border-color);
+}
+.button-top-menu:active {
+    background-color: var(--highlight-color); /* Set your desired highlight color */
+}
+
+.top-menu {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}

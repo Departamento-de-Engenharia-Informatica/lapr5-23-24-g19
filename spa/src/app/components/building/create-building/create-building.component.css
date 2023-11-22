@@ -21,13 +21,10 @@ body {
 /* } */
 
 /* The popup form - hidden by default */
-.form-popup {
-    /* display: none; */
-    /* background: rgba(0, 0, 0, 0.5); */
+/* .form-popup {
     position: fixed;
     bottom: 0;
     right: 15px;
-    /* border: 3px solid #f1f1f1; */
     z-index: 9;
 
     display: flex;
@@ -38,8 +35,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2; /* Adjust the z-index as needed */
-}
+    z-index: 2; 
+} */
 
 /* Add styles to the form container */
 .form-container {
@@ -55,15 +52,12 @@ body {
     width: 100%;
     padding: 15px;
     margin: 5px 0 22px 0;
-    border: none;
-    background: #f1f1f1;
+    background: var(--primary-color);
 }
 
 /* When the inputs get focus, do something */
 .form-container input[type='text']:focus,
 .form-container input[type='password']:focus {
-    background-color: #ddd;
-    outline: none;
 }
 
 /* Set a style for the submit/login button */
@@ -155,10 +149,4 @@ button {
     cursor: pointer;
     margin: 0 auto;
     display: block;
-}
-
-button:disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
 }

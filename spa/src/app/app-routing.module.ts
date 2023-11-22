@@ -28,6 +28,7 @@ import { CreateRoomComponent } from './components/room/create-room/create-room.c
 import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.component'
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
+import { CreateBuildingComponent } from './components/building/create-building/create-building.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -54,34 +55,30 @@ export const routes: Routes = [
         path: 'buildings',
         component: BuildingComponent,
         title: 'Buildings',
-        // children: [
-        //     {
-        //         path: 'create',
-        //         component: EditBuildingComponent,
-        //         title: 'CreateBuilding',
-        //     },
-        // ]
+        children: [
+            {
+                path: 'create',
+                component: CreateBuildingComponent,
+                title: 'CreateBuilding',
+            },
+            {
+                path: 'list',
+                component: GetBuildingsComponent,
+                title: 'List Buildings',
+            },
+            {
+                path: 'edit',
+                component: EditBuildingComponent,
+                title: 'Edit Building',
+            },
+            {
+                path: 'list-by-floors',
+                component: ListBuildingsMinmaxFloorsComponent,
+                title: 'List Buildings by minimum and maximum number of Floors',
+            },
+        ]
     },
-    {
-        path: 'buildings/edit',
-        component: EditBuildingComponent,
-        title: 'Edit Building',
-    },
-    {
-        path: 'buildings/create',
-        component: EditBuildingComponent,
-        title: 'Create Building',
-    },
-    {
-        path: 'buildings/list',
-        component: GetBuildingsComponent,
-        title: 'List Buildings',
-    },
-    {
-        path: 'buildings/list-by-floors',
-        component: ListBuildingsMinmaxFloorsComponent,
-        title: 'List Buildings by minimum and maximum number of Floors',
-    },
+    
 
     { path: 'floors', component: FloorComponent, title: 'Floors' },
     {
