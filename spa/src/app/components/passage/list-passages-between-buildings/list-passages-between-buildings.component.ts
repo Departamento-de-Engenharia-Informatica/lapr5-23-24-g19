@@ -12,6 +12,8 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
     selectedBuilding1: string
     selectedBuilding2: string
     passages: PassageDTO[]
+
+    allPassages: PassageDTO[]
     buildings: BuildingDTO[]
 
     constructor(
@@ -19,6 +21,7 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
         private passageService: PassageService,
     ) {
         this.passages = []
+        this.allPassages = []
         this.buildings = []
         this.selectedBuilding1 = ''
         this.selectedBuilding2 = ''
@@ -35,7 +38,20 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
         this.passageService
             .getPassagesBetweenBuildings(this.selectedBuilding1, this.selectedBuilding2)
             .subscribe((list: PassageDTO[]) => {
-                this.passages = list
+                this.allPassages = list
+                this.passages = this.allPassages
             })
+    }
+
+    filter(event: Event) {
+        const prop = (event.target as HTMLInputElement).value.trim().toLowerCase()
+        if (prop.length === 0) {
+            this.passages = this.allPassages
+        } else {
+            this.passages = this.allPassages.filter(
+                (b) =>
+                    b.floor1.floorNumber.toString().includes(prop) ||  b.floor2.floorNumber.toString().includes(prop),
+            )
+        }
     }
 }

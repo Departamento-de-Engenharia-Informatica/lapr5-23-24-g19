@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import {
-    ElevatorDTO,
     ElevatorService,
     CreatedElevatorDTO,
 } from 'src/app/services/elevator.service'
