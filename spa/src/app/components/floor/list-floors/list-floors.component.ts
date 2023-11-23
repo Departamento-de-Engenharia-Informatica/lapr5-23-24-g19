@@ -25,19 +25,30 @@ export class ListFloorsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
-            this.buildings = list
-        })
+        this.buildingService.getBuildings().subscribe(
+            (list: BuildingDTO[]) => {
+                this.buildings = list
+            },
+            (error) => {
+                alert(error.error)
+                this.buildings = []
+            },
+        )
     }
 
     getFloors(buildingCode: string) {
         this.floors = []
-        this.floorService
-            .getFloors(buildingCode)
-            .subscribe((list: FloorAndBuildingDTO[]) => {
+        this.floorService.getFloors(buildingCode).subscribe(
+            (list: FloorAndBuildingDTO[]) => {
                 this.allFloors = list
                 this.floors = this.allFloors
-            })
+            },
+            (error) => {
+                alert(error.error)
+                this.allFloors = []
+                this.floors = this.allFloors
+            },
+        )
     }
 
     filter(event: Event) {

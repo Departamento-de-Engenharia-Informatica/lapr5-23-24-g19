@@ -25,10 +25,11 @@ activate usr
                     activate md
                     note right : see us170 documentation
     alt building(s) not found
-                        md --> http : 200: empty list
+                        md --> http : 404: error
                         http --> svc : observable
-                        svc --> ctrl : []
+                        svc --> ctrl : error
                         ctrl --> ctrl : buildings = []
+                        note bottom : creates alert with the error message
                         ctrl --> view : buildings
                         view --> usr : does not show anything
 
@@ -71,10 +72,11 @@ activate usr
                     activate md
                     note right : see us210 documentation
     alt floor(s) not found
-                        md --> http : 200: empty list
+                        md --> http : 404: error
                         http --> svc : observable
-                        svc --> ctrl : []
+                        svc --> ctrl : error
                         ctrl --> ctrl : floors = []
+                        note bottom : creates alert with the error message
                         ctrl --> view : floors
                         view --> usr : does not show anything
 
@@ -97,6 +99,7 @@ activate usr
             ctrl --> ctrl : floors = dto[]
             ctrl --> view : floors
         deactivate ctrl
+        view --> usr : lists floors
     deactivate view
 deactivate usr
 
