@@ -2,18 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { AppModule } from '../app.module'
-import { error } from 'cypress/types/jquery'
+import { PassageDTO } from 'src/app/dto/PassageDTO'
 
-export interface PassageDTO {
-    floor1: {
-        buildingCode: string
-        floorNumber: number
-    }
-    floor2: {
-        buildingCode: string
-        floorNumber: number
-    }
-}
+
 
 @Injectable({
     providedIn: 'root',

@@ -6,7 +6,7 @@ import { CriteriaDTO } from 'src/app/dto/CriteriaDTO';
 import { RouteDTO } from 'src/app/dto/TaskDTO';
 import { BuildingService } from 'src/app/services/building.service';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
-import { PassageDTO, PassageService } from 'src/app/services/passage.service';
+import { PassageService } from 'src/app/services/passage.service';
 import { RoomDTO } from 'src/app/services/room.service';
 import { TaskService } from 'src/app/services/task.service';
 

@@ -3,7 +3,8 @@ import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
-import { PassageDTO, PassageService } from 'src/app/services/passage.service'
+import { PassageService } from 'src/app/services/passage.service'
+import { PassageDTO } from 'src/app/dto/PassageDTO'
 
 @Component({
     selector: 'app-create-passage',

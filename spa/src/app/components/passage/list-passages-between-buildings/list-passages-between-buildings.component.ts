@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import { PassageDTO, PassageService } from 'src/app/services/passage.service'
+import { PassageService } from 'src/app/services/passage.service'
+import { PassageDTO } from 'src/app/dto/PassageDTO'
 
 @Component({
     selector: 'app-list-passages-between-buildings',
