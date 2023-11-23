@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import {catchError, Observable, throwError} from 'rxjs'
 import { AppModule } from '../app.module'
 
 export interface RoomDTO {
@@ -37,7 +37,22 @@ export class RoomService {
             JSON.stringify(dto),
             {
                 headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
             },
+        ).pipe(
+            catchError((error: any) => {
+                if (error.status === 422) {
+                    const errorMessage = error.error.message || 'Bad Request'
+                    console.log(`Error: ${errorMessage}`)
+                    return throwError(errorMessage)
+                } else {
+                    console.log(`Error: ${error.message}`)
+                    return throwError(
+                        'An unexpected error occurred. Please try again later.',
+                    )
+                }
+            }),
         )
     }
 
