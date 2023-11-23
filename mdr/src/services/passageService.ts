@@ -46,6 +46,11 @@ export default class PassageService implements IPassageService {
                     errorCode: ErrorCode.NotFound,
                     message: 'Floor Not found',
                 })
+            }else if(passageDTO.floor1.buildingCode==passageDTO.floor2.buildingCode){
+                return left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: 'Passage requires different buildings',
+                })   
             }
 
             const passageOrError = Passage.create({ floor1, floor2 })
