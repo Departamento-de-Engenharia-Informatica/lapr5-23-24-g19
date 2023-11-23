@@ -32,12 +32,12 @@ export class CreateElevatorComponent implements OnInit {
         private elevatorService: ElevatorService,
     ) {
         this.createElevatorForm = this.fb.group({
-            buildingId: ['', Validators.required],
+            buildingId: [null, Validators.required],
             floors: [[], Validators.required],
-            brand: ['', Validators.required],
-            model: ['', Validators.required],
-            serialNumber: ['', Validators.required],
-            description: [''],
+            brand: [undefined],
+            model: [undefined],
+            serialNumber: [undefined],
+            description: [undefined],
         })
     }
 
@@ -58,21 +58,36 @@ export class CreateElevatorComponent implements OnInit {
     }
 
     onSubmit(): void {
+
+
+
         const dto: ElevatorDTO = {
             floors: this.createElevatorForm.value.floors,
-            brand: this.createElevatorForm.value.brand,
-            model: this.createElevatorForm.value.model,
-            serialNumber: this.createElevatorForm.value.serialNumber,
-            description: this.createElevatorForm.value.description,
+            brand: this.createElevatorForm.value.brand ?? undefined,
+            model: this.createElevatorForm.value.model ?? undefined,
+            serialNumber: this.createElevatorForm.value.serialNumber ?? undefined,
+            description: this.createElevatorForm.value.description ?? undefined,
         }
 
+
+        console.log(JSON.stringify(dto))
         const buildingId = this.createElevatorForm.value.buildingId
 
         this.elevatorService
             .createElevator(buildingId, dto)
             .subscribe((elevator: CreatedElevatorDTO) => {
+
+                let alertMessage = 'Elevator created successfully!\n'
+                alert(alertMessage)
+
                 this.createdElevator = elevator
-                this.createElevatorForm.reset();
-            })
+                this.createElevatorForm.reset()
+            },
+                (error) => {
+
+                    alert(error.error)
+                    this.createElevatorForm.reset()
+                },
+            )
     }
 }

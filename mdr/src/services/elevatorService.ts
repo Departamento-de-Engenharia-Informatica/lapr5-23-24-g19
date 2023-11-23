@@ -30,65 +30,73 @@ export default class ElevatorService implements IElevatorService {
     ) {}
 
     async createElevator(dto: IElevatorDTO): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
-        const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
+        try {
+            const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
 
-        if (!building) {
-            return left({
-                errorCode: ErrorCode.NotFound,
-                message: 'Building Not found',
+            if (!building) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Building Not found',
+                })
+            }
+            const identifier = await this.repo.nextIdentifier()
+
+            // map the floorId's into the respective Floor object
+            const floors =
+                (
+                    await Promise.all(
+                        dto.floors.map(async fNum => {
+                            const num = FloorNumber.create(fNum).getOrThrow()
+                            try {
+                                return await this.floorRepo.find(building, num)
+                            } catch (_) {
+                                return undefined
+                            }
+                        }),
+                    )
+                ).filter(f => f !== null && f !== undefined) ?? []
+
+            if (floors.length < dto.floors.length) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Floors were not found ',
+                })
+            }
+
+            const brand = dto.brand && Brand.create(dto.brand).getOrThrow()
+            const model = dto.model && Model.create(dto.model).getOrThrow()
+            const serialNumber = dto.serialNumber && SerialNumber.create(dto.serialNumber).getOrThrow()
+            const description = dto.description && Description.create(dto.description).getOrThrow()
+
+            const result = Elevator.create({
+                building,
+                identifier,
+                floors,
+
+                brand,
+                model,
+                serialNumber,
+                description,
             })
-        }
-        const identifier = await this.repo.nextIdentifier()
 
-        // map the floorId's into the respective Floor object
-        const floors =
-            (
-                await Promise.all(
-                    dto.floors.map(async fNum => {
-                        const num = FloorNumber.create(fNum).getValue()
-                        try {
-                            return await this.floorRepo.find(building, num)
-                        } catch (_) {
-                            return undefined
-                        }
-                    }),
-                )
-            ).filter(f => f !== null && f !== undefined) ?? []
+            if (result.isFailure) {
+                return left({
+                    errorCode: ErrorCode.BussinessRuleViolation,
+                    message: 'Brand cannot exist without specifying model ',
+                })
+            }
 
-        if (floors.length < dto.floors.length) {
-            return left({
-                errorCode: ErrorCode.NotFound,
-                message: 'Floors were not found ',
-            })
-        }
+            const elevator = result.getOrThrow()
+            await this.repo.save(elevator)
 
-        const brand = dto.brand && Brand.create(dto.brand).getValue()
-        const model = dto.model && Model.create(dto.model).getValue()
-        const serialNumber = dto.serialNumber && SerialNumber.create(dto.serialNumber).getValue()
-        const description = dto.description && Description.create(dto.description).getValue()
-
-        const result = Elevator.create({
-            building,
-            identifier,
-            floors,
-
-            brand,
-            model,
-            serialNumber,
-            description,
-        })
-
-        if (result.isFailure) {
+            return right(ElevatorMap.toDTO(elevator))
+        } catch (e) {
             return left({
                 errorCode: ErrorCode.BussinessRuleViolation,
-                message: 'Elevator parameters do not meet requirements ',
-            })
+                message: e.message ?? 'Business rule violation',
+            } as ErrorResult)
+
         }
-
-        const elevator = result.getValue()
-        await this.repo.save(elevator)
-
-        return right(ElevatorMap.toDTO(elevator))
     }
 
     public async editElevator(
