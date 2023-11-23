@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, catchError, throwError } from 'rxjs'
 import { AppModule } from '../app.module'
 
 export interface FloorAndBuildingDTO {
@@ -116,6 +116,16 @@ export class FloorService {
                 observe: 'body',
                 responseType: 'json',
             },
-        )
+        ).pipe(catchError((response: HttpErrorResponse) => {
+            let errorMessage: string;
+
+            if (response.error) {
+                errorMessage = response.error
+            } else {
+                errorMessage = `An unexpected error occurred: ${response.message}`;
+            }
+
+            return throwError(() => new Error(errorMessage))
+        }))
     }
 }

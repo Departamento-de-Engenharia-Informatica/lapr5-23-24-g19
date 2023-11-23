@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { AppModule } from '../app.module'
+import { error } from 'cypress/types/jquery'
 
 export interface PassageDTO {
     floor1: {
@@ -18,7 +19,7 @@ export interface PassageDTO {
     providedIn: 'root',
 })
 export class PassageService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getPassagesBetweenBuildings(
         bCode1: string,
@@ -36,20 +37,19 @@ export class PassageService {
                 responseType: 'json',
             })
             .pipe(
-                catchError((error: any) => {
-                    // Handle error here
-                    console.log('deu erro')
-                    if (error.status === 422) {
-                        const errorMessage = error.error.message || 'Bad Request'
-                        console.log(`Error: ${errorMessage}`)
-                        return throwError(errorMessage)
+                catchError((response: HttpErrorResponse) => {
+                    let errorMessage: string;
+
+                    if (response.error) {
+                        // Extract the error message from the response body
+                        errorMessage = response.error
                     } else {
-                        console.log(`Error: ${error.message}`)
-                        return throwError(
-                            'An unexpected error occurred. Please try again later.',
-                        )
+                        // If there is no specific error message, use a generic one
+                        errorMessage = `An unexpected error occurred: ${response.message}`;
                     }
-                }),
+
+                    return throwError(() => new Error(errorMessage))
+                })
             )
     }
 }

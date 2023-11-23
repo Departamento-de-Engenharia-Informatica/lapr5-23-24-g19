@@ -28,14 +28,6 @@ select {
     background-color: var(--primary-color);
     color: white;
 }
-
-/* .row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 16px;
-} */
-
 button {
     padding: 10px 20px;
     background-color: var(--third-color);
@@ -76,10 +68,6 @@ button:disabled {
     align-items: center;
     margin: 0 auto;
 }
-
-/* ... rest of the styles ... */
-
-/* Adjustments for better centering of content within rows */
 .row label {
     text-align: center;
 }
@@ -91,9 +79,9 @@ button:disabled {
 }
 
 button[type='submit'] {
-    width: 20%; /* Adjust the width as needed */
-    margin: 0 auto; /* Center the button horizontally */
-    margin-top: 25px; /* Add some top margin for spacing */
+    width: 20%; 
+    margin: 0 auto;
+    margin-top: 25px;
     padding: 10px 20px;
     background-color: var(--third-color);
     color: var(--secondary-color);

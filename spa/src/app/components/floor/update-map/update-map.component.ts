@@ -99,11 +99,15 @@ export class UpdateMapComponent {
                 this.updateMapForm.value.floorNumber,
             )
             .subscribe((map: UpdateMapDTO) => {
-                // setSucessMessage()
-            })
+                alert("Map updated successfully")
+            }
+                ,
+                (error) => {
+                    alert(error)
+                },)
     }
 
-    checkValid(){
-        return this.mapFile!=null && this.mapFile!=undefined && this.mapFile!='' 
+    checkValid() {
+        return this.mapFile != null && this.mapFile != undefined && this.mapFile != ''
     }
 }

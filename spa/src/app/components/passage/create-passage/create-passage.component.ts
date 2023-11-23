@@ -1,10 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
-import { catchError, every, of, tap } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import { ErrorMessageService } from 'src/app/services/error-message.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { PassageDTO, PassageService } from 'src/app/services/passage.service'
 
@@ -25,6 +22,7 @@ export class CreatePassageComponent {
 
     floor1!: FloorAndBuildingDTO
     floor2!: FloorAndBuildingDTO
+
     floors1!: FloorAndBuildingDTO[]
     floors2!: FloorAndBuildingDTO[]
 
@@ -32,7 +30,6 @@ export class CreatePassageComponent {
         private fb: FormBuilder,
         private buildingService: BuildingService,
         private floorService: FloorService,
-        private message: ErrorMessageService,
         private passageService: PassageService,
     ) {
         this.passageForm = this.fb.group({
@@ -44,10 +41,6 @@ export class CreatePassageComponent {
     }
 
     submitForm() {
-        if (this.passageForm.value.building1 == this.passageForm.value.building2) {
-            console.log('Can not be the same building')
-            // send error message(deveria fazer o pedido para o backend e se der erro mostrar?)
-        }
         const dto = {
             floor1: {
                 buildingCode: this.passageForm.value.building1,
@@ -58,49 +51,34 @@ export class CreatePassageComponent {
                 floorNumber: this.passageForm.value.floor2,
             },
         } as PassageDTO
-        this.passageService.postPassage(dto).subscribe((passage: PassageDTO) => {
-            console.log('Passage created')
-            // this.message.setSucessMessage("Passage created")
-        })
+        this.passageService.postPassage(dto).subscribe((response: PassageDTO) => {
+            alert("Passage created successfully")
+            this.passageForm.reset()
+        },
+            (error: string) => {
+                alert(error)
+            },
+        )
     }
 
     onBuilding1Selected(event: any) {
         this.floorService
-            .getFloors(event.target.value as string)
-            .pipe(
-                tap((list: FloorAndBuildingDTO[]) => {
-                    this.floors1 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.floors1 = []
-                    } else {
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
+            .getFloors(event.target.value as string).subscribe((list: FloorAndBuildingDTO[]) => {
+                this.floors1 = list
+            },
+                (error) => {
+                    alert(error.message)
+                },)
     }
 
     onBuilding2Selected(event: any) {
         this.floorService
-            .getFloors(event.target.value as string)
-            .pipe(
-                tap((list: FloorAndBuildingDTO[]) => {
-                    this.floors2 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.floors2 = []
-                    } else {
-                        // this.message.setErrorMessage(error)
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
+            .getFloors(event.target.value as string).subscribe((list: FloorAndBuildingDTO[]) => {
+                this.floors2 = list
+            },
+                (error) => {
+                    alert(error.message)
+                },)
     }
 
     ngOnInit(): void {
@@ -117,14 +95,16 @@ export class CreatePassageComponent {
         const control = this.passageForm.get(controlName)
         return !!control && control.invalid && (control.dirty || control.touched)
     }
-    noFloors1() {
-        return (
-            this.floors1 != null && this.floors1 != undefined && this.floors1.length == 0
-        )
+
+
+    isEmpty(obj: any): boolean {
+        return obj != null && obj != undefined && obj.length == 0
     }
-    noFloors2() {
-        return (
-            this.floors2 != null && this.floors2 != undefined && this.floors2.length == 0
-        )
+    noFloors1(): boolean {
+        return this.isEmpty(this.floors1)
     }
+    noFloors2(): boolean {
+        return this.isEmpty(this.floors2)
+    }
+
 }

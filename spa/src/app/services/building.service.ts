@@ -1,7 +1,7 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AppModule } from '../app.module'
-import { Observable } from 'rxjs'
+import { Observable, catchError, throwError } from 'rxjs'
 import { BuildingDTO } from '../dto/BuildingDTO'
 
 // interface BuildingProps{
@@ -50,6 +50,19 @@ export class BuildingService {
             observe: 'body',
             responseType: 'json',
         })
+        .pipe(
+            catchError((response: HttpErrorResponse) => {
+                let errorMessage: string;
+
+                if (response.error) {
+                    errorMessage = response.error
+                } else {
+                    errorMessage = `An unexpected error occurred: ${response.message}`;
+                }
+
+                return throwError(() => new Error(errorMessage))
+            })
+        )
     }
 
     getBuildingsByFloors(dto: MinMaxDTO): Observable<BuildingByFloorsDTO[]> {
