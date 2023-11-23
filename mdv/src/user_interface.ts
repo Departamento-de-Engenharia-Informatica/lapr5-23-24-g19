@@ -82,6 +82,9 @@ export default class UserInterface extends GUI {
 
                     thumbRaiser.removeAudioSources();
 
+                    thumbRaiser.elevators.forEach((e) => {
+                        thumbRaiser.scene.remove(e);
+                    });
                     thumbRaiser.scene.remove(thumbRaiser.maze);
 
                     thumbRaiser.maze.disposeGround();
@@ -89,6 +92,7 @@ export default class UserInterface extends GUI {
 
                     thumbRaiser.stop();
 
+                    thumbRaiser.elevators = [];
                     thumbRaiser.maze = new Maze(mazeParams, loader);
                     thumbRaiser.update();
                 } else {

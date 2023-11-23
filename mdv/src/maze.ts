@@ -4,11 +4,12 @@ import { OBB } from 'three/examples/jsm/math/OBB.js';
 import { merge } from './merge';
 import Ground from './ground';
 import Wall from './wall';
-import Elevator from './elevator'
+import Elevator from './elevator';
 import { MDRUrl } from './main';
 import { Elevator as ElevatorComp, Passage, Room } from './map-components';
 import { Loader } from './loader';
-import { elevatorData } from './default_data'
+import { elevatorData } from './default_data';
+import Door from './door';
 
 type AABB = THREE.Box3[][][];
 type Position = { x: number; z: number };
@@ -54,14 +55,17 @@ type WallT = BaseComponent & {
     segments: { width: number; height: number };
 };
 
+type DoorT = BaseComponent & {
+    segments: { width: number; height: number };
+};
+
 type Model3D = {
-    modelUri: string
-    credits?: string
-}
+    modelUri: string;
+    credits?: string;
+};
 
-type DoorT = Model3D
-type ElevatorT = Model3D
-
+// type DoorT = Model3D
+type ElevatorT = Model3D;
 
 export type FloorMapParameters = {
     // buildingCode: string,
@@ -87,9 +91,9 @@ type FloorMap = {
 type MapFile = {
     map: FloorMap;
     wall: WallT;
+    door: DoorT;
     ground: GroundT;
     elevator: ElevatorT;
-    door: DoorT;
     player: {
         initialPosition: number[];
         initialDirection: number;
@@ -121,6 +125,7 @@ export default class Maze extends THREE.Group {
     public size: FloorMap['dimensions'] = { width: 0, length: 0 };
     public halfSize: Maze['size'] = { width: 0, length: 0 };
     public map: FloorMap['mapContent'] = [[]];
+    public elevators: FloorMap['elevators'] = [];
     public exitLocation: THREE.Vector3 = new THREE.Vector3();
     public aabb: AABB = [];
 
@@ -128,7 +133,10 @@ export default class Maze extends THREE.Group {
     public initialPosition: THREE.Vector3 = new THREE.Vector3();
     public initialDirection: number = 0;
 
+    private elevator: Elevator;
+
     private wall?: Wall;
+    private door?: Door;
     private ground?: Ground;
 
     private onError(url: string, error: unknown) {
@@ -273,6 +281,7 @@ export default class Maze extends THREE.Group {
                     ) < radius
                 ) {
                     console.log('Collision with ' + name + '.');
+                    console.log('row', row, 'column', column);
                     return true;
                 }
             }
@@ -557,6 +566,8 @@ export default class Maze extends THREE.Group {
             length: this.size.length / 2.0,
         };
         this.map = description.map.mapContent;
+        this.elevators = description.map.elevators;
+        console.log(this.elevators);
         // this.exitLocation = this.cellToCartesian(description.map.exitLocation);
 
         // Create the helpers
@@ -652,7 +663,47 @@ export default class Maze extends THREE.Group {
             ),
         });
 
-        const elevator = this.loadElevator(description.elevator)
+        // Create a door
+        this.door = new Door({
+            groundHeight: description.ground.size.height,
+            segments: new THREE.Vector2(
+                description.wall.segments.width,
+                description.wall.segments.height,
+            ),
+            materialParameters: {
+                color: new THREE.Color(
+                    parseInt(description.wall.primaryColor, 16),
+                ),
+                mapUrl: description.wall.maps.color.url,
+                aoMapUrl: description.wall.maps.ao.url,
+                aoMapIntensity: description.wall.maps.ao.intensity,
+                displacementMapUrl: description.wall.maps.displacement.url,
+                displacementScale: description.wall.maps.displacement.scale,
+                displacementBias: description.wall.maps.displacement.bias,
+                normalMapUrl: description.wall.maps.normal.url,
+                normalMapType:
+                    normalMapTypes[description.wall.maps.normal.type],
+                normalScale: new THREE.Vector2(
+                    description.wall.maps.normal.scale.x,
+                    description.wall.maps.normal.scale.y,
+                ),
+                bumpMapUrl: description.wall.maps.bump.url,
+                bumpScale: description.wall.maps.bump.scale,
+                roughnessMapUrl: description.wall.maps.roughness.url,
+                roughness: description.wall.maps.roughness.rough,
+                wrapS: wrappingModes[description.wall.wrapS],
+                wrapT: wrappingModes[description.wall.wrapT],
+                repeat: new THREE.Vector2(
+                    description.wall.repeat.u,
+                    description.wall.repeat.v,
+                ),
+                magFilter: magnificationFilters[description.wall.magFilter],
+                minFilter: minificationFilters[description.wall.minFilter],
+            },
+            secondaryColor: new THREE.Color(
+                parseInt(description.wall.secondaryColor, 16),
+            ),
+        });
 
         // Build the maze
         let geometry: THREE.BufferGeometry;
@@ -660,6 +711,36 @@ export default class Maze extends THREE.Group {
         geometries[0] = [];
         geometries[1] = [];
         this.aabb = [];
+
+        // let i = 2;
+        // let j = 10;
+        // this.aabb[i] = [];
+        // this.aabb[i][j] = [];
+        // this.aabb[i][j][0] = new THREE.Box3();
+        // for (let k = 0; k < 2; k++) {
+        //     geometry = this.wall.geometries[k].clone();
+        //     geometry.applyMatrix4(
+        //         new THREE.Matrix4().makeTranslation(
+        //             j - this.halfSize.width + 0.5,
+        //             0.25,
+        //             i - this.halfSize.length,
+        //         ),
+        //     );
+        //     geometry.computeBoundingBox();
+        //     geometry.boundingBox!.applyMatrix4(
+        //         new THREE.Matrix4().makeScale(
+        //             this.scale.x,
+        //             this.scale.y,
+        //             this.scale.z,
+        //         ),
+        //     );
+        //     geometries[k].push(geometry);
+        //     this.aabb[i][j][0].union(geometry.boundingBox!);
+        // }
+        // this.helper.add(
+        //     new THREE.Box3Helper(this.aabb[i][j][0], this.helpersColor),
+        // );
+
         for (let i = 0; i <= this.size.length; i++) {
             // In order to represent the southmost walls, the map depth is one row greater than the actual maze depth
             this.aabb[i] = [];
@@ -759,13 +840,13 @@ export default class Maze extends THREE.Group {
         this._loaded = true;
     }
 
-    private loadElevator(data: ElevatorT): Elevator {
-        const params = {
-            ...elevatorData,
-            modelUri: data.modelUri,
-            credits: data.credits
-        }
-
-        return new Elevator(params)
-    }
+    // private loadElevator(data: ElevatorT): Elevator {
+    //     const params = {
+    //         ...elevatorData,
+    //         modelUri: data.modelUri,
+    //         credits: data.credits,
+    //     };
+    //
+    //     return new Elevator(params);
+    // }
 }

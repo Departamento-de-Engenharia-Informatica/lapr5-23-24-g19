@@ -101,8 +101,12 @@ export default class Player extends THREE.Group {
     public cylinderHelper: CylinderHelper;
     public boxHelper: BoxHelper;
 
-    get shiftKey() {return this.keyStates.shiftKey}
-    set shiftKey(state: boolean) {this.keyStates.shiftKey = state}
+    get shiftKey() {
+        return this.keyStates.shiftKey;
+    }
+    set shiftKey(state: boolean) {
+        this.keyStates.shiftKey = state;
+    }
 
     constructor(private parameters: PlayerParameters) {
         super();

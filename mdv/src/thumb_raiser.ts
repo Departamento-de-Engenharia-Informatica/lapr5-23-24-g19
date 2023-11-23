@@ -31,6 +31,7 @@ import {
     fogData,
     collisionDetectionData,
     cameraData,
+    elevatorData,
 } from './default_data.js';
 import { merge } from './merge';
 import Audio, { AudioParameters } from './audio';
@@ -51,6 +52,9 @@ import {
 import Fog, { FogParameters } from './fog';
 import Camera, { CameraParameters } from './camera';
 import UserInterface from './user_interface';
+import Elevator, { ElevatorParams } from './elevator.js';
+import { normalView } from 'three/examples/jsm/nodes/Nodes.js';
+import { ToonShaderHatching } from 'three/examples/jsm/Addons.js';
 
 /*
  * generalParameters = {
@@ -396,6 +400,8 @@ export default class ThumbRaiser {
     public maze: Maze;
     public player: Player;
 
+    public elevators: Elevator[] = [];
+
     public background: THREE.Scene;
     public frame: THREE.Scene;
     public camera2D: THREE.OrthographicCamera;
@@ -452,6 +458,7 @@ export default class ThumbRaiser {
         private cubeTexturesParameters: CubeTextureParameters,
         private mazeParameters: MazeParameters,
         private playerParameters: PlayerParameters,
+        private elevatorParameters: ElevatorParams,
         private ambientLightParameters: AmbientLightParameters,
         private directionalLightParameters: DirectionalLightParameters,
         private spotLightParameters: SpotLightParameters,
@@ -474,6 +481,7 @@ export default class ThumbRaiser {
         );
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
+        this.elevatorParameters = merge({}, elevatorData, elevatorParameters);
         this.ambientLightParameters = merge(
             {},
             ambientLightData,
@@ -575,7 +583,7 @@ export default class ThumbRaiser {
 
         // Create the maze
         // TODO: Update the maze here
-        this.maze = new Maze(this.mazeParameters, loader);
+        this.maze = new Maze(this.mazeParameters, loader, this.scene);
 
         // Create the player
         this.player = new Player(this.playerParameters);
@@ -1640,6 +1648,27 @@ export default class ThumbRaiser {
                     this.maze.initialPosition.z,
                 );
                 this.player.direction = this.maze.initialDirection;
+
+                this.maze.elevators.forEach((e) => {
+                    let position: THREE.Vector3 = new THREE.Vector3();
+                    position = this.maze.cellToCartesian([e.x, e.y]);
+
+                    const i = this.elevators.push(
+                        new Elevator(this.elevatorParameters),
+                    );
+                    console.log('Elevator ', i, ' at x=', e.x, ' and y=', e.y);
+
+                    this.scene.add(this.elevators[i - 1]);
+
+                    this.elevators[i - 1].position.set(
+                        position.x,
+                        position.y,
+                        position.z,
+                    );
+
+                    // TODO: rotate elevator
+                    // newElevator.rotateY(THREE.MathUtils.degToRad(90));
+                });
 
                 // Set the spotlight target
                 this.spotLight.target = this.player;

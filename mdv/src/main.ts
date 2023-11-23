@@ -4,8 +4,7 @@ import ThumbRaiser from './thumb_raiser';
 import { Loader, NodeLoader } from './loader';
 export const MDRUrl = 'http://localhost:4000/api/';
 
-
-export const loader:Loader = new NodeLoader()
+export const loader: Loader = new NodeLoader();
 
 let thumbRaiser: ThumbRaiser;
 function initialize() {
@@ -224,6 +223,7 @@ function initialize() {
             helpersColor: new THREE.Color(0xff0077),
         }, // Maze parameters
         { helpersColor: new THREE.Color(0x0055ff) }, // Player parameters
+        { helpersColor: new THREE.Color(0x0055ff) }, // Elevator parameters
         {
             intensity: 0.1,
         }, // Ambient light parameters
