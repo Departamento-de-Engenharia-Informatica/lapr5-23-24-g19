@@ -25,9 +25,9 @@ usr -> view : wants to create floor
         alt building(s) not found
             activate md
                 note right : see us170 documentation
-                md --> http : 200: empty list
+                md --> http : 404: error
                 http --> svc : observable
-                svc --> ctrl : []
+                svc --> ctrl : error
                 ctrl --> ctrl : buildings = []
                 ctrl --> view : buildings
                 view --> usr : does not list anything
@@ -95,7 +95,7 @@ usr -> view : wants to create floor
                     dto --> ctrl : dto
                 deactivate dto
 
-                ctrl -> svc : createFloor()
+                ctrl -> svc : createFloor(dto)
                 activate svc
                     svc --> dto** : create()
                     activate dto
@@ -119,26 +119,27 @@ usr -> view : wants to create floor
 
                     svc --> ctrl : dto
 
-                ctrl --> ctrl : createdFloor = dto
-                ctrl --> view : createdFloor
+                ctrl --> ctrl : listFloors()
+                note bottom : creates alert with the created floor information
+                ctrl --> view : floors
                 view --> usr : previews created floor information
 
                 else floor already exists
                     md --> http : 422: error
-                    http --> svc : null
-                    svc --> ctrl : null
-                    ctrl --> ctrl : createdFloor = null
-                    ctrl --> view : createdFloor
+                    http --> svc : observable
+                    svc --> ctrl : error
+                    note bottom : creates alert with the error message
+                    ctrl --> view : floors
                     view --> usr : informs error
                 else bad floor parameters
                     md --> http : 422: error
                     deactivate md
-                    http --> svc : null
+                    http --> svc : observable
                     deactivate http
-                    svc --> ctrl : null
+                    svc --> ctrl : error
+                    note bottom : creates alert with the error message
                     deactivate svc
-                    ctrl --> ctrl : createdFloor = null
-                    ctrl --> view : createdFloor
+                    ctrl --> view : floors
                     deactivate ctrl
                     view --> usr : informs error
                     deactivate view
