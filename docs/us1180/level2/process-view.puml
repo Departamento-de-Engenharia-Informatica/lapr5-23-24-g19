@@ -7,17 +7,50 @@ participant "Campus UI" as ui
 participant "Campus MD" as md
 
 activate usr
-    ' TODO: investigate UI workflow
+    usr -> ui : edit passage between two buildings
+    activate ui
+        ui -> md : GET /buildings
+        note right: see us170 documentation
+        activate md
+alt buildings not found
+            md --> ui : 404: error
+            ui --> usr : informs error
+else buildings found
+            md --> ui : 200: buildings
+            deactivate md
+        ui --> usr : requests user to select two buildings
+    deactivate ui
 
-    ' usr -> ui : edit passage between two buildings
-    ' activate ui
-    '     ui --> usr : shows passages, requests one and update data
-    ' deactivate ui
+    usr -> ui : selects two buildings
+    activate ui
+        ui -> md : GET /passages
+        note right: see us260 documentation
+        activate md
+alt passages not found 
+            md --> ui : 404: error
+            ui --> usr : informs error
+else passages found
+            md --> ui : 200: passages
+            deactivate md
+        ui --> usr : requests user to select passage to edit
+    deactivate ui
 
-    ' usr -> ui : chooses passage and provides updated data
-    ' activate ui
-    '     ui --> usr : inform error/success
-    ' deactivate ui
+    usr -> ui : selects passage
+    activate ui
+        ui --> usr : requests data to update passage
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : PATCH /passages
+        note right : see us250 documentation
+        activate md
+            md --> ui : 200: passage
+        deactivate md
+        ui --> usr : informs success
+    deactivate ui
 deactivate usr
+end
+end
 
 @enduml

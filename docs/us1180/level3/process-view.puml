@@ -1,0 +1,146 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "dto:\nDTO" as dto
+
+participant "HTTP Driver" as http
+participant "HTTP Params" as params
+
+participant "MD" as md
+
+activate usr
+    usr -> view : edit passage between two buildings
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getBuildings()
+            activate svc
+                svc -> http : get({baseURL}/buildings)
+                activate http
+                    http -> md : GET /buildings
+                    note right : see us170 documentation
+                    activate md
+alt buildings not found
+                        md --> http : 404: error
+                        http --> svc : observable
+                        svc --> ctrl : error
+                        note bottom : creates alert with the error message
+                        ctrl --> ctrl : buildings = []
+                        ctrl --> view : buildings
+                        view --> usr : informs error
+else buildings found
+                        md --> http : 200: buildings
+                    deactivate md
+                    http --> svc : observable
+                deactivate http
+                loop for each building
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+                end
+                svc --> ctrl : dto[]
+            deactivate svc
+            ctrl --> ctrl : buildings = dto[]
+            ctrl --> view : buildings
+        deactivate ctrl
+        view --> usr : requests user to select two buildings
+    deactivate view
+
+    usr -> view : selects two buildings
+    activate view
+        view -> ctrl : getPassages(selectedBuilding1, selectedBuilding2)
+        activate ctrl
+            ctrl --> dto** : create()
+            activate dto
+                dto --> ctrl : dto
+            deactivate dto
+            
+            ctrl -> svc : getPassages(dto)
+            activate svc
+                svc --> params** : create()
+                activate params
+                    svc -> params : set(building1)
+                    svc -> params : set(building2)
+                deactivate params
+
+                svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                activate http
+                    http -> md : GET /passages
+                    note right: see us260 documentation
+                    activate md
+alt passages not found 
+                        md --> http : 404: error
+                        http --> svc : observable
+                        svc --> ctrl : error
+                        note bottom : creates alert with the error message
+                        ctrl --> ctrl : passages = []
+                        ctrl --> view : passages
+                        view --> usr : informs error
+else passages found
+                        md --> http : 200: passages
+                    deactivate md
+                    http --> svc : observable
+                deactivate http
+                loop for each passage
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+                end
+                svc --> ctrl : dto[]
+            deactivate svc
+            ctrl --> ctrl : passages = dto[]
+            ctrl --> view : passages
+        deactivate ctrl
+        view --> usr : requests user to select passage to edit
+    deactivate view
+
+    usr -> view : selects passage
+    activate view
+        view --> usr : requests data to update passage
+    deactivate view
+
+    usr -> view : provides data
+    activate view
+        view -> ctrl : editPassage()
+        activate ctrl
+            ctrl --> dto** : create()
+            activate dto
+                dto --> ctrl : dto
+            deactivate dto
+            
+            ctrl -> svc : patchPassage(dto)
+            activate svc
+                svc -> http : patch({baseURL}/passages)
+                activate http
+                    http -> md : PATCH /passages
+                    note right : see us250 documentation
+                    activate md
+                        md --> http : 200: passage
+                    deactivate md
+                    http --> svc : observable
+                deactivate http
+                svc --> dto** : create()
+                activate dto
+                    dto --> svc : dto
+                deactivate dto
+                
+                svc --> ctrl : dto
+            deactivate svc
+            ctrl --> ctrl : getPassages(selectedBuilding1, selectedBuilding2)
+            note bottom : creates alert with updated passage information
+            ctrl --> view : passages
+        deactivate ctrl
+        view --> usr : informs success
+    deactivate view
+deactivate usr
+end
+end
+
+@enduml
