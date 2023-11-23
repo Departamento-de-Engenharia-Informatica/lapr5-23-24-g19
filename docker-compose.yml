@@ -1,27 +1,30 @@
-version: '3.1'
+version: '3'
+
 services:
 
-  robdrone-db:
-    image: mongo
-    restart: always
+  robdrone-ui:
+    build:
+      context: ./spa
+      dockerfile: Dockerfile
     # environment:
-      # MONGO_INITDB_ROOT_USERNAME: root
-      # MONGO_INITDB_ROOT_PASSWORD: example
-      # MONGO_INITDB_DATABASE: 'prod'
+      # MDV url
+      # MDR url
+      # api key
     ports:
-      - 27017:27017
+      - 4200:2226
+    depends_on:
+        robdrone-mdv
 
 
-  robdrone-be:
-    build: './mdr'
-    container_name: 'robdrone-be'
+  robdrone-mdv:
+    build:
+      context: ./mdv
+      dockerfile: Dockerfile
     environment:
-        NODE_ENV: 'production'
-        PORT: 4000
-        MONGODB_URI: 'mongodb://mongo:27017/prod'
+      # VITE_MDR_URL:   http://localhost:4000/api
+      VITE_APP_TITLE: RobDroneGo-visualization
     ports:
-        - 4000:8080
-    links:
-        - robdrone-db
+      # TODO: check 8080
+      - 8080:2228
 
 # vim: ts=2 sts=2 sw=2

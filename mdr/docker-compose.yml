@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  database:
+    image: mongo
+    restart: always
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: example
+      # MONGO_INITDB_DATABASE: 'prod'
+    # ports:
+    #   - 27017:27017
+    networks:
+      - app_network
+
+
+  robdrone-be:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 'robdrone-be'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4000
+      MONGODB_URI: 'mongodb://mongo:27017/prod'
+      # TODO: planning url
+    ports:
+      - 4000:2226
+    depends_on:
+      database
+    networks:
+      - app_network
+
+  networks:
+    app_network:
+      driver: bridge
+
+# vim: ts=2 sts=2 sw=2
