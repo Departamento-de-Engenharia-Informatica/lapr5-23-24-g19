@@ -13,9 +13,9 @@
     <div>
         <div class="row">
             <div>
-                <label for="buildingCode">Select Building:</label>
+                <label for="selectBuilding">Select Building:</label>
                 <select
-                    id="selectedBuilding"
+                    id="selectBuilding"
                     formControlName="buildingCode"
                     [(ngModel)]="selectedBuilding"
                     (ngModelChange)="getFloors()"
@@ -28,9 +28,9 @@
             </div>
 
             <div>
-                <label for="floorNumber">Select Floor:</label>
+                <label for="selectFloor">Select Floor:</label>
                 <select
-                    id="selectedBuilding"
+                    id="selectFloor"
                     formControlName="oldFloorNumber"
                     [(ngModel)]="selectedFloor"
                     (ngModelChange)="onFloorSelected()"
@@ -44,9 +44,9 @@
         </div>
 
         <div>
-            <label for="floorNumber">Floor number:</label>
+            <label for="newFloorNumber">Floor number:</label>
             <input
-                id="floorNumber"
+                id="newFloorNumber"
                 type="number"
                 formControlName="newFloorNumber"
                 placeholder="{{ floor.floorNumber }}"

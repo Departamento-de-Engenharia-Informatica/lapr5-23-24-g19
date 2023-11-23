@@ -221,7 +221,7 @@ export class EditFloorComponent {
         } else {
             const newFloorNumber = this.editFloorForm.get('newFloorNumber')!.value
 
-            if (newFloorNumber !== null || newFloorNumber !== undefined) {
+            if (newFloorNumber != null || newFloorNumber != undefined) {
                 const newFloorNumberValid = typeof newFloorNumber === 'number'
                 return buildingValid && oldFloorNumberValid && newFloorNumberValid
             }

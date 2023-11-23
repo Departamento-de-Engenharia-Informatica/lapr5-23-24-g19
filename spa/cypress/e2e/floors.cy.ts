@@ -263,4 +263,418 @@ describe('Floors e2e tests', () => {
             cy.get('#description').should('have.value', '')
         })
     })
+    describe('Edit floors e2e tests', () => {
+        beforeEach(() => {
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 2,
+                        description: 'Physics Labs',
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/C/floors', {
+                body: [
+                    {
+                        buildingCode: 'C',
+                        floorNumber: 0,
+                        description: 'Bar',
+                    },
+                    {
+                        buildingCode: 'C',
+                        floorNumber: 1,
+                        description: 'Labs',
+                    },
+                    {
+                        buildingCode: 'C',
+                        floorNumber: 2,
+                        description: 'Teachers room',
+                    },
+                ],
+            }).as('getFloorsChemistry')
+
+            cy.visit('/floors/edit')
+        })
+
+        it('should have the correct title', () => {
+            cy.title().should('equal', 'Edit Floor')
+        })
+
+        it('should display the form elements', () => {
+            cy.get('#selectBuilding').should('exist')
+            cy.get('#selectFloor').should('exist')
+            cy.get('#newFloorNumber').should('exist')
+            cy.get('#description').should('exist')
+            cy.get('#overrideConfirmation').should('exist')
+            cy.get('button[type="submit"]').should('exist')
+        })
+
+        it('should display existing floors when a building is selected', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('have.length', 3)
+            cy.get('.floor-card').should('contain.text', 'Community floor')
+            cy.get('.floor-card').should('contain.text', 'Classrooms')
+            cy.get('.floor-card').should('contain.text', 'Physics Labs')
+
+            cy.get('#selectBuilding').select('C')
+            cy.wait('@getFloorsChemistry')
+
+            cy.get('.floor-card').should('have.length', 3)
+            cy.get('.floor-card').should('contain.text', 'Bar')
+            cy.get('.floor-card').should('contain.text', 'Labs')
+            cy.get('.floor-card').should('contain.text', 'Teachers room')
+        })
+
+        it('should display placeholders when a floor is selected for editing', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('C')
+            cy.wait('@getFloorsChemistry')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Teachers room')
+        })
+
+        it('should update form placeholders when a different floor is selected', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('C')
+            cy.wait('@getFloorsChemistry')
+
+            cy.get('#selectFloor').select('1')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '1')
+            cy.get('#description').should('have.attr', 'placeholder', 'Labs')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Teachers room')
+        })
+
+        it('should update form placeholders when floor is changed', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('C')
+            cy.wait('@getFloorsChemistry')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Teachers room')
+
+            cy.get('#selectFloor').select('1')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '1')
+            cy.get('#description').should('have.attr', 'placeholder', 'Labs')
+        })
+
+        it('should display confirmation checkbox unchecked by default', () => {
+            cy.get('#overrideConfirmation').should('not.be.checked')
+        })
+
+        it('should successfully update floor description without override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedDescription = 'Updated Physics Labs'
+            cy.get('#description').clear().type(updatedDescription)
+
+            cy.intercept('PATCH', 'http://localhost:4000/api/buildings/P/floors/2', {
+                statusCode: 200,
+                body: {
+                    buildingCode: 'P',
+                    floorNumber: 2,
+                    description: 'Updated Physics Labs',
+                },
+            }).as('updateFloor')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 2,
+                        description: 'Updated Physics Labs',
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+            cy.wait('@updateFloor')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('contain.text', `Floor 2`)
+            cy.get('.floor-card').should('contain.text', `Updated Physics Labs`)
+        })
+
+        it('should successfully update floor number without override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedFloorNumber = '3'
+            cy.get('#newFloorNumber').clear().type(updatedFloorNumber)
+
+            cy.intercept('PATCH', 'http://localhost:4000/api/buildings/P/floors/2', {
+                statusCode: 200,
+                body: {
+                    buildingCode: 'P',
+                    floorNumber: 3,
+                    description: 'Physics Labs',
+                },
+            }).as('updateFloorNumber')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 3,
+                        description: 'Physics Labs',
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+            cy.wait('@updateFloorNumber')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('contain.text', `Floor 3`)
+            cy.get('.floor-card').should('contain.text', `Physics Labs`)
+        })
+
+        it('should successfully update floor number and description without override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedFloorNumber = '3'
+            const updatedDescription = 'Updated Physics Labs'
+
+            cy.get('#newFloorNumber').clear().type(updatedFloorNumber)
+            cy.get('#description').clear().type(updatedDescription)
+
+            cy.intercept('PATCH', 'http://localhost:4000/api/buildings/P/floors/2', {
+                statusCode: 200,
+                body: {
+                    buildingCode: 'P',
+                    floorNumber: 3,
+                    description: 'Updated Physics Labs',
+                },
+            }).as('updateFloor')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 3,
+                        description: 'Updated Physics Labs',
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+            cy.wait('@updateFloor')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('contain.text', `Floor 3`)
+            cy.get('.floor-card').should('contain.text', `Updated Physics Labs`)
+        })
+
+        it('should not allow updating only description with override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedDescription = 'Updated Physics Labs'
+
+            cy.get('#description').clear().type(updatedDescription)
+            cy.get('#overrideConfirmation').check()
+
+            cy.get('button[type="submit"]').should('be.disabled')
+        })
+
+        it('should successfully update floor number with override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedFloorNumber = '3'
+
+            cy.get('#newFloorNumber').clear().type(updatedFloorNumber)
+            cy.get('#overrideConfirmation').check()
+
+            cy.intercept('PUT', 'http://localhost:4000/api/buildings/P/floors/2', {
+                statusCode: 200,
+                body: {
+                    buildingCode: 'P',
+                    floorNumber: 3,
+                },
+            }).as('updateFloorNumber')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 3,
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+            cy.wait('@updateFloorNumber')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('contain.text', `Floor 3`)
+            cy.get('.floor-card').should('contain.text', `No description`)
+        })
+
+        it('should successfully update floor number and description with override', () => {
+            cy.wait('@getBuildings')
+
+            cy.get('#selectBuilding').select('P')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('#selectFloor').select('2')
+
+            cy.get('#newFloorNumber').should('have.attr', 'placeholder', '2')
+            cy.get('#description').should('have.attr', 'placeholder', 'Physics Labs')
+
+            const updatedFloorNumber = '3'
+            const updatedDescription = 'Updated Physics Labs'
+
+            cy.get('#newFloorNumber').clear().type(updatedFloorNumber)
+            cy.get('#description').clear().type(updatedDescription)
+            cy.get('#overrideConfirmation').check()
+
+            cy.intercept('PUT', 'http://localhost:4000/api/buildings/P/floors/2', {
+                statusCode: 200,
+                body: {
+                    buildingCode: 'P',
+                    floorNumber: 3,
+                    description: 'Updated Physics Labs',
+                },
+            }).as('updateFloorNumberAndDescription')
+
+            cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
+                body: [
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 0,
+                        description: 'Community floor',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 1,
+                        description: 'Classrooms',
+                    },
+                    {
+                        buildingCode: 'P',
+                        floorNumber: 3,
+                        description: 'Updated Physics Labs',
+                    },
+                ],
+            }).as('getFloorsPhysics')
+
+            cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+            cy.wait('@updateFloorNumberAndDescription')
+            cy.wait('@getFloorsPhysics')
+
+            cy.get('.floor-card').should('contain.text', `Floor 3`)
+            cy.get('.floor-card').should('contain.text', `Updated Physics Labs`)
+        })
+    })
 })
