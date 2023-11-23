@@ -27,12 +27,12 @@ describe('Floors e2e tests', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('/floors')
+        cy.visit('campus/floors')
     })
 
     describe('List floors e2e tests', () => {
         beforeEach(() => {
-            cy.visit('/floors/list')
+            cy.visit('campus/floors/list')
         })
 
         it('has the correct title', () => {
@@ -114,7 +114,7 @@ describe('Floors e2e tests', () => {
 
     describe('Create Floors e2e tests', () => {
         beforeEach(() => {
-            cy.visit('/floors/create')
+            cy.visit('campus/floors/create')
         })
 
         it('should have the correct title', () => {
@@ -305,7 +305,7 @@ describe('Floors e2e tests', () => {
                 ],
             }).as('getFloorsChemistry')
 
-            cy.visit('/floors/edit')
+            cy.visit('campus/floors/edit')
         })
 
         it('should have the correct title', () => {

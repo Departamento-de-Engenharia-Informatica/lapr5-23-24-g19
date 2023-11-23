@@ -121,6 +121,11 @@ describe('CreatePassageComponent', () => {
 
 		cy.get('#building2').select('C');
 		cy.wait('@getFloorsChemistry');
+		
+		cy.on('window:alert', (text) => {
+			// Assert the alert message
+			expect(text).to.exist;
+		  });
 		cy.get('#floor2').should('contain.text','No floors found');
 
 	});

@@ -13,7 +13,7 @@ import { PassageComponent } from './components/passage/passage.component'
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component'
 import { Visualization3DComponent } from './components/visualization3-d/visualization3-d.component'
 import { CampusComponent } from './components/campus-menu/campus-menu.component'
-import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { ListFloorsComponent } from './components/floor/list-floors/list-floors.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ContactInfoComponent } from './components/contact-info/contact-info.component'
@@ -39,14 +39,13 @@ import { RobotService } from './services/robot.service'
 import { CreateRoomComponent } from './components/room/create-room/create-room.component'
 import { RoomService } from './services/room.service'
 import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.component'
-import { ErrorMessageService } from './services/error-message.service'
-import { MessagePopupComponent } from './components/message-popup/message-popup.component'
 import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component'
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
 import { PopupComponent } from './components/popup/popup.component';
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
+import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 
 @NgModule({
     declarations: [
@@ -78,13 +77,13 @@ import { EditPassageComponent } from './components/passage/edit-passage/edit-pas
         ListRobotsComponent,
         CreateRoomComponent,
         ListRoomsComponent,
-        MessagePopupComponent,
         GetBuildingsComponent,
         UpdateMapComponent,
         CreatePassageComponent,
         PopupComponent,
         EditFloorComponent,
         EditPassageComponent,
+        TraceRouteComponent,
     ],
     imports: [
         BrowserModule,
@@ -101,7 +100,6 @@ import { EditPassageComponent } from './components/passage/edit-passage/edit-pas
         PassageService,
         RobotService,
         RoomService,
-        ErrorMessageService,
     ],
     bootstrap: [AppComponent],
 })

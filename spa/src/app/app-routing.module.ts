@@ -21,8 +21,6 @@ import { ListBuildingsMinmaxFloorsComponent } from './components/building/list-b
 import { CreateFloorComponent } from './components/floor/create-floor/create-floor.component'
 import { TaskMenuComponent } from './components/task-menu/task-menu.component'
 import { FleetMenuComponent } from './components/fleet-menu/fleet-menu.component'
-import { PatchFloorComponent } from './components/floor/patch-floor/patch-floor.component'
-import { PutFloorComponent } from './components/floor/put-floor/put-floor.component'
 import { ListRobotsComponent } from './components/robot/list-robots/list-robots.component'
 import { CreateRoomComponent } from './components/room/create-room/create-room.component'
 import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.component'
@@ -31,28 +29,46 @@ import { CreatePassageComponent } from './components/passage/create-passage/crea
 import { CreateBuildingComponent } from './components/building/create-building/create-building.component'
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
+import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
-    // { path: '', redirectTo: 'modules', },
 
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
-    { path: 'task', component: TaskMenuComponent, title: 'Tasks' },
+    {
+        path: 'task', component: TaskMenuComponent, title: 'Tasks',
+        children: [
+            {
+                path: 'trace-route',
+                component: TraceRouteComponent,
+                title: 'Trace route',
+            },
+        ]
+    },
     {
         path: 'visualization',
         component: Visualization3DComponent,
         title: '3d-visualization',
     },
-    { path: 'fleet', component: FleetMenuComponent, title: 'Fleet' },
-
-    { path: 'fleet/robot-types', component: RobotTypeComponent },
-    { path: 'fleet/robots', component: RobotComponent },
     {
-        path: 'fleet/robots/list',
-        component: ListRobotsComponent,
-        title: 'List all robots in the fleet',
+        path: 'fleet', component: FleetMenuComponent, title: 'Fleet', children: [
+
+        ]
     },
+    { path: 'fleet/robot-types', component: RobotTypeComponent },
+    {
+        path: 'fleet/robots', component: RobotComponent,
+        children: [
+            {
+                path: 'list',
+                component: ListRobotsComponent,
+                title: 'List all robots in the fleet',
+            },
+
+        ]
+    },
+
 
     {
         path: 'campus/buildings',
@@ -83,7 +99,7 @@ export const routes: Routes = [
     },
 
     {
-        path: 'floors',
+        path: 'campus/floors',
         component: FloorComponent,
         title: 'Floors',
         children: [
@@ -110,27 +126,43 @@ export const routes: Routes = [
         ],
     },
 
-    { path: 'campus/elevators', component: ElevatorComponent },
     {
-        path: 'campus/elevators/create',
-        component: CreateElevatorComponent,
-        title: 'Create Elevator',
+        path: 'campus/elevators', component: ElevatorComponent,
+        children: [
+            {
+                path: 'create',
+                component: CreateElevatorComponent,
+                title: 'Create Elevator',
+            },
+            // {
+            //     path: 'edit',
+            //     component: ListElevatorsComponent,
+            //     title: 'List Elevators',
+            // },
+            {
+                path: 'list',
+                component: ListElevatorsComponent,
+                title: 'List Elevators',
+            },
+        ]
     },
+
+
     {
-        path: 'campus/elevators/list',
-        component: ListElevatorsComponent,
-        title: 'List Elevators',
-    },
-    { path: 'campus/rooms', component: RoomComponent },
-    {
-        path: 'campus/rooms/create',
-        component: CreateRoomComponent,
-        title: 'Create Room',
-    },
-    {
-        path: 'campus/rooms/list',
-        component: ListRoomsComponent,
-        title: 'List Rooms',
+        path: 'campus/rooms', component: RoomComponent,
+        children: [
+            {
+                path: 'create',
+                component: CreateRoomComponent,
+                title: 'Create Room',
+            },
+            {
+                path: 'list',
+                component: ListRoomsComponent,
+                title: 'List Rooms',
+            },
+
+        ]
     },
     {
         path: 'campus/passages',
@@ -142,6 +174,11 @@ export const routes: Routes = [
                 component: EditPassageComponent,
                 title: 'Edit Passage',
             },
+        ]
+    },
+    {
+        path: 'campus/passages', component: PassageComponent,
+        children: [
             {
                 path: 'list',
                 component: ListPassagesBetweenBuildingsComponent,
@@ -152,12 +189,14 @@ export const routes: Routes = [
                 component: CreatePassageComponent,
                 title: 'Create Passage',
             },
-        ],
+
+        ]
     },
+
     { path: '**', component: PageNotFoundComponent },
 ]
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

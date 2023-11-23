@@ -25,7 +25,7 @@ describe('UpdateMapComponent', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('floors/update-map')
+        cy.visit('campus/floors/update-map')
         cy.wait('@getBuildings')
     })
 
