@@ -1,0 +1,86 @@
+<form id="passageForm" [formGroup]="routeForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
+    <div class="introduce">
+        <div class="row">
+            <div>
+                <label for="buildingCode">Select Building</label>
+                <select id="building1" formControlName="building1" required (change)="onBuilding1Selected($event)">
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="floo1">Select Floor</label>
+                <select id="floor1" formControlName="floor1" required>
+                    <ng-container *ngIf="noFloors1(); else floorsOptions">
+                        <option style="color: red" disabled>No floors found</option>
+                    </ng-container>
+                    <ng-template #floorsOptions>
+                        <option *ngFor="let floor of floors1" [value]="floor.floorNumber">
+                            {{ floor.floorNumber }}
+                        </option>
+                    </ng-template>
+                </select>
+            </div>
+            <div>
+                <label for="room1">Select Room</label>
+                <select id="room1" formControlName="room2" required>
+                    <ng-container *ngIf="noRooms1(); else roomsOptions2">
+                        <option style="color: red" disabled>No rooms found</option>
+                    </ng-container>
+                    <ng-template #roomsOptions1>
+                        <option *ngFor="let room of rooms1" [value]="room.name">
+                            {{ room.name }}
+                        </option>
+                    </ng-template>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <label for="buildingCode">Select Building</label>
+                <select id="building2" formControlName="building2" required (change)="onBuilding2Selected($event)">
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="floor2">Select Floor</label>
+                <select id="floor2" formControlName="floor2" required>
+                    <ng-container *ngIf="noFloors2(); else floorsOptions2">
+                        <option style="color: red" disabled>No floors found</option>
+                    </ng-container>
+                    <ng-template #floorsOptions2>
+                        <option *ngFor="let floor of floors2" [value]="floor.floorNumber">
+                            {{ floor.floorNumber }}
+                        </option>
+                    </ng-template>
+                </select>
+            </div>
+            <div>
+                <label for="room2">Select Room</label>
+                <select id="room2" formControlName="room2" required>
+                    <ng-container *ngIf="noRooms2(); else roomsOptions2">
+                        <option style="color: red" disabled>No rooms found</option>
+                    </ng-container>
+                    <ng-template #roomsOptions2>
+                        <option *ngFor="let room of rooms2" [value]="room.name">
+                            {{ room.name }}
+                        </option>
+                    </ng-template>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="criteria">
+        <label for="criteria">Select criterion</label>
+        <select id="criteria" formControlName="criteria">
+            <option *ngFor="let criterion of criterion" [value]="criterion.desc">
+                {{ criterion.desc }}
+            </option>
+        </select>
+    </div>
+    <button id="submitPassage" type="submit" [disabled]="this.routeForm.invalid">Submit</button>
+</form>
