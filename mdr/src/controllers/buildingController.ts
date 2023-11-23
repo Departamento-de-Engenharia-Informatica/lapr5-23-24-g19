@@ -87,6 +87,14 @@ export default class BuildingController implements IBuildingController {
             const minFloors = parseInt(req.query.minFloors.toString())
             const maxFloors = parseInt(req.query.maxFloors.toString())
 
+            if (minFloors < 0) {
+                return res.status(400).json({ error: 'minFloors cannot have a negative value' })
+            }
+
+            if (maxFloors < 0) {
+                return res.status(400).json({ error: 'maxFloors cannot have a negative value' })
+            }
+
             if (minFloors > maxFloors) {
                 return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' })
             }

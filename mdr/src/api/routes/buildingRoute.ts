@@ -234,7 +234,11 @@ export default (app: Router) => {
         }),
 
         (req, res, next) => {
-            if (parseInt(req.query.minFloors as string)>=0 && parseInt(req.query.maxFloors as string) >=0) {
+            if (
+                (req.query.minFloors && req.query.maxFloors) ||
+                parseInt(req.query.minFloors as string) == 0 ||
+                parseInt(req.query.maxFloors as string) == 0
+            ) {
                 return buildingController.getBuildingsByFloors(req, res, next)
             } else {
                 return buildingController.getBuildings(req, res, next)

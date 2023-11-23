@@ -113,8 +113,15 @@ export default class BuildingService implements IBuildingService {
                 dto.minMaxFloors.max,
             )
 
+            if (buildingsAndFloorCount.length == 0) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Buildings not found',
+                })
+            }
+
             const dtoList = await Promise.all(
-                buildingsAndFloorCount.map(async (value) => {
+                buildingsAndFloorCount.map(async value => {
                     const building = await this.buildingRepo.findByCode(value.buildingCode)
                     return BuildingFloorNumberMap.toDTO(building, value.floorCount)
                 }),
@@ -125,7 +132,6 @@ export default class BuildingService implements IBuildingService {
             throw e
         }
     }
-
     public async editBuilding(dto: IBuildingEditDTO): Promise<Either<ErrorResult, IBuildingDTO>> {
         try {
             const bCode = Code.create(dto.code)
