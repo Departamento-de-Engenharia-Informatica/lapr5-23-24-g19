@@ -59,15 +59,17 @@
             <textarea id="description" formControlName="description"></textarea>
         </div>
 
-        <div class="row">
-            <button
-                type="submit"
-                [disabled]="createElevatorForm.invalid"
-            >
-                Submit
-            </button>
-        </div>
+
     </div>
+
+        <button
+            id="submitElevator"
+            type="submit"
+            [disabled]="createElevatorForm.invalid"
+        >
+            Submit
+        </button>
+
 </form>
 
 <div class="elevator-list">

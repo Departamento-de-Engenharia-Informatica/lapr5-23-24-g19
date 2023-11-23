@@ -80,26 +80,51 @@ describe('Elevator Form e2e tests', () => {
 
         cy.wait('@getFloors')
 
-        cy.get('#selectedFloors').select(['1', '2']);
-        cy.get('#brand').type('BrandName');
-        cy.get('#model').type('ModelName');
-        cy.get('#serialNumber').type('Serial123');
-        cy.get('#description').type('This is a test elevator.');
+        const buildingId = 'P'
+        const identifier = 1
+        const floorsNumber = [1, 2]
+        const brand = 'BrandName'
+        const model = 'ModelName'
+        const serialNumber = 'Serial123'
+        const description = 'This is a test elevator.'
+
+        cy.get('#selectedFloors').select(floorsNumber);
+        cy.get('#brand').type(brand);
+        cy.get('#model').type(model);
+        cy.get('#serialNumber').type(serialNumber);
+        cy.get('#description').type(description);
 
 
-        cy.get('button[type="submit"]').should('not.have.attr', 'disabled');
+        cy.intercept('POST', 'http://localhost:4000/api/buildings/P/elevators', {
+            statusCode: 201,
+                body: {
+                    buildingId: buildingId,
+                    identifier: 1,
+                    floors: floorsNumber,
+                    brand: brand,
+                    model: model,
+                    serialNumber: serialNumber,
+                    description: description,
+            },
 
-        cy.get('button[type="submit"]').click();
-        //cy.get('button').contains('Submit').click()
-
-        cy.get('form').submit();
+        }).as('createElevator')
 
 
+        cy.get('button[type="submit"]').click()
+        cy.wait('@createElevator')
 
-
-        // Assert that the created elevator information is displayed
         cy.get('.elevator-list').should('exist');
-        //cy.get('.elevator-card p').should('have.length.greaterThan', 0);
+        cy.get('.elevator-card p').should('have.length', 7);
+
+
+        cy.get('.elevator-card p').contains('Building ID: P');
+        cy.get('.elevator-card p').contains('Identifier: 1');
+        cy.get('.elevator-card p').contains('Floors: 1, 2');
+        cy.get('.elevator-card p').contains('Brand: BrandName');
+        cy.get('.elevator-card p').contains('Model: ModelName');
+        cy.get('.elevator-card p').contains('Serial Number: Serial123');
+        cy.get('.elevator-card p').contains('Description: This is a test elevator.');
+
     });
 
 

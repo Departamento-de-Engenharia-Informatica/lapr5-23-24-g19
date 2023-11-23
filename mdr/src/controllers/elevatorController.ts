@@ -28,7 +28,7 @@ export default class ElevatorController implements IElevatorController {
             }
 
             const message = result.value as ICreatedElevatorDTO
-            return res.status(201).send(JSON.stringify(message))
+            return res.status(201).send(message)
         } catch (err) {
             return next(err)
         }
