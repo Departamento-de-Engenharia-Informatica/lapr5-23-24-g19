@@ -16,10 +16,10 @@ participant "MD" as md
 activate usr
     usr -> view : wants to list buildings between a minimum\nand maximum number of floors
     activate view
-        view --> usr : requests data
+        view --> usr : requests minimum and maximum number of floors
     deactivate view
 
-    usr -> view : provides data
+    usr -> view : provides minimum and maximum number of floors
     activate view
         view -> ctrl : onSubmit()
         activate ctrl
@@ -28,7 +28,7 @@ activate usr
                 dto --> ctrl : dto
             deactivate dto
 
-            ctrl -> svc : getBuildingsByFloors()
+            ctrl -> svc : getBuildingsByFloors(dto)
             activate svc
                 svc --> params** : create()
                 activate params
@@ -53,31 +53,22 @@ activate usr
                             end
 
                             svc --> ctrl : dto[]
+                            ctrl --> ctrl : buildings = dto[]
                             ctrl --> view : buildings
                             view --> usr : lists buildings
                         else building(s) not found
-                            md --> http : 200: empty list
+                            md --> http : 404: error
                             http --> svc : observable
 
-                            svc --> dto** : create()
-                            activate dto
-                                dto --> svc : dto
-                            deactivate dto
-
-                            svc --> ctrl : empty list
+                            svc --> ctrl : error
+                            ctrl --> ctrl : buildings = []
                             ctrl --> view : buildings
-                            view --> usr : does not list anything
+                            view --> usr : alerts buildings not found
                         end
                     deactivate md
                 deactivate http
             deactivate svc
         deactivate ctrl
-
-
-
-
-
-
     deactivate view
 deactivate usr
 

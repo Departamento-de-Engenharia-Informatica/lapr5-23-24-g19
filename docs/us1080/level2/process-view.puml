@@ -10,10 +10,10 @@ participant "MD" as md
 activate usr
     usr -> ui : wants to list buildings between a minimum\nand maximum number of floors
     activate ui
-        ui --> usr : requests data
+        ui --> usr : requests minimum and maximum number of floors
     deactivate ui
 
-    usr -> ui : provides data
+    usr -> ui : provides minimum and maximum number of floors
     activate ui
         ui -> md : GET /buildings/?minFloors={min}&maxFloors={max}
         activate md
@@ -22,8 +22,8 @@ activate usr
                 md --> ui : 200: buildings
                 ui --> usr : lists buildings
             else building(s) not found
-                md --> ui : 200: empty list
-                ui --> usr : does not list anything
+                md --> ui : 404: error
+                ui --> usr : alerts buildings not found
             end
         deactivate md
     deactivate ui

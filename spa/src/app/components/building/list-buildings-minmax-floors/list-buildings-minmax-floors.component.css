@@ -53,3 +53,20 @@
 .invalid-input {
     border: 2px solid rgb(218, 62, 62);
 }
+
+button {
+    padding: 10px 20px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-top: 10px;
+    display: block;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}

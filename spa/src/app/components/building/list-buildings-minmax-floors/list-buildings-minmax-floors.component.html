@@ -43,12 +43,8 @@
                         </div>
                     </div>
 
-                    <button
-                        class="button"
-                        type="submit"
-                        style="margin-top: 10px"
-                        [disabled]="submitDisabled()"
-                    >
+                    <button *ngIf="formValid()" type="submit">Submit</button>
+                    <button *ngIf="!formValid()" type="submit" [disabled]="true">
                         Submit
                     </button>
                 </form>

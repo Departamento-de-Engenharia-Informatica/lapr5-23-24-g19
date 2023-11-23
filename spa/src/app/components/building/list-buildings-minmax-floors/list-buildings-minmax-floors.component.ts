@@ -16,12 +16,15 @@ export class ListBuildingsMinmaxFloorsComponent {
     buildings: BuildingByFloorsDTO[] = []
     filterForm: FormGroup = null as unknown as FormGroup
 
-    constructor(private formBuilder: FormBuilder, private service: BuildingService) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private service: BuildingService,
+    ) {}
 
     ngOnInit() {
         this.filterForm = this.formBuilder.group({
-            min: [null, [Validators.min(1), Validators.required]],
-            max: [null, [Validators.min(1), Validators.required]],
+            min: [null, [Validators.min(0), Validators.required]],
+            max: [null, [Validators.min(0), Validators.required]],
         })
     }
 
@@ -31,12 +34,18 @@ export class ListBuildingsMinmaxFloorsComponent {
             max: this.filterForm.value.max as unknown as number,
         }
 
-        this.service
-            .getBuildingsByFloors(dto)
-            .subscribe((list: BuildingByFloorsDTO[]) => {
+        this.service.getBuildingsByFloors(dto).subscribe(
+            (list: BuildingByFloorsDTO[]) => {
                 this.allBuildings = list
                 this.buildings = this.allBuildings
-            })
+            },
+            (error) => {
+                alert(error.error)
+                this.filterForm.reset()
+                this.allBuildings = []
+                this.buildings = this.allBuildings
+            },
+        )
     }
 
     filter(event: Event) {
@@ -54,10 +63,10 @@ export class ListBuildingsMinmaxFloorsComponent {
         }
     }
 
-    submitDisabled(): boolean {
+    formValid(): boolean {
         const min = this.filterForm.value.min as unknown as number
         const max = this.filterForm.value.max as unknown as number
-        return min < 0 || max < 0 || min > max
+        return min >= 0 && max >= 0 && min < max
     }
 
     isInvalid(controlName: string): boolean {

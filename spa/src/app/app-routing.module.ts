@@ -93,7 +93,7 @@ export const routes: Routes = [
             {
                 path: 'list-by-floors',
                 component: ListBuildingsMinmaxFloorsComponent,
-                title: 'List Buildings by minimum and maximum number of Floors',
+                title: 'List Buildings by Floors',
             },
         ],
     },

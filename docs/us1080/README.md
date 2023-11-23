@@ -35,6 +35,7 @@ To successfully fulfill this user story, the following criteria must be met:
 
 -   The user should be prevented from submitting the form if the minimum floor input exceeds the maximum floor input.
 -   The user should be prevented from submitting the form if anything other than an integer is entered.
+-   The user should be prevented from submiiting the form if either minimum floor number or maximum floor number is a negative value
 -   The user interface must effectively present the buildings along with their respective specifications and details.
 
 ### 4.1 Outcomes
