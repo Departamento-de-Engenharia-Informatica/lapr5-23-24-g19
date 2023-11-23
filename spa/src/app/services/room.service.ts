@@ -1,25 +1,9 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http'
+import {HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import {catchError, Observable, throwError} from 'rxjs'
+import { Observable } from 'rxjs'
 import { AppModule } from '../app.module'
-
-export interface RoomDTO {
-    name: string
-    description: string
-    category: string
-    dimensions: { length: number; width: number }
-    positions: { x: number; y: number }
-}
-
-export interface CreatedRoomDTO {
-    name: string
-    buildingCode: string
-    floorNumber: number
-    description: string
-    category: string
-    dimensions: { length: number; width: number }
-    positions: { x: number; y: number }
-}
+import { CreatedRoomDTO } from 'src/app/dto/CreatedRoomDTO'
+import { RoomDTO } from 'src/app/dto/RoomDTO'
 
 @Injectable({
     providedIn: 'root',

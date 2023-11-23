@@ -4,8 +4,6 @@ import { Observable, catchError, throwError } from 'rxjs'
 import { AppModule } from '../app.module'
 import { PassageDTO } from 'src/app/dto/PassageDTO'
 
-
-
 @Injectable({
     providedIn: 'root',
 })

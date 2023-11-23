@@ -7,7 +7,7 @@ import { RouteDTO } from 'src/app/dto/TaskDTO';
 import { BuildingService } from 'src/app/services/building.service';
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
 import { PassageService } from 'src/app/services/passage.service';
-import { RoomDTO } from 'src/app/services/room.service';
+import { RoomDTO } from 'src/app/dto/RoomDTO'
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
