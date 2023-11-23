@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { BuildingService } from 'src/app/services/building.service'
-import {
-    ElevatorDTO,
-    ElevatorService,
-    CreatedElevatorDTO,
-} from 'src/app/services/elevator.service'
 import { CreatedRoomDTO, RoomService } from '../../../services/room.service'
 import { FloorAndBuildingDTO, FloorService } from '../../../services/floor.service'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'

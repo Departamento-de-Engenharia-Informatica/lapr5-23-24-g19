@@ -2,15 +2,13 @@ import {
     Component,
     OnInit,
 } from '@angular/core'
-import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { BuildingService } from 'src/app/services/building.service'
-import {
-    CreatedElevatorDTO,
-    ElevatorDTO,
-    ElevatorService,
-} from 'src/app/services/elevator.service'
+import { ElevatorService, } from 'src/app/services/elevator.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
+import { ElevatorDTO } from 'src/app/dto/ElevatorDTO'
+import { CreatedElevatorDTO } from 'src/app/dto/CreatedElevatorDTO'
 
 @Component({
     selector: 'app-create-elevator',

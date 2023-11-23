@@ -1,34 +1,10 @@
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AppModule } from '../app.module'
-import {catchError, Observable, tap, throwError} from 'rxjs'
+import { Observable } from 'rxjs'
+import { ElevatorDTO } from 'src/app/dto/ElevatorDTO'
+import { CreatedElevatorDTO } from 'src/app/dto/CreatedElevatorDTO'
 
-// interface BuildingProps{
-//   code:string
-// }
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-
-export interface ElevatorDTO {
-    floors: number[]
-    brand?: string
-    model?: string
-    serialNumber?: string
-    description?: string
-}
-
-export interface CreatedElevatorDTO {
-    buildingId: string
-    identifier: number
-    floors: number[]
-
-    brand?: string
-    model?: string
-    serialNumber?: string
-    description?: string
-}
 
 @Injectable()
 // {

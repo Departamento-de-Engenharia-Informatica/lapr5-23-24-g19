@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import {
-    ElevatorService,
-    CreatedElevatorDTO,
-} from 'src/app/services/elevator.service'
+import { ElevatorService } from 'src/app/services/elevator.service'
+import { CreatedElevatorDTO } from 'src/app/dto/CreatedElevatorDTO'
 
 @Component({
     selector: 'app-list-elevators',
