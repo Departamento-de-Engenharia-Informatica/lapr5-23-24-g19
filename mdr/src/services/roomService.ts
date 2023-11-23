@@ -27,23 +27,23 @@ export default class RoomService implements IRoomService {
     ) {}
 
     public async createRoom(dto: IRoomDTO): Promise<Either<ErrorResult, IRoomDTO>> {
-        const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
-        const floorNumber = FloorNumber.create(dto.floorNumber).getValue()
-
-        const floor = await this.floorRepo.findByCodeNumber(buildingCode, floorNumber)
-        if (!floor) {
-            return left({
-                errorCode: ErrorCode.NotFound,
-                message: 'Floor Not found',
-            })
-        }
-
         try {
-            const dtoName = RoomName.create(dto.name).getValue()
-            const dtoDescription = RoomDescription.create(dto.description).getValue()
-            const dtoCategory = RoomCategory.create(dto.category).getValue()
-            const dtoDimensions = RoomDimensions.create(dto.dimensions.length, dto.dimensions.width).getValue()
-            const dtoPositions = Coordinates.create(dto.positions.x, dto.positions.y).getValue()
+            const buildingCode = BuildingCode.create(dto.buildingCode).getOrThrow()
+            const floorNumber = FloorNumber.create(dto.floorNumber).getOrThrow()
+
+            const floor = await this.floorRepo.findByCodeNumber(buildingCode, floorNumber)
+            if (!floor) {
+                return left({
+                    errorCode: ErrorCode.NotFound,
+                    message: 'Floor Not found',
+                })
+            }
+
+            const dtoName = RoomName.create(dto.name).getOrThrow()
+            const dtoDescription = RoomDescription.create(dto.description).getOrThrow()
+            const dtoCategory = RoomCategory.create(dto.category).getOrThrow()
+            const dtoDimensions = RoomDimensions.create(dto.dimensions.length, dto.dimensions.width).getOrThrow()
+            const dtoPositions = Coordinates.create(dto.positions.x, dto.positions.y).getOrThrow()
 
             const room = Room.create({
                 name: dtoName,
@@ -67,7 +67,7 @@ export default class RoomService implements IRoomService {
         } catch (e) {
             return left({
                 errorCode: ErrorCode.BussinessRuleViolation,
-                message: 'Business rule violation',
+                message: e.message ?? 'Business rule violation',
             } as ErrorResult)
             throw e
         }

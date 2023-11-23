@@ -87,7 +87,17 @@ export class CreateRoomComponent implements OnInit {
         this.roomService
             .createRoom(buildingCode, floorNumber, dto)
             .subscribe((room: CreatedRoomDTO) => {
+
+                let alertMessage = 'Room created successfully!\n'
+                alert(alertMessage)
+
                 this.createdRoom = room
-            })
+                this.createRoomForm.reset();
+            },
+                (error) => {
+                    alert(error.error)
+                    this.createRoomForm.reset()
+                },
+            )
     }
 }

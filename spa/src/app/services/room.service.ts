@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http'
+import {HttpClient, HttpErrorResponse} from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import {catchError, Observable, throwError} from 'rxjs'
 import { AppModule } from '../app.module'
@@ -40,19 +40,6 @@ export class RoomService {
                 observe: 'body',
                 responseType: 'json',
             },
-        ).pipe(
-            catchError((error: any) => {
-                if (error.status === 422) {
-                    const errorMessage = error.error.message || 'Bad Request'
-                    console.log(`Error: ${errorMessage}`)
-                    return throwError(errorMessage)
-                } else {
-                    console.log(`Error: ${error.message}`)
-                    return throwError(
-                        'An unexpected error occurred. Please try again later.',
-                    )
-                }
-            }),
         )
     }
 
