@@ -30,6 +30,7 @@ import { UpdateMapComponent } from './components/floor/update-map/update-map.com
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
 import { CreateBuildingComponent } from './components/building/create-building/create-building.component'
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
+import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -131,16 +132,27 @@ export const routes: Routes = [
         component: ListRoomsComponent,
         title: 'List Rooms',
     },
-    { path: 'campus/passages', component: PassageComponent },
     {
-        path: 'campus/passages/list',
-        component: ListPassagesBetweenBuildingsComponent,
-        title: 'List passages between buildings',
-    },
-    {
-        path: 'campus/passages/create',
-        component: CreatePassageComponent,
-        title: 'Create Passage',
+        path: 'campus/passages',
+        component: PassageComponent,
+        title: 'Passages',
+        children: [
+            {
+                path: 'edit',
+                component: EditPassageComponent,
+                title: 'Edit Passage',
+            },
+            {
+                path: 'list',
+                component: ListPassagesBetweenBuildingsComponent,
+                title: 'List passages between buildings',
+            },
+            {
+                path: 'create',
+                component: CreatePassageComponent,
+                title: 'Create Passage',
+            },
+        ],
     },
     { path: '**', component: PageNotFoundComponent },
 ]

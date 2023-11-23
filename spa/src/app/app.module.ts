@@ -45,7 +45,8 @@ import { GetBuildingsComponent } from './components/building/get-buildings/get-b
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
 import { PopupComponent } from './components/popup/popup.component';
-import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
+import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
+import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 
 @NgModule({
     declarations: [
@@ -83,6 +84,7 @@ import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.com
         CreatePassageComponent,
         PopupComponent,
         EditFloorComponent,
+        EditPassageComponent,
     ],
     imports: [
         BrowserModule,
