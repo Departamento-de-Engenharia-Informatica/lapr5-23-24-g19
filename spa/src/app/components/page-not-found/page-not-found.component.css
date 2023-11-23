@@ -1,0 +1,26 @@
+.container {
+    max-width: 600px;
+    margin: 100px auto;
+}
+
+h1 {
+    font-size: 4em;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: #5bc0de;
+    text-decoration: none;
+    font-weight: bold;
+}

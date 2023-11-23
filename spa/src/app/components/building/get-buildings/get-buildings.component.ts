@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import { ErrorMessageService } from 'src/app/services/error-message.service'
 
 @Component({
     selector: 'app-get-buildings',
@@ -17,8 +16,7 @@ export class GetBuildingsComponent {
 
     constructor(
         private service: BuildingService,
-        private errorSvc: ErrorMessageService,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.listBuildings()
@@ -28,20 +26,14 @@ export class GetBuildingsComponent {
         this.service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
             this.allBuildings = buildingsList
             this.buildings = this.allBuildings
-        })
-    }
-
-    showError(): boolean {
-        if (this.buildings != undefined) {
             if (this.buildings.length == 0) {
-                this.errorSvc.setErrorMessage('Building Not Found')
-                console.log('show')
-                return true
+                alert("No buildings Found")
             }
-        }
-        return false
+        },
+            (error) => {
+                alert(error)
+            },)
     }
-
     filter(event: Event) {
         const prop = (event.target as HTMLInputElement).value.trim().toLowerCase()
         if (prop.length === 0) {

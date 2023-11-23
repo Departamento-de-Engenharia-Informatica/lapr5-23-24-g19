@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { ErrorMessageService } from 'src/app/services/error-message.service'
 
 @Component({
     selector: 'app-building',
@@ -7,6 +6,5 @@ import { ErrorMessageService } from 'src/app/services/error-message.service'
     styleUrls: ['./building.component.css'],
 })
 export class BuildingComponent {
-    constructor(private errorsvc: ErrorMessageService) {}
-    // TODO err messages
+    constructor() {}
 }

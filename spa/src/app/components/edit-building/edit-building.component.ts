@@ -4,8 +4,6 @@ import { ActivatedRoute } from '@angular/router'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 
-import { ErrorMessageService } from 'src/app/services/error-message.service'
-
 @Component({
     selector: 'app-edit-building',
     templateUrl: './edit-building.component.html',
@@ -23,11 +21,8 @@ export class EditBuildingComponent {
         private fb: FormBuilder,
         private service: BuildingService,
         private route: ActivatedRoute,
-        private message: ErrorMessageService,
     ) {
-        service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
-            this.buildings = buildingsList
-        })
+
         this.buildingCode = this.route.snapshot.params['buildingCode']
         this.buildingForm = this.fb.group({
             buildingCode: [null, Validators.required],
@@ -37,27 +32,6 @@ export class EditBuildingComponent {
             width: [null, [Validators.min(1)]],
             overrideConfirmation: [false],
         })
-
-        //se for para usar o url
-        // const selectedBuilding = this.getBuilding(this.buildingCode);
-        // this.buildingForm = this.fb.group({
-        //     buildingCode: [this.buildingCode, Validators.required],
-        //     name: [selectedBuilding?.name || ''],
-        //     description: [selectedBuilding?.description || ''],
-        //     length: [selectedBuilding?.maxFloorDimensions.length || null, [Validators.required, Validators.min(1)]],
-        //     width: [selectedBuilding?.maxFloorDimensions.width || null, [Validators.required, Validators.min(1)]],
-        //     overrideConfirmation: [false]
-        // });
-
-        // this.buildingForm.get('selectedBuildingCode')?.valueChanges.subscribe((selectedCode: string) => {
-        //     const selectedBuilding = this.getBuilding(selectedCode);
-        //     if (selectedBuilding) {
-        //         this.building.name = selectedBuilding.name
-        //         this.building.description = selectedBuilding.description
-        //         this.building.maxFloorDimensions.length = selectedBuilding.maxFloorDimensions.length
-        //         this.building.maxFloorDimensions.width = selectedBuilding.maxFloorDimensions.width
-        //     }
-        // });
     }
 
     submitForm() {
@@ -139,6 +113,16 @@ export class EditBuildingComponent {
                 width: 0,
             },
         } as BuildingDTO
+
+        this.service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
+            this.buildings = buildingsList
+            if (this.buildings.length == 0) {
+                alert("No buildings Found")
+            }
+        },
+            (error) => {
+                alert(error)
+            })
     }
 
     onBuildingSelected(event: any): void {
