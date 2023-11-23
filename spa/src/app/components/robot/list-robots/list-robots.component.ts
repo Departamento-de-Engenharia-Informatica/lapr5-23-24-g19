@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { RobotDTO, RobotService } from 'src/app/services/robot.service'
+import { RobotService } from 'src/app/services/robot.service'
+import { RobotDTO } from 'src/app/dto/RobotDTO'
 
 @Component({
     selector: 'app-list-robots',

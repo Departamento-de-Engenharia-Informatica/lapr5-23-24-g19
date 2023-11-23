@@ -2,14 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { AppModule } from '../app.module'
-
-export interface RobotDTO {
-    code: string
-    nickname: string
-    typeCode: string
-    serialNumber: string
-    description?: string
-}
+import { RobotDTO } from 'src/app/dto/RobotDTO'
 
 @Injectable({
     providedIn: 'root',
