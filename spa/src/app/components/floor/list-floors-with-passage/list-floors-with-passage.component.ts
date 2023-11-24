@@ -17,7 +17,7 @@ export class ListFloorsWithPassageComponent implements OnInit {
 
     allFloorsPassages: FloorPassageDTO[]
 
-    
+
     constructor(
         private buildingService: BuildingService,
         private floorService: FloorService
