@@ -48,6 +48,8 @@ import { EditPassageComponent } from './components/passage/edit-passage/edit-pas
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 import { FloorService } from './services/floor.service'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
+import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
+import { RobotTypeRepo } from './repos/RobotTypeRepo'
 
 @NgModule({
     declarations: [
@@ -87,6 +89,7 @@ import { ListFloorsWithPassageComponent } from './components/floor/list-floors-w
         EditPassageComponent,
         TraceRouteComponent,
         ListFloorsWithPassageComponent,
+        CreateRobotTypeComponent,
     ],
     imports: [
         BrowserModule,
@@ -104,6 +107,7 @@ import { ListFloorsWithPassageComponent } from './components/floor/list-floors-w
         RobotService,
         RoomService,
         FloorService,
+        RobotTypeRepo
     ],
     bootstrap: [AppComponent],
 })

@@ -5,17 +5,15 @@ export enum TaskType {
 
 export namespace TaskType {
     export function toString(s: TaskType): string {
-        switch (s.trim().toUpperCase()) {
+        switch (s) {
             case TaskType.SURVEILLANCE:
                 return 'SURVEILLANCE'
             case TaskType.DELIVERY:
                 return 'DELIVERY'
-            default:
-                throw 'Unknown'
         }
     }
     export function toType(s: string): TaskType {
-        const type = TaskType[s.trim().toUpperCase()]
+        const type = TaskType[s]
         if (!type) {
             throw new Error(`Unknown TaskType: ${type}`)
         }

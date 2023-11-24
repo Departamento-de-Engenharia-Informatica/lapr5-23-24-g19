@@ -31,6 +31,7 @@ import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.com
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
+import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -57,7 +58,16 @@ export const routes: Routes = [
 
         ]
     },
-    { path: 'fleet/robot-types', component: RobotTypeComponent },
+    {
+        path: 'fleet/robot-types', component: RobotTypeComponent,
+        children: [
+            {
+                path: 'create',
+                component: CreateRobotTypeComponent,
+                title: 'Create robot type',
+            },
+        ]
+    },
     {
         path: 'fleet/robots', component: RobotComponent,
         children: [
@@ -66,7 +76,6 @@ export const routes: Routes = [
                 component: ListRobotsComponent,
                 title: 'List all robots in the fleet',
             },
-
         ]
     },
 

@@ -73,6 +73,10 @@ export default {
             name: 'RobotController',
             path: '../controllers/robotController'
         },
+        task: {
+            name: 'TaskController',
+            path: '../controllers/taskController'
+        },
     },
 
     repos: {
@@ -185,6 +189,10 @@ export default {
         robot: {
             name: 'RobotService',
             path: '../services/robotService'
+        },
+        task: {
+            name: 'TaskService',
+            path: '../services/taskService'
         },
     },
 }
