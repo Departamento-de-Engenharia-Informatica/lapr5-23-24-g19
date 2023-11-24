@@ -31,7 +31,7 @@ usr -> view : wants to create elevator
                 note right : see us170 documentation
                  http <--]    : 404: error
                 http --> svc : observable
-                svc --> ctrl : []
+                svc --> ctrl : error
                 ctrl --> ctrl : buildings = []
                 note bottom : creates alert with the error message
                 ctrl --> view : buildings
@@ -74,7 +74,7 @@ usr -> view : wants to create elevator
                     note right : see us210 documentation
                     http <--]  : 404: error
                     http --> svc : observable
-                    svc --> ctrl : []
+                    svc --> ctrl : error
                     ctrl --> ctrl : floors = []
                     note bottom : creates alert with the error message
                     ctrl --> view : floors

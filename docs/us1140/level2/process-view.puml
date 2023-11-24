@@ -13,7 +13,7 @@ activate usr
         activate md
 
         alt building(s) not found
-                md --> ui : 204: empty list
+                md --> ui : 404: error
                 ui --> usr : informs building(s) not found
         else building(s) found
                 note right of md : see US 170 documentation
@@ -29,7 +29,7 @@ activate usr
         activate md
 
         alt elevator(s) not found
-            md --> ui : 204: empty list
+            md --> ui : 404: error
             ui --> usr : informs elevator(s) not found
         else elevator(s) found
 
