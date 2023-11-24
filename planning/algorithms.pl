@@ -9,6 +9,8 @@
 :- use_module(library(lists)).
 :- use_module(library(sort)).
 
+:- use_module('util/functional', [ map/3, compare_on/4 ]).
+
 % NOTE: Notation used for paths:
 % Path = [PathElement]
 % PathElement = elev(building, floor1, floor2)
@@ -27,17 +29,6 @@ resolve_criterium('least-buildings', algorithms:less_buildings).
 less_elevators(Sign, Path1, Path2) :- compare_on(count_elev, Path1, Path2, Sign).
 less_buildings(Sign, Path1, Path2) :- compare_on(count_build, Path1, Path2, Sign).
 
-% TODO: move to a utils/functional.pl file
-map(_, [], []).
-map(Func, [X|Xs], [Y|Ys]) :-
-    call(Func, X, Y),
-    map(Func, Xs, Ys).
-
-% TODO: move to a utils/functional.pl file
-compare_on(Func, X, Y, Sign) :-
-    call(Func, X, X1),
-    call(Func, Y, Y1),
-    compare(Sign, X1, Y1).
 
 
 count_elev(Xs, Count) :- count_elev_aux(Xs, 0, Count).
