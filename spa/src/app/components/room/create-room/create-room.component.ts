@@ -64,7 +64,11 @@ export class CreateRoomComponent implements OnInit {
                 .getFloors(this.selectedBuilding)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
                     this.floors = list
-                })
+                },(error) => {
+                    alert(error.error)
+                    this.floors = []
+                },
+                )
         }
     }
 

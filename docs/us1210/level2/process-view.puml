@@ -14,7 +14,7 @@ activate usr
             note right of md : see US 170 documentation
 
         alt building(s) not found
-            md --> ui: 204: emtpy list
+            md --> ui: 404: error
             ui --> usr: informs building(s) not found
         else building(s) found
             md --> ui : 200: buildings
@@ -30,7 +30,7 @@ activate usr
             note right of md : see US 210 documentation
 
             alt floor(s) not found
-                md --> ui: 204: empty list
+                md --> ui: 404: error
                 ui --> usr: informs floor(s) not found
             else floor(s) found
                 md --> ui : 200: floors
@@ -45,13 +45,16 @@ activate usr
         activate md
             note right of md : see US 310 documentation
 
-            alt room not created
+            alt room room bad parameters
                 md --> ui: 422: error
                 ui --> usr: informs error
+            else room already exists
+                 md --> ui: 422: error
+                 ui --> usr: informs error
             else room created successfully
                 md --> ui : 201: room
                 deactivate md
-        ui --> usr : previews created room
+                ui --> usr : previews created room
 
                 end
             end
