@@ -20,7 +20,13 @@ export class ListRobotsComponent implements OnInit {
         this.robotService.getRobots().subscribe((list: RobotDTO[]) => {
             this.allRobots = list
             this.robots = this.allRobots
-        })
+        },
+            (error) => {
+                alert(error.error)
+                this.allRobots = []
+                this.robots = this.allRobots
+            },
+        )
     }
 
     filter(event: Event) {

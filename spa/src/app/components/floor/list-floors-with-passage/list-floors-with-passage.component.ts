@@ -39,8 +39,18 @@ export class ListFloorsWithPassageComponent implements OnInit {
             .getFloorsWithPassage(this.selectedBuilding)
             .subscribe((list: FloorPassageDTO[]) => {
                 this.allFloorsPassages = list
+
+                if(this.allFloorsPassages.length === 0)
+                    alert("Floors without passages")
+
                 this.floorPassages = this.allFloorsPassages
-            })
+            },(error) => {
+                    alert(error.error)
+                    this.allFloorsPassages = []
+                    this.floorPassages = this.allFloorsPassages
+                },
+
+            )
     }
 
     filter(event: Event) {

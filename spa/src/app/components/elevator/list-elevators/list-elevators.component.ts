@@ -38,7 +38,12 @@ export class ListElevatorsComponent implements OnInit {
             .subscribe((list: CreatedElevatorDTO[]) => {
                 this.allElevators = list
                 this.elevators = this.allElevators
-            })
+            },(error) => {
+                alert(error.error)
+                this.allElevators = []
+                this.elevators = this.allElevators
+            },
+            )
     }
 
     filter(event: Event) {

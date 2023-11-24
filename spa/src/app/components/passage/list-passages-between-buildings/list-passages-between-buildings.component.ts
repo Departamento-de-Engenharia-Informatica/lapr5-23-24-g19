@@ -41,7 +41,13 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
             .subscribe((list: PassageDTO[]) => {
                 this.allPassages = list
                 this.passages = this.allPassages
-            })
+            },
+                (error) => {
+                alert(error.error)
+                    this.allPassages = []
+                    this.passages = this.allPassages
+                },
+            )
     }
 
     filter(event: Event) {
