@@ -60,7 +60,11 @@ extract_build(pass(B1, _, B2, _), [B1, B2]).
 
 
 
-some_alg(_Orig, _Dest, _Path) :- fail. % TODO
+some_alg((B, F, X, Y), (B, F, X, Y), []).
+some_alg((B, F, X1, X2), (B, F, X1, X2), Path) :- fail. % walk the floor
+some_alg((B, F1, X1, Y1), (B, F2, X2, Y2), Path) :- fail. % catch elevator
+some_alg((B1, F1, X1, Y1), (B2, F2, X2, Y2), Path) :- fail. % corridor
+
 
 % Orig = (building, floor, x, y)
 % Dest = (building, floor, x, y)
