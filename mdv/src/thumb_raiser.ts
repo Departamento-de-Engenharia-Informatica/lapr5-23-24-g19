@@ -1666,8 +1666,27 @@ export default class ThumbRaiser {
                         position.z,
                     );
 
-                    // TODO: rotate elevator
-                    // newElevator.rotateY(THREE.MathUtils.degToRad(90));
+                    switch (e.orientation) {
+                        case 'E':
+                            this.elevators[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(0),
+                            );
+                            break;
+                        case 'N':
+                            this.elevators[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(90),
+                            );
+                            break;
+                        case 'W':
+                            this.elevators[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(180),
+                            );
+                            break;
+                        case 'W':
+                            this.elevators[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(260),
+                            );
+                    }
                 });
 
                 // Set the spotlight target
