@@ -17,7 +17,7 @@ activate usr
     note right of md : see US 380 documentation
 
     alt robot(s) not found
-        md --> ui : 204: empty
+        md --> ui : 404: error
         ui --> usr: informs robot(s) not found
     else robot(s) found
         md --> ui: 200: robots

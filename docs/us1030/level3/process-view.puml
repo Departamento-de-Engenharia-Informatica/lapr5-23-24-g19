@@ -1,0 +1,68 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "dto:\nRobotDTO" as dto
+
+participant "HTTP Driver" as http
+
+
+activate usr
+    usr -> view :  wants to list all fleet robots
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getRobots()
+            activate svc
+                svc -> http : get({baseUrl}/robots)
+                activate http
+                    http ->] : GET /robots
+
+                    note right : see us380 documentation
+    alt robot(s) not found
+                        http <--]: 404: error
+                        http --> svc : observable
+                        svc --> ctrl : error
+                        ctrl --> ctrl : robots = []
+                        note bottom : creates alert with the error message
+                        ctrl --> view : robots
+                        view --> usr : does not show anything
+
+    else robot(s) found
+                        http <--] : 200: robots
+
+
+                    http --> svc : observable
+                deactivate http
+
+                loop for each robot
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+                end
+
+                svc --> ctrl : dto[]
+            deactivate svc
+            ctrl --> ctrl : robot = dto[]
+            ctrl --> view : robots
+        deactivate ctrl
+
+
+
+
+
+        view --> usr : shows robots
+    deactivate view
+
+
+    deactivate view
+deactivate usr
+
+end
+
+@enduml
