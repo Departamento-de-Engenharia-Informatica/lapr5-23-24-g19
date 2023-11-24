@@ -42,7 +42,8 @@ export class CreateElevatorComponent implements OnInit {
     ngOnInit(): void {
         this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
             this.buildings = list
-        })
+        }
+        )
     }
 
     listFloors(): void {
@@ -51,7 +52,11 @@ export class CreateElevatorComponent implements OnInit {
                 .getFloors(this.selectedBuilding)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
                     this.floors = list
-                })
+                },(error) => {
+                alert(error.error)
+                this.floors = []
+            },
+        )
         }
     }
 
@@ -67,8 +72,6 @@ export class CreateElevatorComponent implements OnInit {
             description: this.createElevatorForm.value.description ?? undefined,
         }
 
-
-        console.log(JSON.stringify(dto))
         const buildingId = this.createElevatorForm.value.buildingId
 
         this.elevatorService

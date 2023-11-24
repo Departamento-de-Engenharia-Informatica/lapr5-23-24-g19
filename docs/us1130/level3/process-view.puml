@@ -6,11 +6,15 @@ actor "Campus Manager" as usr
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
 participant "Service" as svc
-participant "dto:\nDTO" as dto
+participant "dto:\nBuildingDTO" as dto
+participant "dto:\nFloorAndBuildingDTO" as dtofb
+participant "dto:\nElevatorDTO" as dtoee
+participant "dto:\nCreatedElevatorDTO" as dtoe
+
+
 
 participant "HTTP Driver" as http
 
-participant "MD" as md
 
 activate usr
 usr -> view : wants to create elevator
@@ -21,19 +25,20 @@ usr -> view : wants to create elevator
             activate svc
                 svc -> http : get({baseURL}/buildings)
                 activate http
-                    http -> md : GET /buildings
+                    http ->] : GET /buildings
         alt building(s) not found
-            activate md
+
                 note right : see us170 documentation
-                md --> http : 200: empty list
+                 http <--]    : 404: error
                 http --> svc : observable
                 svc --> ctrl : []
                 ctrl --> ctrl : buildings = []
+                note bottom : creates alert with the error message
                 ctrl --> view : buildings
                 view --> usr : does not list anything
         else building(s) found
-                md --> http : 200: buildings
-            deactivate md
+                http <--]  : 200: buildings
+
             http --> svc : observable
             deactivate http
 
@@ -58,32 +63,33 @@ usr -> view : wants to create elevator
         activate view
             view -> ctrl : listFloors()
             activate ctrl
-                ctrl -> svc : listFloors()
+                ctrl -> svc : getFloors(selectedBuilding)
                 activate svc
                     svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
                     activate http
-                        http -> md : GET /buildings/{id}/floors
-            activate md
+                        http ->] : GET /buildings/{id}/floors
+
              alt floors(s) not found
-                activate md
+
                     note right : see us210 documentation
-                    md --> http : 200: empty list
+                    http <--]  : 404: error
                     http --> svc : observable
                     svc --> ctrl : []
                     ctrl --> ctrl : floors = []
+                    note bottom : creates alert with the error message
                     ctrl --> view : floors
                     view --> usr : does not list anything
              else floor(s) found
-                md --> http : 200: floors
-                deactivate md
+                http <--]  : 200: floors
+
                     http --> svc : observable
                     deactivate http
 
                     loop for each floor
-                        svc --> dto** : create()
-                        activate dto
-                            dto --> svc : dto
-                        deactivate dto
+                        svc --> dtofb** : create()
+                        activate dtofb
+                            dtofb --> svc : dto
+                        deactivate dtofb
                     end
 
                     svc --> ctrl : dto[]
@@ -99,44 +105,46 @@ usr -> view : wants to create elevator
         activate view
             view -> ctrl : onSubmit()
             activate ctrl
-                ctrl --> dto** : create()
-                activate dto
-                    dto --> ctrl : dto
-                deactivate dto
+                ctrl --> dtoee** : create()
+                activate dtoee
+                    dtoee --> ctrl : dto
+                deactivate dtoee
 
                 ctrl -> svc : createElevator(buildingId,dto)
                 activate svc
 
                     svc -> http : post({baseURL}/buildings/{buildingId}/elevators)
                     activate http
-                        http -> md : POST /buildings/{id}/elevators
-            activate md
+                        http ->] : POST /buildings/{id}/elevators
+
                 note right : see us270 documentation
-                alt elevator not created
-                    md --> http : 422: error
-                    http --> svc : null
-                    svc --> ctrl : null
-                    ctrl --> ctrl : createdElevator = null
+                alt elevator not created / bad parameters
+                    http <--]  : 422: error
+                    http --> svc : observable
+                    svc --> ctrl : error
+
+                note bottom : creates alert with the error message
                     ctrl --> view : createdElevator
                     view --> usr : informs error
 
                 else elevator created successfully
 
-                    md --> http : 201: elevator
+                    http <--]  : 201: elevator
                     http --> svc : observable
 
-                    svc --> dto** : create()
-                    activate dto
-                        dto --> svc : dto
-                    deactivate dto
+                    svc --> dtoe** : create()
+                    activate dtoe
+                        dtoe --> svc : dto
+                    deactivate dtoe
 
                     svc --> ctrl : dto
 
+                    note bottom : creates alert with success message
                     ctrl --> ctrl : createdElevator = dto
                     ctrl --> view : createdElevator
                     view --> usr : previews created \nelevator information
 
-                    deactivate md
+
                     deactivate http
                     deactivate svc
                     deactivate ctrl

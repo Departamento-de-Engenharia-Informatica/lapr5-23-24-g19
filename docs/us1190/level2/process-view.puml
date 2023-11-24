@@ -14,7 +14,7 @@ activate usr
         alt building(s) not found
             activate md
             note right of md : see US 170 documentation
-                md --> ui : 204: empty list
+                md --> ui : 404: error
 
             ui --> usr : informs building(s) not found
 
@@ -38,7 +38,7 @@ activate usr
 
         alt passages(s) not found
                 note right of md : see US 260 documentation
-                md --> ui: 204: empty list
+                md --> ui: 404: error
 
             ui --> usr : informs passages(s) not found
         else passage(s) found

@@ -33,7 +33,7 @@ activate usr
                         ctrl --> ctrl : buildings = []
                         note bottom : creates alert with the error message
                         ctrl --> view : buildings
-                        view --> usr : informs building(s) not found
+                        view --> usr : does not list anything
 
     else building(s) found
                          http <--] : 200: buildings
@@ -92,7 +92,7 @@ activate usr
                             ctrl --> ctrl : passages = []
                             note bottom : creates alert with the error message
                             ctrl --> view : passages
-                            view --> usr : informs passages(s) not found
+                            view --> usr : does not list anything
 
         else passage(s) found
                             http <--] : 200: passages
