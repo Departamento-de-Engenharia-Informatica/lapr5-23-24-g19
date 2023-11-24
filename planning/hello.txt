@@ -1,0 +1,1 @@
+_6642{criteria:least-elevators,goal:_6626{building:B,coordinates:_6614{x:10,y:15},floor:4},start:_6518{building:A,coordinates:_6506{x:12,y:5},floor:2}}
