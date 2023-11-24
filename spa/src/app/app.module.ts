@@ -46,6 +46,8 @@ import { PopupComponent } from './components/popup/popup.component';
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
+import { FloorService } from './services/floor.service'
+import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 
 @NgModule({
     declarations: [
@@ -84,6 +86,7 @@ import { TraceRouteComponent } from './components/task/trace-route/trace-route.c
         EditFloorComponent,
         EditPassageComponent,
         TraceRouteComponent,
+        ListFloorsWithPassageComponent,
     ],
     imports: [
         BrowserModule,
@@ -100,6 +103,7 @@ import { TraceRouteComponent } from './components/task/trace-route/trace-route.c
         PassageService,
         RobotService,
         RoomService,
+        FloorService,
     ],
     bootstrap: [AppComponent],
 })

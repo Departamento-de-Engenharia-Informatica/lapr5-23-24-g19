@@ -30,6 +30,7 @@ import { CreateBuildingComponent } from './components/building/create-building/c
 import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
+import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -122,6 +123,11 @@ export const routes: Routes = [
                 path: 'edit',
                 component: EditFloorComponent,
                 title: 'Edit Floor',
+            },
+            {
+                path: 'list-floors-with-passage',
+                component: ListFloorsWithPassageComponent,
+                title: 'List Floors With Passage',
             },
         ],
     },

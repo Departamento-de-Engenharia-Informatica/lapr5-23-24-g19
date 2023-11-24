@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { AppModule } from '../app.module'
+import {FloorPassageDTO} from "../dto/FloorPassageDTO";
 
 export interface FloorAndBuildingDTO {
     buildingCode: string
@@ -127,5 +128,15 @@ export class FloorService {
 
             return throwError(() => new Error(errorMessage))
         }))
+    }
+
+    getFloorsWithPassage(buildingCode: string): Observable<FloorPassageDTO[]> {
+        return this.http.get<FloorPassageDTO[]>(
+            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/passages`,
+            {
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 }
