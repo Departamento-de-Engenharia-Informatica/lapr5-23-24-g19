@@ -5,10 +5,10 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "BuildingService" as svcb
+participant "PassageService" as svcp
 participant "dto:\nBuildingDTO" as dto
 participant "dto:\nPassageDTO" as dtop
-
 participant "HTTP Driver" as http
 
 
@@ -18,9 +18,9 @@ activate usr
     activate view
         view -> ctrl : ngOnInit()
         activate ctrl
-            ctrl -> svc : getBuildings()
-            activate svc
-                svc -> http : get({baseUrl}/buildings)
+            ctrl -> svcb : getBuildings()
+            activate svcb
+                svcb -> http : get({baseUrl}/buildings)
                 activate http
                     http ->] : GET /buildings
                     note right : see us170 documentation
@@ -28,8 +28,8 @@ activate usr
 
     alt building(s) not found
                         http <--] : 404: error
-                        http --> svc : observable
-                        svc --> ctrl : error
+                        http --> svcb : observable
+                        svcb --> ctrl : error
                         ctrl --> ctrl : buildings = []
                         note bottom : creates alert with the error message
                         ctrl --> view : buildings
@@ -39,18 +39,18 @@ activate usr
                          http <--] : 200: buildings
 
 
-                    http --> svc : observable
+                    http --> svcb : observable
                 deactivate http
 
                 loop for each building
-                    svc --> dto** : create()
+                    svcb --> dto** : create()
                     activate dto
-                        dto --> svc : dto
+                        dto --> svcb : dto
                     deactivate dto
                 end
 
-                svc --> ctrl : dto[]
-            deactivate svc
+                svcb --> ctrl : dto[]
+            deactivate svcb
             ctrl --> ctrl : buildings = dto[]
             ctrl --> view : buldings
         deactivate ctrl
@@ -66,9 +66,9 @@ activate usr
     activate view
         view -> ctrl : getPassagesBetweenBuildings()
         activate ctrl
-            ctrl -> svc : getPassagesBetweenBuildings\n(bCode1, bCode2)
-            activate svc
-                svc -> http : get({baseUrl}/passages/\n?building1=${bCode1}&building2=${bCode2})
+            ctrl -> svcp : getPassagesBetweenBuildings\n(bCode1, bCode2)
+            activate svcp
+                svcp -> http : get({baseUrl}/passages/\n?building1=${bCode1}&building2=${bCode2})
                 activate http
                     http ->]  : GET /passages
 
@@ -76,8 +76,8 @@ activate usr
     alt same building
 
         http <--] : 422: error
-        http --> svc : observable
-        svc --> ctrl : error
+        http --> svcp : observable
+        svcp --> ctrl : error
         ctrl --> ctrl : passages = []
         note bottom : creates alert with the error message
         ctrl --> view : passages
@@ -87,8 +87,8 @@ activate usr
 
         alt passage(s) not found
                             http <--] : 404: error
-                            http --> svc : observable
-                            svc --> ctrl : error
+                            http --> svcp : observable
+                            svcp --> ctrl : error
                             ctrl --> ctrl : passages = []
                             note bottom : creates alert with the error message
                             ctrl --> view : passages
@@ -98,18 +98,18 @@ activate usr
                             http <--] : 200: passages
 
 
-                        http --> svc : observable
+                        http --> svcp : observable
                     deactivate http
 
                     loop for each passage
-                        svc --> dtop** : create()
+                        svcp --> dtop** : create()
                         activate dtop
-                            dtop --> svc : dto
+                            dtop --> svcp : dto
                         deactivate dtop
                     end
 
-                    svc --> ctrl : dto[]
-                deactivate svc
+                    svcp --> ctrl : dto[]
+                deactivate svcp
                 ctrl --> ctrl : passages = dto[]
                 ctrl --> view : passages
             deactivate ctrl

@@ -5,7 +5,9 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "BuildingService" as svcb
+participant "FloorService" as svcf
+participant "ElevatorService" as svce
 participant "dto:\nBuildingDTO" as dto
 participant "dto:\nFloorAndBuildingDTO" as dtofb
 participant "dto:\nElevatorDTO" as dtoee
@@ -21,17 +23,17 @@ usr -> view : wants to create elevator
     activate view
         view -> ctrl : ngOnInit()
         activate ctrl
-            ctrl -> svc : getBuildings()
-            activate svc
-                svc -> http : get({baseURL}/buildings)
+            ctrl -> svcb : getBuildings()
+            activate svcb
+                svcb -> http : get({baseURL}/buildings)
                 activate http
                     http ->] : GET /buildings
         alt building(s) not found
 
                 note right : see us170 documentation
                  http <--]    : 404: error
-                http --> svc : observable
-                svc --> ctrl : error
+                http --> svcb : observable
+                svcb --> ctrl : error
                 ctrl --> ctrl : buildings = []
                 note bottom : creates alert with the error message
                 ctrl --> view : buildings
@@ -39,22 +41,25 @@ usr -> view : wants to create elevator
         else building(s) found
                 http <--]  : 200: buildings
 
-            http --> svc : observable
+            http --> svcb : observable
             deactivate http
 
             loop for each building
-                svc --> dto** : create()
+                svcb --> dto** : create()
                 activate dto
-                    dto --> svc : dto
+                    dto --> svcb : dto
                 deactivate dto
             end
 
-            svc --> ctrl : dto[]
-            deactivate svc
+            svcb --> ctrl : dto[]
+            deactivate svcb
 
             ctrl --> ctrl : buildings = dto[]
             ctrl --> view : buildings
             deactivate ctrl
+
+
+
 
             view --> usr : shows buildings and \nrequest one
         deactivate view
@@ -63,9 +68,9 @@ usr -> view : wants to create elevator
         activate view
             view -> ctrl : listFloors()
             activate ctrl
-                ctrl -> svc : getFloors(selectedBuilding)
-                activate svc
-                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                ctrl -> svcf : getFloors(selectedBuilding)
+                activate svcf
+                    svcf -> http : get({baseURL}/buildings/{buildingCode}/floors)
                     activate http
                         http ->] : GET /buildings/{id}/floors
 
@@ -73,8 +78,8 @@ usr -> view : wants to create elevator
 
                     note right : see us210 documentation
                     http <--]  : 404: error
-                    http --> svc : observable
-                    svc --> ctrl : error
+                    http --> svcf : observable
+                    svcf --> ctrl : error
                     ctrl --> ctrl : floors = []
                     note bottom : creates alert with the error message
                     ctrl --> view : floors
@@ -82,22 +87,26 @@ usr -> view : wants to create elevator
              else floor(s) found
                 http <--]  : 200: floors
 
-                    http --> svc : observable
+                    http --> svcf : observable
                     deactivate http
 
                     loop for each floor
-                        svc --> dtofb** : create()
+                        svcf --> dtofb** : create()
                         activate dtofb
-                            dtofb --> svc : dto
+                            dtofb --> svcf : dto
                         deactivate dtofb
                     end
 
-                    svc --> ctrl : dto[]
-                deactivate svc
+                    svcf --> ctrl : dto[]
+                deactivate svcf
 
                 ctrl --> ctrl : floors = dto[]
                 ctrl --> view : floors
             deactivate ctrl
+
+
+
+
             view --> usr : shows floors and \nrequest data
         deactivate view
 
@@ -110,18 +119,18 @@ usr -> view : wants to create elevator
                     dtoee --> ctrl : dto
                 deactivate dtoee
 
-                ctrl -> svc : createElevator(buildingId,dto)
-                activate svc
+                ctrl -> svce : createElevator(buildingId,dto)
+                activate svce
 
-                    svc -> http : post({baseURL}/buildings/{buildingId}/elevators)
+                    svce -> http : post({baseURL}/buildings/{buildingId}/elevators)
                     activate http
                         http ->] : POST /buildings/{id}/elevators
 
                 note right : see us270 documentation
                 alt elevator not created / bad parameters
                     http <--]  : 422: error
-                    http --> svc : observable
-                    svc --> ctrl : error
+                    http --> svce : observable
+                    svce --> ctrl : error
 
                 note bottom : creates alert with the error message
                     ctrl --> view : createdElevator
@@ -130,14 +139,14 @@ usr -> view : wants to create elevator
                 else elevator created successfully
 
                     http <--]  : 201: elevator
-                    http --> svc : observable
+                    http --> svce : observable
 
-                    svc --> dtoe** : create()
+                    svce --> dtoe** : create()
                     activate dtoe
-                        dtoe --> svc : dto
+                        dtoe --> svce : dto
                     deactivate dtoe
 
-                    svc --> ctrl : dto
+                    svce --> ctrl : dto
 
                     note bottom : creates alert with success message
                     ctrl --> ctrl : createdElevator = dto
@@ -146,7 +155,7 @@ usr -> view : wants to create elevator
 
 
                     deactivate http
-                    deactivate svc
+                    deactivate svce
                     deactivate ctrl
                     deactivate view
 

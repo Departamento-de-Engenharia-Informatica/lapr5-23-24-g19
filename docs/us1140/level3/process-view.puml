@@ -5,10 +5,10 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "BuildingService" as svcb
+participant "ElevatorService" as svce
 participant "dto:\nBuildingDTO" as dto
 participant "dto:\nCreatedElevatorDTO" as dtoce
-
 participant "HTTP Driver" as http
 
 
@@ -18,17 +18,17 @@ activate usr
     activate view
         view -> ctrl : ngOnInit()
         activate ctrl
-            ctrl -> svc : getBuildings()
-            activate svc
-                svc -> http : get({baseUrl}/buildings)
+            ctrl -> svcb : getBuildings()
+            activate svcb
+                svcb -> http : get({baseUrl}/buildings)
                 activate http
                     http ->] : GET /buildings
 
                     note right : see us170 documentation
     alt building(s) not found
                          http <--]: 404: error
-                        http --> svc : observable
-                        svc --> ctrl : error
+                        http --> svcb : observable
+                        svcb --> ctrl : error
                         ctrl --> ctrl : buildings = []
                         note bottom : creates alert with the error message
                         ctrl --> view : buildings
@@ -38,18 +38,18 @@ activate usr
                         http <--] : 200: buildings
 
 
-                    http --> svc : observable
+                    http --> svcb : observable
                 deactivate http
 
                 loop for each building
-                    svc --> dto** : create()
+                    svcb --> dto** : create()
                     activate dto
-                        dto --> svc : dto
+                        dto --> svcb : dto
                     deactivate dto
                 end
 
-                svc --> ctrl : dto[]
-            deactivate svc
+                svcb --> ctrl : dto[]
+            deactivate svcb
             ctrl --> ctrl : buildings = dto[]
             ctrl --> view : buldings
         deactivate ctrl
@@ -65,17 +65,17 @@ activate usr
     activate view
         view -> ctrl : getElevators()
         activate ctrl
-            ctrl -> svc : getElevators(selectedBuilding)
-            activate svc
-                svc -> http : get({baseUrl}/buildings/${buildingCode}/elevators)
+            ctrl -> svce : getElevators(selectedBuilding)
+            activate svce
+                svce -> http : get({baseUrl}/buildings/${buildingCode}/elevators)
                 activate http
                     http ->] : GET /buildings/{id}/elevators
 
                     note right : see us290 documentation
     alt elevator(s) not found
                         http <--] : 404: error
-                        http --> svc : observable
-                        svc --> ctrl : error
+                        http --> svce : observable
+                        svce --> ctrl : error
                         ctrl --> ctrl : elevators = []
                         note bottom : creates alert with the error message
                         ctrl --> view : elevators
@@ -85,18 +85,18 @@ activate usr
                         http <--] : 200: elevators
 
 
-                    http --> svc : observable
+                    http --> svce : observable
                 deactivate http
 
                 loop for each elevator
-                    svc --> dtoce** : create()
+                    svce --> dtoce** : create()
                     activate dtoce
-                        dtoce --> svc : dto
+                        dtoce --> svce : dto
                     deactivate dtoce
                 end
 
-                svc --> ctrl : dto[]
-            deactivate svc
+                svce --> ctrl : dto[]
+            deactivate svce
             ctrl --> ctrl : elevators = dto[]
             ctrl --> view : elevators
         deactivate ctrl

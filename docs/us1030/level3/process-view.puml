@@ -5,7 +5,7 @@ actor "Fleet Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "RobotService" as svc
 participant "dto:\nRobotDTO" as dto
 
 participant "HTTP Driver" as http
