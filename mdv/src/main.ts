@@ -77,6 +77,24 @@ function initialize() {
                     volume: 0.75,
                 },
             ],
+            openDoor: [
+                {
+                    url: './clips/open_door.mp3',
+                    position: 'player',
+                    referenceDistance: 1.0,
+                    loop: false,
+                    volume: 0.75,
+                },
+            ],
+            closeDoor: [
+                {
+                    url: './clips/close_door.mp3',
+                    position: 'player',
+                    referenceDistance: 1.0,
+                    loop: false,
+                    volume: 0.75,
+                },
+            ],
             danceClips: [
                 {
                     url: './clips/best-buddies-12609.mp3',

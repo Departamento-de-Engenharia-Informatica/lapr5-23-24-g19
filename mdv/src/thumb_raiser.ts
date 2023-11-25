@@ -1517,6 +1517,8 @@ export default class ThumbRaiser {
         const types = [
             this.audio.introductionClips,
             this.audio.idleClips,
+            this.audio.openDoor,
+            this.audio.closeDoor,
             this.audio.jumpClips,
             this.audio.deathClips,
             this.audio.danceClips,
@@ -1560,6 +1562,14 @@ export default class ThumbRaiser {
 
     stop() {
         this._gameRunning = false;
+    }
+
+    openDoor() {
+        this.audio.play(this.audio.openDoor, false);
+    }
+
+    closeDoor() {
+        this.audio.play(this.audio.closeDoor, false);
     }
 
     update() {
@@ -1687,7 +1697,7 @@ export default class ThumbRaiser {
                                 THREE.MathUtils.degToRad(180),
                             );
                             break;
-                        case 'W':
+                        case 'S':
                             this.elevators[i - 1].rotateY(
                                 THREE.MathUtils.degToRad(270),
                             );
@@ -1984,7 +1994,7 @@ export default class ThumbRaiser {
                     this.player.rotation.y =
                         directionRad - this.player.defaultDirection;
 
-                    this.maze.foundDoor(position, this.doors);
+                    this.maze.foundDoor(position, this.doors, this);
                 }
             }
 

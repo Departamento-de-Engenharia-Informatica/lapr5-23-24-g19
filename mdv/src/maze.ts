@@ -11,6 +11,8 @@ import { Loader } from './loader';
 import { doorData, elevatorData } from './default_data';
 import Door from './door';
 import SideWall from './side_wall';
+import Audio, { AudioParameters } from './audio';
+import ThumbRaiser from './thumb_raiser';
 
 type AABB = THREE.Box3[][][];
 type Position = { x: number; z: number };
@@ -328,8 +330,12 @@ export default class Maze extends THREE.Group {
 
     nearDoors: Set<Door> = new Set();
     openDoors: Set<Door> = new Set();
-
-    foundDoor(position: THREE.Vector3, doors: Door[]) {
+    doorAngle = THREE.MathUtils.degToRad(90);
+    foundDoor(
+        position: THREE.Vector3,
+        doors: Door[],
+        thumbRaiser: ThumbRaiser,
+    ) {
         const indices = this.cartesianToCell(position);
         const row = indices[0];
         const column = indices[1];
@@ -352,15 +358,27 @@ export default class Maze extends THREE.Group {
             }
         });
 
-        this.animateDoors();
+        this.nearDoors.forEach((d) => {
+            if (!this.openDoors.has(d)) {
+                d.handle.rotateZ(this.doorAngle);
+                thumbRaiser.openDoor();
+                this.openDoors.add(d);
+            }
+        });
+
+        this.openDoors.forEach((d) => {
+            if (!this.nearDoors.has(d)) {
+                d.handle.rotateZ(-this.doorAngle);
+                thumbRaiser.closeDoor();
+                this.openDoors.delete(d);
+            }
+        });
     }
 
-    doorAngle = THREE.MathUtils.degToRad(90);
     animateDoors() {
         this.nearDoors.forEach((d) => {
             if (!this.openDoors.has(d)) {
                 d.handle.rotateZ(this.doorAngle);
-                // d.handle.scale(0.2, 0.23, 0.4);
                 this.openDoors.add(d);
             }
         });
@@ -726,103 +744,12 @@ export default class Maze extends THREE.Group {
             ),
         });
 
-        // Create a door
-        // this.sideWall = new SideWall({
-        //     groundHeight: description.ground.size.height,
-        //     segments: new THREE.Vector2(
-        //         description.wall.segments.width,
-        //         description.wall.segments.height,
-        //     ),
-        //     materialParameters: {
-        //         color: new THREE.Color(
-        //             parseInt(description.wall.primaryColor, 16),
-        //         ),
-        //         mapUrl: description.wall.maps.color.url,
-        //         aoMapUrl: description.wall.maps.ao.url,
-        //         aoMapIntensity: description.wall.maps.ao.intensity,
-        //         displacementMapUrl: description.wall.maps.displacement.url,
-        //         displacementScale: description.wall.maps.displacement.scale,
-        //         displacementBias: description.wall.maps.displacement.bias,
-        //         normalMapUrl: description.wall.maps.normal.url,
-        //         normalMapType:
-        //             normalMapTypes[description.wall.maps.normal.type],
-        //         normalScale: new THREE.Vector2(
-        //             description.wall.maps.normal.scale.x,
-        //             description.wall.maps.normal.scale.y,
-        //         ),
-        //         bumpMapUrl: description.wall.maps.bump.url,
-        //         bumpScale: description.wall.maps.bump.scale,
-        //         roughnessMapUrl: description.wall.maps.roughness.url,
-        //         roughness: description.wall.maps.roughness.rough,
-        //         wrapS: wrappingModes[description.wall.wrapS],
-        //         wrapT: wrappingModes[description.wall.wrapT],
-        //         repeat: new THREE.Vector2(
-        //             description.wall.repeat.u,
-        //             description.wall.repeat.v,
-        //         ),
-        //         magFilter: magnificationFilters[description.wall.magFilter],
-        //         minFilter: minificationFilters[description.wall.minFilter],
-        //     },
-        //     secondaryColor: new THREE.Color(
-        //         parseInt(description.wall.secondaryColor, 16),
-        //     ),
-        // });
-
         // Build the maze
         let geometry: THREE.BufferGeometry;
         let geometries: THREE.BufferGeometry[][] = [];
         geometries[0] = [];
         geometries[1] = [];
         this.aabb = [];
-
-        let i = 1;
-        let j = 1;
-        this.aabb[i] = [];
-        this.aabb[i][j] = [];
-        this.aabb[i][j][0] = new THREE.Box3();
-        for (let k = 0; k < 2; k++) {
-            geometry = this.wall.geometries[k].clone();
-
-            geometry.applyMatrix4(
-                new THREE.Matrix4().makeTranslation(
-                    j - this.halfSize.width + 1.25,
-                    0.25,
-                    i - this.halfSize.length,
-                ),
-            );
-            geometry.computeBoundingBox();
-            geometry.boundingBox!.applyMatrix4(
-                new THREE.Matrix4().makeScale(
-                    this.scale.x,
-                    this.scale.y,
-                    this.scale.z,
-                ),
-            );
-            geometries[k].push(geometry);
-            this.aabb[i][j][0].union(geometry.boundingBox!);
-
-            geometry = this.wall.geometries[k].clone();
-            geometry.applyMatrix4(
-                new THREE.Matrix4().makeTranslation(
-                    j - this.halfSize.width - 0.25,
-                    0.25,
-                    i - this.halfSize.length,
-                ),
-            );
-            geometry.computeBoundingBox();
-            geometry.boundingBox!.applyMatrix4(
-                new THREE.Matrix4().makeScale(
-                    this.scale.x,
-                    this.scale.y,
-                    this.scale.z,
-                ),
-            );
-            geometries[k].push(geometry);
-            this.aabb[i][j][0].union(geometry.boundingBox!);
-        }
-        this.helper.add(
-            new THREE.Box3Helper(this.aabb[i][j][0], this.helpersColor),
-        );
 
         for (let i = 0; i <= this.size.length; i++) {
             // In order to represent the southmost walls, the map depth is one row greater than the actual maze depth
@@ -834,7 +761,7 @@ export default class Maze extends THREE.Group {
                  *  this.map[][] | North wall | West wall
                  * --------------+------------+-----------
                  *       0       |     No     |     No
-                 *       1       |     No     |    Yes
+                 *       1       |    No     |    Yes
                  *       2       |    Yes     |     No
                  *       3       |    Yes     |    Yes
                  */
