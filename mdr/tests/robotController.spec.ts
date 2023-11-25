@@ -67,6 +67,7 @@ describe('Robot controller:', () => {
             })
 
             let robotRepo = Container.get('RobotRepo') as IRobotRepo
+            sandbox.stub(robotRepo, 'find').resolves(null as unknown as Robot)
             sandbox.stub(robotRepo, 'save').resolves({
                 code: req.body.code,
                 nickname: req.body.nickname,
@@ -128,6 +129,7 @@ describe('Robot controller:', () => {
             })
 
             let robotRepo = Container.get('RobotRepo') as IRobotRepo
+            sandbox.stub(robotRepo, 'find').resolves(null as unknown as Robot)
             sandbox.stub(robotRepo, 'save').resolves({
                 code: req.body.code,
                 nickname: req.body.nickname,
