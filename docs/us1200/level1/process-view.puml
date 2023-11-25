@@ -16,9 +16,9 @@ activate usr
 
     usr -> sys : choses building
     activate sys
-    alt passage(s) not found
+    alt floor(s) with passage(s) not found
                 sys --> usr: informs passage(s) not found
-            else passage(s) found
+            else floor(s) with passage(s) found
 
         sys --> usr : show floors with passage
     deactivate sys

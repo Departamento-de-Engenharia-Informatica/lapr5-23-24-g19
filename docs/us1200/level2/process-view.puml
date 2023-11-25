@@ -31,14 +31,14 @@ activate usr
     activate ui
         ui -> md : GET /buildings/{id}/floors/passages
         note right of md : see US 220 documentation
-        alt passage(s) not found
+        alt floor(s) with passage(s) not found
 
         activate md
                         md --> ui: 404: error
 
                     ui --> usr : informs passages(s) not found
 
-        else passage(s) found
+        else floor(s) with passage(s) found
 
 
             md --> ui : 200: floors with passages

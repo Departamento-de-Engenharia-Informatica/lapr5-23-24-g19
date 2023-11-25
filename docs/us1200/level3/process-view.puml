@@ -1,0 +1,115 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+
+participant "BuildingService" as svcb
+participant "FloorService" as svcp
+
+participant "dto:\nBuildingDTO" as dto
+participant "dto:\nFloorPassageDTO" as dtop
+participant "HTTP Driver" as http
+
+
+
+activate usr
+    usr -> view : list building floors with passages
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svcb : getBuildings()
+            activate svcb
+                svcb -> http : get({baseUrl}/buildings)
+                activate http
+                    http ->] : GET /buildings
+                    note right : see us170 documentation
+
+
+    alt building(s) not found
+                        http <--] : 404: error
+                        http --> svcb : observable
+                        svcb --> ctrl : error
+                        ctrl --> ctrl : buildings = []
+                        note bottom : creates alert with the error message
+                        ctrl --> view : buildings
+                        view --> usr : does not list anything
+
+    else building(s) found
+                         http <--] : 200: buildings
+
+
+                    http --> svcb : observable
+                deactivate http
+
+                loop for each building
+                    svcb --> dto** : create()
+                    activate dto
+                        dto --> svcb : dto
+                    deactivate dto
+                end
+
+                svcb --> ctrl : dto[]
+            deactivate svcb
+            ctrl --> ctrl : buildings = dto[]
+            ctrl --> view : buldings
+        deactivate ctrl
+
+
+
+
+
+        view --> usr : shows buildings and requests two
+    deactivate view
+
+    usr -> view : chooses building
+    activate view
+        view -> ctrl : getFloorsWithPassage()
+        activate ctrl
+            ctrl -> svcp : getFloorsWithPassage(selectedBuilding)
+            activate svcp
+                svcp -> http : get({baseUrl}/buildings/${buildingCode}/floors)
+                activate http
+                    http ->]  : GET buildings/{id}/floors/passages
+
+                    note right : see us260 documentation
+
+
+        alt floor(s) with passage(s) not found
+                            http <--] : 404: error
+                            http --> svcp : observable
+                            svcp --> ctrl : error
+                            ctrl --> ctrl : floorPassages = []
+                            note bottom : creates alert with the error message
+                            ctrl --> view : floorPassages
+                            view --> usr : does not list anything
+
+        else floor(s) with passage(s) found
+                            http <--] : 200: floorPassages
+
+
+                        http --> svcp : observable
+                    deactivate http
+
+                    loop for each floor passages
+                        svcp --> dtop** : create()
+                        activate dtop
+                            dtop --> svcp : dto
+                        deactivate dtop
+                    end
+
+                    svcp --> ctrl : dto[]
+                deactivate svcp
+                ctrl --> ctrl : floorPassages = dto[]
+                ctrl --> view : floorPassages
+            deactivate ctrl
+            view --> usr : show floors with passages
+        deactivate view
+    deactivate usr
+end
+end
+
+
+@enduml
