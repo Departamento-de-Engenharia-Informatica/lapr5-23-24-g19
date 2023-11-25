@@ -24,81 +24,18 @@ loadmap(Building, FLoor) :-
     populate_elev(Building, Floor, Map.elevators).
 
 
-add_diagonals(Building, Floor) :-
-    findall((X, Y), floorcell(Building, Floor, X, Y), Cells),
-    add_diagonals_aux(Building, Floor, Cells).
+populate_cells(_, _, 0, _) :- !.
+populate_cells(Building, FLoor, X, Y) :-
+    X1 is X-1,
+    populate_cells_aux(Building, FLoor, X1, Y),
+    populate_cells(Building, FLoor, X1, Y).
 
-add_diagonals_aux(_, _, []).
-add_diagonals_aux(Building, Floor, [(X, Y)|Cells]) :-
-    add_diagonal(Building, Floor, X, Y),
-    add_diagonals_aux(Building, Floor, Cells).
+populate_cells_aux(_, _, _, 0) :- !.
+populate_cells_aux(Building, FLoor, X, Y) :-
+    Y1 is Y-1,
+    assertz(floorcell(Building, FLoor, X, Y1)),
+    populate_cells_aux(Building, FLoor, X, Y1).
 
-add_diagonal(Building, Floor, X, Y) :-
-    Xb is X - 1,
-    Xa is X + 1,
-    Yb is Y - 1,
-    Ya is Y + 1,
-
-    (% top left
-        (
-            (
-                (
-                    connection(Building, Floor, cell(X, Y), cell(Xb, Y), _),
-                    connection(Building, Floor, cell(Xb, Y), cell(Xb, Yb), _)
-                );
-                (
-                    connection(Building, Floor, cell(X, Y), cell(X, Yb), _),
-                    connection(Building, Floor, cell(X, Yb), cell(Xb, Yb), _)
-                )
-            ),
-            assertz(connection(Building, Floor, cell(X, Y), cell(Xb, Yb), sqrt(2)))
-        ); true
-    ),
-    (% top right
-        (
-            (
-                (
-                    connection(Building, Floor, cell(X, Y), cell(Xa, Y), _),
-                    connection(Building, Floor, cell(Xa, Y), cell(Xa, Yb), _)
-                );
-                (
-                    connection(Building, Floor, cell(X, Y), cell(X, Yb), _),
-                    connection(Building, Floor, cell(X, Yb), cell(Xa, Yb), _)
-                )
-            ),
-            assertz(connection(Building, Floor, cell(X, Y), cell(Xa, Yb), sqrt(2)))
-        ); true
-    ),
-    (% bottom left
-        (
-            (
-                (
-                    connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
-                    connection(Building, Floor, cell(X, Ya), cell(Xb, Ya), _)
-                );
-                (
-                    connection(Building, Floor, cell(X, Y), cell(Xb, Y), _),
-                    connection(Building, Floor, cell(Xb, Y), cell(Xb, Ya), _)
-                )
-            ),
-            assertz(connection(Building, Floor, cell(X, Y), cell(Xb, Ya), sqrt(2)))
-        ); true
-    ),
-    (% bottom right
-        (
-            (
-                (
-                    connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
-                    connection(Building, Floor, cell(X, Ya), cell(Xa, Ya), _)
-                );
-                (
-                    connection(Building, Floor, cell(X, Y), cell(Xa, Y), _),
-                    connection(Building, Floor, cell(Xa, Y), cell(Xa, Ya), _)
-                )
-            ),
-            assertz(connection(Building, Floor, cell(X, Y), cell(Xa, Ya), sqrt(2)))
-        ); true
-    ).
 
 build_graph(Building, Floor, FloorMap) :-
     length(FloorMap, Rows),
@@ -135,24 +72,37 @@ build_graph_col(Building, Floor, [Cell|Cells], NRows, NCols, Row, Col) :-
     ),
     build_graph_col(Building, Floor, Cells, NRows, NCols, Row, Col1).
 
-populate_cells(_, _, 0, _) :- !.
-populate_cells(Building, FLoor, X, Y) :-
-    X1 is X-1,
-    populate_cells_aux(Building, FLoor, X1, Y),
-    populate_cells(Building, FLoor, X1, Y).
 
-populate_cells_aux(_, _, _, 0) :- !.
-populate_cells_aux(Building, FLoor, X, Y) :-
-    Y1 is Y-1,
-    assertz(floorcell(Building, FLoor, X, Y1)),
-    populate_cells_aux(Building, FLoor, X, Y1).
+add_diagonals(Building, Floor) :-
+    findall((X, Y), floorcell(Building, Floor, X, Y), Cells),
+    add_diagonals_aux(Building, Floor, Cells).
 
+add_diagonals_aux(_, _, []).
+add_diagonals_aux(Building, Floor, [(X, Y)|Cells]) :-
+    add_diagonal(Building, Floor, X, Y),
+    add_diagonals_aux(Building, Floor, Cells).
 
-populate_elev(_, _, []).
-populate_elev(Building, Floor, [E|Es]) :-
-    _{ x:X, y:Y, floors: Fs } :< E,
-    assertz(elevator(Building, Floor, X, Y, Fs)),
-    populate_elev(Building, Floor, Es).
+add_diagonal(Building, Floor, X, Y) :-
+    Xb is X - 1, Xa is X + 1,
+    Yb is Y - 1, Ya is Y + 1,
+
+    (add_diagonal_aux(Building, Floor, X, Y, Xb, Yb); true),
+    (add_diagonal_aux(Building, Floor, X, Y, Xb, Ya); true),
+    (add_diagonal_aux(Building, Floor, X, Y, Xa, Yb); true),
+    (add_diagonal_aux(Building, Floor, X, Y, Xa, Ya); true).
+
+add_diagonal_aux(Building, Floor, X_orig, Y_orig, X_dest, Y_dest) :-
+    (
+        (
+            connection(Building, Floor, cell(X_orig, Y_orig), cell(X_dest, Y_orig), _),
+            connection(Building, Floor, cell(X_dest, Y_orig), cell(X_dest, Y_dest), _)
+        );
+        (
+            connection(Building, Floor, cell(X_orig, Y_orig), cell(X_orig, Y_dest), _),
+            connection(Building, Floor, cell(X_orig, Y_dest), cell(X_dest, Y_dest), _)
+        )
+    ),
+    assertz(connection(Building, Floor, cell(X_orig, Y_orig), cell(X_dest, Y_dest), sqrt(2))).
 
 
 populate_passage(_, _, []).
@@ -162,5 +112,11 @@ populate_passage(Building, Floor, [P|Ps]) :-
 
     assertz(passage(Building, Floor, X, Y, BDest, FDest)),
     populate_passage(Building, Floor, Ps).
+
+populate_elev(_, _, []).
+populate_elev(Building, Floor, [E|Es]) :-
+    _{ x:X, y:Y, floors: Fs } :< E,
+    assertz(elevator(Building, Floor, X, Y, Fs)),
+    populate_elev(Building, Floor, Es).
 
 % vim: ft=prolog
