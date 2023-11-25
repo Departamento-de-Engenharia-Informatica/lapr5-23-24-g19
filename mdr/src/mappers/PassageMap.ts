@@ -10,7 +10,6 @@ import FloorRepo from '../repos/mongo/floorRepo'
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 
-
 export class PassageMap extends Mapper<Passage> {
     public static toDTO(passage: Passage): IPassageDTO {
         return {
@@ -25,10 +24,8 @@ export class PassageMap extends Mapper<Passage> {
         } as IPassageDTO
     }
 
-
     public static async toDomain(raw: IPassagePersistence): Promise<Passage> {
         const floorRepo = Container.get(FloorRepo)
-
 
         const floor1 = await floorRepo.findByID(raw.floor1ID)
         const floor2 = await floorRepo.findByID(raw.floor2ID)
@@ -45,4 +42,3 @@ export class PassageMap extends Mapper<Passage> {
         }
     }
 }
-

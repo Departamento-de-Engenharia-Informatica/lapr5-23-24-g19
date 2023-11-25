@@ -16,7 +16,6 @@ import { PassageService } from 'src/app/services/passage.service'
 })
 export class EditPassageComponent implements OnInit {
     editPassageForm: FormGroup
-    passage!: PassageDTO
 
     selectedBuilding1: string
     selectedBuilding2: string
@@ -53,10 +52,10 @@ export class EditPassageComponent implements OnInit {
             oldFloorNumber1: [null, [Validators.required]],
             oldFloorNumber2: [null, [Validators.required]],
 
-            newBuildingCode1: '',
-            newBuildingCode2: '',
-            newFloorNumber1: null,
-            newFloorNumber2: null,
+            newBuildingCode1: [null, [Validators.required]],
+            newBuildingCode2: [null, [Validators.required]],
+            newFloorNumber1: [null, [Validators.required]],
+            newFloorNumber2: [null, [Validators.required]],
         })
     }
 
@@ -69,22 +68,10 @@ export class EditPassageComponent implements OnInit {
                 alert(error.error)
             },
         )
-
-        this.passage = {
-            floor1: {
-                buildingCode: null as unknown as string,
-                floorNumber: null as unknown as number,
-            },
-            floor2: {
-                buildingCode: null as unknown as string,
-                floorNumber: null as unknown as number,
-            },
-        }
     }
 
     getPassages() {
-        if (!this.isEmpty(this.selectedBuilding1) && !this.isEmpty(this.selectedBuilding2)) {
-            console.log('aqui')
+        if (this.selectedBuilding1 != '' && this.selectedBuilding2 != '') {
             const dto: BuildingCodePairDTO = {
                 buildingCode1: this.selectedBuilding1,
                 buildingCode2: this.selectedBuilding2,
@@ -93,41 +80,54 @@ export class EditPassageComponent implements OnInit {
             this.passageService.getPassages(dto).subscribe(
                 (list: PassageDTO[]) => {
                     this.passages = list
+                    this.editPassageForm.reset({
+                        oldBuildingCode1: dto.buildingCode1,
+                        oldBuildingCode2: dto.buildingCode2,
+                    })
                 },
                 (error) => {
                     alert(error.error)
+                    this.editPassageForm.reset()
+                    this.resetSelection()
                 },
             )
         }
     }
 
-    onPassageSelected(event: any,passage: PassageDTO) {
-        this.selectedPassage=passage
-        if (this.isEmpty(this.selectedPassage)) {
-            console.log(JSON.stringify(this.selectedPassage.floor1.buildingCode))
-        }
-        const selectedPassage = this.editPassageForm.value.passage
+    onPassageSelected(event: any) {
+        const selectedPassage = this.getPassage(this.selectedPassage)
         if (selectedPassage) {
-            this.passage.floor1.buildingCode = selectedPassage.floor1.buildingCode
-            this.passage.floor1.floorNumber = selectedPassage.floor1.floorNumber
-            this.passage.floor2.buildingCode = selectedPassage.floor2.buildingCode
-            this.passage.floor2.floorNumber = selectedPassage.floor2.floorNumber
+            this.editPassageForm
+                .get('oldFloorNumber1')
+                ?.setValue(selectedPassage.floor1.floorNumber)
+            this.editPassageForm
+                .get('oldFloorNumber2')
+                ?.setValue(selectedPassage.floor2.floorNumber)
+            this.editPassageForm
+                .get('newBuildingCode1')
+                ?.setValue(selectedPassage.floor1.buildingCode)
+            this.editPassageForm
+                .get('newBuildingCode2')
+                ?.setValue(selectedPassage.floor2.buildingCode)
+
+            this.getFloorsNewBuilding1()
+            this.getFloorsNewBuilding2()
         }
     }
 
-    // private getPassage(selectedPassage: PassageDTO): PassageDTO | undefined {
-    //     const val = this.passages.find(
-    //         (b) =>
-    //             b.floor1.buildingCode == selectedPassage.floor1.buildingCode &&
-    //             b.floor1.floorNumber == selectedPassage.floor1.floorNumber &&
-    //             b.floor2.buildingCode == selectedPassage.floor2.buildingCode &&
-    //             b.floor2.floorNumber == selectedPassage.floor2.floorNumber,
-    //     )
-    //     return val
-    // }
+    private getPassage(selectedPassage: PassageDTO): PassageDTO | undefined {
+        const val = this.passages.find(
+            (b) =>
+                b.floor1.buildingCode == selectedPassage.floor1.buildingCode &&
+                b.floor1.floorNumber == selectedPassage.floor1.floorNumber &&
+                b.floor2.buildingCode == selectedPassage.floor2.buildingCode &&
+                b.floor2.floorNumber == selectedPassage.floor2.floorNumber,
+        )
+        return val
+    }
 
     getFloorsNewBuilding1() {
-        if (this.isEmpty(this.selectedBuilding1)) {
+        if (this.selectedBuilding1 != '') {
             this.floorService
                 .getFloors(this.newSelectedBuilding1)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
@@ -136,13 +136,13 @@ export class EditPassageComponent implements OnInit {
         }
     }
 
-
     getFloorsNewBuilding2() {
-        if (this.isEmpty(this.selectedBuilding2))) {
+        if (this.selectedBuilding1 != '') {
             this.floorService
                 .getFloors(this.newSelectedBuilding2)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
                     this.floorsBuilding2 = list
+                    this.editPassageForm.get('newFloorNumber2')?.reset()
                 })
         }
     }
@@ -159,20 +159,17 @@ export class EditPassageComponent implements OnInit {
                     floorNumber: this.editPassageForm.value.oldFloorNumber2,
                 },
             },
-            new: {},
+            new: {
+                floor1: {
+                    buildingCode: this.editPassageForm.value.newBuildingCode1,
+                    floorNumber: this.editPassageForm.value.newFloorNumber1,
+                },
+                floor2: {
+                    buildingCode: this.editPassageForm.value.newBuildingCode2,
+                    floorNumber: this.editPassageForm.value.newFloorNumber2,
+                },
+            },
         }
-
-        const newBuildingCode1 = this.editPassageForm.value.newBuildingCode1
-        if (newBuildingCode1 !== '') dto.new.floor1!.buildingCode = newBuildingCode1
-
-        const newBuildingCode2 = this.editPassageForm.value.newBuildingCode2
-        if (newBuildingCode2 !== '') dto.new.floor2!.buildingCode = newBuildingCode2
-
-        const newFloorNumber1 = this.editPassageForm.value.newFloorNumber1
-        if (newFloorNumber1 !== null) dto.new.floor1!.floorNumber = newFloorNumber1
-
-        const newFloorNumber2 = this.editPassageForm.value.newFloorNumber2
-        if (newFloorNumber2 !== null) dto.new.floor2!.floorNumber = newFloorNumber2
 
         this.passageService.patchPassage(dto).subscribe(
             (passage: PassageDTO) => {
@@ -184,45 +181,21 @@ export class EditPassageComponent implements OnInit {
                                     \nBuilding 2 floor: ${passage.floor2.floorNumber}`
 
                 alert(alertMessage)
-
-                this.passage = {
-                    floor1: {
-                        buildingCode: null as unknown as string,
-                        floorNumber: null as unknown as number,
-                    },
-                    floor2: {
-                        buildingCode: null as unknown as string,
-                        floorNumber: null as unknown as number,
-                    },
-                }
-
                 this.editPassageForm.reset()
+                this.resetSelection()
             },
             (error) => {
                 alert(error.error)
-
-                this.passage = {
-                    floor1: {
-                        buildingCode: null as unknown as string,
-                        floorNumber: null as unknown as number,
-                    },
-                    floor2: {
-                        buildingCode: null as unknown as string,
-                        floorNumber: null as unknown as number,
-                    },
-                }
-
                 this.editPassageForm.reset()
+                this.resetSelection()
             },
         )
     }
-    isEmpty(obj: any): boolean {
-        return obj != null && obj != undefined && obj.length == 0
-    }
-    noFloors1(): boolean {
-        return this.isEmpty(this.floorsBuilding1)
-    }
-    noFloors2(): boolean {
-        return this.isEmpty(this.floorsBuilding2)
+
+    resetSelection() {
+        this.selectedBuilding1 = ''
+        this.selectedBuilding2 = ''
+        this.newSelectedBuilding1 = ''
+        this.newSelectedBuilding2 = ''
     }
 }

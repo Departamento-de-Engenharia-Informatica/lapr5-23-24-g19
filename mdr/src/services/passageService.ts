@@ -46,11 +46,11 @@ export default class PassageService implements IPassageService {
                     errorCode: ErrorCode.NotFound,
                     message: 'Floor Not found',
                 })
-            }else if(passageDTO.floor1.buildingCode==passageDTO.floor2.buildingCode){
+            } else if (passageDTO.floor1.buildingCode == passageDTO.floor2.buildingCode) {
                 return left({
                     errorCode: ErrorCode.BussinessRuleViolation,
                     message: 'Passage requires different buildings',
-                })   
+                })
             }
 
             const passageOrError = Passage.create({ floor1, floor2 })
@@ -137,7 +137,7 @@ export default class PassageService implements IPassageService {
                     message: 'Passages Not found',
                 })
             } else {
-                const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
                 return right(dtoList)
             }
         } catch (e) {
@@ -190,12 +190,13 @@ export default class PassageService implements IPassageService {
             const passages = await this.passageRepo.passagesBetweenBuildings(b1, b2)
 
             if (passages.length === 0) {
+                console.log('')
                 return left({
                     errorCode: ErrorCode.NotFound,
                     message: 'Passages not found',
                 })
             } else {
-                const dtoList = await Promise.all(passages.map(passage => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
                 return right(dtoList)
             }
         } catch (e) {
