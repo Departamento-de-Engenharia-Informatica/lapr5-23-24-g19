@@ -1,0 +1,108 @@
+form {
+    align-items: center;
+    margin-top: 20px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.introduce {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    width: 60%;
+    margin: 0 auto;
+}
+label {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+}
+button {
+    padding: 10px 20px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 4px;
+    margin: 0 auto;
+    display: block;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.invalid-input {
+    border: 2px solid rgb(218, 62, 62);
+}
+
+.row {
+    flex-direction: column;
+    justify-content: space-between;
+
+    width: 100%;
+    margin-right: 3%;
+    margin-left: 3%;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.column {
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+    margin-right: 3%;
+    margin-left: 3%;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.row div {
+    width: 70%;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+.row label {
+    text-align: center;
+}
+
+.row input,
+.row select {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+button[type='submit'] {
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    display: block;
+}
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
