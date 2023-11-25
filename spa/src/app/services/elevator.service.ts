@@ -4,6 +4,7 @@ import { AppModule } from '../app.module'
 import { Observable } from 'rxjs'
 import { ElevatorDTO } from 'src/app/dto/ElevatorDTO'
 import { CreatedElevatorDTO } from 'src/app/dto/CreatedElevatorDTO'
+import {FloorAndBuildingDTO, PatchFloorDTO, PutFloorDTO} from "./floor.service";
 
 @Injectable()
 // {
@@ -30,5 +31,38 @@ export class ElevatorService {
             observe: 'body',
             responseType: 'json',
         })
+    }
+
+    patchElevator(dto: CreatedElevatorDTO): Observable<CreatedElevatorDTO> {
+        /*const edit: PatchDTO = {
+            floorNumber: dto.newFloorNumber,
+            description: dto.newDescription,
+        }*/
+
+        return this.http.patch<CreatedElevatorDTO>(
+            `${AppModule.baseUrl}/buildings/${dto.buildingId}/elevators/${dto.identifier}`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
+    }
+
+    putElevator(dto: CreatedElevatorDTO): Observable<CreatedElevatorDTO> {
+        /*const edit: FloorDTO = {
+            floorNumber: dto.newFloorNumber,
+            description: dto.newDescription,
+        }*/
+        return this.http.put<CreatedElevatorDTO>(
+            `${AppModule.baseUrl}/buildings/${dto.buildingId}/elevators/${dto.identifier}`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 }

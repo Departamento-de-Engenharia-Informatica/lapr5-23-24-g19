@@ -32,6 +32,7 @@ import { EditPassageComponent } from './components/passage/edit-passage/edit-pas
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
+import {EditElevatorComponent} from "./components/elevator/edit-elevator/edit-elevator.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -149,11 +150,11 @@ export const routes: Routes = [
                 component: CreateElevatorComponent,
                 title: 'Create Elevator',
             },
-            // {
-            //     path: 'edit',
-            //     component: ListElevatorsComponent,
-            //     title: 'List Elevators',
-            // },
+            {
+                path: 'edit',
+                component: EditElevatorComponent,
+                title: 'Edit Elevator',
+            },
             {
                 path: 'list',
                 component: ListElevatorsComponent,

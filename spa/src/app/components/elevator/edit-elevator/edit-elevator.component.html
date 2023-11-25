@@ -1,0 +1,110 @@
+<form
+    [formGroup]="editElevatorForm"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data"
+>
+    <div>
+        <div class="row">
+            <div>
+                <label for="selectedBuilding">Select Building:</label>
+                <select
+                    id="selectedBuilding"
+                    formControlName="buildingId"
+                    [(ngModel)]="selectedBuilding"
+                    (ngModelChange)="getElevators()"
+                    required
+                >
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="selectedElevator">Select Elevator:</label>
+                <select
+                    id="selectedElevator"
+                    formControlName="elevator"
+                    [(ngModel)]="selectedElevator"
+                    (ngModelChange)="onElevatorSelected()"
+                    (ngModelChange)="getFloors()"
+                    required
+                >
+                    <option
+                        *ngFor="let elevator of elevators"
+                        [value]="elevator.identifier"
+                    >
+                        Elevator
+                        {{ elevator.identifier }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+
+        <label for="newSelectedFloors"> Select Floors </label>
+        <textarea
+            id="newSelectedFloors"
+            formControlName="floors"
+            placeholder="Previously selected floors: {{ elevator.floors }}"
+            disable
+        ></textarea>
+        <select
+            id="newSelectedFloors"
+            formControlName="floors"
+            [(ngModel)]="selectedFloors"
+            multiple
+        >
+            <option
+                *ngFor="let floor of floors"
+                [value]="floor.floorNumber"
+            >
+                {{ floor.floorNumber }}
+            </option>
+        </select>
+
+        <label for="identifier">Identifier:</label>
+        <input
+            id="identifier"
+            type="number"
+            formControlName="identifier"
+            placeholder="{{ elevator.identifier }}"
+        />
+
+        <label for="brand">Brand:</label>
+        <textarea
+            id="brand"
+            formControlName="brand"
+            placeholder="{{ elevator.brand }}"
+        ></textarea>
+
+        <label for="model">Model:</label>
+        <textarea
+            id="model"
+            formControlName="model"
+            placeholder="{{ elevator.model }}"
+        ></textarea>
+
+        <label for="serialNumber">Serial Number:</label>
+        <textarea
+            id="serialNumber"
+            formControlName="serialNumber"
+            placeholder="{{ elevator.serialNumber }}"
+        ></textarea>
+
+        <label for="description">Description:</label>
+        <textarea
+            id="description"
+            formControlName="description"
+            placeholder="{{ elevator.description }}"
+        ></textarea>
+
+        <div class="checkbox-container">
+            <input type="checkbox" formControlName="override" id="overrideConfirmation" />
+            <label for="overrideConfirmation">Override</label>
+        </div>
+
+        <button *ngIf="formValid()" type="submit">Submit</button>
+        <button *ngIf="!formValid()" type="submit" [disabled]="true">Submit</button>
+    </div>
+</form>
