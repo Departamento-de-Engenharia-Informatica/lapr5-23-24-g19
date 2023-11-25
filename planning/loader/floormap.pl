@@ -2,9 +2,10 @@
     loadmap/2
 ]).
 
-:- use_module('loader/http-loader', [ getmap/3 ]).
+% TODO: switch back to http-loader
+:- use_module('loader/static-loader', [ getmap/3 ]).
 
-:- use_module(graph, [
+:- use_module('graph', [
     floorcell/4,
     elevator/5,
     passage/6,
@@ -12,11 +13,12 @@
     edge/5
 ]).
 
-loadmap(Building, FLoor) :-
-    getmap(Building, FLoor, Map),
+loadmap(Building, Floor) :-
+    getmap(Building, Floor, Map),
     _{length: Len, width: Wid} :< Map.dimensions,
 
-    populate_cells(Building, FLoor, Len, Wid),
+    populate_cells(Building, Floor, Len, Wid),
+    % TODO: block access through room door cell
     build_graph(Building, Floor, Map.mapContent),
     add_diagonals(Building, Floor),
 
@@ -25,16 +27,16 @@ loadmap(Building, FLoor) :-
 
 
 populate_cells(_, _, 0, _) :- !.
-populate_cells(Building, FLoor, X, Y) :-
-    X1 is X-1,
-    populate_cells_aux(Building, FLoor, X1, Y),
-    populate_cells(Building, FLoor, X1, Y).
+populate_cells(Building, Floor, Y, X) :-
+    Y1 is Y-1,
+    populate_cells_aux(Building, Floor, Y1, X),
+    populate_cells(Building, Floor, Y1, X).
 
 populate_cells_aux(_, _, _, 0) :- !.
-populate_cells_aux(Building, FLoor, X, Y) :-
-    Y1 is Y-1,
-    assertz(floorcell(Building, FLoor, X, Y1)),
-    populate_cells_aux(Building, FLoor, X, Y1).
+populate_cells_aux(Building, Floor, Y, X) :-
+    X1 is X-1,
+    asserta(floorcell(Building, Floor, X1, Y)),
+    populate_cells_aux(Building, Floor, Y, X1).
 
 
 build_graph(Building, Floor, FloorMap) :-
@@ -44,9 +46,7 @@ build_graph(Building, Floor, FloorMap) :-
     Rows1 is Rows-1,
     Cols1 is Cols-1,
 
-    build_graph_row(Building, Floor, FloorMap, Rows1, Cols1, 0, 0),
-
-    add_diagonals(Building, Floor).
+    build_graph_row(Building, Floor, FloorMap, Rows1, Cols1, 0, 0).
 
 build_graph_row(_, _, [], _, _, _, _) :- !.
 build_graph_row(Building, Floor, [Map|Maps], NRows, NCols, Row, Col) :-
@@ -55,22 +55,26 @@ build_graph_row(Building, Floor, [Map|Maps], NRows, NCols, Row, Col) :-
     build_graph_row(Building, Floor, Maps, NRows, NCols, Row1, Col).
 
 build_graph_col(_, _, [], _, _, _, _) :- !.
-build_graph_col(Building, Floor, [Cell|Cells], NRows, NCols, Row, Col) :-
-    Col1 is Col + 1,
-    Row1 is Row + 1,
-    (
-        ((Cell \== 1); (Cell \== 3)),
-        Col < NCols,
-        assertz(connection(Building, Floor, cell(Row, Col), cell(Row,Col1), 1))
+build_graph_col(Building, Floor, [Cell|Cells], NRows, NCols, Y, X) :-
+    X1 is X - 1,
+    Y1 is Y - 1,
+    (% connect to the left
+        ((Cell \== 1), (Cell \== 3)),
+        X < NCols,
+        floorcell(Building, Floor, X1, Y),
+        assertz(connection(Building, Floor, cell(X, Y), cell(X1, Y), 1))
     ;   true
     ),
-    (
-        ((Cell \== 2); (Cell \== 3)),
-        Row < NRows,
-        assertz(connection(Building, Floor, cell(Row, Col, 1), cell(Row1,Col, 1), 1))
+    (% connect above
+        ((Cell \== 2), (Cell \== 3)),
+        Y < NRows,
+        floorcell(Building, Floor, X, Y1),
+        assertz(connection(Building, Floor, cell(X, Y), cell(X, Y1), 1))
     ;   true
     ),
-    build_graph_col(Building, Floor, Cells, NRows, NCols, Row, Col1).
+
+    Row is X + 1,
+    build_graph_col(Building, Floor, Cells, NRows, NCols, Y, Row).
 
 
 add_diagonals(Building, Floor) :-
