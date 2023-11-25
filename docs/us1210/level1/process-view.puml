@@ -24,9 +24,11 @@ activate usr
 
     usr -> sys : choose floor and provides\n room data
     activate sys
-        alt room not created
+        alt room bad parameters
             sys --> usr : inform error
-        else success
+        else room already exists
+            sys --> usr : inform error
+        else room created successfully
             sys --> usr : previews created room
 
             end

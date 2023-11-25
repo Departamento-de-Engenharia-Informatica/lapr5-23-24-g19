@@ -45,7 +45,7 @@ activate usr
         activate md
             note right of md : see US 310 documentation
 
-            alt room room bad parameters
+            alt room bad parameters
                 md --> ui: 422: error
                 ui --> usr: informs error
             else room already exists

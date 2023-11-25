@@ -10,13 +10,14 @@ activate usr
     usr -> ui : wants to create elevator
     activate ui
         ui -> md : GET /buildings
+        note right of md : see US 170 documentation
         activate md
 
          alt building(s) not found
                 md --> ui : 404: error
                 ui --> usr :  informs building(s) not found
          else building(s) found
-            note right of md : see US 170 documentation
+
             md --> ui : 200: buildings
             deactivate md
 
@@ -26,6 +27,7 @@ activate usr
     usr -> ui : chooses building
     activate ui
         ui -> md : GET /buildings/{id}/floors
+        note right of md : see US 210 documentation
         activate md
 
         alt floor(s) not found
@@ -33,7 +35,7 @@ activate usr
                 ui --> usr :  informs floor(s) not found
         else floor(s) found
 
-            note right of md : see US 210 documentation
+
             md --> ui : 200: floors
         deactivate md
 
@@ -43,6 +45,7 @@ activate usr
     usr -> ui: chooses floors and provides\n elevator data
     activate ui
         ui -> md : POST /buildings/{id}/elevators
+        note right of md : see US 270 documentation
         activate md
 
             alt elevator not created
@@ -51,7 +54,7 @@ activate usr
             else elevator created successfully
 
 
-            note right of md : see US 270 documentation
+
             md --> ui : 201: elevator
         deactivate md
         ui --> usr : preview elevator
