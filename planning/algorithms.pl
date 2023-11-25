@@ -10,6 +10,7 @@
 :- use_module(library(sort)).
 
 :- use_module('util/functional', [ map/3, compare_on/4 ]).
+:- use_module('loader/floormap', [ loadmap/2 ]).
 
 % NOTE: Notation used for paths:
 % Path = [PathElement]
@@ -50,11 +51,22 @@ extract_build(elev(B, _, _), B).
 extract_build(pass(B1, _, B2, _), [B1, B2]).
 
 
-
+% TODO: somehow create a wrapper around these
+% in order to avoid calling loadmap/2 on each one
+% while also avoiding mutual recursion
 some_alg((B, F, X, Y), (B, F, X, Y), []).
-some_alg((B, F, X1, X2), (B, F, X1, X2), Path) :- fail. % walk the floor
-some_alg((B, F1, X1, Y1), (B, F2, X2, Y2), Path) :- fail. % catch elevator
-some_alg((B1, F1, X1, Y1), (B2, F2, X2, Y2), Path) :- fail. % corridor
+some_alg((B, F, X1, X2), (B, F, X1, X2), Path) :-
+    % walk the floor until we reach the goal
+    fail.
+some_alg((B, F1, X1, Y1), (B, F2, X2, Y2), Path) :-
+    % walk the floor until we reach the elevator
+    % catch the elevator to another floor
+    fail.
+some_alg((B1, F1, X1, Y1), (B2, F2, X2, Y2), Path) :-
+    % walk the floor until we reach the passage
+    % go to the other building
+    % use passage/6 to find where we end up in
+    fail.
 
 
 % Orig = (building, floor, x, y)
