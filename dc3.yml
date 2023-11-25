@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+
+  robdrone-mdv:
+    build:
+      context: ./mdv
+      dockerfile: Dockerfile
+    environment:
+      # VITE_MDR_URL:   http://localhost:4000/api
+      VITE_APP_TITLE: RobDroneGo-visualization
+    ports:
+      # TODO: check 8080
+      - 5173:5173
+
+  robdrone-ui:
+    build:
+      context: ./spa
+      dockerfile: Dockerfile
+    # environment:
+      # MDV url
+      # MDR url
+      # api key
+    ports:
+      - 4200:4200
+    depends_on:
+      - robdrone-mdv
+
+# vim: ts=2 sts=2 sw=2
