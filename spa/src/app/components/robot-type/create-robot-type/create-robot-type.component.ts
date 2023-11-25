@@ -48,6 +48,7 @@ export class CreateRobotTypeComponent {
       },
       (error) => {
         alert('Error creating robot: ' + error);
+        this.createRobotTypeForm.reset();
       }
     );
   }
