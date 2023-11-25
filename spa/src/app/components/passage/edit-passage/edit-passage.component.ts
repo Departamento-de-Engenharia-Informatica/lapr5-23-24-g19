@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, NgModel, Validators } from '@angular/forms'
 import { error } from 'cypress/types/jquery'
 import { BuildingCodePairDTO } from 'src/app/dto/BuildingCodePairDTO'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
@@ -83,8 +83,8 @@ export class EditPassageComponent implements OnInit {
     }
 
     getPassages() {
-        console.log('aqui')
-        if (this.selectedBuilding1.length !== 0 && this.selectedBuilding2.length !== 0) {
+        if (!this.isEmpty(this.selectedBuilding1) && !this.isEmpty(this.selectedBuilding2)) {
+            console.log('aqui')
             const dto: BuildingCodePairDTO = {
                 buildingCode1: this.selectedBuilding1,
                 buildingCode2: this.selectedBuilding2,
@@ -101,17 +101,18 @@ export class EditPassageComponent implements OnInit {
         }
     }
 
-    onPassageSelected() {
-        if (this.selectedPassage) {
+    onPassageSelected(event: any,passage: PassageDTO) {
+        this.selectedPassage=passage
+        if (this.isEmpty(this.selectedPassage)) {
             console.log(JSON.stringify(this.selectedPassage.floor1.buildingCode))
         }
-        // const selectedPassage = this.getPassage(this.selectedPassage)
-        // if (selectedPassage) {
-        //     this.passage.floor1.buildingCode = selectedPassage.floor1.buildingCode
-        //     this.passage.floor1.floorNumber = selectedPassage.floor1.floorNumber
-        //     this.passage.floor2.buildingCode = selectedPassage.floor2.buildingCode
-        //     this.passage.floor2.floorNumber = selectedPassage.floor2.floorNumber
-        // }
+        const selectedPassage = this.editPassageForm.value.passage
+        if (selectedPassage) {
+            this.passage.floor1.buildingCode = selectedPassage.floor1.buildingCode
+            this.passage.floor1.floorNumber = selectedPassage.floor1.floorNumber
+            this.passage.floor2.buildingCode = selectedPassage.floor2.buildingCode
+            this.passage.floor2.floorNumber = selectedPassage.floor2.floorNumber
+        }
     }
 
     // private getPassage(selectedPassage: PassageDTO): PassageDTO | undefined {
@@ -126,7 +127,7 @@ export class EditPassageComponent implements OnInit {
     // }
 
     getFloorsNewBuilding1() {
-        if (this.selectedBuilding1.length !== 0) {
+        if (this.isEmpty(this.selectedBuilding1)) {
             this.floorService
                 .getFloors(this.newSelectedBuilding1)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
@@ -135,8 +136,9 @@ export class EditPassageComponent implements OnInit {
         }
     }
 
+
     getFloorsNewBuilding2() {
-        if (this.selectedBuilding2.length !== 0) {
+        if (this.isEmpty(this.selectedBuilding2))) {
             this.floorService
                 .getFloors(this.newSelectedBuilding2)
                 .subscribe((list: FloorAndBuildingDTO[]) => {
@@ -213,5 +215,14 @@ export class EditPassageComponent implements OnInit {
                 this.editPassageForm.reset()
             },
         )
+    }
+    isEmpty(obj: any): boolean {
+        return obj != null && obj != undefined && obj.length == 0
+    }
+    noFloors1(): boolean {
+        return this.isEmpty(this.floorsBuilding1)
+    }
+    noFloors2(): boolean {
+        return this.isEmpty(this.floorsBuilding2)
     }
 }

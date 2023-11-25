@@ -14,13 +14,8 @@
         <div class="row">
             <div>
                 <label for="oldBuildingCode1">Select Building 1</label>
-                <select
-                    id="oldBuildingCode1"
-                    formControlName="oldBuildingCode1"
-                    [(ngModel)]="selectedBuilding1"
-                    (ngModelChange)="getPassages()"
-                    required
-                >
+                <select id="oldBuildingCode1" formControlName="oldBuildingCode1" [(ngModel)]="selectedBuilding1"
+                    (change)="getPassages()" required>
                     <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }}
                     </option>
@@ -28,13 +23,8 @@
             </div>
             <div>
                 <label for="oldBuildingCode2">Select Building 2</label>
-                <select
-                    id="oldBuildingCode2"
-                    formControlName="oldBuildingCode2"
-                    [(ngModel)]="selectedBuilding2"
-                    (ngModelChange)="getPassages()"
-                    required
-                >
+                <select id="oldBuildingCode2" formControlName="oldBuildingCode2" [(ngModel)]="selectedBuilding2"
+                    (change)="getPassages()" required>
                     <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }}
                     </option>
@@ -42,54 +32,70 @@
             </div>
             <div>
                 <label for="selectPassage">Select Passage</label>
-                <select
-                    id="selectPassage"
-                    formControlName="passage"
-                    [(ngModel)]="selectedPassage"
-                    (ngModelChange)="onPassageSelected()"
-                    required
-                >
-                    <option *ngFor="let passage of passages" [value]="passage">
-                        {{ passage.floor1.buildingCode
-                        }}{{ passage.floor1.floorNumber }} -
-                        {{ passage.floor2.buildingCode }}{{ passage.floor2.floorNumber }}
+                <select id="selectPassage" formControlName="passage" [(ngModel)]="selectedPassage"
+                     required>
+                    <option  (click)="onPassageSelected($event,passage)" *ngFor="let passage of passages" [value]="passage">
+                        {{ passage.floor1.buildingCode}}{{ passage.floor1.floorNumber }} -
+                        {{ passage.floor2.buildingCode}}{{ passage.floor2.floorNumber }}
                     </option>
                 </select>
-            </div>
         </div>
     </div>
+    </div>
 
-    <div class="introduce">
+    <div class="introduce" style="margin-top: 10px;">
         <div class="row">
             <div>
                 <label for="newBuildingCode1">Select new Building 1</label>
-                <select
-                    id="newBuildingCode1"
-                    formControlName="newBuildingCode1"
-                    [(ngModel)]="newSelectedBuilding1"
-                    (ngModelChange)="getFloorsNewBuilding1(); getPassages()"
-                    required
-                >
+                <select id="newBuildingCode1" formControlName="newBuildingCode1" [(ngModel)]="newSelectedBuilding1"
+                    (change)="getFloorsNewBuilding1(); getPassages()" required>
                     <option *ngFor="let building of buildings" [value]="building.code">
                         {{ building.code }}
                     </option>
                 </select>
             </div>
-            <!-- <div>
-                <label for="buildingCode">Select Floor</label>
+            <div>
+                <label for="newFloorNumber1">Select new Floor 1</label>
                 <select id="newFloorNumber1" formControlName="newFloorNumber1" required>
                     <ng-container *ngIf="noFloors1(); else floorsOptions">
                         <option style="color: red" disabled>No floors found</option>
                     </ng-container>
                     <ng-template #floorsOptions>
-                        <option *ngFor="let floor of newFloorNumber1" [value]="floor.floorNumber">
+                        <option *ngFor="let floor of floorsBuilding1" [value]="floor.floorNumber">
                             {{ floor.floorNumber }}
                         </option>
                     </ng-template>
                 </select>
-            </div> -->
+            </div>
         </div>
 
+        <div class="row">
+
+            <div>
+                <label for="newBuildingCode2">Select new Building 2</label>
+                <select id="newBuildingCode2" formControlName="newBuildingCode2" [(ngModel)]="newSelectedBuilding1"
+                    (change)="getFloorsNewBuilding2(); getPassages()" required>
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="newFloorNumber2">Select Floor</label>
+                <select id="newFloorNumber2" formControlName="newFloorNumber2" required>
+                    <ng-container *ngIf="noFloors2(); else floorsOptions2">
+                        <option style="color: red" disabled>No floors found</option>
+                    </ng-container>
+                    <ng-template #floorsOptions2>
+                        <option *ngFor="let floor of floorsBuilding2" [value]="floor.floorNumber">
+                            {{ floor.floorNumber }}
+                        </option>
+                    </ng-template>
+                </select>
+            </div>
+
+        </div>
+        
         <!-- <div class="row">
             <div>
                 <label for="buildingCode">Select Building</label>
@@ -104,21 +110,8 @@
                     </option>
                 </select>
             </div>
-            <div>
-                <label for="buildingCode">Select Floor</label>
-                <select id="floor2" formControlName="floor2" required>
-                    <ng-container *ngIf="noFloors2(); else floorsOptions2">
-                        <option style="color: red" disabled>No floors found</option>
-                    </ng-container>
-                    <ng-template #floorsOptions2>
-                        <option *ngFor="let floor of floors2" [value]="floor.floorNumber">
-                            {{ floor.floorNumber }}
-                        </option>
-                    </ng-template>
-                </select>
-            </div>
+           
         </div> -->
     </div>
 
-    <div></div>
 </form>

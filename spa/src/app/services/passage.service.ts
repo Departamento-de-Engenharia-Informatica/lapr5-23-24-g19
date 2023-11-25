@@ -26,7 +26,7 @@ export class PassageService {
         params = params.set('building1', dto.buildingCode1)
         params = params.set('building2', dto.buildingCode2)
 
-        return this.http.get<PassageDTO[]>(`${AppModule.baseUrl}/passages/`, {
+        return this.http.get<PassageDTO[]>(`${AppModule.baseUrl}/passages`, {
             params,
             observe: 'body',
             responseType: 'json',
