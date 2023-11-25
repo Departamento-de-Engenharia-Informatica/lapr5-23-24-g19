@@ -41,29 +41,61 @@ add_diagonal(Building, Floor, X, Y) :-
 
     (% top left
         (
-            connection(Building, Floor, cell(X, Y), cell(Xb, Y), _),
-            connection(Building, Floor, cell(Xb, Y), cell(Xb, Yb), _),
+            (
+                (
+                    connection(Building, Floor, cell(X, Y), cell(Xb, Y), _),
+                    connection(Building, Floor, cell(Xb, Y), cell(Xb, Yb), _)
+                );
+                (
+                    connection(Building, Floor, cell(X, Y), cell(X, Yb), _),
+                    connection(Building, Floor, cell(X, Yb), cell(Xb, Yb), _)
+                )
+            ),
             assertz(connection(Building, Floor, cell(X, Y), cell(Xb, Yb), sqrt(2)))
         ); true
     ),
     (% top right
         (
-            connection(Building, Floor, cell(X, Y), cell(Xa, Y), _),
-            connection(Building, Floor, cell(Xa, Y), cell(Xa, Yb), _),
+            (
+                (
+                    connection(Building, Floor, cell(X, Y), cell(Xa, Y), _),
+                    connection(Building, Floor, cell(Xa, Y), cell(Xa, Yb), _)
+                );
+                (
+                    connection(Building, Floor, cell(X, Y), cell(X, Yb), _),
+                    connection(Building, Floor, cell(X, Yb), cell(Xa, Yb), _)
+                )
+            ),
             assertz(connection(Building, Floor, cell(X, Y), cell(Xa, Yb), sqrt(2)))
         ); true
     ),
     (% bottom left
         (
-            connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
-            connection(Building, Floor, cell(X, Ya), cell(Xb, Ya), _),
+            (
+                (
+                    connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
+                    connection(Building, Floor, cell(X, Ya), cell(Xb, Ya), _)
+                );
+                (
+                    connection(Building, Floor, cell(X, Y), cell(Xb, Y), _),
+                    connection(Building, Floor, cell(Xb, Y), cell(Xb, Ya), _)
+                )
+            ),
             assertz(connection(Building, Floor, cell(X, Y), cell(Xb, Ya), sqrt(2)))
         ); true
     ),
     (% bottom right
         (
-            connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
-            connection(Building, Floor, cell(X, Ya), cell(Xa, Ya), _),
+            (
+                (
+                    connection(Building, Floor, cell(X, Y), cell(X, Ya), _),
+                    connection(Building, Floor, cell(X, Ya), cell(Xa, Ya), _)
+                );
+                (
+                    connection(Building, Floor, cell(X, Y), cell(Xa, Y), _),
+                    connection(Building, Floor, cell(Xa, Y), cell(Xa, Ya), _)
+                )
+            ),
             assertz(connection(Building, Floor, cell(X, Y), cell(Xa, Ya), sqrt(2)))
         ); true
     ).
