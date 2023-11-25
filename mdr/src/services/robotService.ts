@@ -38,6 +38,15 @@ export default class RobotService implements IRobotService {
             }
 
             const code = RobotCode.create(dto.code).getOrThrow()
+
+            const exists = await this.robotRepo.find(code)
+            if (exists) {
+                return left({
+                    errorCode: RobotErrorCode.BussinessRuleViolation,
+                    message: `Robot with code ${dto.code} already exists`,
+                })
+            }
+
             const nickname = Nickname.create(dto.nickname).getOrThrow()
             const serialNumber = SerialNumber.create(dto.serialNumber).getOrThrow()
             const description = dto.description && Description.create(dto.description).getOrThrow()
