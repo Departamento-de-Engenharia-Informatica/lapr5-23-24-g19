@@ -11,6 +11,7 @@ import { RobotDescription as Description } from '../../../domain/robot/descripti
 import { RobotNickname as Nickname } from '../../../domain/robot/nickname'
 import { RobotSerialNumber as SerialNumber } from '../../../domain/robot/serialNumber'
 import { RobotTypeCode } from '../../../domain/robotType/robotTypeCode'
+import { UniqueEntityID } from '../../../core/domain/UniqueEntityID'
 
 // scuffed impl because of schema not using ObjectId's
 export default class MongoRobotDataMap
@@ -45,7 +46,7 @@ export default class MongoRobotDataMap
             type,
             serialNumber,
             description
-        })
+        }, new UniqueEntityID(p.domainId))
 
         if (result.isFailure) {
             return null

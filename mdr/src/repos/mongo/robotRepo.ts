@@ -19,7 +19,7 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     async save(t: Robot): Promise<Robot> {
-        const doc = await this.schema.findOne({ domainId: t.id.toString() })
+        const doc = await this.schema.findOne({ code: t.code.value })
 
         try {
             const raw = await this.mapper.toPersistence(t)
@@ -46,6 +46,9 @@ export default class RobotRepo implements IRobotRepo {
 
     async find(code: RobotCode): Promise<Robot> {
         const doc = await this.schema.findOne({ code: code.value })
+        if (!doc) {
+            return null
+        }
         return this.mapper.toDomain(doc)
     }
 
