@@ -1,0 +1,136 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+
+participant "buildingService:\nBuildingService" as b_svc
+participant "floorService:\nFloorService" as f_svc
+
+participant "dto:\nBuildingDTO" as b_dto
+participant "dto:\nFloorAndBuildingDTO" as f_dto
+participant "dto:\nPutFloorDTO" as p_dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to edit floor
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> b_svc : getBuildings()
+            activate b_svc
+                b_svc -> http : getBuildings()
+                activate http
+                    note right of http : see us170 documentation
+                    http ->] : GET /buildings
+alt building(s) not found
+                    http <--] : 404: error
+                    http --> b_svc : observable
+                    b_svc --> ctrl : error
+                    ctrl --> ctrl : buildings = []
+                    note left : creates alert with the error message
+                    ctrl --> view : buildings
+                    view --> usr : informs error
+else building(s) found
+                    http <--] : 200: buildings
+                    http --> b_svc : observable
+                deactivate http
+                loop for each building
+                    b_svc --> b_dto** : create()
+                    activate b_dto
+                        b_dto --> b_svc : dto
+                    deactivate b_dto
+                end
+                b_svc --> ctrl : dto[]
+            deactivate b_svc
+            ctrl --> ctrl : buildings = dto[]
+            ctrl --> view : buildings
+        deactivate ctrl
+        view --> usr : requests building
+    deactivate view
+
+    usr -> view : provides building
+    activate view
+        view -> ctrl : getFloors()
+        activate ctrl
+            ctrl -> f_svc : getFloors(selectedBuilding)
+            activate f_svc
+                f_svc -> http : getFloors()
+                activate http
+                    note right of http : see us210 documentation
+                    http ->] : GET /buildings/{id}/floors
+alt floor(s) not found
+                    http <--] : 404: error
+                    http --> f_svc : observable
+                    f_svc --> ctrl : error
+                    ctrl --> ctrl : floors = []
+                    note left : creates alert with the error message
+                    ctrl --> view : floors
+                    view --> usr : informs error
+else floor(s) found
+                    http <--] : 200: floors
+                    http --> f_svc : observable
+                deactivate http
+                loop for each floor
+                    f_svc --> f_dto** : create()
+                    activate f_dto
+                        f_dto --> f_svc : dto
+                    deactivate f_dto
+                end
+                f_svc --> ctrl : dto[]
+            deactivate f_svc
+            ctrl --> ctrl : floors = dto[]
+            ctrl --> view : floors
+        deactivate ctrl
+        view --> usr : requests floor
+    deactivate view
+    usr -> view : provides floor
+    activate view
+        view --> usr : requests data
+    deactivate view
+    usr -> view : provides data
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+            ctrl --> ctrl : putFloor()
+            ctrl --> p_dto** : create()
+            activate p_dto
+                p_dto --> ctrl : dto
+            deactivate p_dto
+            ctrl -> f_svc : putFloor(dto)
+            activate f_svc
+                f_svc -> http : getFloors()
+                activate http
+                    note right of http : see us200 documentation
+                    http ->] : PUT /building/{id}/floors/{floor}
+alt bad floor parameters
+                    http <--] : 422: error
+                    http --> f_svc : observable
+                    f_svc --> ctrl : error
+                    note left : creates alert with the error message
+                    ctrl --> view : floors
+                    view --> usr : informs error
+else success
+                    http <--] : 201: floor
+                    http --> f_svc : observable
+                deactivate http
+                f_svc --> f_dto** : create()
+                activate f_dto
+                    f_dto --> f_svc : dto
+                deactivate f_dto
+                f_svc --> ctrl : dto
+            deactivate f_svc
+            ctrl --> ctrl : getFloors()
+            note left : creates alert with the edited floor information
+            ctrl --> view : floors
+        deactivate ctrl
+        view --> usr : previews edited floor information
+    deactivate view
+deactivate usr
+end
+end
+end
+@enduml

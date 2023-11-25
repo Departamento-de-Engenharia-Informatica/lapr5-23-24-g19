@@ -21,9 +21,12 @@ The customer has specified that the Campus Manager should have the ability to ed
 - [Process View (PUT)](./level2/process-view-put.svg)
 
 ### Level 3
-- [Logical View](../general-purpose/level3/logical-view.svg)
-- [Process View](./level3/process-view.svg) [Work in Progress]
-- [Implementation View](../general-purpose/level3/implementation-view.svg)
+- [Logical View MDR](../general-purpose/level3/mdr-logical-view.svg)
+- [Logical View UI](../general-purpose/level3/ui-logical-view.svg)
+- [Implementation View MDR](../general-purpose/level3/mdr-implementation-view.svg)
+- [Implementation View UI](../general-purpose/level3/ui-implementation-view.svg)
+- [Process View (PATCH)](./level3/process-view-patch.svg)
+- [Process View (PUT)](./level3/process-view-put.svg)
 - [Class Diagram](./level3/class-diagram.svg) [Work in Progress]
 
 ## 4. Acceptance Criteria and Tests

@@ -220,12 +220,23 @@ export class EditFloorComponent {
             return buildingValid && oldFloorNumberValid && newFloorNumberValid
         } else {
             const newFloorNumber = this.editFloorForm.get('newFloorNumber')!.value
+            const newDescription = this.editFloorForm.get('newDescription')!.value
 
-            if (newFloorNumber != null || newFloorNumber != undefined) {
+            if (newFloorNumber != null && newFloorNumber != undefined) {
                 const newFloorNumberValid = typeof newFloorNumber === 'number'
                 return buildingValid && oldFloorNumberValid && newFloorNumberValid
             }
-            return buildingValid && oldFloorNumberValid
+
+            if (
+                newDescription !== '' &&
+                newDescription != null &&
+                newDescription != undefined
+            ) {
+                const newDescriptionValid = true
+                return buildingValid && oldFloorNumberValid && newDescriptionValid
+            }
+
+            return false
         }
     }
 }
