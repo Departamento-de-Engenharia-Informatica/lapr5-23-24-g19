@@ -85,6 +85,11 @@ export default class UserInterface extends GUI {
                     thumbRaiser.elevators.forEach((e) => {
                         thumbRaiser.scene.remove(e);
                     });
+
+                    thumbRaiser.doors.forEach((d) => {
+                        thumbRaiser.scene.remove(d);
+                    });
+
                     thumbRaiser.scene.remove(thumbRaiser.maze);
 
                     thumbRaiser.maze.disposeGround();
@@ -94,6 +99,7 @@ export default class UserInterface extends GUI {
 
                     thumbRaiser.elevators = [];
                     thumbRaiser.maze = new Maze(mazeParams, loader);
+
                     thumbRaiser.update();
                 } else {
                     alert('Both building and floor should be selected');

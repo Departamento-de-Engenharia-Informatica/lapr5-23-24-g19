@@ -224,6 +224,7 @@ function initialize() {
         }, // Maze parameters
         { helpersColor: new THREE.Color(0x0055ff) }, // Player parameters
         { helpersColor: new THREE.Color(0x0055ff) }, // Elevator parameters
+        { helpersColor: new THREE.Color(0x0055ff) }, // Door parameters
         {
             intensity: 0.1,
         }, // Ambient light parameters

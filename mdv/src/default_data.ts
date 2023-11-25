@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Orientation from './orientation';
 import { ElevatorParams } from './elevator';
+import Door, { DoorParams } from './door';
 
 export const generalData = {
     setDevicePixelRatio: false,
@@ -51,7 +52,7 @@ export const playerData = {
     url: './models/gltf/RobotExpressive/RobotExpressive.glb',
     credits:
         "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
-    scale: new THREE.Vector3(0.1, 0.1, 0.1),
+    scale: new THREE.Vector3(0.15, 0.2, 0.15),
     helpersColor: new THREE.Color(0xffffff),
     walkingSpeed: 0.75,
     defaultDirection: 0.0, // Expressed in degrees
@@ -89,7 +90,14 @@ export const playerData = {
 
 export const elevatorData: ElevatorParams = {
     modelUri: './models/gltf/elevator/elevator.glb',
-    scale: new THREE.Vector3(0.2, 0.2, 0.2),
+    scale: new THREE.Vector3(0.3, 0.3, 0.3),
+    helpersColor: new THREE.Color(0xffffff),
+    defaultDirection: 0.0,
+};
+
+export const doorData: DoorParams = {
+    modelUri: './models/gltf/door/door.glb',
+    scale: new THREE.Vector3(0.2, 0.23, 0.4),
     helpersColor: new THREE.Color(0xffffff),
     defaultDirection: 0.0,
 };

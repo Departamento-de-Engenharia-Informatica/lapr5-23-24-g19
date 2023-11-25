@@ -32,6 +32,7 @@ import {
     collisionDetectionData,
     cameraData,
     elevatorData,
+    doorData,
 } from './default_data.js';
 import { merge } from './merge';
 import Audio, { AudioParameters } from './audio';
@@ -55,6 +56,7 @@ import UserInterface from './user_interface';
 import Elevator, { ElevatorParams } from './elevator.js';
 import { normalView } from 'three/examples/jsm/nodes/Nodes.js';
 import { ToonShaderHatching } from 'three/examples/jsm/Addons.js';
+import Door, { DoorParams } from './door.js';
 
 /*
  * generalParameters = {
@@ -401,6 +403,7 @@ export default class ThumbRaiser {
     public player: Player;
 
     public elevators: Elevator[] = [];
+    public doors: Door[] = [];
 
     public background: THREE.Scene;
     public frame: THREE.Scene;
@@ -459,6 +462,7 @@ export default class ThumbRaiser {
         private mazeParameters: MazeParameters,
         private playerParameters: PlayerParameters,
         private elevatorParameters: ElevatorParams,
+        private doorParameters: DoorParams,
         private ambientLightParameters: AmbientLightParameters,
         private directionalLightParameters: DirectionalLightParameters,
         private spotLightParameters: SpotLightParameters,
@@ -482,6 +486,7 @@ export default class ThumbRaiser {
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
         this.elevatorParameters = merge({}, elevatorData, elevatorParameters);
+        this.doorParameters = merge({}, doorData, doorParameters);
         this.ambientLightParameters = merge(
             {},
             ambientLightData,
@@ -1684,7 +1689,66 @@ export default class ThumbRaiser {
                             break;
                         case 'W':
                             this.elevators[i - 1].rotateY(
-                                THREE.MathUtils.degToRad(260),
+                                THREE.MathUtils.degToRad(270),
+                            );
+                    }
+                });
+
+                this.maze.rooms.forEach((e) => {
+                    let position: THREE.Vector3 = new THREE.Vector3();
+                    position = this.maze.cellToCartesian([e.x, e.y]);
+
+                    const i = this.doors.push(new Door(this.doorParameters));
+
+                    console.log('Door', i, ' at x=', e.x, ' and y=', e.y);
+
+                    this.scene.add(this.doors[i - 1]);
+
+                    this.doors[i - 1].position.set(
+                        position.x,
+                        position.y,
+                        position.z,
+                    );
+
+                    switch (e.orientation) {
+                        case 'E':
+                            this.doors[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(180),
+                            );
+                            this.doors[i - 1].position.set(
+                                position.x - 0.5,
+                                position.y,
+                                position.z,
+                            );
+                            break;
+                        case 'N':
+                            this.doors[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(270),
+                            );
+                            this.doors[i - 1].position.set(
+                                position.x,
+                                position.y,
+                                position.z - 0.5,
+                            );
+                            break;
+                        case 'W':
+                            this.doors[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(0),
+                            );
+                            this.doors[i - 1].position.set(
+                                position.x - 0.5,
+                                position.y,
+                                position.z,
+                            );
+                            break;
+                        case 'S':
+                            this.doors[i - 1].rotateY(
+                                THREE.MathUtils.degToRad(90),
+                            );
+                            this.doors[i - 1].position.set(
+                                position.x,
+                                position.y,
+                                position.z - 0.5,
                             );
                     }
                 });
@@ -1919,6 +1983,8 @@ export default class ThumbRaiser {
 
                     this.player.rotation.y =
                         directionRad - this.player.defaultDirection;
+
+                    this.maze.foundDoor(position, this.doors);
                 }
             }
 
