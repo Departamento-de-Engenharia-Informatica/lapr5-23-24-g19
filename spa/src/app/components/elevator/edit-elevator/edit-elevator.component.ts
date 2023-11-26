@@ -167,9 +167,9 @@ export class EditElevatorComponent implements OnInit{
 
                 },(error) => {
 
-                        console.log(JSON.stringify(error))
+
                         alert(error)
-                        //this.editElevatorForm.reset()
+                        this.editElevatorForm.reset()
                 },
                 )
     }
@@ -190,10 +190,10 @@ export class EditElevatorComponent implements OnInit{
             buildingId: this.editElevatorForm.value.buildingId,
             floors: this.editElevatorForm.value.floors,
             identifier: this.elevator.identifier,
-            brand: this.editElevatorForm.value.brand ?? undefined,
-            model: this.editElevatorForm.value.model ?? undefined,
-            serialNumber: this.editElevatorForm.value.serialNumber ?? undefined,
-            description: this.editElevatorForm.value.description ?? undefined,
+            brand: this.editElevatorForm.value.brand ?? this.elevator.brand,
+            model: this.editElevatorForm.value.model ?? this.elevator.model,
+            serialNumber: this.editElevatorForm.value.serialNumber ?? this.elevator.serialNumber,
+            description: this.editElevatorForm.value.description ?? this.elevator.description,
 
         } as CreatedElevatorDTO
 
@@ -219,6 +219,7 @@ export class EditElevatorComponent implements OnInit{
     }
 
     formValid(): boolean {
+
 
         if (this.editElevatorForm.get('override')!.value) {
 
