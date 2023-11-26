@@ -12,15 +12,12 @@ RUN npm install -g @angular/cli
 
 RUN npm install
 RUN npm run build_prod
-#RUN npm run start
 
 ##
 
 FROM nginx:alpine AS prod
 
-WORKDIR /app
-
-COPY --from=build dist/spa/* /usr/share/nginx/html/
+COPY --from=build /app/dist/ /usr/share/nginx/html/
 
 EXPOSE 80
 
