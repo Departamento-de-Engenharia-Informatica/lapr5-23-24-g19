@@ -1,0 +1,157 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "View" as view
+participant ":Controller" as ctrl
+
+participant "dto:BuildingDTO" as b_dto
+participant "dto:FloorDTO" as f_dto
+participant "dto:ElevatorDTO" as e_dto
+participant "dto:EditElevatorDTO" as edit_dto
+
+
+participant ":BuildingService" as b_svc
+participant ":FloorService" as f_svc
+participant ":ElevatorService" as e_svc
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to edit elevator
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> b_svc : getBuildings()
+
+            activate b_svc
+                b_svc -> http : get(API_URI/buildings)
+                activate http
+                    http ->] : GET /buildings
+                    http <--] : buildings
+
+                    http --> b_svc : buildings
+                deactivate http
+
+                b_svc --> b_dto** : create()
+
+                b_svc --> ctrl : observer<BuildingDTO[]>
+            deactivate b_svc
+
+alt buildingList empty
+            ctrl --> view : error
+            view --> usr : inform error
+else
+
+
+
+            ctrl --> view : buildings
+        deactivate ctrl
+        view --> usr : display buildings
+    deactivate view
+
+    usr -> view : chooses building
+    activate view
+        view -> ctrl : onBuildingSelect()
+        activate ctrl
+            ctrl -> e_svc : getElevators(building)
+
+            activate e_svc
+                e_svc -> http : get(API_URI/buildings/:code/elevators)
+                activate http
+                    http ->] : GET /buildings/:code/elevators
+                    http <--] : elevators
+
+                    http --> e_svc : elevators
+                deactivate http
+
+                e_svc --> e_dto** : create()
+
+                e_svc --> ctrl : observer<ElevatorDTO[]>
+            deactivate e_svc
+
+alt no elevators
+            ctrl --> view : error
+            view --> usr : inform error
+else
+            ctrl --> view : elevators
+            view --> usr : show elevators
+
+            ctrl -> f_svc : getFloors(building)
+
+            activate f_svc
+                f_svc -> http : get(API_URI/buildings/:code/floors)
+                activate http
+                    http ->] : GET /buildings/:code/floors
+                    http <--] : floors
+
+                    http --> f_svc : floors
+                deactivate http
+
+                f_svc --> f_dto** : create()
+
+                f_svc --> ctrl : observer<FloorDTO[]>
+            deactivate f_svc
+
+            ctrl --> view : floors
+        deactivate ctrl
+
+        view --> usr : show floors
+    deactivate view
+
+    usr -> view : chooses elevator & floors
+alt
+    activate view
+        view --> usr : request additional data
+    deactivate view
+end
+
+    usr -> view : submits
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+            ctrl --> edit_dto** : create()
+
+alt override mode on
+            ctrl -> e_svc : putElevator(editElevatorDTO)
+            activate e_svc
+                e_svc -> http : patch(API_URI/buildings/:bCode/elevators/:eCode, dto)
+                activate http
+                    http ->] : PATCH /buildings/:bCode/elevators/:eCode
+                    http <--] : elevator
+
+                    http --> e_svc : elevator
+                deactivate http
+else override mode off
+            ctrl -> e_svc : patchElevator(editElevatorDTO)
+                e_svc -> http : put(API_URI/buildings/:bCode/elevators/:eCode, dto)
+                activate http
+                    http ->] : PUT /buildings/:bCode/elevators/:eCode
+                    http <--] : elevator
+
+                    http --> e_svc : elevator
+                deactivate http
+end
+                e_svc --> e_dto** : create()
+
+                e_svc --> ctrl : elevatorDTO
+            deactivate e_svc
+
+alt edit error
+            ctrl --> view : error
+            view --> usr : inform error
+else success
+            ctrl --> view : elevator
+        deactivate ctrl
+
+        view --> usr : inform update success
+    deactivate view
+end
+
+end
+end
+
+deactivate usr
+
+@enduml

@@ -1,236 +1,149 @@
-import {Component, OnInit} from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import {
-    FloorAndBuildingDTO,
+    FloorAndBuildingDTO as FloorDTO,
     FloorService,
 } from 'src/app/services/floor.service'
-import {CreatedElevatorDTO} from "../../../dto/CreatedElevatorDTO";
-import {ElevatorService} from "../../../services/elevator.service";
+import { CreatedElevatorDTO } from '../../../dto/CreatedElevatorDTO'
+import { ElevatorService } from '../../../services/elevator.service'
+import { ElevatorDTO } from 'src/app/dto/ElevatorDTO'
+import { EditElevatorDTO } from 'src/app/dto/EditElevatorDTO'
+import { Observable } from 'rxjs'
 
 @Component({
     selector: 'app-edit-elevator',
     templateUrl: './edit-elevator.component.html',
     styleUrls: ['./edit-elevator.component.css'],
 })
-export class EditElevatorComponent implements OnInit{
-    editElevatorForm: FormGroup = null as unknown as FormGroup
-    selectedBuilding: string
-    selectedElevator: number
-    selectedFloors: string[]
+export class EditElevatorComponent implements OnInit {
+    form: FormGroup
 
-    floor!: FloorAndBuildingDTO
-    elevator!:CreatedElevatorDTO
-    building!: BuildingDTO
-    buildings: BuildingDTO[]
+    elevatorID?: number
+    selectedFloors?: number[]
 
-    floors: FloorAndBuildingDTO[]
+    selectedElevator?: CreatedElevatorDTO
 
-    elevators: CreatedElevatorDTO[]
-
-    editedElevator = null as unknown as CreatedElevatorDTO
+    buildings: BuildingDTO[] = []
+    floors: FloorDTO[] = []
+    elevators: CreatedElevatorDTO[] = []
 
     constructor(
         private fb: FormBuilder,
         private buildingService: BuildingService,
         private floorService: FloorService,
-
-        private elevatorService: ElevatorService
+        private elevatorService: ElevatorService,
     ) {
-        this.editElevatorForm = this.fb.group({
+        this.form = this.fb.group({
             buildingId: [null, Validators.required],
             elevator: [null, Validators.required],
-            floors: [[], Validators.required],
-            brand: [undefined],
-            model: [undefined],
-            serialNumber: [undefined],
-            description: [undefined],
+            floors: [[]],
+            brand: [null],
+            model: [null],
+            serialNumber: [null],
+            description: [null],
 
-            override: [false, [Validators.required]],
+            override: [false],
         })
-
-        this.selectedBuilding = ''
-        this.buildings = []
-        this.selectedElevator = null as unknown as number
-        this.floors = []
-        this.selectedFloors = []
-        this.elevators = []
-        this.elevator = {} as CreatedElevatorDTO;
-
-
-
     }
 
     ngOnInit(): void {
-        this.building = {
-            name: 'None',
-            description: 'None',
-            maxFloorDimensions: {
-                length: 0,
-                width: 0,
-            },
-        } as BuildingDTO
-
-        this.buildingService.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
+        this.buildingService.getBuildings().subscribe({
+            next: (buildingsList: BuildingDTO[]) => {
                 this.buildings = buildingsList
-                if (this.buildings.length == 0) {
-                    alert("No buildings Found")
-                }
             },
-            (error) => {
-                alert(error)
-            })
+            error: (error) => alert(JSON.stringify(error)),
+        })
     }
 
-    getElevators(): void {
-        if (this.selectedBuilding.length !== 0) {
-            this.elevatorService
-                .getElevators(this.selectedBuilding)
-                .subscribe((list: CreatedElevatorDTO[]) => {
-                    this.elevators = list
-                })
-        }
+    onBuildingSelect(event: Event) {
+        const buildingCode = (event.target as HTMLSelectElement).value
+        this.selectedElevator = undefined
+        this.selectedFloors = []
+
+        this.getElevators(buildingCode)
+        this.getFloors(buildingCode)
     }
 
-    getFloors(): void {
-        if (this.selectedBuilding.length !== 0) {
-            this.floorService
-                .getFloors(this.selectedBuilding)
-                .subscribe((list: FloorAndBuildingDTO[]) => {
-                    this.floors = list
-                })
-        }
-    }
-
-    onElevatorSelected(): void {
-        const selectedElevator = this.getElevator(this.selectedElevator)
-        if (selectedElevator) {
-
-            this.elevator.buildingId = selectedElevator.buildingId
-            this.elevator.floors = selectedElevator.floors
-            this.elevator.identifier = selectedElevator.identifier
-            this.elevator.brand = selectedElevator.brand
-            this.elevator.model = selectedElevator.model
-            this.elevator.serialNumber = selectedElevator.serialNumber
-            this.elevator.description = selectedElevator.description
-        }
-    }
-
-    private getElevator(selectedElevator: number): CreatedElevatorDTO | undefined {
-        const val = this.elevators.find((e) => e.identifier == selectedElevator)
-        return val
+    onElevatorSelect(event: Event): void {
+        const elevatorId = parseInt((event.target as HTMLSelectElement).value)
+        this.selectedElevator = this.elevators.find(
+            (e) => e.identifier == elevatorId,
+        )!
+        this.selectedFloors = this.selectedElevator.floors
     }
 
     onSubmit(): void {
+        if (this.form.valid) {
+            this.editElevator(this.selectedElevator!).subscribe({
+                next: (elevator) => {
+                    const bCode = elevator.buildingId
+                    const id = elevator.identifier
 
-        if (this.editElevatorForm.value.override) {
-            this.putElevator()
+                    alert(`Successfully updated elevator ${id} of building ${bCode}`)
+                    this.form.reset()
+                    this.selectedElevator = undefined
+                    this.selectedFloors = []
+                },
+                error: (error) => alert(JSON.stringify(error))
+            })
         } else {
-            this.patchElevator()
+            console.error('Attempted to submit invalid form')
         }
-
     }
 
-    private putElevator(){
 
-            const buildingId = this.editElevatorForm.value.buildingId
-            const floors = this.editElevatorForm.value.floors
-
-            if ( buildingId !== null && floors === null  ||
-                buildingId === null && floors !== null
-            ) {
-                console.log('building and floors must be filled')
-                return
-            }
-
-            const dto = {
-                buildingId: this.editElevatorForm.value.buildingId,
-                floors: this.editElevatorForm.value.floors,
-                identifier: this.elevator.identifier,
-                brand: this.editElevatorForm.value.brand ?? undefined,
-                model: this.editElevatorForm.value.model ?? undefined,
-                serialNumber: this.editElevatorForm.value.serialNumber ?? undefined,
-                description: this.editElevatorForm.value.description ?? undefined,
-
-            } as CreatedElevatorDTO
-
-            this.elevatorService
-                .putElevator(dto)
-                .subscribe((elevator: CreatedElevatorDTO) => {
-
-                        let alertMessage = 'Elevator edited successfully!\n'
-                        alert(alertMessage)
-
-                        this.editedElevator = elevator
-                        this.editElevatorForm.reset()
-
-                },(error) => {
-
-
-                        alert(error)
-                        this.editElevatorForm.reset()
-                },
-                )
-    }
-
-    private patchElevator(){
-
-        const buildingId = this.editElevatorForm.value.buildingId
-        const floors = this.editElevatorForm.value.floors
-
-        if ( buildingId !== null && floors === null  ||
-            buildingId === null && floors !== null
-        ) {
-            console.log('building and floors must be filled')
-            return
-        }
-
-        const dto = {
-            buildingId: this.editElevatorForm.value.buildingId,
-            floors: this.editElevatorForm.value.floors,
-            identifier: this.elevator.identifier,
-            brand: this.editElevatorForm.value.brand ?? this.elevator.brand,
-            model: this.editElevatorForm.value.model ?? this.elevator.model,
-            serialNumber: this.editElevatorForm.value.serialNumber ?? this.elevator.serialNumber,
-            description: this.editElevatorForm.value.description ?? this.elevator.description,
-
-        } as CreatedElevatorDTO
-
-        this.elevatorService
-            .patchElevator(dto)
-            .subscribe((elevator: CreatedElevatorDTO) => {
-
-                let alertMessage = 'Elevator edited successfully!\n'
-                alert(alertMessage)
-
-                this.editedElevator = elevator
-                this.editElevatorForm.reset()
-
+    private getFloors(buildingCode: string) {
+        this.floorService.getFloors(buildingCode).subscribe({
+            next: (floors) => {
+                this.floors = floors
             },
-                (error) => {
-
-                    alert(error)
-                    this.editElevatorForm.reset()
-                },
-            )
-
-
+            error: () => {
+                this.floors = []
+            },
+        })
     }
 
-    formValid(): boolean {
+    private getElevators(buildingCode: string) {
+        this.elevatorService.getElevators(buildingCode).subscribe({
+            next: (elevators) => {
+                this.elevators = elevators
+            },
+            error: () => {
+                this.elevators = []
+            },
+        })
+    }
 
+    private editElevator(elevator: ElevatorDTO): Observable<ElevatorDTO> {
+        const dto: EditElevatorDTO = {
+            identifier: elevator.identifier,
 
-        if (this.editElevatorForm.get('override')!.value) {
+            buildingId: this.form.value.buildingId!,
+            floors: this.form.value.floors ?? [],
 
-            const buildingId = this.editElevatorForm.get('buildingId')!.value != null
-            const floors = this.editElevatorForm.get('floors')!.value != null
-            const identifier = this.elevator.identifier != null
-
-            return buildingId && floors && identifier
-
+            brand: this.form.value.brand,
+            model: this.form.value.model,
+            serialNumber: this.form.value.serialNumber,
+            description: this.form.value.description,
         }
 
-        return true
+        if (this.form.value.override) {
+            dto.brand ??= undefined
+            dto.model ??= undefined
+            dto.serialNumber ??= undefined
+            dto.description ??= undefined
+
+            return this.elevatorService.putElevator(dto)
+        } else {
+            dto.brand ??= elevator.brand
+            dto.model ??= elevator.model
+            dto.serialNumber ??= elevator.serialNumber
+            dto.description ??= elevator.description
+
+            return this.elevatorService.patchElevator(dto)
+        }
     }
+
 }

@@ -1,7 +1,7 @@
-export interface ElevatorDTO {
+export interface EditElevatorDTO {
     buildingId: string
-    identifier: number
     floors: number[]
+    identifier: number
 
     brand?: string
     model?: string
