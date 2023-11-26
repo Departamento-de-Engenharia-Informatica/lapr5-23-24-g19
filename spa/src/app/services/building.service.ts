@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { Config } from '../config'
 import { BuildingDTO } from '../dto/BuildingDTO'
+import { CreateBuildingDTO } from '../dto/CreateBuildingDTO'
 
 // interface BuildingProps{
 //   code:string
@@ -75,11 +76,10 @@ export class BuildingService {
         })
     }
 
-    createBuilding(dto: BuildingDTO) {
-        const building = cleanObject(dto)
-        return this.http.post<BuildingDTO | undefined>(
+    createBuilding(dto: CreateBuildingDTO) {
+        return this.http.post<BuildingDTO>(
             `${Config.baseUrl}/buildings`,
-            JSON.stringify(building),
+            JSON.stringify(dto),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',

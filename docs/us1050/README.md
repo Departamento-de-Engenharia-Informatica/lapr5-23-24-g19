@@ -29,18 +29,17 @@ see [us150](../us150/README.md)
 - [Implementation](../general-purpose/level2/implementation-view.svg)
 
 ### Level 3
-- [Logical View](../general-purpose/level3/logical-view.svg)
-- [Process View](./level3/process-view.svg) [Work in Progress]
-- [Implementation View](../general-purpose/level3/implementation-view.svg)
-<!-- - [Class Diagram](./level3/class-diagram.svg) [Work in Progress] -->
+- [Logical View](../general-purpose/level3/ui-logical-view.svg)
+- [Process View](./level3/process-view.svg)
+- [Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 
 ## 4. Acceptance Criteria
 
 To successfully complete this user story, the following criteria must be met:
 
-- The interface should be able to display/communicate to the
-user what buildings already exist in the system.
-    + This list should be updated after a successful creation
+<!-- - The interface should be able to display/communicate to the -->
+<!-- user what buildings already exist in the system. -->
+<!--     + This list should be updated after a successful creation -->
 - When the user provides valid data, the building should
 be successfully created (assuming no internal errors in the application backend)
     + Similarly, if invalid data is provided, the user should

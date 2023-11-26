@@ -11,10 +11,6 @@ participant "dto:InhibitRobotDTO" as i_dto
 
 participant ":RobotService" as svc
 
-' participant "dto:\nBuildingDTO" as b_dto
-' participant "dto:\nFloorAndBuildingDTO" as f_dto
-' participant "dto:\nPatchFloorDTO" as p_dto
-
 participant "HTTP Driver" as http
 
 activate usr

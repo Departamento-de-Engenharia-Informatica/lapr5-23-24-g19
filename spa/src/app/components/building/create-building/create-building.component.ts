@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
+import { CreateBuildingDTO } from 'src/app/dto/CreateBuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 
 @Component({
@@ -11,9 +12,7 @@ import { BuildingService } from 'src/app/services/building.service'
 export class CreateBuildingComponent {
     form: UntypedFormGroup
 
-    @Output() buildingCreated = new EventEmitter<BuildingDTO | undefined>()
-
-    constructor(private fb: FormBuilder, private svc: BuildingService) {
+    constructor(private fb: FormBuilder, private service: BuildingService) {
         this.form = this.fb.group({
             code: [null, Validators.required],
             name: [''],
@@ -27,7 +26,7 @@ export class CreateBuildingComponent {
 
     submit() {
         if (this.form.valid) {
-            const dto: BuildingDTO = {
+            const dto: CreateBuildingDTO = {
                 code: this.form.value.code,
                 name: this.form.value.name,
                 description: this.form.value.description,
@@ -37,9 +36,20 @@ export class CreateBuildingComponent {
                 },
             }
 
-            this.svc.createBuilding(dto).subscribe((building) => {
-                this.buildingCreated.emit(building)
-                // TODO: clear form
+            if (dto.name?.trim().length == 0) {
+                dto.name = undefined
+            }
+
+            if (dto.description?.trim().length == 0) {
+                dto.description = undefined
+            }
+
+            this.service.createBuilding(dto).subscribe({
+                next: () => {
+                    alert(`Created building ${code}${name ? ' - ' + name : ''}`)
+                    this.form.reset()
+                },
+                error: (error) => alert(JSON.stringify(error)),
             })
         }
     }

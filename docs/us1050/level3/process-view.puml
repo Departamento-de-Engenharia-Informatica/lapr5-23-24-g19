@@ -3,14 +3,15 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "HTML + CSS + JS" as view
-participant "Controller" as ctrl
-participant "Service" as svc
-participant "dto:\nDTO" as dto
+participant "View" as view
+participant ":Controller" as ctrl
+
+participant "dto:CreatedBuildingDTO" as c_dto
+participant "dto:BuildingDTO" as b_dto
+
+participant ":BuildingService" as svc
 
 participant "HTTP Driver" as http
-
-participant "MD" as md
 
 activate usr
     usr -> view : wants to create building
@@ -22,37 +23,31 @@ activate usr
     activate view
         view -> ctrl : submit()
         activate ctrl
-            ctrl --> dto** : create()
-            activate dto
-                dto --> ctrl : dto
-            deactivate dto
+            ctrl --> c_dto** : create()
+
             ctrl -> svc : createBuilding(dto)
             activate svc
-                svc -> http : post({baseUrl}/buildings)
+                svc -> http : post(API_URL/buildings, dto)
                 activate http
-                http -> md : POST /buildings
-                    activate md
-                        note right of md : see US 150 documentation
-alt building not created
-                        md --> http : 422: error
-                        http --> svc : observer
-                        svc --> ctrl : error
-                        view --> usr : informs error
-else success
-                        md --> http : 201: building
-                    deactivate md
-                    http --> svc : observer
+
+                    http ->] : POST /buildings
+                    http <--] : building
                 deactivate http
-                svc --> dto** : create()
-                activate dto
-                    dto --> svc : dto
-                deactivate dto
+
+                svc --> b_dto** : create()
                 svc --> ctrl : dto
             deactivate svc
-            ctrl --> ctrl : buildingCreated.emit(building)
-            view --> usr : shows created building
+alt create error
+
+            ctrl --> view : error
+            view --> usr : inform error
+else success
+            ctrl --> view : building
         deactivate ctrl
+
+        view --> usr : shows created building
     deactivate view
-deactivate usr
 end
+
+deactivate usr
 @enduml
