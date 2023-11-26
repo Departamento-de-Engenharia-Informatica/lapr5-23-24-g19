@@ -1,0 +1,86 @@
+@startuml
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "View" as view
+participant ":Controller" as ctrl
+
+participant "dto:RobotDTO" as r_dto
+participant "dto:InhibitRobotDTO" as i_dto
+
+participant ":RobotService" as svc
+
+' participant "dto:\nBuildingDTO" as b_dto
+' participant "dto:\nFloorAndBuildingDTO" as f_dto
+' participant "dto:\nPatchFloorDTO" as p_dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to inhibit a robot
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : getRobots()
+            activate svc
+                svc -> http : get(API_URI/robots)
+                activate http
+                    http ->] : GET /robots
+                    http <--] : robots
+
+                    http --> svc : robots
+                deactivate http
+
+                svc --> r_dto** : create()
+                ' activate r_dto
+                ' deactivate r_dto
+
+                svc --> ctrl : observer<RobotDTO[]>
+            deactivate svc
+
+alt robotList empty
+            ctrl --> view : error
+            view --> usr : inform error
+else
+            ctrl --> view : robots
+        deactivate ctrl
+        view --> usr : display robots
+    deactivate view
+
+    usr -> view : chooses robot
+    activate view
+        view -> ctrl : inhibit(robotDTO)
+        activate ctrl
+            ctrl -> i_dto** : create()
+
+            ctrl -> svc : inhibit(inhibitRobotDTO)
+            activate svc
+                svc -> http : patch(API_URI/robots/:code/inhibit, robotState)
+                activate http
+                    http ->] : PATCH /robots/:code/inhibit
+                    http <--] : robot
+
+                    http --> svc : robot
+                deactivate http
+
+                svc --> r_dto** : create()
+                svc --> ctrl : observer<RobotDTO>
+            deactivate svc
+
+alt inhibit error
+            ctrl --> view : error
+            view --> usr : inform error
+else success
+            ctrl -> svc : getRobots()
+            note left of svc : Same as initial getRobots()
+            ctrl --> view : robotList
+        deactivate ctrl
+
+        view --> usr : show updated list of robots
+    deactivate view
+end
+end
+deactivate usr
+
+@enduml

@@ -28,20 +28,19 @@ See [us370](../us370/README.md)
 - [Implementation](../general-purpose/level2/implementation-view.svg)
 
 ### Level 3
-- [Logical View](../general-purpose/level3/logical-view.svg)
-- [Process View](./level3/process-view.svg) [Work in Progress]
-- [Implementation View](../general-purpose/level3/implementation-view.svg)
-<!-- - [Class Diagram](./level3/class-diagram.svg) [Work in Progress] -->
+- [Logical View](../general-purpose/level3/ui-logical-view.svg)
+- [Process View](./level3/process-view.svg)
+- [Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 
 ## 4. Acceptance Criteria
 
 To successfully complete this user story, the following criteria must be met:
 
-- The interface should be able to display/communicate to the
-user what robots exist in the system.
+- The interface should be able to display/communicate to the user what robots
+  exist in the system.
     + This content of the listing should be updated after a successful inhibition.
-- After inhibition, the selected robot should be in a disabled/inhibited state.
-- Attempting to inhibit a robot that is already inhibited should reflect in no changes.
+- After inhibiting, the selected robot should be in a disabled/inhibited state.
+- The user can select an inhibited robot, to re-enable it.
 
 ## 5. Dependencies
 
