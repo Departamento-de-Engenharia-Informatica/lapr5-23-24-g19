@@ -21,6 +21,7 @@ activate usr
             ctrl -> svc : getRobots()
             activate svc
                 svc -> http : get(API_URI/robots)
+                note right : see us380 documentation
                 activate http
                     http ->] : GET /robots
                     http <--] : robots
@@ -38,7 +39,7 @@ activate usr
 alt robotList empty
             ctrl --> view : error
             view --> usr : inform error
-else
+else robot(s) found
             ctrl --> view : robots
         deactivate ctrl
         view --> usr : display robots
@@ -69,6 +70,9 @@ alt inhibit error
             view --> usr : inform error
 else success
             ctrl -> svc : getRobots()
+            activate svc
+                svc --> ctrl: robotList
+            deactivate svc
             note left of svc : Same as initial getRobots()
             ctrl --> view : robotList
         deactivate ctrl

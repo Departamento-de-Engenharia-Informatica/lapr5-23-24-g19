@@ -1,16 +1,25 @@
 @startuml
 autonumber
 
-actor "Campus Manager" as usr
+actor "Fleet Manager" as usr
 
-participant "Front-end" as ui
+participant "FE" as ui
 participant "MD" as md
 
 activate usr
-    usr -> ui : inhibit robot
+    usr -> ui : wants to inhibit robot
     activate ui
         ui -> md : GET /robots
+        note right : see us380 documentation
         activate md
+        alt robotList empty
+
+        md --> ui:  error
+        ui --> usr: informs error
+
+        else robot(s) found
+
+
             md --> ui : robots
         deactivate md
 
@@ -19,13 +28,25 @@ activate usr
 
     usr -> ui : chooses robot
     activate ui
-        ui -> md : PATCH /robots/{:code}
+        ui -> md : PATCH /robots/{:code}/inhibit
+
         activate md
-            md --> ui : error/success
+
+        alt inhibit error
+            md --> ui: error
+            ui --> usr: informs error
+
+        else success
+            md --> ui : success
+        deactivate md
+            ui -> md : GET /robots
+            activate md
+            md --> ui: robotList
         deactivate md
 
-        ui --> usr : inform error/success
+        ui --> usr : show updated list of robots
     deactivate ui
 deactivate usr
-
+end
+end
 @enduml

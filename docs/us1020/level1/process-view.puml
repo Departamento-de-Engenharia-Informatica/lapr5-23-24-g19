@@ -1,20 +1,33 @@
 @startuml
 autonumber
 
-actor "Campus Manager" as usr
+actor "Fleet Manager" as usr
 
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-    usr -> sys : inhibit robot
+
+    usr -> sys : wants to inhibit robot
     activate sys
+
+    alt robotList empty
+        sys --> usr: informs error
+    else robot(s) found
+
         sys --> usr : show available robots
     deactivate sys
 
     usr -> sys : chooses robot
     activate sys
-        sys --> usr : inform error/success
+
+    alt inhibit error
+        sys --> usr: informs error
+    else success
+
+
+        sys --> usr : show updated list of robots
     deactivate sys
 deactivate usr
-
+end
+end
 @enduml
