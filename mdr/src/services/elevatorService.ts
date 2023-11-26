@@ -161,7 +161,7 @@ export default class ElevatorService implements IElevatorService {
         } catch (e) {
             return left({
                 errorCode: ErrorCode.BussinessRuleViolation,
-                message: 'Business rule violation',
+                message: e.message ?? 'Business rule violation',
             } as ErrorResult)
             throw e
         }

@@ -63,14 +63,6 @@
             </option>
         </select>
 
-        <label for="identifier">Identifier:</label>
-        <input
-            id="identifier"
-            type="number"
-            formControlName="identifier"
-            placeholder="{{ elevator.identifier }}"
-        />
-
         <label for="brand">Brand:</label>
         <textarea
             id="brand"
@@ -108,3 +100,18 @@
         <button *ngIf="!formValid()" type="submit" [disabled]="true">Submit</button>
     </div>
 </form>
+
+<div class="elevator-list">
+    <div *ngIf="editElevatorForm" class="elevator-card p">
+        <h2>Edited Elevator</h2>
+        <p>Building ID: {{ editElevatorForm.value.buildingId }}</p>
+        <p>Identifier: {{ editElevatorForm.value.identifier }}</p>
+        <p>Floors: {{ editElevatorForm.value.floors.join(', ') }}</p>
+        <p>Brand: {{ editElevatorForm.value.brand }}</p>
+        <p>Model: {{ editElevatorForm.value.model }}</p>
+        <p>Serial Number: {{ editElevatorForm.value.serialNumber }}</p>
+        <p>Description: {{ editElevatorForm.value.description }}</p>
+    </div>
+</div>
+
+

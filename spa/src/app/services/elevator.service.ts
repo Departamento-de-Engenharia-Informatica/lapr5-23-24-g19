@@ -31,14 +31,18 @@ export class ElevatorService {
     }
 
     patchElevator(dto: CreatedElevatorDTO): Observable<CreatedElevatorDTO> {
-        /*const edit: PatchDTO = {
-            floorNumber: dto.newFloorNumber,
-            description: dto.newDescription,
-        }*/
+        const dtoElevator = {
+            floors: dto.floors,
+            brand: dto.brand ?? undefined,
+            model: dto.model  ?? undefined,
+            serialNumber: dto.serialNumber  ?? undefined,
+            description: dto.description  ?? undefined,
+
+        } as ElevatorDTO
 
         return this.http.patch<CreatedElevatorDTO>(
             `${Config.baseUrl}/buildings/${dto.buildingId}/elevators/${dto.identifier}`,
-            JSON.stringify(dto),
+            JSON.stringify(dtoElevator),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
@@ -48,13 +52,18 @@ export class ElevatorService {
     }
 
     putElevator(dto: CreatedElevatorDTO): Observable<CreatedElevatorDTO> {
-        /*const edit: FloorDTO = {
-            floorNumber: dto.newFloorNumber,
-            description: dto.newDescription,
-        }*/
+        const dtoElevator = {
+            floors: dto.floors,
+            brand: dto.brand ?? undefined,
+            model: dto.model  ?? undefined,
+            serialNumber: dto.serialNumber  ?? undefined,
+            description: dto.description  ?? undefined,
+
+        } as ElevatorDTO
+
         return this.http.put<CreatedElevatorDTO>(
             `${Config.baseUrl}/buildings/${dto.buildingId}/elevators/${dto.identifier}`,
-            JSON.stringify(dto),
+            JSON.stringify(dtoElevator),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
