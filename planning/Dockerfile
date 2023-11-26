@@ -4,9 +4,6 @@ WORKDIR /app
 
 COPY . ./
 
-ENV PLAN_PORT 2228
-# ENV MDR_API  value
-
 EXPOSE 2228
 
-CMD ["swipl", "./main.pl"]
+CMD ["swipl", "./main.pl", "-g", "main", "--port=2228", "--fork=false"]
