@@ -7,8 +7,8 @@ actor "Fleet Manager" as usr
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
 participant "Service" as svc
-participant "RobotTypeRepository" as t_repo
-participant "RobotRepository" as r_repo
+participant "robotTypeRepo:\nRobotTypeRepo" as t_repo
+participant "robotRepo:\nRobotRepo" as r_repo
 participant "dto:\nRobotTypeDTO" as t_dto
 participant "dto:\nRobotDTO" as r_dto
 participant "dto:\nRobotWithoutStateDTO" as rs_dto
