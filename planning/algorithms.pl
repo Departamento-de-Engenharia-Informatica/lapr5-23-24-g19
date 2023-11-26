@@ -65,7 +65,7 @@ extract_build(pass(B1, _, B2, _), [B1, B2]).
 % Dest = (building, floor, x, y)
 % Paths: output
 compute_paths(Orig, Dest, Criterion, Paths) :-
-    % TODO: environment variable?
+    % TODO: environment variable
     findnsols(30, Ligs, compute_path(Orig, Dest, Ligs), LLigs),
 
     % pick criterion
@@ -81,7 +81,6 @@ cell_to_floorcell(Building, Floor, Cell, FloorCell) :-
     Cell = cell(X, Y),
     FloorCell = cell(Building, Floor, X, Y).
 absolute_path(Building, Floor, Relative, Absolute) :-
-    % TODO: check if this works
     map(algorithms:cell_to_floorcell(Building, Floor), Relative, Absolute).
 edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
 
@@ -115,7 +114,7 @@ compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path]) :-
 
     % catch the elevator to another floor
     % FIXME: find coords of elevator in the other floor
-    fail, Xf2 = 1, Yf2 = 2,
+    Xf2 = XElev, Yf2 = YElev,
 
     append(CompAbs, [elev(B, F1, F2)], CompFull),
 
@@ -138,8 +137,6 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
 
     append(CompAbs, [pass(B1, F2, B2, F2)], CompFull),
 
-    % TODO: consider passage cost?
-
     % get coords from the other side, Xb2 & Yb2
     loadmap(B2, Fb2),
     passage(B2, Fb2, Xb2, Yb2, B1, F1),
@@ -158,7 +155,7 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
 
     % catch the elevator to another floor
     % FIXME: find coords of elevator in the other floor
-    fail, Xf2 = 1, Yf2 = 2,
+    Xf2 = XElev, Yf2 = YElev,
 
     append(CompAbs, [elev(B1, F1, Fconn)], CompFull),
     compute_path_aux((B1, Fconn, Xf2, Yf2), (B2, F2, X2, Y2), Path).
