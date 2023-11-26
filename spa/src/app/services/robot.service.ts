@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { AppModule } from '../app.module'
 import { RobotDTO } from 'src/app/dto/RobotDTO'
 import { InhibitRobotDTO } from '../dto/InhibitRobotDTO'
 import { RobotTypeRepo } from '../repos/RobotTypeRepo'
 import { RobotRepo } from '../repos/RobotRepo'
 import { RobotWithoutStateDTO } from '../dto/RobotWithoutStateDTO'
 import { CreateRobotTypeDTO } from '../dto/CreateRobotTypeDTO'
+import { Config } from '../config'
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +20,7 @@ export class RobotService {
     ) {}
 
     getRobots(): Observable<RobotDTO[]> {
-        return this.http.get<RobotDTO[]>(`${AppModule.baseUrl}/robots`, {
+        return this.http.get<RobotDTO[]>(`${Config.baseUrl}/robots`, {
             observe: 'body',
             responseType: 'json',
         })
@@ -43,7 +43,7 @@ export class RobotService {
         const body = { state: dto.state }
 
         return this.http.patch<RobotDTO>(
-            `${AppModule.baseUrl}/robots/${code}/inhibit`,
+            `${Config.baseUrl}/robots/${code}/inhibit`,
             JSON.stringify(body),
             {
                 headers: { 'Content-type': 'application/json' },

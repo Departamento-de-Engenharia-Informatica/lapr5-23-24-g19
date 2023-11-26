@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
-import { AppModule } from '../app.module'
 import { PassageDTO } from 'src/app/dto/PassageDTO'
 import { BuildingCodePairDTO } from '../dto/BuildingCodePairDTO'
 import { EditPassageDTO } from '../dto/EditPassageDTO'
+import { Config } from '../config'
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +16,7 @@ export class PassageService {
         bCode1: string,
         bCode2: string,
     ): Observable<PassageDTO[]> {
-        const url = `${AppModule.baseUrl}/passages/?building1=${bCode1}&building2=${bCode2}`
+        const url = `${Config.baseUrl}/passages/?building1=${bCode1}&building2=${bCode2}`
         return this.http.get<PassageDTO[]>(url, { observe: 'body', responseType: 'json' })
     }
 
@@ -26,7 +26,7 @@ export class PassageService {
         params = params.set('building1', dto.buildingCode1)
         params = params.set('building2', dto.buildingCode2)
 
-        return this.http.get<PassageDTO[]>(`${AppModule.baseUrl}/passages`, {
+        return this.http.get<PassageDTO[]>(`${Config.baseUrl}/passages`, {
             params,
             observe: 'body',
             responseType: 'json',
@@ -35,9 +35,9 @@ export class PassageService {
 
     patchPassage(dto: EditPassageDTO): Observable<PassageDTO> {
         return this.http.patch<PassageDTO>(
-            `${AppModule.baseUrl}/passages`,
+            `${Config.baseUrl}/passages`,
             JSON.stringify(dto),
-        
+
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
@@ -48,7 +48,7 @@ export class PassageService {
 
     postPassage(dto: PassageDTO): Observable<PassageDTO> {
         return this.http
-            .post<PassageDTO>(`${AppModule.baseUrl}/passages`, JSON.stringify(dto), {
+            .post<PassageDTO>(`${Config.baseUrl}/passages`, JSON.stringify(dto), {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',
                 responseType: 'json',

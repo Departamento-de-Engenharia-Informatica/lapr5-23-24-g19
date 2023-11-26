@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
-import { AppModule } from '../app.module'
-import {FloorPassageDTO} from "../dto/FloorPassageDTO";
+import { FloorPassageDTO } from '../dto/FloorPassageDTO'
+import { Config } from '../config'
 
 export interface FloorAndBuildingDTO {
     buildingCode: string
@@ -46,7 +46,7 @@ export class FloorService {
 
     getFloors(buildingCode: string): Observable<FloorAndBuildingDTO[]> {
         return this.http.get<FloorAndBuildingDTO[]>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}/floors`,
+            `${Config.baseUrl}/buildings/${buildingCode}/floors`,
             {
                 observe: 'body',
                 responseType: 'json',
@@ -61,7 +61,7 @@ export class FloorService {
         }
 
         return this.http.post<FloorAndBuildingDTO>(
-            `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors`,
+            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors`,
             JSON.stringify(floor),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -78,7 +78,7 @@ export class FloorService {
         }
 
         return this.http.patch<FloorAndBuildingDTO>(
-            `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
+            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
             JSON.stringify(edit),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -95,7 +95,7 @@ export class FloorService {
         }
 
         return this.http.put<FloorAndBuildingDTO>(
-            `${AppModule.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
+            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
             JSON.stringify(edit),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -109,30 +109,34 @@ export class FloorService {
         buildingCode: String,
         floorNumber: number,
     ): Observable<UpdateMapDTO> {
-        return this.http.patch<UpdateMapDTO>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
-            JSON.stringify(dto.map),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        ).pipe(catchError((response: HttpErrorResponse) => {
-            let errorMessage: string;
+        return this.http
+            .patch<UpdateMapDTO>(
+                `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
+                JSON.stringify(dto.map),
+                {
+                    headers: { 'Content-type': 'application/json' },
+                    observe: 'body',
+                    responseType: 'json',
+                },
+            )
+            .pipe(
+                catchError((response: HttpErrorResponse) => {
+                    let errorMessage: string
 
-            if (response.error) {
-                errorMessage = response.error
-            } else {
-                errorMessage = `An unexpected error occurred: ${response.message}`;
-            }
+                    if (response.error) {
+                        errorMessage = response.error
+                    } else {
+                        errorMessage = `An unexpected error occurred: ${response.message}`
+                    }
 
-            return throwError(() => new Error(errorMessage))
-        }))
+                    return throwError(() => new Error(errorMessage))
+                }),
+            )
     }
 
     getFloorsWithPassage(buildingCode: string): Observable<FloorPassageDTO[]> {
         return this.http.get<FloorPassageDTO[]>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/passages`,
+            `${Config.baseUrl}/buildings/${buildingCode}/floors/passages`,
             {
                 observe: 'body',
                 responseType: 'json',

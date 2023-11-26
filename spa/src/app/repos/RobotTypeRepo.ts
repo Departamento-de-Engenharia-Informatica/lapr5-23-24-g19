@@ -1,7 +1,7 @@
 import { Observable, catchError, throwError } from 'rxjs'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { AppModule } from '../app.module'
 import { Injectable } from '@angular/core'
+import { Config } from '../config'
 
 interface CreateRobotTypeDTO {
     code: string
@@ -19,7 +19,7 @@ export class RobotTypeRepo {
     createRobotType(dto: CreateRobotTypeDTO): Observable<CreateRobotTypeDTO> {
         return this.http
             .post<CreateRobotTypeDTO>(
-                `${AppModule.baseUrl}/robottypes`,
+                `${Config.baseUrl}/robottypes`,
                 JSON.stringify(dto),
                 {
                     headers: { 'Content-type': 'application/json' },
@@ -43,7 +43,7 @@ export class RobotTypeRepo {
     }
 
     getRobotTypes(): Observable<CreateRobotTypeDTO[]> {
-        return this.http.get<CreateRobotTypeDTO[]>(`${AppModule.baseUrl}/robottypes`, {
+        return this.http.get<CreateRobotTypeDTO[]>(`${Config.baseUrl}/robottypes`, {
             headers: { 'Content-type': 'application/json' },
             observe: 'body',
             responseType: 'json',

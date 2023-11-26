@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { AppModule } from '../app.module'
 import { Observable, catchError, throwError } from 'rxjs'
+import { Config } from '../config'
 import { BuildingDTO } from '../dto/BuildingDTO'
 
 // interface BuildingProps{
@@ -38,31 +38,29 @@ export interface MinMaxDTO {
 }
 
 @Injectable()
-// {
-// providedIn: AppModule
-// }
 export class BuildingService {
     constructor(private http: HttpClient) {}
 
     getBuildings(): Observable<BuildingDTO[]> {
-        const url = `${AppModule.baseUrl}/buildings`
-        return this.http.get<BuildingDTO[]>(url, {
-            observe: 'body',
-            responseType: 'json',
-        })
-        .pipe(
-            catchError((response: HttpErrorResponse) => {
-                let errorMessage: string;
-
-                if (response.error) {
-                    errorMessage = response.error
-                } else {
-                    errorMessage = `An unexpected error occurred: ${response.message}`;
-                }
-
-                return throwError(() => new Error(errorMessage))
+        const url = `${Config.baseUrl}/buildings`
+        return this.http
+            .get<BuildingDTO[]>(url, {
+                observe: 'body',
+                responseType: 'json',
             })
-        )
+            .pipe(
+                catchError((response: HttpErrorResponse) => {
+                    let errorMessage: string
+
+                    if (response.error) {
+                        errorMessage = response.error
+                    } else {
+                        errorMessage = `An unexpected error occurred: ${response.message}`
+                    }
+
+                    return throwError(() => new Error(errorMessage))
+                }),
+            )
     }
 
     getBuildingsByFloors(dto: MinMaxDTO): Observable<BuildingByFloorsDTO[]> {
@@ -70,7 +68,7 @@ export class BuildingService {
         params = params.set('minFloors', dto.min)
         params = params.set('maxFloors', dto.max)
 
-        return this.http.get<BuildingByFloorsDTO[]>(`${AppModule.baseUrl}/buildings/`, {
+        return this.http.get<BuildingByFloorsDTO[]>(`${Config.baseUrl}/buildings/`, {
             params,
             observe: 'body',
             responseType: 'json',
@@ -80,7 +78,7 @@ export class BuildingService {
     createBuilding(dto: BuildingDTO) {
         const building = cleanObject(dto)
         return this.http.post<BuildingDTO | undefined>(
-            `${AppModule.baseUrl}/buildings`,
+            `${Config.baseUrl}/buildings`,
             JSON.stringify(building),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -95,7 +93,7 @@ export class BuildingService {
         buildingCode: String,
     ): Observable<BuildingDTO> {
         return this.http.put<BuildingDTO>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}`,
+            `${Config.baseUrl}/buildings/${buildingCode}`,
             JSON.stringify(cleanObject(building)),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -110,7 +108,7 @@ export class BuildingService {
         buildingCode: String,
     ): Observable<BuildingDTO> {
         return this.http.patch<BuildingDTO>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}`,
+            `${Config.baseUrl}/buildings/${buildingCode}`,
             JSON.stringify(cleanObject(building)),
             {
                 headers: { 'Content-type': 'application/json' },

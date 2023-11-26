@@ -1,9 +1,9 @@
 import {HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { AppModule } from '../app.module'
 import { CreatedRoomDTO } from 'src/app/dto/CreatedRoomDTO'
 import { RoomDTO } from 'src/app/dto/RoomDTO'
+import { Config } from '../config'
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +17,7 @@ export class RoomService {
         dto: RoomDTO,
     ): Observable<CreatedRoomDTO> {
         return this.http.post<CreatedRoomDTO>(
-            `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`,
+            `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`,
             JSON.stringify(dto),
             {
                 headers: { 'Content-type': 'application/json' },
@@ -28,7 +28,7 @@ export class RoomService {
     }
 
     getRooms(buildingCode: string, floorNumber: string): Observable<CreatedRoomDTO[]> {
-        const url = `${AppModule.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
+        const url = `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
         return this.http.get<CreatedRoomDTO[]>(url, {
             observe: 'body',
             responseType: 'json',

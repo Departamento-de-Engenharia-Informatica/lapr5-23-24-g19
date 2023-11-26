@@ -1,6 +1,5 @@
 describe('Elevator Form e2e tests', () => {
     beforeEach(() => {
-
         cy.intercept('GET', 'http://localhost:4000/api/buildings', {
             body: [
                 {
@@ -24,23 +23,23 @@ describe('Elevator Form e2e tests', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('/campus/elevators/create');
-    });
+        cy.visit('/campus/elevators/create')
+    })
 
     it('has the correct title', () => {
-        cy.title().should('equal', 'Create Elevator');
-    });
+        cy.title().should('equal', 'Create Elevator')
+    })
 
     it('should have empty initial values', () => {
-        cy.get('#selectedBuilding').should('have.value', null);
-        cy.get('#selectedFloors').invoke('val').should('deep.equal', []);
-        cy.get('#brand').should('have.value', '');
-        cy.get('#model').should('have.value', '');
-        cy.get('#serialNumber').should('have.value', '');
-        cy.get('#description').should('have.value', '');
-    });
+        cy.get('#selectedBuilding').should('have.value', null)
+        cy.get('#selectedFloors').invoke('val').should('deep.equal', [])
+        cy.get('#brand').should('have.value', '')
+        cy.get('#model').should('have.value', '')
+        cy.get('#serialNumber').should('have.value', '')
+        cy.get('#description').should('have.value', '')
+    })
 
-  /*  it('should display error and disable submit button for invalid form', () => {
+    /*  it('should display error and disable submit button for invalid form', () => {
         // Submit the form without filling in any fields
         cy.get('button[type="submit"]').click({ force: true });
 
@@ -52,11 +51,8 @@ describe('Elevator Form e2e tests', () => {
     });
 */
 
-
     it('should submit the form successfully and display created elevator', () => {
-
         cy.wait('@getBuildings')
-        cy.get('#selectedBuilding').select('P');
 
         cy.intercept('GET', 'http://localhost:4000/api/buildings/P/floors', {
             body: [
@@ -78,6 +74,7 @@ describe('Elevator Form e2e tests', () => {
             ],
         }).as('getFloors')
 
+        cy.get('#selectedBuilding').select('P')
         cy.wait('@getFloors')
 
         const buildingId = 'P'
@@ -88,44 +85,37 @@ describe('Elevator Form e2e tests', () => {
         const serialNumber = 'Serial123'
         const description = 'This is a test elevator.'
 
-        cy.get('#selectedFloors').select(floorsNumber);
-        cy.get('#brand').type(brand);
-        cy.get('#model').type(model);
-        cy.get('#serialNumber').type(serialNumber);
-        cy.get('#description').type(description);
-
+        cy.get('#selectedFloors').select(floorsNumber)
+        cy.get('#brand').type(brand)
+        cy.get('#model').type(model)
+        cy.get('#serialNumber').type(serialNumber)
+        cy.get('#description').type(description)
 
         cy.intercept('POST', 'http://localhost:4000/api/buildings/P/elevators', {
             statusCode: 201,
-                body: {
-                    buildingId: buildingId,
-                    identifier: 1,
-                    floors: floorsNumber,
-                    brand: brand,
-                    model: model,
-                    serialNumber: serialNumber,
-                    description: description,
+            body: {
+                buildingId: buildingId,
+                identifier: 1,
+                floors: floorsNumber,
+                brand: brand,
+                model: model,
+                serialNumber: serialNumber,
+                description: description,
             },
-
         }).as('createElevator')
-
 
         cy.get('button[type="submit"]').click()
         cy.wait('@createElevator')
 
-        cy.get('.elevator-list').should('exist');
-        cy.get('.elevator-card p').should('have.length', 7);
+        cy.get('.elevator-list').should('exist')
+        cy.get('.elevator-card p').should('have.length', 7)
 
-
-        cy.get('.elevator-card p').contains('Building ID: P');
-        cy.get('.elevator-card p').contains('Identifier: 1');
-        cy.get('.elevator-card p').contains('Floors: 1, 2');
-        cy.get('.elevator-card p').contains('Brand: BrandName');
-        cy.get('.elevator-card p').contains('Model: ModelName');
-        cy.get('.elevator-card p').contains('Serial Number: Serial123');
-        cy.get('.elevator-card p').contains('Description: This is a test elevator.');
-
-    });
-
-
-});
+        cy.get('.elevator-card p').contains('Building ID: P')
+        cy.get('.elevator-card p').contains('Identifier: 1')
+        cy.get('.elevator-card p').contains('Floors: 1, 2')
+        cy.get('.elevator-card p').contains('Brand: BrandName')
+        cy.get('.elevator-card p').contains('Model: ModelName')
+        cy.get('.elevator-card p').contains('Serial Number: Serial123')
+        cy.get('.elevator-card p').contains('Description: This is a test elevator.')
+    })
+})
