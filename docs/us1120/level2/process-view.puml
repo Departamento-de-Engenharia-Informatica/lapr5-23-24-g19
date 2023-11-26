@@ -3,8 +3,8 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as UI
-participant "Campus MD" as md
+participant "FE" as UI
+participant "MD" as md
 
 activate usr
     usr -> UI : update floor map

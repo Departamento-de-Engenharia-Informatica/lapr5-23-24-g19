@@ -5,31 +5,37 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "PassageDTO" as passageDTO
+participant "BuildingService" as buildingSvc
+participant "FloorService" as floorSvc
+participant "PassageService" as passageSvc
+participant "FloorDTO" as floorDTO
+participant "BuildingDTO" as dto
 
 participant "HTTP Driver" as http
-
-participant "MD" as md
 
 activate usr
 usr -> view : wants to list buildings
     activate view
         view -> ctrl : ngOnInit()
         activate ctrl
-            ctrl -> svc : getBuildings()
-            activate svc
-                svc -> http : get({baseURL}/buildings)
+            ctrl -> buildingSvc : getBuildings()
+            activate buildingSvc
+                buildingSvc -> http : get({baseURL}/buildings)
                 activate http
-                    http -> md : GET /buildings
+                    http ->]: GET /buildings
                 note right : see us170 documentation
-            activate md
-                md --> http : 200
-                deactivate md
-                http --> svc : observable
+                ]--> http : 200
+                http --> buildingSvc : observable
                 deactivate http
-                svc --> ctrl : buildings
+                loop for each building
+                    buildingSvc --> dto** : create()
+                    activate dto
+                        dto --> buildingSvc : dto
+                    deactivate dto
+                end
+                buildingSvc --> ctrl : buildings
         alt buildings empty
-                deactivate svc
                 ctrl --> view : error message
                 view --> usr : shows error message
         else building(s) found
@@ -46,23 +52,31 @@ usr -> view : wants to list buildings
         activate view
             view -> ctrl : listFloors(building)
             activate ctrl
-                ctrl -> svc : listFloors(building)
-                activate svc
-                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+                ctrl --> dto** : create()
+                activate dto
+                    dto --> ctrl : dto
+                deactivate dto
+                ctrl -> floorSvc : listFloors(building)
+                activate floorSvc
+                    floorSvc -> http : get({baseURL}/buildings/{buildingCode}/floors)
                     activate http
-                        http -> md : GET /buildings/{id}/floors
-            activate md
-                md --> http : 200
+                        http ->] : GET /buildings/{id}/floors
+                ]--> http : 200
                 note right : see us210 documentation
-                deactivate md
-                    http --> svc : observable
+                    http --> floorSvc : observable
                     deactivate http
-                    svc --> ctrl : floors
+                    loop for each floor
+                        floorSvc --> floorDTO** : create()
+                        activate floorDTO
+                            floorDTO --> floorSvc : floorDTO
+                        deactivate floorDTO
+                    end
+                    floorSvc --> ctrl : floors
+                deactivate floorSvc
                     alt floors is empty
                         ctrl --> view : floors not found
                         view --> usr : shows error
                     else floors found
-                deactivate svc
 
                 ctrl --> view : floors
             deactivate ctrl
@@ -73,25 +87,27 @@ usr -> view : wants to list buildings
         activate view
             view -> ctrl : formData
             activate ctrl
-                ctrl -> svc : createPassage()
-                activate svc
-                    svc -> http : post({baseURL}/passages)
+                ctrl-> passageDTO**: create()
+                activate passageDTO
+                    ctrl-> passageDTO: passageDTO
+                deactivate passageDTO
+                ctrl -> passageSvc : createPassage(passage)
+                activate passageSvc
+                    passageSvc -> http : post({baseURL}/passages)
                     activate http
-                        http -> md : POST /passages
-                        activate md
-                            md --> http : status code
-                        deactivate md
+                        http ->] : POST /passages
+                            ]--> http : status code
                 note right : see us160 documentation
-                    http --> svc : observable
+                    http --> passageSvc : observable
                     deactivate http
                     alt status==200
-                    svc --> ctrl : map
+                    passageSvc --> ctrl : map
 
                 ctrl --> view : map
                 view --> usr : shows success message
                 else
-                    svc --> ctrl : error message
-                    deactivate svc
+                    passageSvc --> ctrl : error message
+                    deactivate passageSvc
                 ctrl --> view : error message
                 deactivate ctrl
             view --> usr : shows error message

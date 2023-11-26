@@ -5,11 +5,15 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "BuildingService" as svc
+participant "FloorService" as floorSvc
+
+participant "BuildingDTO" as dto
+participant "FloorDTO" as floorDTO
+participant "FloorMapDTO" as floorMapDTO
 
 participant "HTTP Driver" as http
 
-participant "MD" as md
 
 activate usr
 usr -> view : wants to list buildings
@@ -20,13 +24,17 @@ usr -> view : wants to list buildings
             activate svc
                 svc -> http : get({baseURL}/buildings)
                 activate http
-                    http -> md : GET /buildings
+                    http ->] : GET /buildings
                 note right : see us170 documentation
-            activate md
-                md --> http : 200
-                deactivate md
+                ]--> http : 200
                 http --> svc : observable
                 deactivate http
+                loop for each building
+                    svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+                end
                 svc --> ctrl : buildings
         alt buildings empty
                 deactivate svc
@@ -42,23 +50,28 @@ usr -> view : wants to list buildings
         activate view
             view -> ctrl : listFloors()
             activate ctrl
-                ctrl -> svc : listFloors()
-                activate svc
-                    svc -> http : get({baseURL}/buildings/{buildingCode}/floors)
+            deactivate dto
+                ctrl -> floorSvc : listFloors()
+                activate floorSvc
+                    floorSvc -> http : get({baseURL}/buildings/{buildingCode}/floors)
                     activate http
-                        http -> md : GET /buildings/{id}/floors
-            activate md
-                md --> http : 200
+                        http ->] : GET /buildings/{id}/floors
+                ]--> http : 200
                 note right : see us210 documentation
-                deactivate md
-                    http --> svc : observable
+                    http --> floorSvc : observable
                     deactivate http
-                    svc --> ctrl : floors
+                    loop for each floor
+                        floorSvc --> floorDTO** : create()
+                        activate floorDTO
+                            floorDTO --> floorSvc : floorDTO
+                        deactivate floorDTO
+                    end
+                    floorSvc --> ctrl : floors
                     alt floors is empty
                         ctrl --> view : floors not found
                         view --> usr : shows error
                     else floors found
-                deactivate svc
+                deactivate floorSvc
 
                 ctrl --> view : floors
             deactivate ctrl
@@ -69,25 +82,31 @@ usr -> view : wants to list buildings
         activate view
             view -> ctrl : buildingData
             activate ctrl
-                ctrl -> svc : editBuilding()
-                activate svc
-                    svc -> http : patch({baseURL}/buildings/{buildingCode}/floors/{floorNumber}/map
+                ctrl --> floorMapDTO** : create()
+                activate floorMapDTO
+                    floorMapDTO --> ctrl : floorMapDTO
+                deactivate floorMapDTO
+                ctrl -> floorSvc : editBuilding(floorMapDTOs)
+                activate floorSvc
+                    floorSvc -> http : patch({baseURL}/buildings/{buildingCode}/floors/{floorNumber}/map
                     activate http
-                        http -> md : PATCH /buildings/{buildingCode}
-                        activate md
-                            md --> http : status code
-                        deactivate md
+                        http ->] : PATCH /buildings/{buildingCode}
+                            ]--> http : status code
                 note right : see us160 documentation
-                    http --> svc : observable
+                    http --> floorSvc : observable
                     deactivate http
+                    floorSvc --> floorMapDTO** : create()
+                    activate floorMapDTO
+                        floorMapDTO --> floorSvc : floorMapDTO
+                    deactivate floorMapDTO
                     alt status==200
-                    svc --> ctrl : map
+                    floorSvc --> ctrl : map
 
                 ctrl --> view : map
                 view --> usr : shows success message
                 else
-                    svc --> ctrl : error message
-                    deactivate svc
+                    floorSvc --> ctrl : error message
+                    deactivate floorSvc
                 ctrl --> view : error message
                 deactivate ctrl
             view --> usr : shows error message

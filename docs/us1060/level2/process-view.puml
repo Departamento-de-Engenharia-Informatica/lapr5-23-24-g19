@@ -3,9 +3,9 @@ autonumber
 
 actor "Campus Manager" as usr
 
-participant "Campus UI" as ui
+participant "FE" as ui
 
-participant "Campus MD" as md
+participant "MD" as md
 
 activate usr
     usr -> ui : list floors from a building

@@ -5,11 +5,10 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "Service" as svc
+participant "BuildingService" as svc
+participant "BuildingDTO" as dto
 
 participant "HTTP Driver" as http
-
-participant "MD" as md
 
 activate usr
 usr -> view : wants to list buildings
@@ -20,13 +19,17 @@ usr -> view : wants to list buildings
             activate svc
                 svc -> http : get({baseURL}/buildings)
                 activate http
-                    http -> md : GET /buildings
+                    http ->] : GET /buildings
                 note right : see us170 documentation
-            activate md
-                md --> http : 200
-                deactivate md
+                ]-> http : 200
                 http --> svc : observable
                 deactivate http
+                loop for each building
+                svc --> dto** : create()
+                    activate dto
+                        dto --> svc : dto
+                    deactivate dto
+                end
                 svc --> ctrl : buildings
         alt buildings empty
                 deactivate svc

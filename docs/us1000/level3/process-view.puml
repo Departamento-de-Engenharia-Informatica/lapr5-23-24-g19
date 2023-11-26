@@ -1,0 +1,64 @@
+@startuml
+
+autonumber
+
+actor "Fleet Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+participant "dto:\nRobotTypeDTO" as t_dto
+participant "RobotTypeService" as svc
+participant "robotTypeRepo:\nRobotTypeRepo" as r_repo
+participant "dto:\nRobotDTO" as r_dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to create robot type
+    activate view
+    usr <-- view : requests data
+    deactivate view
+    usr -> view : provides data
+    activate view
+        view -> ctrl : createRobotType()
+        activate ctrl
+        ctrl --> t_dto** : create()
+            activate t_dto
+                ctrl <-- t_dto : dto
+            deactivate t_dto
+                ctrl -> svc : getRobots()
+                activate svc
+                    svc -> r_repo : createRobotType(dto)
+                    activate r_repo
+                        r_repo -> http: post({baseUrl}/robottype)
+                        note right of http : see us350 documentation,
+                        activate http
+                            http <--] : 200: robots
+                            http --> r_repo : observable
+                            alt 201
+                        deactivate http
+                        r_repo --> r_dto** : create()
+                        activate r_dto
+                            r_dto --> r_repo : dto
+                        deactivate r_dto
+                        r_repo --> svc : robotType
+                    svc --> ctrl : robotType
+                ctrl --> view : robots
+        view --> usr : success message
+        else
+        deactivate http
+                                deactivate r_dto
+                                r_repo --> svc : error
+                            deactivate r_repo
+                            svc --> ctrl : error
+                        deactivate svc
+                        ctrl --> view : error
+                deactivate ctrl
+                view --> usr : error message
+
+    deactivate view
+
+deactivate usr
+        end
+
+@enduml

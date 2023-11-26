@@ -22,10 +22,7 @@ activate usr
         alt success
             md --> ui : 201: robotType
             ui --> usr : previews created robot type
-        else robot type already exists
-            md --> ui : 412: error
-            ui --> usr : informs error
-        else bad robot type parameters
+        else error creating robot type
             md --> ui : 422: error
             ui --> usr : informs error
         end
