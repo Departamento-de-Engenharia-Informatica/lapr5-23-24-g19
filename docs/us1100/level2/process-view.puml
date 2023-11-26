@@ -15,7 +15,7 @@ activate usr
             activate md
                 note right : see us170 documentation
                 md --> ui : 404: error
-                ui --> usr : informs building(s) not found
+                ui --> usr : informs error
 
     else building(s) found
             md --> ui : 200: buildings
