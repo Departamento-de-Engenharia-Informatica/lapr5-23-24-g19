@@ -42,16 +42,18 @@ import { ListRoomsComponent } from './components/room/list-rooms/list-rooms.comp
 import { GetBuildingsComponent } from './components/building/get-buildings/get-buildings.component'
 import { UpdateMapComponent } from './components/floor/update-map/update-map.component'
 import { CreatePassageComponent } from './components/passage/create-passage/create-passage.component'
-import { PopupComponent } from './components/popup/popup.component';
-import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component';
+import { PopupComponent } from './components/popup/popup.component'
+import { EditFloorComponent } from './components/floor/edit-floor/edit-floor.component'
 import { EditPassageComponent } from './components/passage/edit-passage/edit-passage.component'
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 import { FloorService } from './services/floor.service'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
 import { RobotTypeRepo } from './repos/RobotTypeRepo'
-import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component';
+import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component'
 import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
+import { RobotRepo } from './repos/RobotRepo';
+import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
 
 @NgModule({
     declarations: [
@@ -94,6 +96,7 @@ import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-
         CreateRobotTypeComponent,
         EditElevatorComponent,
         InhibitRobotComponent,
+        CreateRobotComponent,
     ],
     imports: [
         BrowserModule,
@@ -111,7 +114,8 @@ import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-
         RobotService,
         RoomService,
         FloorService,
-        RobotTypeRepo
+        RobotTypeRepo,
+        RobotRepo,
     ],
     bootstrap: [AppComponent],
 })

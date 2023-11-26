@@ -1,0 +1,49 @@
+<div class="flex flex-col m-auto p-auto">
+    <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
+        <div class="flex items-center flex-nowrap lg:ml-40 md:ml-20 ml-10">
+            <div *ngFor="let robot of robots" class="floor-card">
+                <h2>Robot {{ robot.code }}</h2>
+                <p>Nickname: {{ robot.nickname }}</p>
+                <p>Robot Type code: {{ robot.typeCode }}</p>
+                <p>Serial Number: {{ robot.serialNumber }}</p>
+                <p>Description: {{ robot.description || 'No description' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form [formGroup]="createRobotForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div>
+        <div class="row">
+            <div>
+                <label for="robotTypeCode">Select Robot Type:</label>
+                <select
+                    id="selectedRobotType"
+                    formControlName="typeCode"
+                    [(ngModel)]="selectedRobotType"
+                    required
+                >
+                    <option *ngFor="let type of robotTypes" [value]="type.code">
+                        {{ type.code }} - {{ type.model }} ({{ type.brand }})
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="code">Robot Code:</label>
+                <input id="code" type="text" formControlName="code" />
+            </div>
+        </div>
+
+        <label for="nickname">Nickname:</label>
+        <textarea id="nickname" formControlName="nickname"></textarea>
+
+        <label for="serialNumber">SerialNumber:</label>
+        <textarea id="serialNumber" formControlName="serialNumber"></textarea>
+
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+
+        <button type="submit" [disabled]="createRobotForm.invalid">Submit</button>
+    </div>
+</form>

@@ -32,8 +32,9 @@ import { EditPassageComponent } from './components/passage/edit-passage/edit-pas
 import { TraceRouteComponent } from './components/task/trace-route/trace-route.component'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
-import {EditElevatorComponent} from "./components/elevator/edit-elevator/edit-elevator.component";
+import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component'
 import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
+import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -41,14 +42,16 @@ export const routes: Routes = [
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
     {
-        path: 'task', component: TaskMenuComponent, title: 'Tasks',
+        path: 'task',
+        component: TaskMenuComponent,
+        title: 'Tasks',
         children: [
             {
                 path: 'trace-route',
                 component: TraceRouteComponent,
                 title: 'Trace route',
             },
-        ]
+        ],
     },
     {
         path: 'visualization',
@@ -56,22 +59,25 @@ export const routes: Routes = [
         title: '3d-visualization',
     },
     {
-        path: 'fleet', component: FleetMenuComponent, title: 'Fleet', children: [
-
-        ]
+        path: 'fleet',
+        component: FleetMenuComponent,
+        title: 'Fleet',
+        children: [],
     },
     {
-        path: 'fleet/robot-types', component: RobotTypeComponent,
+        path: 'fleet/robot-types',
+        component: RobotTypeComponent,
         children: [
             {
                 path: 'create',
                 component: CreateRobotTypeComponent,
                 title: 'Create robot type',
             },
-        ]
+        ],
     },
     {
-        path: 'fleet/robots', component: RobotComponent,
+        path: 'fleet/robots',
+        component: RobotComponent,
         children: [
             {
                 path: 'inhibit',
@@ -79,13 +85,17 @@ export const routes: Routes = [
                 title: 'Inhibt a robot',
             },
             {
+                path: 'create',
+                component: CreateRobotComponent,
+                title: 'Create robot',
+            },
+            {
                 path: 'list',
                 component: ListRobotsComponent,
                 title: 'List all robots in the fleet',
             },
-        ]
+        ],
     },
-
 
     {
         path: 'campus/buildings',
@@ -149,7 +159,8 @@ export const routes: Routes = [
     },
 
     {
-        path: 'campus/elevators', component: ElevatorComponent,
+        path: 'campus/elevators',
+        component: ElevatorComponent,
         children: [
             {
                 path: 'create',
@@ -166,12 +177,12 @@ export const routes: Routes = [
                 component: ListElevatorsComponent,
                 title: 'List Elevators',
             },
-        ]
+        ],
     },
 
-
     {
-        path: 'campus/rooms', component: RoomComponent,
+        path: 'campus/rooms',
+        component: RoomComponent,
         children: [
             {
                 path: 'create',
@@ -183,8 +194,7 @@ export const routes: Routes = [
                 component: ListRoomsComponent,
                 title: 'List Rooms',
             },
-
-        ]
+        ],
     },
     {
         path: 'campus/passages',
@@ -196,10 +206,11 @@ export const routes: Routes = [
                 component: EditPassageComponent,
                 title: 'Edit Passage',
             },
-        ]
+        ],
     },
     {
-        path: 'campus/passages', component: PassageComponent,
+        path: 'campus/passages',
+        component: PassageComponent,
         children: [
             {
                 path: 'list',
@@ -211,8 +222,7 @@ export const routes: Routes = [
                 component: CreatePassageComponent,
                 title: 'Create Passage',
             },
-
-        ]
+        ],
     },
 
     { path: '**', component: PageNotFoundComponent },
@@ -221,4 +231,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

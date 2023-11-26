@@ -10,7 +10,8 @@ participant "Service" as svc
 participant "RobotTypeRepository" as t_repo
 participant "RobotRepository" as r_repo
 participant "dto:\nRobotTypeDTO" as t_dto
-participant "dto:\nRobotWithoutStateDTO" as r_dto
+participant "dto:\nRobotDTO" as r_dto
+participant "dto:\nRobotWithoutStateDTO" as rs_dto
 
 participant "HTTP Driver" as http
 
@@ -88,15 +89,15 @@ else robot type(s) found
 
     usr -> view : provides data
     activate view
-        view -> ctrl : createRobot()
+        view -> ctrl : onSubmit()
         activate ctrl
-            ctrl --> r_dto** : create()
-            activate r_dto
-                r_dto --> ctrl : dto
-            deactivate r_dto
+            ctrl --> rs_dto** : create()
+            activate rs_dto
+                rs_dto --> ctrl : dto
+            deactivate rs_dto
             ctrl -> svc : createRobot(dto)
             activate svc
-                svc -> r_repo : createRobot()
+                svc -> r_repo : createRobot(dto)
                 activate r_repo 
                     r_repo -> http: post({baseUrl}/robots)
                     activate http
@@ -114,6 +115,10 @@ else success
                         http <--] : 201: robot
                         http --> r_repo : observable
                     deactivate http
+                    r_repo --> r_dto** : create()
+                    activate r_dto
+                        r_dto --> r_repo : dto
+                    deactivate r_dto
                     r_repo --> svc : dto
                 deactivate r_repo 
                 svc --> ctrl : dto
@@ -121,6 +126,7 @@ else success
             ctrl --> ctrl : getRobots()
             note left: creates alert with the created robot details
             ctrl --> view : robots
+        deactivate ctrl
         view --> usr : previews created robot
     deactivate view
 deactivate usr

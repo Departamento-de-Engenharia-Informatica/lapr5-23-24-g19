@@ -4,18 +4,38 @@ import { Observable } from 'rxjs'
 import { AppModule } from '../app.module'
 import { RobotDTO } from 'src/app/dto/RobotDTO'
 import { InhibitRobotDTO } from '../dto/InhibitRobotDTO'
+import { RobotTypeRepo } from '../repos/RobotTypeRepo'
+import { RobotRepo } from '../repos/RobotRepo'
+import { RobotWithoutStateDTO } from '../dto/RobotWithoutStateDTO'
+import { CreateRobotTypeDTO } from '../dto/CreateRobotTypeDTO'
 
 @Injectable({
     providedIn: 'root',
 })
 export class RobotService {
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private robotRepo: RobotRepo,
+        private robotTypeRepo: RobotTypeRepo,
+    ) {}
 
     getRobots(): Observable<RobotDTO[]> {
         return this.http.get<RobotDTO[]>(`${AppModule.baseUrl}/robots`, {
             observe: 'body',
             responseType: 'json',
         })
+    }
+
+    getRobotsOnion(): Observable<RobotDTO[]> {
+        return this.robotRepo.getRobots()
+    }
+
+    getRobotTypes(): Observable<CreateRobotTypeDTO[]> {
+        return this.robotTypeRepo.getRobotTypes()
+    }
+
+    createRobot(dto: RobotWithoutStateDTO): Observable<RobotDTO> {
+        return this.robotRepo.createRobot(dto)
     }
 
     inhibit(dto: InhibitRobotDTO) {
