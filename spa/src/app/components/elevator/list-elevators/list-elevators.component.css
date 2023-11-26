@@ -35,3 +35,21 @@
     overflow: visible;
     text-overflow: inherit;
 }
+
+
+label {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+}
