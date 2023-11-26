@@ -1,4 +1,4 @@
-name: Monorepo CI
+name: CI/CD
 
 on:
   push:
@@ -24,12 +24,11 @@ jobs:
           npm run lint:fix
           npm test
 
-    # - name: Frontend Lint and Test
-    #   run: |
-    #     cd frontend
-    #     npm install
-    #     npm run lint
-    #     npm test
+      - name: SPA Test
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start
 
   mdr_build:
     name: MDR Build
@@ -45,16 +44,16 @@ jobs:
           npm install
           npm run build
 
-# frontend_build:
-#   name: Frontend Build
-#   runs-on: ubuntu-latest
+  spa_build:
+    name: SPA Build
+    runs-on: ubuntu-latest
 
-#   steps:
-#     - name: Checkout Repository
-#       uses: actions/checkout@v2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-#     - name: Frontend Build
-#       run: |
-#         cd frontend
-#         npm install
-#         npm run build
+      - name: SPA Build
+        run: |
+          cd spa
+          npm install
+          npm run build
