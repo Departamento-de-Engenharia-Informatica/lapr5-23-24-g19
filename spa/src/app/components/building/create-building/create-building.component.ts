@@ -12,7 +12,10 @@ import { BuildingService } from 'src/app/services/building.service'
 export class CreateBuildingComponent {
     form: UntypedFormGroup
 
-    constructor(private fb: FormBuilder, private service: BuildingService) {
+    constructor(
+        private fb: FormBuilder,
+        private service: BuildingService,
+    ) {
         this.form = this.fb.group({
             code: [null, Validators.required],
             name: [''],
@@ -46,7 +49,11 @@ export class CreateBuildingComponent {
 
             this.service.createBuilding(dto).subscribe({
                 next: (building) => {
-                    alert(`Created building ${building.code}${building.name ? ' - ' + building.name : ''}`)
+                    alert(
+                        `Created building ${building.code}${
+                            building.name ? ' - ' + building.name : ''
+                        }`,
+                    )
                     this.form.reset()
                 },
                 error: (error) => alert(JSON.stringify(error)),
