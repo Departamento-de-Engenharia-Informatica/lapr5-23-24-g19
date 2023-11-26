@@ -4,6 +4,9 @@
 # Node.js
 node_modules/
 
+# Local FS-API root
+filesystem/
+
 # TypeScript
 *.tsbuildinfo
 

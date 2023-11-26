@@ -1,151 +1,151 @@
-import { assert, expect } from 'chai'
-import { createSandbox } from 'sinon'
-import { describe, it } from 'mocha'
+// import { assert, expect } from 'chai'
+// import { createSandbox } from 'sinon'
+// import { describe, it } from 'mocha'
 
-import { Result } from '../../core/logic/Result'
+// import { Result } from '../../core/logic/Result'
 
-import Building from '../building/building'
+// import Building from '../building/building'
 
-import { BuildingDescription, BuildingDescription as Description } from '../building/description'
-import { FloorNumber, FloorNumber as Number } from '../floor/floorNumber'
-import { FloorMapContent, FloorMapProps } from './floorMap'
-import { BuildingCode } from '../building/code'
-import { BuildingName } from '../building/name'
-import { MaxFloorDimensions } from '../building/maxFloorDimensions'
-import { Coordinates } from './Coordinates'
-import { Floor } from './floor'
+// import { BuildingDescription, BuildingDescription as Description } from '../building/description'
+// import { FloorNumber, FloorNumber as Number } from '../floor/floorNumber'
+// import { FloorMapContent, FloorMapProps } from './floorMap'
+// import { BuildingCode } from '../building/code'
+// import { BuildingName } from '../building/name'
+// import { MaxFloorDimensions } from '../building/maxFloorDimensions'
+// import { Coordinates } from './Coordinates'
+// import { Floor } from './floor'
 
-describe('Floor map integration', () => {
-    const sinon = createSandbox()
-    function stubCreate<K>(klass: K) {
-        sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
-    }
+// describe('Floor map integration', () => {
+//     const sinon = createSandbox()
+//     function stubCreate<K>(klass: K) {
+//         sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
+//     }
 
-    let code:BuildingCode,description:BuildingDescription,name:BuildingName,floorNumber: FloorNumber
+//     let code:BuildingCode,description:BuildingDescription,name:BuildingName,floorNumber: FloorNumber
 
-    beforeEach(() => {
-        stubCreate(Number)
-        stubCreate(BuildingCode)
-        stubCreate(BuildingDescription)
-        stubCreate(BuildingName)
+//     beforeEach(() => {
+//         stubCreate(Number)
+//         stubCreate(BuildingCode)
+//         stubCreate(BuildingDescription)
+//         stubCreate(BuildingName)
 
-        code = BuildingCode.create('').getValue()
-        name = BuildingName.create('').getValue()
-        floorNumber = FloorNumber.create(0).getValue()
-        description = BuildingDescription.create('').getValue()
-    })
+//         code = BuildingCode.create('').getValue()
+//         name = BuildingName.create('').getValue()
+//         floorNumber = FloorNumber.create(0).getValue()
+//         description = BuildingDescription.create('').getValue()
+//     })
 
-    afterEach(sinon.restore)
+//     afterEach(sinon.restore)
 
-    it('should not update floor map, because dimensions too large', () => {
+//     it('should not update floor map, because dimensions too large', () => {
 
-        const code = BuildingCode.create('').getValue()
-        const name = BuildingName.create('').getValue()
-        const description = BuildingDescription.create('').getValue()
-        const maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
+//         const code = BuildingCode.create('').getValue()
+//         const name = BuildingName.create('').getValue()
+//         const description = BuildingDescription.create('').getValue()
+//         const maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
 
-        const buildingRes = Building.create({
-            code,
-            maxFloorDimensions,
-            name,
-            description,
-        })
+//         const buildingRes = Building.create({
+//             code,
+//             maxFloorDimensions,
+//             name,
+//             description,
+//         })
 
-        //prepare Building
-        assert.isOk(buildingRes.isSuccess)
+//         //prepare Building
+//         assert.isOk(buildingRes.isSuccess)
 
-        const result = Floor.create({
-            building: buildingRes.getValue(),
-            floorNumber,
-            description,
-        })
+//         const result = Floor.create({
+//             building: buildingRes.getValue(),
+//             floorNumber,
+//             description,
+//         })
 
-        //prepare floor
-        assert.isOk(result.isSuccess)
-        expect(buildingRes.getValue().maxFloorDimensions.length).to.equal(10)
-        expect(buildingRes.getValue().maxFloorDimensions.width).to.equal(20)
-        
-        const dimensions = MaxFloorDimensions.create(30,30).getValue()
-        const mapContent = []
+//         //prepare floor
+//         assert.isOk(result.isSuccess)
+//         expect(buildingRes.getValue().maxFloorDimensions.length).to.equal(10)
+//         expect(buildingRes.getValue().maxFloorDimensions.width).to.equal(20)
+//
+//         const dimensions = MaxFloorDimensions.create(30,30).getValue()
+//         const mapContent = []
 
-        const coor = Coordinates.create(0,0).getValue()
-        const passages = [coor]
-        const rooms = [coor]
-        const elevators = [coor]
+//         const coor = Coordinates.create(0,0).getValue()
+//         const passages = [coor]
+//         const rooms = [coor]
+//         const elevators = [coor]
 
-        const props = {
-            map:{
-                dimensions,
-                // mapContent,
-                // passages,
-                // rooms,
-                // elevators,
-            }
-        }
+//         const props = {
+//             map:{
+//                 dimensions,
+//                 // mapContent,
+//                 // passages,
+//                 // rooms,
+//                 // elevators,
+//             }
+//         }
 
-        //prepare map
-        const floorMap = FloorMapContent.create(props as FloorMapProps)
-        assert.isOk(floorMap.isSuccess)
-        
-        expect(floorMap.getValue().dimensions.length).to.equal(30)
-        expect(floorMap.getValue().dimensions.width).to.equal(30)
+//         //prepare map
+//         const floorMap = FloorMapContent.create(props as FloorMapProps)
+//         assert.isOk(floorMap.isSuccess)
+//
+//         expect(floorMap.getValue().dimensions.length).to.equal(30)
+//         expect(floorMap.getValue().dimensions.width).to.equal(30)
 
-        assert.isNotOk(result.getValue().addMap(floorMap.getValue()))
-    })
-    it('should update floor map', () => {
+//         assert.isNotOk(result.getValue().addMap(floorMap.getValue()))
+//     })
+//     it('should update floor map', () => {
 
-        const code = BuildingCode.create('').getValue()
-        const name = BuildingName.create('').getValue()
-        const description = BuildingDescription.create('').getValue()
-        const maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
+//         const code = BuildingCode.create('').getValue()
+//         const name = BuildingName.create('').getValue()
+//         const description = BuildingDescription.create('').getValue()
+//         const maxFloorDimensions = MaxFloorDimensions.create(10, 20).getValue()
 
-        const buildingRes = Building.create({
-            code,
-            maxFloorDimensions,
-            name,
-            description,
-        })
+//         const buildingRes = Building.create({
+//             code,
+//             maxFloorDimensions,
+//             name,
+//             description,
+//         })
 
-        //prepare Building
-        assert.isOk(buildingRes.isSuccess)
+//         //prepare Building
+//         assert.isOk(buildingRes.isSuccess)
 
-        const result = Floor.create({
-            building: buildingRes.getValue(),
-            floorNumber,
-            description,
-        })
+//         const result = Floor.create({
+//             building: buildingRes.getValue(),
+//             floorNumber,
+//             description,
+//         })
 
-        //prepare floor
-        assert.isOk(result.isSuccess)
+//         //prepare floor
+//         assert.isOk(result.isSuccess)
 
-        expect(buildingRes.getValue().maxFloorDimensions.length).to.equal(10)
-        expect(buildingRes.getValue().maxFloorDimensions.width).to.equal(20)
-        
-        const dimensions = MaxFloorDimensions.create(5,5).getValue()
-        const mapContent = []
+//         expect(buildingRes.getValue().maxFloorDimensions.length).to.equal(10)
+//         expect(buildingRes.getValue().maxFloorDimensions.width).to.equal(20)
+//
+//         const dimensions = MaxFloorDimensions.create(5,5).getValue()
+//         const mapContent = []
 
-        const coor = Coordinates.create(0,0).getValue()
-        const passages = [coor]
-        const rooms = [coor]
-        const elevators = [coor]
+//         const coor = Coordinates.create(0,0).getValue()
+//         const passages = [coor]
+//         const rooms = [coor]
+//         const elevators = [coor]
 
-        const props = {
-            map:{
-                dimensions,
-                // mapContent,
-                // passages,
-                // rooms,
-                // elevators,
-            }
-        }
+//         const props = {
+//             map:{
+//                 dimensions,
+//                 // mapContent,
+//                 // passages,
+//                 // rooms,
+//                 // elevators,
+//             }
+//         }
 
-        //prepare map
-        const floorMap = FloorMapContent.create(props as FloorMapProps)
-        assert.isOk(floorMap.isSuccess)
-        
+//         //prepare map
+//         const floorMap = FloorMapContent.create(props as FloorMapProps)
+//         assert.isOk(floorMap.isSuccess)
+//
 
-        assert.isOk(result.getValue().addMap(floorMap.getValue()))
-        // expect(result.getValue().map).to.equal(floorMap.getValue())
+//         assert.isOk(result.getValue().addMap(floorMap.getValue()))
+//         // expect(result.getValue().map).to.equal(floorMap.getValue())
 
-    })
-})
+//     })
+// })

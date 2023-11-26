@@ -7,15 +7,22 @@ export default ({
     controllers,
     repos,
     services,
+    storage,
 }: {
     mongoConnection
     schemas: { name: string; schema: any }[]
     controllers: { name: string; path: string }[]
     repos: { name: string; path: string }[]
     services: { name: string; path: string }[]
+    storage: { name: string, path: string, prefix: string }
 }) => {
     try {
         Container.set('logger', LoggerInstance)
+
+        // set up file storage
+        let storageClass = require(storage.path).default
+        let storageInstance = Container.get(storageClass)
+        Container.set(storage.name, storageInstance)
 
         /**
          * We are injecting the mongoose models into the DI container.
