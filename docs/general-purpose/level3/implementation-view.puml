@@ -21,6 +21,9 @@ package system {
 
         package "FileSystem Driver" {
         }
+        
+        package "Planning Driver" {
+        }
     }
 
     package "Interface Adapters" {
@@ -37,6 +40,9 @@ package system {
 
         package "FileSystemStorage" {
         }
+
+        package "PlanningAdapter" {
+        }
     }
 
     package "Application Services" {
@@ -51,6 +57,8 @@ package system {
             }
 
             package "IFileSystemStorage" {
+            }
+            package "IPlanningAdapter" {
             }
         }
     }
@@ -75,6 +83,7 @@ package system {
     "ImplAppServices" .left.|> "IAppServices"
     "ImplAppServices" .left.> "IRepositories"
     "ImplAppServices" .right.> "IFileSystemStorage"
+    "ImplAppServices" .right.> "PlanningAdapter"
     "ImplAppServices" .down.> "Aggregates"
     "ImplAppServices" .down.> "Value Objects"
     "ImplAppServices" .down.> "Services"
@@ -85,6 +94,9 @@ package system {
 
     "FileSystemStorage" .up.> "FileSystem Driver"
     "FileSystemStorage" .down.|> "IFileSystemStorage"
+
+    "PlanningAdapter" .up.> "Planning Driver"
+    "PlanningAdapter" .down.|> "IPlanningAdapter"
 }
 
 @enduml

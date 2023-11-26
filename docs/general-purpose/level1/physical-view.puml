@@ -1,7 +1,0 @@
-@startuml
-
-node "<<System>>\n RobDronIsep" {
-
-}
-
-@enduml
