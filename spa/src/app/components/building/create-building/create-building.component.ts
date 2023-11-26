@@ -45,8 +45,8 @@ export class CreateBuildingComponent {
             }
 
             this.service.createBuilding(dto).subscribe({
-                next: () => {
-                    alert(`Created building ${code}${name ? ' - ' + name : ''}`)
+                next: (building) => {
+                    alert(`Created building ${building.code}${building.name ? ' - ' + building.name : ''}`)
                     this.form.reset()
                 },
                 error: (error) => alert(JSON.stringify(error)),
