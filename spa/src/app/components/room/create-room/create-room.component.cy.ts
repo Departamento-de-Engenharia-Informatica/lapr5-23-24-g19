@@ -9,7 +9,7 @@ import {RoomService} from "../../../services/room.service";
 import {CreateRoomComponent} from "./create-room.component";
 import {CreatedRoomDTO} from "../../../dto/CreatedRoomDTO";
 
-describe('CreateElevatorComponent: Unit Tests', () => {
+describe('CreateRoomComponent: Unit Tests', () => {
     let buildingServiceStub: Partial<BuildingService>;
     let floorServiceStub: Partial<FloorService>;
     let roomServiceStub: Partial<RoomService>;

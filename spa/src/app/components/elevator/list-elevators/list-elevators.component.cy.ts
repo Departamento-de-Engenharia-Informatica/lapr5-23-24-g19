@@ -7,7 +7,7 @@ import {ElevatorService} from "../../../services/elevator.service";
 import {CreatedElevatorDTO} from "../../../dto/CreatedElevatorDTO";
 import {ListElevatorsComponent} from "./list-elevators.component";
 
-describe('ListFloorsComponent', () => {
+describe('ListElevatorsComponent', () => {
     let buildingServiceStub: Partial<BuildingService>;
     let elevatorServiceStub: Partial<ElevatorService>;
 
