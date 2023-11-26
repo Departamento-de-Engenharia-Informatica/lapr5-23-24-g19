@@ -29,6 +29,7 @@ jobs:
           cd spa
           npm install
           npm run start & npx cypress run
+          npx cypress run --component
 
   mdr_build:
     name: MDR Build
