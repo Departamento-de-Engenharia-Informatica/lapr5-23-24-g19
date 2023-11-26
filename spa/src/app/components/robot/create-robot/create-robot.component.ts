@@ -52,7 +52,7 @@ export class CreateRobotComponent implements OnInit {
     }
 
     getRobots(): void {
-        this.svc.getRobots().subscribe((list: RobotDTO[]) => {
+        this.svc.getRobotsOnion().subscribe((list: RobotDTO[]) => {
             this.robots = list
         })
     }
