@@ -16,7 +16,7 @@ usr -> ui : wants to create floor
                 md --> ui : 404: error
                 note right : see us170 documentation
             deactivate md
-            ui --> usr : informs building(s) not found
+            ui --> usr : informs error
         else building(s) found
             activate md
                 md --> ui : 200: buildings
