@@ -5,8 +5,8 @@ actor "Campus Manager" as usr
 
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
-participant "FloorService" as svc
-participant "BuildingService" as b_svc
+participant "floorService:\nFloorService" as svc
+participant "buildingService:\nBuildingService" as b_svc
 participant "dto:\nFloorAndBuildingDTO" as dto
 participant "dto:\nBuildingDTO" as b_dto
 
