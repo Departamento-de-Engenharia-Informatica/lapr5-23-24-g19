@@ -27,8 +27,13 @@ jobs:
       - name: SPA Test
         uses: cypress-io/github-action@v6
         with:
-          build: npm run build
-          start: npm start
+          build: |
+            cd spa
+            npm run build
+
+          start: |
+            cd spa
+            npm start
 
   mdr_build:
     name: MDR Build
