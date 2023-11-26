@@ -1,18 +1,31 @@
 version: '3.8'
 
 services:
+  robdrone-be:
+    build:
+      context: ./mdr
+      dockerfile: Dockerfile
+    container_name: 'robdrone-be'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4000
+      MONGODB_URI: 'mongodb+srv://root:iJwu80jbwERuTa4t@maincluster.ocd2dr6.mongodb.net/?retryWrites=true&w=majority'
+      # TODO: planning url
+    ports: 
+      - 4000:4000
 
   robdrone-ui:
     build:
       context: ./spa
       dockerfile: Dockerfile
+    container_name: 'robdrone-ui'
     # environment:
       # MDV url
       # MDR url
       # api key
     ports:
-      - 4200:4200
+      - 4200:80
         #depends_on:
         #- robdrone-mdv
-
+        #
 # vim: ts=2 sts=2 sw=2

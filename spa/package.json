@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "prod": "ng serve --configuration=production",
+    "start": "ng serve --host 0.0.0.0",
+    "prod": "ng serve --host 0.0.0.0 --configuration=production",
     "serve": "ng serve",
     "build": "ng build",
+    "build_prod": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "e2e": "ng e2e",

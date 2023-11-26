@@ -129,7 +129,7 @@ export class AppModule {
             AppModule.mdrUrl = environment.mdrServerUrl
             AppModule.visualizationUrl = environment.mdvUrl
         } else {
-            AppModule.baseUrl = `${environment.mdrServerUrl}/api`
+            AppModule.baseUrl = `${prod.mdrServerUrl}/api`
             AppModule.mdrUrl = prod.mdrServerUrl
             AppModule.visualizationUrl = prod.mdvUrl
         }

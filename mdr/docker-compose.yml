@@ -1,9 +1,10 @@
 version: '3.8'
 
 services:
-  robdrone-db:
-    image: mongo
-    restart: always
+
+  #robdrone-db:
+    #image: mongo
+      #restart: always
       # environment:
       # MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: example
@@ -24,8 +25,8 @@ services:
       # TODO: planning url
     ports: 
       - 4000:4000
-    depends_on:
-      - robdrone-db
+        #depends_on:
+        #- robdrone-db
         #healthcheck:
         #test: ["CMD","curl","-f","http://localhost"]
         #interval: 10s
