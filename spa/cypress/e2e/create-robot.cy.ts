@@ -1,4 +1,4 @@
-describe('Floors e2e tests', () => {
+describe('Robot: createRobot() e2e tests', () => {
     beforeEach(() => {
         cy.intercept('GET', `http://localhost:4000/api/robottypes`, {
             body: [
