@@ -1,14 +1,3 @@
-<!-- <div class="flex flex-col m-auto p-auto">
-    <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
-        <div class="flex items-center flex-nowrap lg:ml-40 md:ml-20 ml-10">
-            <div *ngFor="let passage of passages" class="floor-card">
-                <h2>Passage {{ passage.floor1.buildingCode }} - {{ passage.floor2.buildingCode }}</h2>
-                <p>Connects floor {{ passage.floor1.floorNumber }} from building {{ passage.floor1.buildingCode }} to floor {{ passage.floor2.floorNumber }} from building {{ passage.floor2.buildingCode }}</p>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <form [formGroup]="editPassageForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
     <div class="introduce">
         <div class="row">
