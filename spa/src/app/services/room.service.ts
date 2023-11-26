@@ -11,6 +11,14 @@ import { Config } from '../config'
 export class RoomService {
     constructor(private http: HttpClient) {}
 
+   /* getRoomsTraceRoute(buildingCode: string, floorNumber: number): Observable<CreatedRoomDTO[]> {
+        const url = `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
+        return this.http.get<CreatedRoomDTO[]>(url, {
+            observe: 'body',
+            responseType: 'json',
+        })
+    }*/
+
     createRoom(
         buildingCode: string,
         floorNumber: string,
@@ -27,11 +35,13 @@ export class RoomService {
         )
     }
 
-    getRooms(buildingCode: string, floorNumber: string): Observable<CreatedRoomDTO[]> {
+    getRooms(buildingCode: string, floorNumber: string|number): Observable<CreatedRoomDTO[]> {
         const url = `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
         return this.http.get<CreatedRoomDTO[]>(url, {
             observe: 'body',
             responseType: 'json',
         })
     }
+
+
 }

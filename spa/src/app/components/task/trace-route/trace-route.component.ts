@@ -9,6 +9,8 @@ import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.servic
 import { PassageService } from 'src/app/services/passage.service';
 import { RoomDTO } from 'src/app/dto/RoomDTO'
 import { TaskService } from 'src/app/services/task.service';
+import {RoomService} from "../../../services/room.service";
+import {CreatedRoomDTO} from "../../../dto/CreatedRoomDTO";
 
 @Component({
     selector: 'app-trace-route',
@@ -28,8 +30,17 @@ export class TraceRouteComponent {
     floors1!: FloorAndBuildingDTO[]
     floors2!: FloorAndBuildingDTO[]
 
+    floor1!: FloorAndBuildingDTO
+    floor2!: FloorAndBuildingDTO
+
     rooms2!: RoomDTO[]
     rooms1!: RoomDTO[]
+
+    room1!: RoomDTO
+    room2!: RoomDTO
+
+
+
 
     criterion!: CriteriaDTO[]
 
@@ -37,6 +48,7 @@ export class TraceRouteComponent {
         private fb: FormBuilder,
         private buildingService: BuildingService,
         private floorService: FloorService,
+        private roomService: RoomService,
         private taskService: TaskService,
     ) {
         this.routeForm = this.fb.group({
@@ -76,16 +88,28 @@ export class TraceRouteComponent {
     }
 
     onBuilding1Selected(event: any) {
+        this.building1 = event.target.value
         this.floorService
-            .getFloors(event.target.value as string).subscribe((list: FloorAndBuildingDTO[]) => {
-                this.floors1 = list
-            },
-                (error) => {
-                    alert(error.message)
-                },)
+            .getFloors(event.target.value as string)
+            .pipe(
+                tap((list: FloorAndBuildingDTO[]) => {
+                    this.floors1 = list
+                }),
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.floors1 = []
+                    } else {
+                        // this.message.setErrorMessage(error)
+                        console.error('Error fetching floors:', error)
+                    }
+                    return of()
+                }),
+            )
+            .subscribe()
     }
 
     onBuilding2Selected(event: any) {
+        this.building2 = event.target.value
         this.floorService
             .getFloors(event.target.value as string)
             .pipe(
@@ -95,6 +119,47 @@ export class TraceRouteComponent {
                 catchError((error) => {
                     if (error.status === 404) {
                         this.floors2 = []
+                    } else {
+                        // this.message.setErrorMessage(error)
+                        console.error('Error fetching floors:', error)
+                    }
+                    return of()
+                }),
+            )
+            .subscribe()
+    }
+
+    onFloor1Selected(event: any){
+        this.floor1 = event.target.value
+        this.roomService
+            .getRooms(this.routeForm.value.building1, this.routeForm.value.floor1)
+            .pipe(
+                tap((list: CreatedRoomDTO[]) => {
+                    this.rooms1 = list
+                }),
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.rooms1 = []
+                    } else {
+                        // this.message.setErrorMessage(error)
+                        console.error('Error fetching floors:', error)
+                    }
+                    return of()
+                }),
+            )
+            .subscribe()
+    }
+    onFloor2Selected(event: any){
+        this.floor2 = event.target.value
+        this.roomService
+            .getRooms(this.routeForm.value.building2, this.routeForm.value.floor2)
+            .pipe(
+                tap((list: CreatedRoomDTO[]) => {
+                    this.rooms2 = list
+                }),
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.rooms2 = []
                     } else {
                         // this.message.setErrorMessage(error)
                         console.error('Error fetching floors:', error)

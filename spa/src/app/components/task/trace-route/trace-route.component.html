@@ -11,7 +11,7 @@
             </div>
             <div>
                 <label for="floo1">Select Floor</label>
-                <select id="floor1" formControlName="floor1" required>
+                <select id="floor1" formControlName="floor1" required (change)="onFloor1Selected($event)">
                     <ng-container *ngIf="noFloors1(); else floorsOptions">
                         <option style="color: red" disabled>No floors found</option>
                     </ng-container>
@@ -24,8 +24,8 @@
             </div>
             <div>
                 <label for="room1">Select Room</label>
-                <select id="room1" formControlName="room2" required>
-                    <ng-container *ngIf="noRooms1(); else roomsOptions2">
+                <select id="room1" formControlName="room1" required>
+                    <ng-container *ngIf="noRooms1(); else roomsOptions1">
                         <option style="color: red" disabled>No rooms found</option>
                     </ng-container>
                     <ng-template #roomsOptions1>
@@ -48,7 +48,7 @@
             </div>
             <div>
                 <label for="floor2">Select Floor</label>
-                <select id="floor2" formControlName="floor2" required>
+                <select id="floor2" formControlName="floor2" required (change)="onFloor2Selected($event)">
                     <ng-container *ngIf="noFloors2(); else floorsOptions2">
                         <option style="color: red" disabled>No floors found</option>
                     </ng-container>
