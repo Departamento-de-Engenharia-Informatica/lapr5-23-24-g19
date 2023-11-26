@@ -28,6 +28,7 @@ jobs:
         run: |
           cd spa
           npm install
+          npm run start
           npx cypress run
 
   mdr_build:
