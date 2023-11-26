@@ -6,12 +6,11 @@ actor "Campus Manager" as usr
 participant "HTML + CSS + JS" as view
 participant "Controller" as ctrl
 participant "Service" as svc
-participant "dto:\nDTO" as dto
+participant "dto:\nMinMaxDTO" as m_dto
+participant "dto:\nBuildingByFloorsDTO" as dto
 
 participant "HTTP Params" as params
 participant "HTTP Driver" as http
-
-participant "MD" as md
 
 activate usr
     usr -> view : wants to list buildings between a minimum\nand maximum number of floors
@@ -23,10 +22,10 @@ activate usr
     activate view
         view -> ctrl : onSubmit()
         activate ctrl
-            ctrl --> dto** : create()
-            activate dto
-                dto --> ctrl : dto
-            deactivate dto
+            ctrl --> m_dto** : create()
+            activate m_dto
+                m_dto --> ctrl : dto
+            deactivate m_dto
 
             ctrl -> svc : getBuildingsByFloors(dto)
             activate svc
@@ -38,11 +37,10 @@ activate usr
 
                 svc -> http : get({baseURL}/buildings/)
                 activate http
-                    http -> md : GET /buildings/?minFloors={min}&maxFloors={max}
-                    activate md
-                        note right : see us180 documentation
+                    note right of http: see us180 documentation
+                    http ->] : GET /buildings/?minFloors={min}&maxFloors={max}
                         alt success
-                            md --> http : 200: buildings
+                            http <--] : 200: buildings
                             http --> svc : observable
 
                             loop for each building
@@ -57,20 +55,20 @@ activate usr
                             ctrl --> view : buildings
                             view --> usr : lists buildings
                         else building(s) not found
-                            md --> http : 404: error
+                            http <--] : 404: error
                             http --> svc : observable
 
                             svc --> ctrl : error
                             ctrl --> ctrl : buildings = []
+                            note left: creates alert with the error message
                             ctrl --> view : buildings
                             view --> usr : alerts buildings not found
-                        end
-                    deactivate md
                 deactivate http
             deactivate svc
         deactivate ctrl
     deactivate view
 deactivate usr
+end
 
 
 @enduml
