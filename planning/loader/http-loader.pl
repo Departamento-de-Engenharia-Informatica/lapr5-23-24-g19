@@ -2,7 +2,7 @@
     getmap/3
 ]).
 
-:- dynamic loaded/4. % loaded(Building, Floor, Cache, UNIX_time)
+:- use_module(library(http/http_client)).
 
 :- use_module(graph, [
     floorcell/4,
@@ -11,9 +11,12 @@
     connection/5
 ]).
 
-% 2 min long cache; adjust as needed
-% NOTE: could be configured via environment variable
-ttl(120).
+:- use_module(env, [
+    loader_ttl/1 as ttl,
+    mdr_url/1
+]).
+
+:- dynamic loaded/4. % loaded(Building, Floor, Cache, UNIX_time)
 
 already_loaded(Building, Floor) :-
     get_time(Now),
@@ -22,16 +25,14 @@ already_loaded(Building, Floor) :-
     ttl(Hold),
     Now - Time =< Hold.
 
-
 getmap(Building, Floor, Map) :-
     \+ already_loaded(Building, Floor), !,
 
-    % TODO: http connection
-    % 1. Ensure MDR URL is defined in the environment
-    %    Check to be added in main.pl
-    % 2. Grab MDR URL from environment
-    % 3. Map to return should be the equivalent of
-    %    JSON.parse(req.body).map
+    mdr_url(Prefix),
+    atomic_list_concat([Prefix, '/buildings/', Building, '/floors/', Floor, '/map'], URL),
+
+    http_get(URL, MapDTO, [content_type('application/json')]),
+    Map = MapDTO.map,
 
     (
         (retractall(loaded(Building, Floor, _, _)), !; true),

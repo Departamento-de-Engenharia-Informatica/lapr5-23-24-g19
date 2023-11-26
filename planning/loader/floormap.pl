@@ -2,8 +2,7 @@
     loadmap/2
 ]).
 
-% TODO: switch back to http-loader
-:- use_module('loader/static-loader', [ getmap/3 ]).
+:- use_module('loader/http-loader', [ getmap/3 ]).
 
 :- use_module('graph', [
     floorcell/4,
