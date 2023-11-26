@@ -35,7 +35,7 @@ export class RobotRepo {
     }
 
     getRobots(): Observable<RobotDTO[]> {
-        return this.http.get<RobotDTO[]>(`${Config.baseUrl}/robottypes`, {
+        return this.http.get<RobotDTO[]>(`${Config.baseUrl}/robots`, {
             headers: { 'Content-type': 'application/json' },
             observe: 'body',
             responseType: 'json',
