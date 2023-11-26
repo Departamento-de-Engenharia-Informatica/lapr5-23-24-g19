@@ -74,7 +74,7 @@ export default class Wall extends THREE.Group {
         // Create the front face (a rectangle)
         let geometry = new THREE.PlaneGeometry(
             0.95,
-            0.5 + this.groundHeight,
+            1.94 + this.groundHeight,
             this.segments.x,
             this.segments.y,
         );
@@ -89,7 +89,7 @@ export default class Wall extends THREE.Group {
         // Create the rear face (a rectangle)
         geometry = new THREE.PlaneGeometry(
             0.95,
-            0.5 + this.groundHeight,
+            1.94 + this.groundHeight,
             this.segments.x,
             this.segments.y,
         );
@@ -141,25 +141,31 @@ export default class Wall extends THREE.Group {
             -0.475,
             -0.25 - this.groundHeight,
             0.025,
+
             -0.475,
-            0.25,
+            0.97,
             0.025,
+
             -0.5,
-            0.25,
+            0.97,
             0.0,
+
             -0.5,
             -0.25 - this.groundHeight,
             0.0,
 
             -0.5,
-            0.25,
+            0.97,
             0.0,
+
             -0.475,
-            0.25,
+            0.97,
             -0.025,
+
             -0.475,
             -0.25 - this.groundHeight,
             -0.025,
+            
             -0.5,
             -0.25 - this.groundHeight,
             0.0,
@@ -191,12 +197,20 @@ export default class Wall extends THREE.Group {
     }
     private topFace() {
         const points = new Float32Array([
-            -0.5, 0.25, 0.0, -0.475, 0.25, 0.025, -0.475, 0.25, -0.025, 0.475,
-            0.25, 0.025, 0.475, 0.25, -0.025, 0.5, 0.25, 0.0,
+            -0.5, 0.97, 0.0,
+            -0.475, 0.97, 0.025,
+            -0.475, 0.97, -0.025,
+             0.475, 0.97, 0.025,
+              0.475, 0.97, -0.025,
+               0.5, 0.97, 0.0,
         ]);
         const normals = new Float32Array([
-            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-            1.0, 0.0, 0.0, 1.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0 ,1.0, 0.0,
+            0.0, 1.0, 0.0,
         ]);
         const indices = [0, 1, 2, 2, 1, 3, 3, 4, 2, 4, 3, 5];
         const geometry = new THREE.BufferGeometry().setAttribute(
