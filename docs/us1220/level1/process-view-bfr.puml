@@ -33,20 +33,11 @@ activate usr
         deactivate sys
 
                 usr -> sys: chooses rooms
-
                 activate sys
-                    alt task types not found
-                    sys --> usr: informs task(s) not found
-                else task types(s) found
+                    sys --> usr: list paths
 
-                    sys --> usr : shows task types and request one
                 deactivate sys
 
-
-                usr -> sys: chooses trace route criteria
-                activate sys
-                sys --> usr: shows route
-                        end
                     end
                 end
             end

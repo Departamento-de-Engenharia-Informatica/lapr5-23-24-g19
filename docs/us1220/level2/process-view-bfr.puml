@@ -58,38 +58,8 @@ activate usr
 
                 usr -> ui: chooses rooms
                 activate ui
-                ui -> md : GET (/task/types)
-                activate md
-                    alt task types not found
-                    md --> ui: 404: error
-                    ui --> usr: informs task(s) not found
-                else task types(s) found
-                    md --> ui : 200: task types
-                    deactivate md
-                    ui --> usr : shows task types and request one
-                deactivate md
-        deactivate ui
-
-                usr -> ui: chooses trace route criteria
-                activate ui
-                ui -> md: GET (task/findroute)
-                activate md
-                    md -> pl : findroute()
-                    activate pl
-
-
-                    pl -> md: route
-                    deactivate pl
-
-                    md --> ui:route
-                    ui --> usr: shows route
-                deactivate md
-
-
-
+                    ui --> usr: list paths
                 deactivate ui
-
-                        end
                     end
                 end
             end

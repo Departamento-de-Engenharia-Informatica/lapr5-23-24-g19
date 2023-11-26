@@ -1,0 +1,15 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys :  Wants to list paths between two \nbuildings following a specific criteria
+    activate
+
+    deactivate sys
+deactivate usr
+
+@enduml

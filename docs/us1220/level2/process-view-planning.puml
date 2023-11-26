@@ -1,0 +1,37 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "FE" as ui
+participant "MD" as md
+participant "Planning" as pl
+
+activate usr
+    usr -> ui :  chooses room1
+    activate ui
+    note right :see documentation\nfor selecting buildings\nfloors
+    usr -> ui: chooses room2
+    usr -> ui: chosses criteria
+    note right : less elevators\nless buildings
+    ui -> md : findRoute(room1,room2,criteria)
+
+    activate md
+        md -> pl : paths()
+        activate pl
+         pl --> md : gets....
+         pl --> md : paths
+        deactivate pl
+
+    md --> ui: paths
+
+    ui --> usr: paths
+
+
+
+    deactivate md
+
+    deactivate ui
+deactivate usr
+
+@enduml
