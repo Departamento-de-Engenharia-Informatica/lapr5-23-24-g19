@@ -6,24 +6,51 @@ actor "Task Manager" as usr
 participant "<<system>>\n System RobDroneGo" as sys
 
 activate usr
-     usr -> sys : Wants to list paths between two \nbuildings following a specific criteria
-     activate sys
+    usr -> sys : Wants to list paths between two \nbuildings following a specific criteria
+    activate sys
 
-        alt building(s) not found
-            sys --> usr: informs error
-        else building(s) found
-            sys --> usr: shows buildings and request two
-            deactivate sys
-
-        usr -> sys: chooses buildings
-        activate sys
-            sys --> usr: shows paths optimized
+            alt building(s) not found
+                sys --> usr: informs building(s) not found
+            else building(s) found
+            sys --> usr : shows building and request two
         deactivate sys
 
+        usr -> sys : chooses building
+        activate sys
+                alt floor(s) not found
+                    sys --> usr: informs floor(s) not found
+                else floor(s) found
+                sys --> usr : shows floors and request two
+        deactivate sys
+
+        usr -> sys: chooses floors
+        activate sys
+
+                alt room not found
+                    sys --> usr: informs room(s) not found
+                else room(s) found
+                    sys --> usr : shows rooms and request two
+        deactivate sys
+
+                usr -> sys: chooses rooms
+
+                activate sys
+                    alt task types not found
+                    sys --> usr: informs task(s) not found
+                else task types(s) found
+
+                    sys --> usr : shows task types and request one
+                deactivate sys
 
 
-
-        end
-deactivate usr
+                usr -> sys: chooses trace route criteria
+                activate sys
+                sys --> usr: shows route
+                        end
+                    end
+                end
+            end
+        deactivate sys
+    deactivate usr
 
 @enduml

@@ -1,53 +1,99 @@
 @startuml
 autonumber
 
-actor "Campus Manager" as usr
+actor "Task Manager" as usr
 
-participant "UI" as ui
+participant "FE" as ui
 participant "MD" as md
 participant "Planning" as pl
 
 activate usr
     usr -> ui : Wants to list paths between two \nbuildings following a specific criteria
     activate ui
-        ui -> md : GET /buildings
-        activate md
-            note right of md : see US 170 documentation
+            ui -> md : GET /buildings
+            activate md
+                note right of md : see US 170 documentation
 
-        alt building(s) not found
-            md --> ui: 404: error
-            ui --> usr: informs error
-        else building(s) found
-            md --> ui : 200: buildings
-            deactivate md
+            alt building(s) not found
+                md --> ui: 404: error
+                ui --> usr: informs building(s) not found
+            else building(s) found
+                md --> ui : 200: buildings
+                deactivate md
 
-        ui --> usr : shows buildings and request two
-    deactivate ui
+            ui --> usr : shows buildings and request two
+        deactivate ui
 
-    usr -> ui : chooses buildings
-    activate ui
+        usr -> ui : chooses buildings
+        activate ui
+            ui -> md : GET /buildings/{id}/floors
+            activate md
+                note right of md : see US 210 documentation
 
-       ui -> md: GET /buildings/{b1Code}/paths/{b2Code}
-       activate md
-            md -> pl: optimize(b1,b2)
-            activate pl
-                pl -> md: getPassages(b1,b2)?
-                pl -> md: getFloors(b1,b2)?
-                pl -> md: getElevator(b1,b2)?
+                alt floor(s) not found
+                    md --> ui: 404: error
+                    ui --> usr: informs floor(s) not found
+                else floor(s) found
+                    md --> ui : 200: floors
+                    deactivate md
+
+            ui --> usr : shows floors and request two
+        deactivate ui
+
+        usr -> ui: chooses floors
+        activate ui
+            ui -> md : GET (/buildings/{buildingId}/floors/{floorNumber}/rooms)
+            activate md
 
 
-                pl --> md: list of paths
-            deactivate pl
+                alt room not found
+                    md --> ui: 404: error
+                    ui --> usr: informs room(s) not found
+                else room(s) found
+                    md --> ui : 200: rooms
+                    deactivate md
+                    ui --> usr : shows rooms and request two
 
-            md --> ui : 200: list paths
-       deactivate md
+        deactivate ui
 
-       ui --> usr : shows optimized paths
+                usr -> ui: chooses rooms
+                activate ui
+                ui -> md : GET (/task/types)
+                activate md
+                    alt task types not found
+                    md --> ui: 404: error
+                    ui --> usr: informs task(s) not found
+                else task types(s) found
+                    md --> ui : 200: task types
+                    deactivate md
+                    ui --> usr : shows task types and request one
+                deactivate md
+        deactivate ui
+
+                usr -> ui: chooses trace route criteria
+                activate ui
+                ui -> md: GET (task/findroute)
+                activate md
+                    md -> pl : findroute()
+                    activate pl
+
+
+                    pl -> md: route
+                    deactivate pl
+
+                    md --> ui:route
+                    ui --> usr: shows route
+                deactivate md
 
 
 
-    deactivate ui
-    end
-deactivate usr
+                deactivate ui
+
+                        end
+                    end
+                end
+            end
+        deactivate ui
+    deactivate usr
 
 @enduml
