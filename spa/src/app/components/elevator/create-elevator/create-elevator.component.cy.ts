@@ -108,7 +108,7 @@ describe('CreateElevatorComponent: Unit Tests', () => {
         expect(component.floors).to.eq(floors)
     })
 
-    it('should reset form and show success alert on successful floor creation', () => {
+    it('should reset form and show success alert on successful elevator creation', () => {
         const alertSpy = cy.spy(window, 'alert')
         const resetSpy = cy.spy(component.createElevatorForm, 'reset')
 
