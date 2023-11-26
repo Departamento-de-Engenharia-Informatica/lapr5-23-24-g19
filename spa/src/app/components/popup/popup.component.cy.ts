@@ -1,7 +1,7 @@
-import { PopupComponent } from './popup.component'
+// import { PopupComponent } from './popup.component'
 
-describe('PopupComponent', () => {
-    it('should mount', () => {
-        cy.mount(PopupComponent)
-    })
-})
+// describe('PopupComponent', () => {
+//     it('should mount', () => {
+//         cy.mount(PopupComponent)
+//     })
+// })

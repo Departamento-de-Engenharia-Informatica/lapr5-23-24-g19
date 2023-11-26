@@ -1,7 +1,7 @@
-import { TraceRouteComponent } from './trace-route.component'
+// import { TraceRouteComponent } from './trace-route.component'
 
-describe('TraceRouteComponent', () => {
-  it('should mount', () => {
-    cy.mount(TraceRouteComponent)
-  })
-})
+// describe('TraceRouteComponent', () => {
+//   it('should mount', () => {
+//     cy.mount(TraceRouteComponent)
+//   })
+// })

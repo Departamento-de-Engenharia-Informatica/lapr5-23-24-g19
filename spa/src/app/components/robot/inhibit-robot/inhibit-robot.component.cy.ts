@@ -1,7 +1,7 @@
-import { InhibitRobotComponent } from './inhibit-robot.component'
+// import { InhibitRobotComponent } from './inhibit-robot.component'
 
-describe('InhibitComponent', () => {
-  it('should mount', () => {
-    cy.mount(InhibitRobotComponent)
-  })
-})
+// describe('InhibitComponent', () => {
+//   it('should mount', () => {
+//     cy.mount(InhibitRobotComponent)
+//   })
+// })

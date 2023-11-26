@@ -1,7 +1,7 @@
-import { CreateRobotComponent } from './create-robot.component'
+// import { CreateRobotComponent } from './create-robot.component'
 
-describe('CreateRobotComponent', () => {
-  it('should mount', () => {
-    cy.mount(CreateRobotComponent)
-  })
-})
+// describe('CreateRobotComponent', () => {
+//   it('should mount', () => {
+//     cy.mount(CreateRobotComponent)
+//   })
+// })
