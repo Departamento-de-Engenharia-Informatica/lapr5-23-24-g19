@@ -23,7 +23,7 @@ The customer has specified that the Fleet Manager should be able to create a rob
 ### Level 3
 
 -   [Logical View](../general-purpose/level3/logical-view.svg)
--   [Process View](./level3/process-view.svg) [Work in Progress]
+-   [Process View](./level3/process-view.svg) 
 -   [Implementation View](../general-purpose/level3/implementation-view.svg)
 -   [Class Diagram](./level3/class-diagram.svg) [Work in Progress]
 

@@ -9,7 +9,7 @@ activate usr
     usr -> sys : wants to create robot
     activate sys
     alt robot type(s) not found
-        sys --> usr : informs robot type(s) not found
+        sys --> usr : informs error
     else robot type(s) found
         sys --> usr : requests robot type
     deactivate sys
@@ -21,10 +21,10 @@ activate usr
 
     usr -> sys : provides data
     activate sys
-    alt success
-        sys --> usr : previews created robot
-    else bad robot parameters
+    alt bad robot parameters
         sys --> usr : informs error
+    else success
+        sys --> usr : previews created robot
     deactivate sys
 deactivate usr
 end

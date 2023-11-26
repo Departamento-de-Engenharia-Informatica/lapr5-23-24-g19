@@ -1,4 +1,5 @@
 @startuml
+
 autonumber
 
 actor "Fleet Manager" as usr
@@ -12,11 +13,11 @@ activate usr
     activate ui
         ui -> md : GET /robottypes
         activate md
-        alt robot type(s) not found
-        note right : see list-robotTypes documentation
-            md --> ui : 204: empty list
-            ui --> usr : informs robot type(s) not found
-        else robot type(s) found
+alt robot type(s) not found
+            note right : see list-robotTypes documentation
+            md --> ui : 404: error
+            ui --> usr : informs error
+else robot type(s) found
             md --> ui : 200 : robotTypes
         deactivate md
         ui --> usr : requests robot type
@@ -38,12 +39,12 @@ activate usr
 
         activate md
         note right of md : see us360 documentation
-        alt success
-            md --> ui : 201: robot
-            ui --> usr : previews created robot
-        else bad robot parameters
+alt bad robot parameters
             md --> ui : 422: error
             ui --> usr : informs error
+else success
+            md --> ui : 201: robot
+            ui --> usr : previews created robot
         deactivate md
 
     deactivate ui
