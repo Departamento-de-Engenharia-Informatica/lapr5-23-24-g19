@@ -33,6 +33,7 @@ import { TraceRouteComponent } from './components/task/trace-route/trace-route.c
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
 import {EditElevatorComponent} from "./components/elevator/edit-elevator/edit-elevator.component";
+import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -72,6 +73,11 @@ export const routes: Routes = [
     {
         path: 'fleet/robots', component: RobotComponent,
         children: [
+            {
+                path: 'inhibit',
+                component: InhibitRobotComponent,
+                title: 'Inhibt a robot',
+            },
             {
                 path: 'list',
                 component: ListRobotsComponent,

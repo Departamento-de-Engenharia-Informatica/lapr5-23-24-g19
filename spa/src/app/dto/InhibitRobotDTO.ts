@@ -1,4 +1,4 @@
-export interface IRobotInhibitDTO {
+export interface InhibitRobotDTO {
     code: string
     state: number
 }

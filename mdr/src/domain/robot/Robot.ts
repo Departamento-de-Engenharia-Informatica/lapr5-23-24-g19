@@ -2,12 +2,13 @@ import { AggregateRoot } from '../../core/domain/AggregateRoot'
 import { UniqueEntityID } from '../../core/domain/UniqueEntityID'
 import { Guard } from '../../core/logic/Guard'
 import { Result } from '../../core/logic/Result'
+import { IRobotStateDTO } from '../../dto/IRobotStateDTO'
 import Type from '../robotType/robotType'
 import { RobotCode as Code } from './code'
 import { RobotDescription as Description } from './description'
 import { RobotNickname as Nickname } from './nickname'
 import { RobotSerialNumber as SerialNumber } from './serialNumber'
-import { RobotState as State } from './state'
+import { RobotState, RobotState as State } from './state'
 
 interface CreateProps {
     code: Code
@@ -43,6 +44,11 @@ export default class Robot extends AggregateRoot<Props> {
 
     inhibit(): void {
         this.props.state = State.DISABLED
+    }
+
+    updateState(newState: IRobotStateDTO) {
+        const state = RobotState.fromCode(newState.state)
+        this.props.state = state
     }
 
     get id(): UniqueEntityID {

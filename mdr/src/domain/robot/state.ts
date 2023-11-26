@@ -14,4 +14,15 @@ export namespace RobotState {
                 return 'Unknown'
         }
     }
+
+    export function fromCode(code: number): RobotState {
+        switch (code) {
+            case 0:
+                return RobotState.ENABLED
+            case 1:
+                return RobotState.DISABLED
+            default:
+                throw new Error(`Invalid code: ${code}`)
+        }
+    }
 }

@@ -9,7 +9,7 @@ export class RobotMap extends Mapper<Robot> {
         return {
             code: robot.code.value,
             nickname: robot.nickname.value,
-            state: RobotState.toString(robot.state),
+            state: robot.state,
             serialNumber: robot.serialNumber.value,
             description: robot.description?.value,
 

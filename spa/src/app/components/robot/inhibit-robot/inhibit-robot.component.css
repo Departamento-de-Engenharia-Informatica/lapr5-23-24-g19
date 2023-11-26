@@ -1,0 +1,52 @@
+
+.robot-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.robot-card {
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.robot-card:hover {
+    transform: scale(1.1); /* Increase the size on hover */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+.robot-card h2 {
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bolder;
+    font-size: larger;
+    color: var(--secondary-color);
+}
+
+.robot-card h2:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+.robot-card p {
+    color: var(--secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 3em;
+}
+
+.robot-card p:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}

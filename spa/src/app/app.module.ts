@@ -50,7 +50,8 @@ import { FloorService } from './services/floor.service'
 import { ListFloorsWithPassageComponent } from './components/floor/list-floors-with-passage/list-floors-with-passage.component'
 import { CreateRobotTypeComponent } from './components/robot-type/create-robot-type/create-robot-type.component'
 import { RobotTypeRepo } from './repos/RobotTypeRepo'
-import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component'
+import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component';
+import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
 
 @NgModule({
     declarations: [
@@ -92,6 +93,7 @@ import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-
         ListFloorsWithPassageComponent,
         CreateRobotTypeComponent,
         EditElevatorComponent,
+        InhibitRobotComponent,
     ],
     imports: [
         BrowserModule,

@@ -46,7 +46,10 @@ export default class RobotController implements IRobotController {
 
     async inhibitRobot(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = { code: req.params.id } as IRobotInhibitDTO
+            const dto: IRobotInhibitDTO = {
+                code: req.params.id,
+                state: req.body.state
+            }
             const result = await this.service.inhibitRobot(dto)
 
             if (result.isLeft()) {

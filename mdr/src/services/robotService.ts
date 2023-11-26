@@ -18,13 +18,14 @@ import { RobotSerialNumber as SerialNumber } from '../domain/robot/serialNumber'
 import { RobotDescription as Description } from '../domain/robot/description'
 import { ICreatedRobotDTO } from '../dto/ICreatedRobotDTO'
 import { IRobotInhibitDTO } from '../dto/IRobotInhibitDTO'
+import { IRobotStateDTO } from '../dto/IRobotStateDTO'
 
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
-    ) {}
+    ) { }
 
     async createRobot(dto: IRobotDTO): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
         try {
@@ -87,7 +88,7 @@ export default class RobotService implements IRobotService {
             })
         }
 
-        robot.inhibit()
+        robot.updateState({ state: dto.state } as IRobotStateDTO)
         const saved = await this.robotRepo.save(robot)
         return right(RobotMap.toDTO(saved))
     }

@@ -4,4 +4,5 @@ export interface RobotDTO {
     typeCode: string
     serialNumber: string
     description?: string
+    state: number
 }
