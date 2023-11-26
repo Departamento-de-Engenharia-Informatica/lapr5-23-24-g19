@@ -55,7 +55,7 @@ path_criteria(_Request) :-
 
 % should be a /GET
 % method(post) does not work
-:- http_handler('/api/paths/', get_paths, [method(*)]).
+:- http_handler('/api/paths', get_paths, [method(*)]).
 
 get_paths(Request) :-
     http_read_json_dict(Request, Body),

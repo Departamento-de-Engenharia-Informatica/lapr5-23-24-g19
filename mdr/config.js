@@ -22,6 +22,10 @@ export default {
     databaseURL: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/test',
 
     /**
+     */
+    planningURL: process.env.PLANNING_URI || 'http://localhost:8090/api',
+
+    /**
      * Your secret sauce
      */
     jwtSecret: process.env.JWT_SECRET || 'my sakdfho2390asjod$%jl)!sdjas0i secret',
@@ -81,6 +85,10 @@ export default {
             name: 'TaskController',
             path: '../controllers/taskController'
         },
+        path: {
+            name: 'PathController',
+            path: '../controllers/pathController'
+        }
     },
 
     repos: {
@@ -120,6 +128,10 @@ export default {
             name: 'RobotRepo',
             path: '../repos/mongo/robotRepo'
         },
+        path: {
+            name: 'HttpPlanningAdapter',
+            path: '../repos/planning/httpNodePlanningAdapter'
+        }
     },
 
     schemas: {
@@ -202,6 +214,10 @@ export default {
             name: 'TaskService',
             path: '../services/taskService'
         },
+        path: {
+            name: 'PathService',
+            path: '../services/pathService'
+        }
     },
 
     storage: {

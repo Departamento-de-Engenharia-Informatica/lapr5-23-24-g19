@@ -59,6 +59,7 @@ count_build(Path, Count) :-
 
 extract_build(elev(B, _, _), B).
 extract_build(pass(B1, _, B2, _), [B1, B2]).
+extract_build(cell(B, _, _, _), B).
 
 
 % Orig = (building, floor, x, y)

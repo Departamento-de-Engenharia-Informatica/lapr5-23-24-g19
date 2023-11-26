@@ -7,6 +7,7 @@ import passage from './routes/passageRoute'
 import robot from './routes/robotRoute'
 import robotType from './routes/robotTypeRoute'
 import task from './routes/taskRoute'
+import path from './routes/pathRoute'
 
 export default () => {
     const app = Router()
@@ -19,6 +20,7 @@ export default () => {
     robot(app)
     task(app)
     robotType(app)
+    path(app)
 
     return app
 }
