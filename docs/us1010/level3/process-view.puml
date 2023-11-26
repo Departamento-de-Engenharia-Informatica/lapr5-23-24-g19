@@ -10,7 +10,7 @@ participant "Service" as svc
 participant "RobotTypeRepository" as t_repo
 participant "RobotRepository" as r_repo
 participant "dto:\nRobotTypeDTO" as t_dto
-participant "dto:\nRobotDTO" as r_dto
+participant "dto:\nRobotWithoutStateDTO" as r_dto
 
 participant "HTTP Driver" as http
 
