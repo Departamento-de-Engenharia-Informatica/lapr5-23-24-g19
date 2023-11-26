@@ -87,7 +87,7 @@ export const routes: Routes = [
             {
                 path: 'create',
                 component: CreateRobotComponent,
-                title: 'Create robot',
+                title: 'Create Robot',
             },
             {
                 path: 'list',
