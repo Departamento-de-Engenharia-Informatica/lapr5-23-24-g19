@@ -329,6 +329,24 @@ export default class Maze extends THREE.Group {
         return false;
     }
 
+    async checkFloorMap(url: string): Promise<string> {
+        try {
+            return await fetch(url)
+                .then(async (res) => {
+                    const json = await res.json();
+
+                    return json;
+                })
+                .catch((err) => {
+                    const errmsg = `Error fetching @ ${url}: ${err}`;
+                    return Promise.reject(errmsg);
+                });
+        } catch (_) {
+            return '';
+        }
+    }
+
+    nearPassages: Set<string> = new Set();
     foundPassage(position: THREE.Vector3, thumbRaiser: ThumbRaiser) {
         const indices = this.cartesianToCell(position);
         const row = indices[0];
@@ -339,7 +357,10 @@ export default class Maze extends THREE.Group {
             passagePosition = this.cellToCartesian([p.x, p.y]);
 
             const passageIndices = this.cartesianToCell(passagePosition);
+            const url = `http://localhost:4000/api/buildings/${p.to.building}/floors/${p.to.floor}/map`;
+
             if (
+                // make this values more realistic
                 (passageIndices[0] == row - 0.5 ||
                     passageIndices[0] == row ||
                     passageIndices[0] == row + 0.5) &&
@@ -347,9 +368,25 @@ export default class Maze extends THREE.Group {
                     passageIndices[1] == column ||
                     passageIndices[1] == column + 0.5)
             ) {
-                thumbRaiser.enterPassage(
-                    'http://localhost:4000/api/buildings/C/floors/2/map',
-                );
+                this.checkFloorMap(url).then((m) => {
+                    if (m != '' && m != null && m != undefined) {
+                        if (!this.nearPassages.has(url)) {
+                            //TODO: make this message more descriptive
+                            alert('Success!');
+                            this.nearPassages.add(url);
+                        }
+                        thumbRaiser.enterPassage(url);
+                    } else {
+                        if (!this.nearPassages.has(url)) {
+                            alert('Cannot go through this passage');
+                            this.nearPassages.add(url);
+                        }
+                    }
+                });
+            } else {
+                if (this.nearPassages.has(url)) {
+                    this.nearPassages.delete(url);
+                }
             }
         });
     }
