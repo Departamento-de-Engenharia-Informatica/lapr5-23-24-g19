@@ -1572,6 +1572,39 @@ export default class ThumbRaiser {
         this.audio.play(this.audio.closeDoor, false);
     }
 
+    enterPassage(url: string) {
+        const mazeParams = {
+            url: url,
+            designCredits:
+                "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
+            texturesCredits:
+                "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+            scale: new THREE.Vector3(1.0, 1.0, 1.0),
+            helpersColor: new THREE.Color(0xff0077),
+        };
+        this.removeAudioSources();
+
+        this.elevators.forEach((e) => {
+            this.scene.remove(e);
+        });
+
+        this.doors.forEach((d) => {
+            this.scene.remove(d);
+        });
+
+        this.scene.remove(this.maze);
+
+        this.maze.disposeGround();
+        this.maze.disposeWalls();
+
+        this.stop();
+
+        this.elevators = [];
+        this.maze = new Maze(mazeParams, loader);
+
+        this.update();
+    }
+
     update() {
         if (!this._gameRunning) {
             if (this.audio.loaded() && this.maze.loaded && this.player.loaded) {
@@ -1995,6 +2028,7 @@ export default class ThumbRaiser {
                         directionRad - this.player.defaultDirection;
 
                     this.maze.foundDoor(position, this.doors, this);
+                    this.maze.foundPassage(position, this);
                 }
             }
 

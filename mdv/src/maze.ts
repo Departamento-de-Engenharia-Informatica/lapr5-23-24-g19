@@ -134,6 +134,7 @@ export default class Maze extends THREE.Group {
     public map: FloorMap['mapContent'] = [[]];
     public elevators: FloorMap['elevators'] = [];
     public rooms: FloorMap['rooms'] = [];
+    public passages: FloorMap['passages'] = [];
     public exitLocation: THREE.Vector3 = new THREE.Vector3();
     public aabb: AABB = [];
 
@@ -326,6 +327,31 @@ export default class Maze extends THREE.Group {
             }
         }
         return false;
+    }
+
+    foundPassage(position: THREE.Vector3, thumbRaiser: ThumbRaiser) {
+        const indices = this.cartesianToCell(position);
+        const row = indices[0];
+        const column = indices[1];
+
+        this.passages.forEach((p) => {
+            let passagePosition: THREE.Vector3 = new THREE.Vector3();
+            passagePosition = this.cellToCartesian([p.x, p.y]);
+
+            const passageIndices = this.cartesianToCell(passagePosition);
+            if (
+                (passageIndices[0] == row - 0.5 ||
+                    passageIndices[0] == row ||
+                    passageIndices[0] == row + 0.5) &&
+                (passageIndices[1] == column - 0.5 ||
+                    passageIndices[1] == column ||
+                    passageIndices[1] == column + 0.5)
+            ) {
+                thumbRaiser.enterPassage(
+                    'http://localhost:4000/api/buildings/C/floors/2/map',
+                );
+            }
+        });
     }
 
     nearDoors: Set<Door> = new Set();
@@ -648,6 +674,7 @@ export default class Maze extends THREE.Group {
         this.map = description.map.mapContent;
         this.elevators = description.map.elevators;
         this.rooms = description.map.rooms;
+        this.passages = description.map.passages;
         console.log(this.rooms);
         // this.exitLocation = this.cellToCartesian(description.map.exitLocation);
 
