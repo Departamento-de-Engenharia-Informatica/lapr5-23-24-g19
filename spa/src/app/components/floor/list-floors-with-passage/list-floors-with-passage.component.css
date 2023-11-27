@@ -42,7 +42,7 @@
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
-    width: 350px;
+    /* width: 350px; */
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: var(--primary-color);
@@ -68,3 +68,21 @@
     overflow: visible;
     text-overflow: inherit;
 }
+
+label {
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+input,
+textarea,
+select {
+    width: 500px;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+}
+
