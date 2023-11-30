@@ -91,37 +91,31 @@ describe('List Floors with Passage e2e tests', () => {
         cy.get('.floors-with-passage-list').should('have.length', 1);
 
         // Assertions for the first floor with passages
-        cy.get('.floors-card').eq(0).should('contain.text', 'Building Code: P');
-        cy.get('.floors-card').eq(0).should('contain.text', 'Floor Number: 3');
+        cy.get('.floors-card').eq(0).should('contain.text', 'Floor P3');
         cy.get('.floors-card').eq(0).should('contain.text', 'Description: example');
 
 
         // Assertions for the first passage of the first floor
-        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(0).should('contain.text', 'Building Code: O');
-        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(0).should('contain.text', 'Floor Number: 1');
+        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(0).should('contain.text', 'Passage to O1');
         cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(0).should('contain.text', 'Description: Floor1');
 
 
         // Assertions for the second passage of the first floor
-        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(1).should('contain.text', 'Building Code: O');
-        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(1).should('contain.text', 'Floor Number: 2');
+        cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(1).should('contain.text', 'Passage to O2');
         cy.get('.floors-card').eq(0).find('.floors-passage-card').eq(1).should('contain.text', 'Description: Floor 2');
 
 
 
         // Assertions for the second floor with passages
-        cy.get('.floors-card').eq(1).should('contain.text', 'Building Code: P');
-        cy.get('.floors-card').eq(1).should('contain.text', 'Floor Number: 2');
+        cy.get('.floors-card').eq(1).should('contain.text', 'Floor P2');
         cy.get('.floors-card').eq(1).should('contain.text', 'Description: asasd');
 
         // Assertions for the first passage of the second floor
-        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(0).should('contain.text', 'Building Code: O');
-        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(0).should('contain.text', 'Floor Number: 1');
+        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(0).should('contain.text', 'Passage to O1');
         cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(0).should('contain.text', 'Description: Floor1');
 
         // Assertions for the second passage of the second floor
-        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(1).should('contain.text', 'Building Code: O');
-        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(1).should('contain.text', 'Floor Number: 2');
+        cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(1).should('contain.text', 'Passage to O2');
         cy.get('.floors-card').eq(1).find('.floors-passage-card').eq(1).should('contain.text', 'Description: Floor 2');
 
     });
