@@ -66,11 +66,12 @@ extract_build(cell(B, _, _, _), B).
 % Dest = (building, floor, x, y)
 % Paths: output
 compute_paths(Orig, Dest, Criterion, Paths) :-
+    % pick criterion
+    resolve_criterion(Criterion, Crit),
+
     % TODO: environment variable
     findnsols(30, Ligs, compute_path(Orig, Dest, Ligs), LLigs),
 
-    % pick criterion
-    resolve_criterion(Criterion, Crit),
     predsort(Crit, LLigs, Paths).
 
 compute_path(Orig, Dest, Path) :-
@@ -84,7 +85,6 @@ cell_to_floorcell(Building, Floor, Cell, FloorCell) :-
 absolute_path(Building, Floor, Relative, Absolute) :-
     map(algorithms:cell_to_floorcell(Building, Floor), Relative, Absolute).
 edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
-
 
 
 % FIXME: accumutate Cost

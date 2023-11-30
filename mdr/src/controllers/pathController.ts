@@ -11,7 +11,6 @@ export default class PathController implements IPathController {
 
     async pathsBetweenBuildings(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('oi')
             const dto = req.body as IPathBetweenBuildingsDTO
             const result = await this.service.pathsBetweenBuildings(dto)
 

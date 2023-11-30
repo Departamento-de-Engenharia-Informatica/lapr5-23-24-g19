@@ -31,4 +31,3 @@ dto_single(pass(B1, F1, B2, F2), Dto) :-
 segments_to_dto(Segs, Dtos) :- map(path_segment_dto:dto_single, Segs, Dtos).
 
 % vim: ft=prolog
-

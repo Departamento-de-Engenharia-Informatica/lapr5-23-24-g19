@@ -27,6 +27,8 @@
 
 :- use_module('dto/path-segment', [ segments_to_dto/2 ]).
 
+:- use_module('util/functional', [ map/3 ]).
+
 %%%%%%
 
 :- set_setting(http:cors, [*]).
@@ -62,15 +64,12 @@ get_paths(Request) :-
 
     Start = Body.start,
     Goal = Body.goal,
-    Crit = Body.criteria,
+    atom_string(Crit, Body.criteria),
 
     Orig = (Start.building, Start.floor, Start.coordinates.x, Start.coordinates.y),
     Dest = (Goal.building, Goal.floor, Goal.coordinates.x, Goal.coordinates.y),
 
     compute_paths(Orig, Dest, Crit, Paths),
-    segments_to_dto(Paths, PathsDTO),
+    map(path_segment_dto:segments_to_dto, Paths, PathsDTO),
 
-    % prolog_to_json(Path, JSON),
-    % reply_json(JSON).
     reply_json_dict(PathsDTO).
-

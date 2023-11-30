@@ -33,7 +33,6 @@ export class BuildingMap extends Mapper<Building> {
         )
 
         if (result.isFailure) {
-            console.log(result.error)
             return null
         }
 

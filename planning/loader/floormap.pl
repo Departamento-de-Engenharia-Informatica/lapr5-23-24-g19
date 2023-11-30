@@ -16,8 +16,9 @@ loadmap(Building, Floor) :-
     getmap(Building, Floor, Map),
     _{length: Len, width: Wid} :< Map.dimensions,
 
-    populate_cells(Building, Floor, Len, Wid),
     % TODO: block access through room door cell
+    populate_cells(Building, Floor, Len, Wid),
+
     build_graph(Building, Floor, Map.mapContent),
     add_diagonals(Building, Floor),
 

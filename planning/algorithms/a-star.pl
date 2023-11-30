@@ -22,6 +22,7 @@ a_star2(Dest, [(_, Ca, LA)|Outros], EdgePred, Cam, Custo):-
 	a_star2(Dest, TodosOrd, EdgePred, Cam, Custo).
 
 
+
 estimate(Node1, Node2, Estimate) :-
     Node1 = cell(X1, Y1),
     Node2 = cell(X2, Y2),

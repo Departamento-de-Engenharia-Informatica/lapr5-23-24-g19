@@ -190,7 +190,6 @@ export default class PassageService implements IPassageService {
             const passages = await this.passageRepo.passagesBetweenBuildings(b1, b2)
 
             if (passages.length === 0) {
-                console.log('')
                 return left({
                     errorCode: ErrorCode.NotFound,
                     message: 'Passages not found',

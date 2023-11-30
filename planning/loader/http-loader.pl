@@ -2,6 +2,7 @@
     getmap/3
 ]).
 
+:- use_module(library(http/http_open)).
 :- use_module(library(http/http_client)).
 :- use_module(library(http/json)).
 :- use_module(library(http/json_convert)).
@@ -31,14 +32,13 @@ getmap(Building, Floor, Map) :-
     \+ already_loaded(Building, Floor), !,
 
     mdr_url(Prefix),
-    atomic_list_concat([Prefix, '/buildings/', Building, '/floors/', Floor, '/map'], URL),
+    format(string(URL), '~w/buildings/~w/floors/~w/map', [Prefix, Building, Floor]),
 
-    http_get(URL, MapJSON, [content_type('application/json')]),
-    % json_to_prolog(MapJSON, MapDTO),
+    http_open(URL, MapJSON, []),
     json_read_dict(MapJSON, MapDTO),
-    % atom_json_dict(MapJSON, MapDTO, []),
-    Map = MapDTO.map,
+    close(MapJSON),
 
+    Map = MapDTO.map,
     (
         (retractall(loaded(Building, Floor, _, _)), !; true),
         (retractall(floorcell(Building, Floor, _, _)), !; true),

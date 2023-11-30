@@ -12,6 +12,7 @@
 :- dynamic passage/6.    % passage(b_orig, f_orig, x, y, b_dest, f_dest)
 :- dynamic connection/5. % connection(Building, Floor, cell(X1, Y1), cell(X2, Y2), Cost)
 
+
 edge(Building, Floor, C1, C2, Cost) :-
     connection(Building, Floor, C1, C2, Cost);
     connection(Building, Floor, C2, C1, Cost).
