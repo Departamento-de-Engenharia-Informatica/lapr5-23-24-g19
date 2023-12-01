@@ -1,48 +1,32 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { catchError, of, tap } from 'rxjs';
-import { BuildingDTO } from 'src/app/dto/BuildingDTO';
-import { CriteriaDTO } from 'src/app/dto/CriteriaDTO';
-import { RouteDTO } from 'src/app/dto/TaskDTO';
-import { BuildingService } from 'src/app/services/building.service';
-import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service';
-import { PassageService } from 'src/app/services/passage.service';
+import { Component } from '@angular/core'
+import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
+import { catchError, of } from 'rxjs'
+import { BuildingDTO } from 'src/app/dto/BuildingDTO'
+import { CriterionDTO } from 'src/app/dto/CriteriaDTO'
+import { BuildingService } from 'src/app/services/building.service'
+import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { RoomDTO } from 'src/app/dto/RoomDTO'
-import { TaskService } from 'src/app/services/task.service';
-import {RoomService} from "../../../services/room.service";
-import {CreatedRoomDTO} from "../../../dto/CreatedRoomDTO";
+import { TaskService } from 'src/app/services/task.service'
+import { RoomService } from '../../../services/room.service'
+import { GetPathsDTO } from 'src/app/dto/GetPathsDTO'
 
 @Component({
     selector: 'app-trace-route',
     templateUrl: './trace-route.component.html',
-    styleUrls: ['./trace-route.component.css']
+    styleUrls: ['./trace-route.component.css'],
 })
 export class TraceRouteComponent {
-    @Output() formSubmitted = new EventEmitter<any>()
-
     routeForm: UntypedFormGroup
 
     buildings: BuildingDTO[] = []
 
-    building1!: BuildingDTO
-    building2!: BuildingDTO
+    floors1: FloorAndBuildingDTO[] = []
+    floors2: FloorAndBuildingDTO[] = []
 
-    floors1!: FloorAndBuildingDTO[]
-    floors2!: FloorAndBuildingDTO[]
+    rooms1: RoomDTO[] = []
+    rooms2: RoomDTO[] = []
 
-    floor1!: FloorAndBuildingDTO
-    floor2!: FloorAndBuildingDTO
-
-    rooms2!: RoomDTO[]
-    rooms1!: RoomDTO[]
-
-    room1!: RoomDTO
-    room2!: RoomDTO
-
-
-
-
-    criterion!: CriteriaDTO[]
+    criteria: CriterionDTO[] = []
 
     constructor(
         private fb: FormBuilder,
@@ -52,160 +36,112 @@ export class TraceRouteComponent {
         private taskService: TaskService,
     ) {
         this.routeForm = this.fb.group({
-            building1: [null, Validators.required],
-            building2: [null, Validators.required],
-            floor1: [null, Validators.required],
-            floor2: [null, Validators.required],
-            room1: [null, Validators.required],
-            room2: [null, Validators.required],
-            criteria: [null, Validators.required]
+            buildingStart: [null, Validators.required],
+            buildingGoal: [null, Validators.required],
+            floorStart: [null, Validators.required],
+            floorGoal: [null, Validators.required],
+            roomStart: [null, Validators.required],
+            roomGoal: [null, Validators.required],
+            criterion: [null, Validators.required],
+        })
+    }
+
+    ngOnInit(): void {
+        this.buildingService.getBuildings().subscribe({
+            next: (buildingsList: BuildingDTO[]) => {
+                this.buildings = buildingsList
+            },
+            error: (error) => alert(error),
+        })
+
+        this.taskService.getCriteria().subscribe({
+            next: (criteria: CriterionDTO[]) => {
+                this.criteria = criteria
+            },
+            error: (error) => alert(error),
         })
     }
 
     submitForm() {
-        //roomDomainId or building/floor??
-        const dto = {
-            room1: {
-                buildingCode: this.routeForm.value.building1,
-                floorNumber: this.routeForm.value.floor1,
-                room: this.routeForm.value.room1,
+        const dto: GetPathsDTO = {
+            criteria: this.routeForm.value.criterion,
+            roomStart: {
+                building: this.routeForm.value.buildingStart,
+                floor: this.routeForm.value.floorStart,
+                name: this.routeForm.value.roomStart,
             },
-            room2: {
-                buildingCode: this.routeForm.value.building2,
-                floorNumber: this.routeForm.value.floor2,
-                room: this.routeForm.value.room2
+            roomGoal: {
+                building: this.routeForm.value.buildingGoal,
+                floor: this.routeForm.value.floorGoal,
+                name: this.routeForm.value.roomGoal,
             },
-        } as RouteDTO
+        }
 
-        //TODO: properly implement findRoute()
-        this.taskService.findRoute().subscribe((response) => {
-            alert("Passage created successfully")
-        },
-            (error: string) => {
-                alert(error)
+        this.taskService.findRoute(dto).subscribe({
+            next: (paths) => {
+                alert('Path(s) computed, agora implementai a UI bonita')
+                alert('Isto as vezes demora a computar, por isso uma msg/simbolo de loading n e mal pensado')
+                console.log(paths)
             },
+            error: (error) => alert(JSON.stringify(error)),
+        })
+    }
+
+    onBuilding1Selected(event: Event) {
+        this.floors1 = []
+        this.rooms1 = []
+
+        this.getFloors((event.target as HTMLSelectElement).value).subscribe({
+            next: (floors) => {
+                this.floors1 = floors
+            },
+        })
+    }
+
+    onBuilding2Selected(event: Event) {
+        this.floors2 = []
+        this.rooms2 = []
+
+        this.getFloors((event.target as HTMLSelectElement).value).subscribe({
+            next: (floors) => {
+                this.floors2 = floors
+            },
+        })
+    }
+
+    onFloor1Selected(event: Event) {
+        this.rooms1 = []
+
+        const floor = parseInt((event.target as HTMLSelectElement).value)
+        this.getRooms(this.routeForm.value.buildingStart, floor).subscribe((rooms) => {
+            this.rooms1 = rooms
+        })
+    }
+
+    onFloor2Selected(event: Event) {
+        this.rooms2 = []
+        const floor = parseInt((event.target as HTMLSelectElement).value)
+
+        this.getRooms(this.routeForm.value.buildingGoal, floor).subscribe((rooms) => {
+            this.rooms2 = rooms
+        })
+    }
+
+    private getFloors(building: string) {
+        return this.floorService.getFloors(building).pipe(
+            catchError((error) => {
+                console.error(`Error fetching floors: ${error}`)
+                return of()
+            }),
         )
     }
 
-    onBuilding1Selected(event: any) {
-        this.building1 = event.target.value
-        this.floorService
-            .getFloors(event.target.value as string)
-            .pipe(
-                tap((list: FloorAndBuildingDTO[]) => {
-                    this.floors1 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.floors1 = []
-                    } else {
-                        // this.message.setErrorMessage(error)
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
-    }
-
-    onBuilding2Selected(event: any) {
-        this.building2 = event.target.value
-        this.floorService
-            .getFloors(event.target.value as string)
-            .pipe(
-                tap((list: FloorAndBuildingDTO[]) => {
-                    this.floors2 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.floors2 = []
-                    } else {
-                        // this.message.setErrorMessage(error)
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
-    }
-
-    onFloor1Selected(event: any){
-        this.floor1 = event.target.value
-        this.roomService
-            .getRooms(this.routeForm.value.building1, this.routeForm.value.floor1)
-            .pipe(
-                tap((list: CreatedRoomDTO[]) => {
-                    this.rooms1 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.rooms1 = []
-                    } else {
-                        // this.message.setErrorMessage(error)
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
-    }
-    onFloor2Selected(event: any){
-        this.floor2 = event.target.value
-        this.roomService
-            .getRooms(this.routeForm.value.building2, this.routeForm.value.floor2)
-            .pipe(
-                tap((list: CreatedRoomDTO[]) => {
-                    this.rooms2 = list
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.rooms2 = []
-                    } else {
-                        // this.message.setErrorMessage(error)
-                        console.error('Error fetching floors:', error)
-                    }
-                    return of()
-                }),
-            )
-            .subscribe()
-    }
-
-    ngOnInit(): void {
-        this.buildingService.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
-            this.buildings = buildingsList
-        })
-        // this.taskService.getCriterion().subscribe((criteria: CriteriaDTO[]) => {
-        //     this.criterion = criterion
-        // })
-        this.criterion = [{ desc: "this" } as CriteriaDTO, { desc: "that" } as CriteriaDTO]
-    }
-
-    getBuilding(buildingCode: string): BuildingDTO | undefined {
-        return this.buildings.find((building) => building.code === buildingCode)
-    }
-
-    isInvalid(controlName: string): boolean {
-        const control = this.routeForm.get(controlName)
-        return !!control && control.invalid && (control.dirty || control.touched)
-    }
-
-    isEmpty(obj: any): boolean {
-        return obj != null && obj != undefined && obj.length == 0
-    }
-
-    noFloors1(): boolean {
-        return this.isEmpty(this.floors1)
-    }
-
-    noFloors2(): boolean {
-        return this.isEmpty(this.floors2)
-    }
-
-    noRooms1(): boolean {
-        return this.isEmpty(this.rooms1)
-    }
-    noRooms2(): boolean {
-        return this.isEmpty(this.floors1)
+    private getRooms(building: string, floor: number) {
+        return this.roomService.getRooms(building, floor).pipe(
+            catchError((error) => {
+                console.error('Error fetching floors:', error)
+                return of()
+            }),
+        )
     }
 }
-

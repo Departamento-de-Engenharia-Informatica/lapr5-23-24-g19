@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Observable, catchError, throwError } from 'rxjs'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { CriteriaDTO } from '../dto/CriteriaDTO'
+import { CriterionDTO } from '../dto/CriteriaDTO'
 import { TaskTypeDTO } from '../dto/CreateRobotTypeDTO'
 import { Config } from '../config'
+import { PathDTO } from '../dto/PathDTO'
+import { GetPathsDTO } from '../dto/GetPathsDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -11,17 +13,24 @@ import { Config } from '../config'
 export class TaskService {
     constructor(private http: HttpClient) {}
 
-    getCriterion(): Observable<CriteriaDTO[]> {
-        const url = `${Config.baseUrl}/task/criterion`
-        return this.http.get<CriteriaDTO[]>(url, {
+    getCriteria() {
+        const url = `${Config.baseUrl}/paths/criteria`
+        return this.http.get<CriterionDTO[]>(url, {
             observe: 'body',
             responseType: 'json',
         })
     }
 
-    findRoute(): Observable<String> {
-        alert('Funcionality not implemented.')
-        return {} as Observable<String>
+    findRoute(dto: GetPathsDTO) {
+        return this.http.post<PathDTO[]>(
+            `${Config.baseUrl}/paths`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 
     tasksTypes(): Observable<TaskTypeDTO[]> {

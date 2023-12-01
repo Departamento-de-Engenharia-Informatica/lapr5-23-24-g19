@@ -16,21 +16,15 @@ export default (app: Router) => {
         celebrate({
             body: Joi.object({
                 criteria: Joi.string().required(),
-                start: Joi.object({
+                roomStart: Joi.object({
                     building: Joi.string().required(),
                     floor: Joi.number().integer().required(),
-                    coordinates: Joi.object({
-                        x: Joi.number().integer().required(),
-                        y: Joi.number().integer().required(),
-                    }).required(),
+                    name: Joi.string().required()
                 }).required(),
-                goal: Joi.object({
+                roomGoal: Joi.object({
                     building: Joi.string().required(),
                     floor: Joi.number().integer().required(),
-                    coordinates: Joi.object({
-                        x: Joi.number().integer().required(),
-                        y: Joi.number().integer().required(),
-                    }).required(),
+                    name: Joi.string().required()
                 }).required(),
             }),
         }),

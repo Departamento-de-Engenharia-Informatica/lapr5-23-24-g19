@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Inject, Service } from 'typedi'
 import config from '../../config'
-import { IPathBetweenBuildingsDTO } from '../dto/IPathBetweenBuildingsDTO'
+import { IGetPathsDTO } from '../dto/IGetPathsDTO'
 import IPathService from '../services/IServices/IPathService'
 import IPathController from './IControllers/IPathController'
 
@@ -11,7 +11,7 @@ export default class PathController implements IPathController {
 
     async pathsBetweenBuildings(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = req.body as IPathBetweenBuildingsDTO
+            const dto = req.body as IGetPathsDTO
             const result = await this.service.pathsBetweenBuildings(dto)
 
 

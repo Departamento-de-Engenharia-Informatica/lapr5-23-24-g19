@@ -229,13 +229,6 @@ export default class FloorService implements IFloorService {
 
             const floors = await this.floorRepo.findByBuildingCode(code)
 
-            if (floors.length == 0) {
-                return left({
-                    errorCode: ErrorCode.NotFound,
-                    message: `Floors not found for building ${buildingCode}`,
-                })
-            }
-
             const dtoList = await Promise.all(floors.map((floor) => FloorMap.toDTO(floor)))
             return right(dtoList)
         } catch (e) {

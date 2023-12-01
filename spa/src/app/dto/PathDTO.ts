@@ -1,4 +1,4 @@
-export type IPathDTO = PathSegmentDTO[]
+export type PathDTO = PathSegmentDTO[]
 
 export type PathSegmentDTO = CellSegmentDTO | ElevatorSegmentDTO | PassageSegmentDTO
 

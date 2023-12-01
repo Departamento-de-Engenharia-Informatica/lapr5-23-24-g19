@@ -106,15 +106,8 @@ export default class RoomService implements IRoomService {
 
             const rooms = await this.roomRepo.findAllInFloor(building, floor)
 
-            if (rooms.length === 0) {
-                return left({
-                    errorCode: ErrorCode.NotFound,
-                    message: 'rooms not found',
-                })
-            } else {
-                const dtoList = await Promise.all(rooms.map(room => RoomMap.toDTO(room)))
-                return right(dtoList)
-            }
+            const dtoList = await Promise.all(rooms.map(room => RoomMap.toDTO(room)))
+            return right(dtoList)
         } catch (e) {
             throw e
         }

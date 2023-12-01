@@ -1,3 +1,1 @@
-export interface CriteriaDTO{
-    desc : string
-}
+export type CriterionDTO = string

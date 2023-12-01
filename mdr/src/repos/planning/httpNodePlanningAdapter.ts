@@ -20,7 +20,7 @@ export default class HttpNodePlanningAdapter implements IPlanningAdapter {
         })
 
         if (!res.ok) {
-            return Promise.reject()
+            return []
         }
 
         const paths = (await res.json()) as IPathDTO[]

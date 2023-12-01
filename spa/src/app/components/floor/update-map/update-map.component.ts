@@ -103,7 +103,7 @@ export class UpdateMapComponent {
             }
                 ,
                 (error) => {
-                    alert(error)
+                    alert(JSON.stringify(error))
                 },)
     }
 
