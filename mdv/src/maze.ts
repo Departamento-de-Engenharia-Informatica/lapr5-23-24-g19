@@ -12,11 +12,12 @@ import {
 } from './map-components';
 import { Loader } from './loader';
 import { elevatorData } from './default_data';
-import Door from './door';
+import Door, { DoorParams } from './door';
 import SideWall from './side_wall';
 import ThumbRaiser from './thumb_raiser';
 import Dispatcher from './dispatcher';
 import Passage from './passage';
+import DoorSet, { DoorSetParameters } from './door_set';
 
 type AABB = THREE.Box3[][][];
 type position = { x: number; z: number };
@@ -70,12 +71,12 @@ type SideWallT = BaseComponent & {
 //     segments: { width: number; height: number };
 // };
 
-type Model3D = {
+export type Model3D = {
     modelUri: string;
     credits?: string;
 };
 
-type DoorT = Model3D;
+export type DoorT = Model3D;
 type ElevatorModelProps = Model3D;
 
 export type FloorMapParameters = {
@@ -137,11 +138,15 @@ export default class Maze extends THREE.Group {
 
     private building?: string;
     private floor?: number;
+    public a: number = 0;
+    public doors : Door[] = []
+
 
     public size: FloorMap['dimensions'] = { width: 0, length: 0 };
     public halfSize: Maze['size'] = { width: 0, length: 0 };
     public map: FloorMap['mapContent'] = [[]];
     public elevators: Elevator[] = [];
+    public doorSet!: DoorSet;
     public rooms: FloorMap['rooms'] = [];
     public passages: Passage[] = [];
     public exitLocation: THREE.Vector3 = new THREE.Vector3();
@@ -490,15 +495,22 @@ export default class Maze extends THREE.Group {
         const row = indices[0];
         const column = indices[1];
         // console.log(row);
+        // console.log(thumbRaiser.maze.doorSet.doors)
+        // console.log(thumbRaiser.maze.doorSet)
+        // if(thumbRaiser.maze.doorSet.doors.length>0){
+            // console.log("not null")
+        // }
+        // this.doorSet.doors.forEach((d) => {
         doors.forEach((d) => {
             const doorIndices = this.cartesianToCell(d.position);
+            const radius = 1
             if (
-                (doorIndices[0] == row - 1 ||
+                (doorIndices[0] == row - radius ||
                     doorIndices[0] == row ||
-                    doorIndices[0] == row + 1) &&
-                (doorIndices[1] == column - 1 ||
+                    doorIndices[0] == row + radius) &&
+                (doorIndices[1] == column - radius ||
                     doorIndices[1] == column ||
-                    doorIndices[1] == column + 1)
+                    doorIndices[1] == column + radius)
             ) {
                 this.nearDoors.add(d);
             } else {
@@ -830,6 +842,10 @@ export default class Maze extends THREE.Group {
                 `(from: ${p.buildingA.building}${p.buildingA.floor} to ${p.buildingB.building}${p.buildingB.floor})`,
             );
         });
+        
+        // NEWW
+        // this.add(new DoorSet({maze : this} as DoorSetParameters,description.door))
+        // console.log("Child",this.children);
 
         // this.elevators = description.map.elevators;
 

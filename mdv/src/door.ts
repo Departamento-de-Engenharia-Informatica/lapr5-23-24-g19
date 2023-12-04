@@ -3,6 +3,7 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 import MultiTexturedMaterial from './material';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { merge } from './merge';
+import TextSprite from '@seregpie/three.text-sprite';
 
 type Handle = THREE.Object3D & {
     worldPosition: THREE.Vector3;
@@ -43,11 +44,13 @@ export type DoorParams = {
     scale: THREE.Vector3;
     helpersColor: THREE.Color;
     defaultDirection: number;
+    name: string,
 
     credits?: string;
 };
 
-export default class Door extends THREE.Group {
+export default class Door extends THREE.Mesh {
+    public label!: THREE.Sprite
     // // get size() { return this.parameters.size }
     // get segments() {
     //     return this.parameters.segments;
@@ -74,6 +77,7 @@ export default class Door extends THREE.Group {
     }
 
     public handle: Handle = new THREE.Object3D() as unknown as Handle;
+    public doorName: string
 
     private _loaded = false;
     get loaded() {
@@ -90,6 +94,7 @@ export default class Door extends THREE.Group {
         this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection);
 
         this.loadModel(params.modelUri);
+        this.doorName = params.name
 
         // merge(this, parameters);
         // const halfGroundHeight = this.groundHeight / 2.0;
@@ -246,8 +251,8 @@ export default class Door extends THREE.Group {
         loader.load(
             uri,
             (model) => this.onLoad(model),
-            () => {}, // onProgress
-            () => {}, // onError
+            () => { }, // onProgress
+            () => { }, // onError
         );
 
         this._loaded = true;
@@ -274,9 +279,77 @@ export default class Door extends THREE.Group {
         // const halfSize = size.clone().divideScalar(2)
         // const radius = (halfSize.x + halfSize.z) / 2
 
+        const fontSize = 20
+        const textColor = 'black'
+
+        // Create a canvas texture for the text
+        const textTexture = this.createTextTexture(this.doorName, fontSize, textColor)
+
+        // Create a Sprite using the canvas texture as a material
+        const spriteMaterial = new THREE.SpriteMaterial({ map: textTexture })
+        this.label = new THREE.Sprite(spriteMaterial)
+
+        // Set the position based on your door bounding box
+        const doorBoundingBox = new THREE.Box3().setFromObject(this.handle)
+        this.label.position.set(0, doorBoundingBox.max.y * 6, 0);
+
+        this.label.visible=false
+        this.add(this.label)
+        
         size.multiply(this.params.scale);
         this.setShadow();
     }
+
+    createTextTexture(text:string, fontSize:number, color:string) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const font = `${fontSize}px Arial, Helvetica, sans-serif`;
+
+        if(context==null){
+            return
+        }
+        context.font = font;
+        context.imageSmoothingEnabled = true;
+        
+        const textMetrics = context.measureText(text);
+        const textWidth = textMetrics.width;
+
+        canvas.width = textWidth + 10
+        canvas.height = fontSize + 10
+
+        context.font = font;
+        context.fillStyle = color;
+
+        const totalWidth = textWidth + 5 * 2
+        const totalHeight = fontSize + 5 * 2;
+        const borderRadius = 10
+
+        context.fillStyle = "black"
+        context.beginPath();
+        context.moveTo(borderRadius, 0);
+        context.lineTo(totalWidth - borderRadius, 0);
+        context.quadraticCurveTo(totalWidth, 0, totalWidth, borderRadius);
+        context.lineTo(totalWidth, totalHeight - borderRadius);
+        context.quadraticCurveTo(totalWidth, totalHeight, totalWidth - borderRadius, totalHeight);
+        context.lineTo(borderRadius, totalHeight);
+        context.quadraticCurveTo(0, totalHeight, 0, totalHeight - borderRadius);
+        context.lineTo(0, borderRadius);
+        context.quadraticCurveTo(0, 0, borderRadius, 0);
+        context.closePath();
+        context.fill();
+
+        const textX = (totalWidth - textWidth) / 2;
+        const textY = 5 + fontSize;
+    
+        context.fillStyle = "white"
+        context.fillText(text, textX, textY);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.magFilter =  THREE.LinearFilter
+        texture.minFilter =  THREE.LinearFilter
+        return texture;
+    }
+
 
     private setShadow() {
         this.traverseVisible((child) => {
