@@ -1,12 +1,18 @@
 import { GLTF, GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { merge } from './merge';
 import * as THREE from 'three';
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 export type ElevatorParams = {
     modelUri: string;
     scale: THREE.Vector3;
     helpersColor: THREE.Color;
     defaultDirection: number;
+
+    cellCoords: { x: number, y: number }
+    orientation: 'N'|'S'|'W'|'E'
+    floors: number[]
+    building: string
 
     credits?: string;
 };
@@ -29,13 +35,35 @@ export default class Elevator extends THREE.Group {
         return this._loaded;
     }
 
+    get building() {
+        return this.params.building
+    }
+
+    get floors() {
+        return this.params.floors
+    }
+
+    get cellCoords() {
+        return this.params.cellCoords
+    }
+
     constructor(private params: ElevatorParams) {
         super();
         merge(this, { scale: params.scale });
 
         this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection);
+        this.rotate()
 
         this.loadModel(params.modelUri);
+    }
+
+    private rotate() {
+        switch(this.params.orientation) {
+            case 'N': this.rotateY(degToRad(90)); break;
+            case 'S':this.rotateY(degToRad(270)); break;
+            case 'W':this.rotateY(degToRad(180)); break;
+            case 'E':this.rotateY(degToRad(0)); break;
+        }
     }
 
     private loadModel(uri: string) {

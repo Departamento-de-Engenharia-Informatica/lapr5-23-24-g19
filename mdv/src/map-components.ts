@@ -18,6 +18,6 @@ export type Room = {
 export type Elevator = {
     x: number;
     y: number;
-    orientation: string;
+    orientation: 'N'|'S'|'W'|'E';
     floors: number[];
 };

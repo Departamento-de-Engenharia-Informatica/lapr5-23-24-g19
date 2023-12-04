@@ -70,37 +70,7 @@ export default class UserInterface extends GUI {
                 const building = optionsBuildings.getValue();
                 const floor = optionsFloors.getValue();
                 if (newMap !== '' && building && floor) {
-                    const mazeParams = {
-                        url: newMap,
-                        designCredits:
-                            "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
-                        texturesCredits:
-                            "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-                        scale: new THREE.Vector3(1.0, 1.0, 1.0),
-                        helpersColor: new THREE.Color(0xff0077),
-                    };
-
-                    thumbRaiser.removeAudioSources();
-
-                    thumbRaiser.elevators.forEach((e) => {
-                        thumbRaiser.scene.remove(e);
-                    });
-
-                    thumbRaiser.doors.forEach((d) => {
-                        thumbRaiser.scene.remove(d);
-                    });
-
-                    thumbRaiser.scene.remove(thumbRaiser.maze);
-
-                    thumbRaiser.maze.disposeGround();
-                    thumbRaiser.maze.disposeWalls();
-
-                    thumbRaiser.stop();
-
-                    thumbRaiser.elevators = [];
-                    thumbRaiser.maze = new Maze(mazeParams, loader);
-
-                    thumbRaiser.update();
+                    thumbRaiser.enterPassage(newMap)
                 } else {
                     alert('Both building and floor should be selected');
                 }

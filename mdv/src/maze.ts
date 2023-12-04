@@ -5,14 +5,13 @@ import { merge } from './merge';
 import Ground from './ground';
 import Wall from './wall';
 import Elevator from './elevator';
-import { MDRUrl } from './main';
 import { Elevator as ElevatorComp, Passage, Room } from './map-components';
 import { Loader } from './loader';
-import { doorData, elevatorData } from './default_data';
+import { elevatorData } from './default_data';
 import Door from './door';
 import SideWall from './side_wall';
-import Audio, { AudioParameters } from './audio';
 import ThumbRaiser from './thumb_raiser';
+import Dispatcher from './dispatcher';
 
 type AABB = THREE.Box3[][][];
 type Position = { x: number; z: number };
@@ -49,6 +48,7 @@ type BaseComponent = {
     secondaryColor: string;
 };
 
+
 type GroundT = BaseComponent & {
     size: { width: number; height: number; depth: number };
     segments: { width: number; height: number; depth: number };
@@ -62,9 +62,9 @@ type SideWallT = BaseComponent & {
     segments: { width: number; height: number };
 };
 
-type DoorT = BaseComponent & {
-    segments: { width: number; height: number };
-};
+// type DoorT = BaseComponent & {
+//     segments: { width: number; height: number };
+// };
 
 type Model3D = {
     modelUri: string;
@@ -72,7 +72,7 @@ type Model3D = {
 };
 
 type DoorT = Model3D;
-type ElevatorT = Model3D;
+type ElevatorModelProps = Model3D;
 
 export type FloorMapParameters = {
     // buildingCode: string,
@@ -100,11 +100,13 @@ type MapFile = {
     sidewall: SideWallT;
     door: DoorT;
     ground: GroundT;
-    elevator: ElevatorT;
+    elevator: ElevatorModelProps;
     player: {
         initialPosition: number[];
         initialDirection: number;
     };
+    buildingCode: string
+    floorNumber: number
 };
 
 // type MazeSize = { width:number, depth:number }
@@ -129,10 +131,13 @@ export default class Maze extends THREE.Group {
         return this._loaded;
     }
 
+    private building?: string
+    private floor?: number
+
     public size: FloorMap['dimensions'] = { width: 0, length: 0 };
     public halfSize: Maze['size'] = { width: 0, length: 0 };
     public map: FloorMap['mapContent'] = [[]];
-    public elevators: FloorMap['elevators'] = [];
+    public elevators: Elevator[] = [];
     public rooms: FloorMap['rooms'] = [];
     public passages: FloorMap['passages'] = [];
     public exitLocation: THREE.Vector3 = new THREE.Vector3();
@@ -142,7 +147,7 @@ export default class Maze extends THREE.Group {
     public initialPosition: THREE.Vector3 = new THREE.Vector3();
     public initialDirection: number = 0;
 
-    private elevator: Elevator;
+    // private elevator: Elevator;
 
     private wall?: Wall;
     private sideWall?: SideWall;
@@ -154,11 +159,16 @@ export default class Maze extends THREE.Group {
     private onProgress(url: string, xhr: ProgressEvent<EventTarget>) {
         console.log(
             "Resource '" +
-                url +
-                "' " +
-                ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
-                '% loaded.',
+            url +
+            "' " +
+            ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
+            '% loaded.',
         );
+    }
+
+    public destroy() {
+        // ...
+        this.elevators.forEach(e => this.remove(e))
     }
 
     constructor(
@@ -280,8 +290,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.x -
-                            (this.cellToCartesian([row, column]).x +
-                                delta.x * this.scale.x),
+                        (this.cellToCartesian([row, column]).x +
+                            delta.x * this.scale.x),
                     ) < radius
                 ) {
                     console.log(this.rooms);
@@ -293,8 +303,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.z -
-                            (this.cellToCartesian([row, column]).z +
-                                delta.z * this.scale.z),
+                        (this.cellToCartesian([row, column]).z +
+                            delta.z * this.scale.z),
                     ) < radius
                 ) {
                     console.log('Collision with ' + name + '.');
@@ -389,6 +399,45 @@ export default class Maze extends THREE.Group {
                 }
             }
         });
+    }
+
+    private _lastPos?: THREE.Vector3 // HACK
+    foundElevator(position: THREE.Vector3) {
+        const [row, col] = this.cartesianToCell(position)
+
+        if (!!this._lastPos) {
+            const [oldR, oldC] = this.cartesianToCell(this._lastPos)
+            if (oldR == row && oldC == col) {
+                return
+            }
+        }
+
+        const elev = this.elevators?.find(e => {
+            const { x: eRow, y: eCol } = e.cellCoords
+            return eRow == row && eCol == col
+        })
+
+        if (!!elev) {
+            Dispatcher.emit(
+                'enter-elevator',
+                this.building!,
+                this.floor!,
+                elev.floors
+            )
+        } else if (!!this._lastPos) {
+            const [oldR, oldC] = this.cartesianToCell(this._lastPos)
+
+            const nearElev = this.elevators?.find(e => {
+                const { x: eRow, y: eCol } = e.cellCoords
+                return eRow == oldR && eCol == oldC
+            })
+
+            if (!!nearElev) {
+                Dispatcher.emit('exit-elevator')
+            }
+        }
+
+        this._lastPos = position
     }
 
     nearDoors: Set<Door> = new Set();
@@ -709,7 +758,23 @@ export default class Maze extends THREE.Group {
             length: this.size.length / 2.0,
         };
         this.map = description.map.mapContent;
-        this.elevators = description.map.elevators;
+
+        this.building = description.buildingCode
+        this.floor = description.floorNumber
+
+        this.elevators =
+            description.map.elevators?.map(e => this.loadElevator(description.elevator, e, this.building!))
+
+        this.elevators.forEach(e => {
+            this.add(e)
+
+            console.log('Elevator at x=', e.cellCoords.x, ' and y=', e.cellCoords.y);
+        })
+
+        // this.elevators = description.map.elevators;
+
+
+
         this.rooms = description.map.rooms;
         this.passages = description.map.passages;
         console.log(this.rooms);
@@ -914,13 +979,23 @@ export default class Maze extends THREE.Group {
         this._loaded = true;
     }
 
-    // private loadElevator(data: ElevatorT): Elevator {
-    //     const params = {
-    //         ...elevatorData,
-    //         modelUri: data.modelUri,
-    //         credits: data.credits,
-    //     };
-    //
-    //     return new Elevator(params);
-    // }
+    private loadElevator(data: ElevatorModelProps, props: ElevatorComp, building: string): Elevator {
+        const params = {
+            ...elevatorData,
+            modelUri: data.modelUri,
+            credits: data.credits,
+            orientation: props.orientation,
+            floors: props.floors,
+            cellCoords: { x: props.x, y: props.y },
+            building
+        };
+
+        const e = new Elevator(params);
+
+        const pos = this.cellToCartesian([e.cellCoords.x, e.cellCoords.y])
+        e.position.set(pos.x, pos.y, pos.z)
+
+        return e
+    }
+
 }
