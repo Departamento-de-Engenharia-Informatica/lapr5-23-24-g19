@@ -10,7 +10,7 @@ export default class ElevatorMenu extends GUI {
 
         this.title(`Elevator &mdash; ${building}${currentFloor}`);
         this.domElement.style.position = 'absolute';
-        this.domElement.style.right = '0.5vw';
+        this.domElement.style.left = '0.5vw';
         this.domElement.style.top = '1.0vh';
         this.domElement.style.fontSize = fontSize;
 
