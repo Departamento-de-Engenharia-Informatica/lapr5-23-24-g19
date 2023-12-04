@@ -36,4 +36,6 @@ coverage/
 
 # Other
 
-docs/**/*.png
+.directory
+.mdr-maps
+
