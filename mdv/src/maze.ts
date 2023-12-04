@@ -5,16 +5,21 @@ import { merge } from './merge';
 import Ground from './ground';
 import Wall from './wall';
 import Elevator from './elevator';
-import { Elevator as ElevatorComp, Passage, Room } from './map-components';
+import {
+    Elevator as ElevatorComp,
+    Passage as PassageComp,
+    Room,
+} from './map-components';
 import { Loader } from './loader';
 import { elevatorData } from './default_data';
 import Door from './door';
 import SideWall from './side_wall';
 import ThumbRaiser from './thumb_raiser';
 import Dispatcher from './dispatcher';
+import Passage from './passage';
 
 type AABB = THREE.Box3[][][];
-type Position = { x: number; z: number };
+type position = { x: number; z: number };
 
 export type MazeParameters = {
     url: string;
@@ -47,7 +52,6 @@ type BaseComponent = {
     minFilter: number;
     secondaryColor: string;
 };
-
 
 type GroundT = BaseComponent & {
     size: { width: number; height: number; depth: number };
@@ -87,7 +91,7 @@ export type FloorMapParameters = {
 type FloorMap = {
     dimensions: { length: number; width: number };
     mapContent: number[][];
-    passages: Passage[]; //Coordinates
+    passages: PassageComp[]; //Coordinates
 
     rooms: Room[]; //Coordinates
     elevators: ElevatorComp[]; //Coordinates
@@ -105,8 +109,8 @@ type MapFile = {
         initialPosition: number[];
         initialDirection: number;
     };
-    buildingCode: string
-    floorNumber: number
+    buildingCode: string;
+    floorNumber: number;
 };
 
 // type MazeSize = { width:number, depth:number }
@@ -131,15 +135,15 @@ export default class Maze extends THREE.Group {
         return this._loaded;
     }
 
-    private building?: string
-    private floor?: number
+    private building?: string;
+    private floor?: number;
 
     public size: FloorMap['dimensions'] = { width: 0, length: 0 };
     public halfSize: Maze['size'] = { width: 0, length: 0 };
     public map: FloorMap['mapContent'] = [[]];
     public elevators: Elevator[] = [];
     public rooms: FloorMap['rooms'] = [];
-    public passages: FloorMap['passages'] = [];
+    public passages: Passage[] = [];
     public exitLocation: THREE.Vector3 = new THREE.Vector3();
     public aabb: AABB = [];
 
@@ -159,16 +163,16 @@ export default class Maze extends THREE.Group {
     private onProgress(url: string, xhr: ProgressEvent<EventTarget>) {
         console.log(
             "Resource '" +
-            url +
-            "' " +
-            ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
-            '% loaded.',
+                url +
+                "' " +
+                ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
+                '% loaded.',
         );
     }
 
     public destroy() {
         // ...
-        this.elevators.forEach(e => this.remove(e))
+        this.elevators.forEach((e) => this.remove(e));
     }
 
     constructor(
@@ -290,8 +294,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.x -
-                        (this.cellToCartesian([row, column]).x +
-                            delta.x * this.scale.x),
+                            (this.cellToCartesian([row, column]).x +
+                                delta.x * this.scale.x),
                     ) < radius
                 ) {
                     console.log(this.rooms);
@@ -303,8 +307,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.z -
-                        (this.cellToCartesian([row, column]).z +
-                            delta.z * this.scale.z),
+                            (this.cellToCartesian([row, column]).z +
+                                delta.z * this.scale.z),
                     ) < radius
                 ) {
                     console.log('Collision with ' + name + '.');
@@ -356,88 +360,122 @@ export default class Maze extends THREE.Group {
         }
     }
 
-    nearPassages: Set<string> = new Set();
-    foundPassage(position: THREE.Vector3, thumbRaiser: ThumbRaiser) {
-        const indices = this.cartesianToCell(position);
-        const row = indices[0];
-        const column = indices[1];
+    private _lastPassage?: THREE.Vector3; // HACK
+    passage(position: THREE.Vector3) {
+        const [row, col] = this.cartesianToCell(position);
 
-        this.passages.forEach((p) => {
-            let passagePosition: THREE.Vector3 = new THREE.Vector3();
-            passagePosition = this.cellToCartesian([p.x, p.y]);
-
-            const passageIndices = this.cartesianToCell(passagePosition);
-            const url = `http://localhost:4000/api/buildings/${p.to.building}/floors/${p.to.floor}/map`;
-
-            if (
-                // make this values more realistic
-                (passageIndices[0] == row - 0.5 ||
-                    passageIndices[0] == row ||
-                    passageIndices[0] == row + 0.5) &&
-                (passageIndices[1] == column - 0.5 ||
-                    passageIndices[1] == column ||
-                    passageIndices[1] == column + 0.5)
-            ) {
-                this.checkFloorMap(url).then((m) => {
-                    if (m != '' && m != null && m != undefined) {
-                        if (!this.nearPassages.has(url)) {
-                            //TODO: make this message more descriptive
-                            alert('Success!');
-                            this.nearPassages.add(url);
-                        }
-                        thumbRaiser.enterPassage(url);
-                    } else {
-                        if (!this.nearPassages.has(url)) {
-                            alert('Cannot go through this passage');
-                            this.nearPassages.add(url);
-                        }
-                    }
-                });
-            } else {
-                if (this.nearPassages.has(url)) {
-                    this.nearPassages.delete(url);
-                }
-            }
-        });
-    }
-
-    private _lastPos?: THREE.Vector3 // HACK
-    foundElevator(position: THREE.Vector3) {
-        const [row, col] = this.cartesianToCell(position)
-
-        if (!!this._lastPos) {
-            const [oldR, oldC] = this.cartesianToCell(this._lastPos)
+        if (!!this._lastPassage) {
+            const [oldR, oldC] = this.cartesianToCell(this._lastPassage);
             if (oldR == row && oldC == col) {
-                return
+                return;
             }
         }
 
-        const elev = this.elevators?.find(e => {
-            const { x: eRow, y: eCol } = e.cellCoords
-            return eRow == row && eCol == col
-        })
+        const pas = this.passages?.find((p) => {
+            const { x: pRow, y: pCol } = p.cellCoords;
+            return pRow == row && pCol == col;
+        });
+
+        if (!!pas) {
+            Dispatcher.emit('enter-passage', pas.buildingA, pas.buildingB);
+        } else if (!!this._lastPassage) {
+            const [oldR, oldC] = this.cartesianToCell(this._lastPassage);
+
+            const nearPas = this.passages?.find((e) => {
+                const { x: pRow, y: pCol } = e.cellCoords;
+                return pRow == oldR && pCol == oldC;
+            });
+
+            if (!!nearPas) {
+                Dispatcher.emit('exit-passage');
+            }
+        }
+
+        this._lastPassage = position;
+    }
+
+    // nearPassages: Set<string> = new Set();
+    // foundPassage(position: THREE.Vector3, thumbRaiser: ThumbRaiser) {
+    //     const indices = this.cartesianToCell(position);
+    //     const row = indices[0];
+    //     const column = indices[1];
+    //
+    //     this.passages.forEach((p) => {
+    //         let passagePosition: THREE.Vector3 = new THREE.Vector3();
+    //         passagePosition = this.cellToCartesian([p.x, p.y]);
+    //
+    //         const passageIndices = this.cartesianToCell(passagePosition);
+    //         const url = `http://localhost:4000/api/buildings/${p.to.building}/floors/${p.to.floor}/map`;
+    //
+    //         if (
+    //             // make this values more realistic
+    //             (passageIndices[0] == row - 0.5 ||
+    //                 passageIndices[0] == row ||
+    //                 passageIndices[0] == row + 0.5) &&
+    //             (passageIndices[1] == column - 0.5 ||
+    //                 passageIndices[1] == column ||
+    //                 passageIndices[1] == column + 0.5)
+    //         ) {
+    //             this.checkFloorMap(url).then((m) => {
+    //                 if (m != '' && m != null && m != undefined) {
+    //                     if (!this.nearPassages.has(url)) {
+    //                         //TODO: make this message more descriptive
+    //                         alert('Success!');
+    //                         this.nearPassages.add(url);
+    //                     }
+    //                     thumbRaiser.enterPassage(url);
+    //                 } else {
+    //                     if (!this.nearPassages.has(url)) {
+    //                         alert('Cannot go through this passage');
+    //                         this.nearPassages.add(url);
+    //                     }
+    //                 }
+    //             });
+    //         } else {
+    //             if (this.nearPassages.has(url)) {
+    //                 this.nearPassages.delete(url);
+    //             }
+    //         }
+    //     });
+    // }
+
+    private _lastPos?: THREE.Vector3; // HACK
+    foundElevator(position: THREE.Vector3) {
+        const [row, col] = this.cartesianToCell(position);
+
+        if (!!this._lastPos) {
+            const [oldR, oldC] = this.cartesianToCell(this._lastPos);
+            if (oldR == row && oldC == col) {
+                return;
+            }
+        }
+
+        const elev = this.elevators?.find((e) => {
+            const { x: eRow, y: eCol } = e.cellCoords;
+            return eRow == row && eCol == col;
+        });
 
         if (!!elev) {
             Dispatcher.emit(
                 'enter-elevator',
                 this.building!,
                 this.floor!,
-                elev.floors
-            )
+                elev.floors,
+            );
         } else if (!!this._lastPos) {
-            const [oldR, oldC] = this.cartesianToCell(this._lastPos)
+            const [oldR, oldC] = this.cartesianToCell(this._lastPos);
 
-            const nearElev = this.elevators?.find(e => {
-                const { x: eRow, y: eCol } = e.cellCoords
-                return eRow == oldR && eCol == oldC
-            })
+            const nearElev = this.elevators?.find((e) => {
+                const { x: eRow, y: eCol } = e.cellCoords;
+                return eRow == oldR && eCol == oldC;
+            });
 
             if (!!nearElev) {
-                Dispatcher.emit('exit-elevator')
+                Dispatcher.emit('exit-elevator');
             }
         }
 
-        this._lastPos = position
+        this._lastPos = position;
     }
 
     nearDoors: Set<Door> = new Set();
@@ -759,24 +797,43 @@ export default class Maze extends THREE.Group {
         };
         this.map = description.map.mapContent;
 
-        this.building = description.buildingCode
-        this.floor = description.floorNumber
+        this.building = description.buildingCode;
+        this.floor = description.floorNumber;
 
-        this.elevators =
-            description.map.elevators?.map(e => this.loadElevator(description.elevator, e, this.building!))
+        this.elevators = description.map.elevators?.map((e) =>
+            this.loadElevator(description.elevator, e, this.building!),
+        );
 
-        this.elevators.forEach(e => {
-            this.add(e)
+        description.map.passages?.forEach((e) =>
+            this.passages.push(
+                this.loadPassage(e, this.building!, this.floor!),
+            ),
+        );
 
-            console.log('Elevator at x=', e.cellCoords.x, ' and y=', e.cellCoords.y);
-        })
+        this.elevators.forEach((e) => {
+            this.add(e);
+
+            console.log(
+                'Elevator at x=',
+                e.cellCoords.x,
+                ' and y=',
+                e.cellCoords.y,
+            );
+        });
+
+        this.passages.forEach((p) => {
+            console.log(
+                'Passage at x=',
+                p.cellCoords.x,
+                ' and y=',
+                p.cellCoords.y,
+                `(from: ${p.buildingA.building}${p.buildingA.floor} to ${p.buildingB.building}${p.buildingB.floor})`,
+            );
+        });
 
         // this.elevators = description.map.elevators;
 
-
-
         this.rooms = description.map.rooms;
-        this.passages = description.map.passages;
         console.log(this.rooms);
         // this.exitLocation = this.cellToCartesian(description.map.exitLocation);
 
@@ -979,7 +1036,11 @@ export default class Maze extends THREE.Group {
         this._loaded = true;
     }
 
-    private loadElevator(data: ElevatorModelProps, props: ElevatorComp, building: string): Elevator {
+    private loadElevator(
+        data: ElevatorModelProps,
+        props: ElevatorComp,
+        building: string,
+    ): Elevator {
         const params = {
             ...elevatorData,
             modelUri: data.modelUri,
@@ -987,15 +1048,29 @@ export default class Maze extends THREE.Group {
             orientation: props.orientation,
             floors: props.floors,
             cellCoords: { x: props.x, y: props.y },
-            building
+            building,
         };
 
         const e = new Elevator(params);
 
-        const pos = this.cellToCartesian([e.cellCoords.x, e.cellCoords.y])
-        e.position.set(pos.x, pos.y, pos.z)
+        const pos = this.cellToCartesian([e.cellCoords.x, e.cellCoords.y]);
+        e.position.set(pos.x, pos.y, pos.z);
 
-        return e
+        return e;
     }
 
+    private loadPassage(
+        props: PassageComp,
+        building: string,
+        floor: number,
+    ): Passage {
+        const params = {
+            cellCoords: { x: props.x, y: props.y },
+            buildingA: { building, floor },
+            buildingB: props.to,
+        };
+
+        const p = new Passage(params);
+        return p;
+    }
 }

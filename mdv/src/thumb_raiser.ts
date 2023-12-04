@@ -59,6 +59,7 @@ import { ToonShaderHatching } from 'three/examples/jsm/Addons.js';
 import Door, { DoorParams } from './door.js';
 import Dispatcher from './dispatcher.js';
 import ElevatorMenu from './elevator-menu.js';
+import PassageMenu from './passage-menu.js';
 
 /*
  * generalParameters = {
@@ -475,14 +476,14 @@ export default class ThumbRaiser {
         private firstPersonViewCameraParameters: CameraParameters,
         private thirdPersonViewCameraParameters: CameraParameters,
         private topViewCameraParameters: CameraParameters,
-        private miniMapCameraParameters: CameraParameters
+        private miniMapCameraParameters: CameraParameters,
     ) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
         this.cubeTexturesParameters = merge(
             {},
             cubeTextureData,
-            cubeTexturesParameters
+            cubeTexturesParameters,
         );
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
@@ -491,54 +492,54 @@ export default class ThumbRaiser {
         this.ambientLightParameters = merge(
             {},
             ambientLightData,
-            ambientLightParameters
+            ambientLightParameters,
         );
         this.directionalLightParameters = merge(
             {},
             directionalLightData,
-            directionalLightParameters
+            directionalLightParameters,
         );
         this.spotLightParameters = merge(
             {},
             spotLightData,
-            spotLightParameters
+            spotLightParameters,
         );
         this.flashLightParameters = merge(
             {},
             flashLightData,
-            flashLightParameters
+            flashLightParameters,
         );
         this.shadowsParameters = merge({}, shadowsData, shadowsParameters);
         this.fogParameters = merge({}, fogData, fogParameters);
         this.collisionDetectionParameters = merge(
             {},
             collisionDetectionData,
-            collisionDetectionParameters
+            collisionDetectionParameters,
         );
         this.fixedViewCameraParameters = merge(
             {},
             cameraData,
-            fixedViewCameraParameters
+            fixedViewCameraParameters,
         );
         this.firstPersonViewCameraParameters = merge(
             {},
             cameraData,
-            firstPersonViewCameraParameters
+            firstPersonViewCameraParameters,
         );
         this.thirdPersonViewCameraParameters = merge(
             {},
             cameraData,
-            thirdPersonViewCameraParameters
+            thirdPersonViewCameraParameters,
         );
         this.topViewCameraParameters = merge(
             {},
             cameraData,
-            topViewCameraParameters
+            topViewCameraParameters,
         );
         this.miniMapCameraParameters = merge(
             {},
             cameraData,
-            miniMapCameraParameters
+            miniMapCameraParameters,
         );
 
         // Set the game state
@@ -574,7 +575,7 @@ export default class ThumbRaiser {
             1.0,
             0.0,
             0.0,
-            1.0
+            1.0,
         );
 
         // Create a 3D scene (the game itself)
@@ -584,7 +585,7 @@ export default class ThumbRaiser {
         this.cubeTexture = new CubeTexture(
             this.cubeTexturesParameters.skyboxes[
                 this.cubeTexturesParameters.selected
-            ]
+            ],
         );
 
         // Create the maze
@@ -597,7 +598,7 @@ export default class ThumbRaiser {
         // Create the lights
         this.ambientLight = new AmbientLight(this.ambientLightParameters);
         this.directionalLight = new DirectionalLight(
-            this.directionalLightParameters
+            this.directionalLightParameters,
         );
         this.spotLight = new SpotLight(this.spotLightParameters);
         this.flashLight = new FlashLight(this.flashLightParameters);
@@ -608,10 +609,10 @@ export default class ThumbRaiser {
         // Create the cameras corresponding to the four different views: fixed view, first-person view, third-person view and top view
         this.fixedViewCamera = new Camera(this.fixedViewCameraParameters);
         this.firstPersonViewCamera = new Camera(
-            this.firstPersonViewCameraParameters
+            this.firstPersonViewCameraParameters,
         );
         this.thirdPersonViewCamera = new Camera(
-            this.thirdPersonViewCameraParameters
+            this.thirdPersonViewCameraParameters,
         );
         this.topViewCamera = new Camera(this.topViewCameraParameters);
 
@@ -650,7 +651,7 @@ export default class ThumbRaiser {
         this.resetAll = document.getElementById('reset-all')!;
         this.mouseHelpPanel = document.getElementById('mouse-help-panel')!;
         this.keyboardHelpPanel = document.getElementById(
-            'keyboard-help-panel'
+            'keyboard-help-panel',
         )!;
         this.creditsPanel = document.getElementById('credits-panel')!;
         this.subwindowsPanel = document.getElementById('subwindows-panel')!;
@@ -713,21 +714,29 @@ export default class ThumbRaiser {
                 }/buildings/${building}/floors/${floornumber}/map`;
 
                 this.enterPassage(url);
-            }
+            },
         );
 
         Dispatcher.subscribe(
             'enter-elevator',
-            (b: string, f: number, fs: number[]) => this.enterElevator(b, f, fs)
+            (b: string, f: number, fs: number[]) =>
+                this.enterElevator(b, f, fs),
         );
         Dispatcher.subscribe('exit-elevator', () => this.exitElevator());
+
+        Dispatcher.subscribe(
+            'enter-passage',
+            (b1: { b: string; f: number }, b2: { b: string; f: number }) =>
+                this.passage(b1, b2),
+        );
+        Dispatcher.subscribe('exit-passage', () => this.exitPassage());
     }
     private elevatorMenu?: ElevatorMenu;
 
     private enterElevator(
         building: string,
         floor: number,
-        elevatorFloors: number[]
+        elevatorFloors: number[],
     ) {
         const servedFloors = elevatorFloors.filter((f) => f !== floor);
 
@@ -739,12 +748,26 @@ export default class ThumbRaiser {
         this.elevatorMenu?.hide();
     }
 
+    private passageMenu?: PassageMenu;
+
+    private passage(
+        b1: { b: string; f: number },
+        b2: { b: string; f: number },
+    ) {
+        this.passageMenu = new PassageMenu(b1, b2);
+        this.passageMenu.show();
+    }
+
+    private exitPassage() {
+        this.passageMenu?.hide();
+    }
+
     buildHelpPanels() {
         // Mouse help panel is static; so, it doesn't need to be built
 
         // Keyboard help panel
         const table = document.getElementById(
-            'keyboard-help-table'
+            'keyboard-help-table',
         )! as HTMLTableElement;
         let i = 0;
         for (const key in this.player.keyCodes) {
@@ -758,7 +781,7 @@ export default class ThumbRaiser {
 
     buildCreditsPanel() {
         const table = document.getElementById(
-            'credits-table'
+            'credits-table',
         )! as HTMLTableElement;
         while (table.rows.length > 1) {
             table.deleteRow(-1);
@@ -918,7 +941,7 @@ export default class ThumbRaiser {
                 mouse.camera = camera;
                 this.getPointedFrame(mouse, camera);
                 this.setCursor(
-                    this.mouse.frame == 'none' ? 'drag' : this.mouse.frame
+                    this.mouse.frame == 'none' ? 'drag' : this.mouse.frame,
                 );
                 return;
             }
@@ -1122,7 +1145,7 @@ export default class ThumbRaiser {
             if (event.code == this.player.keyCodes.realisticViewMode && state) {
                 // Stabilized view mode / realistic view mode
                 this.setRealisticViewMode(
-                    !this.realisticViewMode.checkBox.checked
+                    !this.realisticViewMode.checkBox.checked,
                 );
             } else if (event.code == this.player.keyCodes.fixedView && state) {
                 // Display / select / hide fixed view
@@ -1155,7 +1178,7 @@ export default class ThumbRaiser {
             ) {
                 // Display / hide user interface
                 this.setUserInterfaceVisibility(
-                    !this.userInterface.checkBox.checked
+                    !this.userInterface.checkBox.checked,
                 );
             } else if (event.code == this.player.keyCodes.help && state) {
                 // Display / hide help
@@ -1168,7 +1191,7 @@ export default class ThumbRaiser {
                 this.collisionDetectionParameters.boundingVolumes.visible =
                     !this.collisionDetectionParameters.boundingVolumes.visible;
                 this.setBoundingVolumesVisibility(
-                    this.collisionDetectionParameters.boundingVolumes.visible
+                    this.collisionDetectionParameters.boundingVolumes.visible,
                 );
             } else if (
                 event.code == this.player.keyCodes.ambientLight &&
@@ -1229,7 +1252,7 @@ export default class ThumbRaiser {
                 // Store initial mouse position in window coordinates (mouse coordinate system: origin in the top-left corner; window coordinate system: origin in the bottom-left corner)
                 this.mouse.initialPosition = new THREE.Vector2(
                     event.clientX,
-                    window.innerHeight - event.clientY - 1
+                    window.innerHeight - event.clientY - 1,
                 );
                 if (this.mouse.camera != 'none') {
                     // A viewport is being pointed
@@ -1279,7 +1302,7 @@ export default class ThumbRaiser {
                 // Store current mouse position in window coordinates (mouse coordinate system: origin in the top-left corner; window coordinate system: origin in the bottom-left corner)
                 this.mouse.currentPosition = new THREE.Vector2(
                     event.clientX,
-                    window.innerHeight - event.clientY - 1
+                    window.innerHeight - event.clientY - 1,
                 );
                 if (event.buttons == 0) {
                     // No button down
@@ -1301,7 +1324,7 @@ export default class ThumbRaiser {
                                 // Resizing the viewport
                                 this.mouse.camera.resizeViewport(
                                     this.mouse.frame,
-                                    this.mouse
+                                    this.mouse,
                                 );
                             }
                         } else {
@@ -1310,8 +1333,8 @@ export default class ThumbRaiser {
                                 // Orbiting around a target
                                 this.mouse.camera.updateOrientation(
                                     mouseIncrement.multiply(
-                                        new THREE.Vector2(-0.5, 0.5)
-                                    )
+                                        new THREE.Vector2(-0.5, 0.5),
+                                    ),
                                 );
                                 this.updateViewsPanel();
                             } else {
@@ -1329,10 +1352,10 @@ export default class ThumbRaiser {
                                         (this.miniMapCamera.orthographic.top -
                                             this.miniMapCamera.orthographic
                                                 .bottom)) /
-                                        this.miniMapCamera.orthographic.zoom
+                                        this.miniMapCamera.orthographic.zoom,
                                 );
                                 this.miniMapCamera.updateTarget(
-                                    targetIncrement
+                                    targetIncrement,
                                 );
                             }
                         }
@@ -1362,7 +1385,7 @@ export default class ThumbRaiser {
             // Store current mouse position in window coordinates (mouse coordinate system: origin in the top-left corner; window coordinate system: origin in the bottom-left corner)
             this.mouse.currentPosition = new THREE.Vector2(
                 event.clientX,
-                window.innerHeight - event.clientY - 1
+                window.innerHeight - event.clientY - 1,
             );
             // Reset the cursor
             this.getPointedViewport(this.mouse);
@@ -1417,17 +1440,17 @@ export default class ThumbRaiser {
                         this.firstPersonViewCamera,
                         this.thirdPersonViewCamera,
                         this.topViewCamera,
-                    ][this.view.options.selectedIndex]
+                    ][this.view.options.selectedIndex],
                 );
                 break;
             case 'projection':
                 this.activeViewCamera.activeProjection.remove(
-                    this.audio.listener
+                    this.audio.listener,
                 );
                 this.activeViewCamera.setActiveProjection(
                     ['perspective', 'orthographic'][
                         this.projection.options.selectedIndex
-                    ]
+                    ],
                 );
                 this.activeViewCamera.activeProjection.add(this.audio.listener);
                 break;
@@ -1442,13 +1465,13 @@ export default class ThumbRaiser {
                             this.activeViewCamera.setOrientation(
                                 new Orientation(
                                     this.horizontal.value,
-                                    this.vertical.value
-                                )
+                                    this.vertical.value,
+                                ),
                             );
                             break;
                         case 'distance':
                             this.activeViewCamera.setDistance(
-                                this.distance.value
+                                this.distance.value,
                             );
                             break;
                         case 'zoom':
@@ -1521,15 +1544,15 @@ export default class ThumbRaiser {
         this.thirdPersonViewCamera.setOrientation(
             new Orientation(
                 -180.0,
-                this.thirdPersonViewCamera.initialOrientation.v
-            )
+                this.thirdPersonViewCamera.initialOrientation.v,
+            ),
         );
         this.thirdPersonViewCamera.setDistance(
-            this.thirdPersonViewCamera.initialDistance
+            this.thirdPersonViewCamera.initialDistance,
         );
         this.thirdPersonViewCamera.setZoom(2.0);
         this.thirdPersonViewCamera.setViewport(
-            new THREE.Vector4(0.0, 0.0, 1.0, 1.0)
+            new THREE.Vector4(0.0, 0.0, 1.0, 1.0),
         );
         // Make the viewport visible and set it as the topmost viewport
         this.thirdPersonViewCamera.checkBox.checked = true;
@@ -1667,7 +1690,7 @@ export default class ThumbRaiser {
                                 clip.source.position.set(
                                     position[0],
                                     position[1],
-                                    position[2]
+                                    position[2],
                                 );
                             }
                         } else if (
@@ -1685,7 +1708,7 @@ export default class ThumbRaiser {
                                 clip.source.position.set(
                                     position.x,
                                     position.y,
-                                    position.z
+                                    position.z,
                                 );
                             }
                         }
@@ -1699,7 +1722,7 @@ export default class ThumbRaiser {
                             clip.source.position.set(
                                 this.maze.initialPosition.x,
                                 this.maze.initialPosition.y,
-                                this.maze.initialPosition.z
+                                this.maze.initialPosition.z,
                             );
                         } else if (clip.position == 'player') {
                             // Positional audio object (player current position)
@@ -1727,7 +1750,7 @@ export default class ThumbRaiser {
                 this.player.position.set(
                     this.maze.initialPosition.x,
                     this.maze.initialPosition.y,
-                    this.maze.initialPosition.z
+                    this.maze.initialPosition.z,
                 );
                 this.player.direction = this.maze.initialDirection;
 
@@ -1744,48 +1767,48 @@ export default class ThumbRaiser {
                     this.doors[i - 1].position.set(
                         position.x,
                         position.y,
-                        position.z
+                        position.z,
                     );
 
                     switch (e.orientation) {
                         case 'E':
                             this.doors[i - 1].rotateY(
-                                THREE.MathUtils.degToRad(180)
+                                THREE.MathUtils.degToRad(180),
                             );
                             this.doors[i - 1].position.set(
                                 position.x - 0.5,
                                 position.y,
-                                position.z
+                                position.z,
                             );
                             break;
                         case 'N':
                             this.doors[i - 1].rotateY(
-                                THREE.MathUtils.degToRad(270)
+                                THREE.MathUtils.degToRad(270),
                             );
                             this.doors[i - 1].position.set(
                                 position.x,
                                 position.y,
-                                position.z - 0.5
+                                position.z - 0.5,
                             );
                             break;
                         case 'W':
                             this.doors[i - 1].rotateY(
-                                THREE.MathUtils.degToRad(0)
+                                THREE.MathUtils.degToRad(0),
                             );
                             this.doors[i - 1].position.set(
                                 position.x - 0.5,
                                 position.y,
-                                position.z
+                                position.z,
                             );
                             break;
                         case 'S':
                             this.doors[i - 1].rotateY(
-                                THREE.MathUtils.degToRad(90)
+                                THREE.MathUtils.degToRad(90),
                             );
                             this.doors[i - 1].position.set(
                                 position.x,
                                 position.y,
-                                position.z - 0.5
+                                position.z - 0.5,
                             );
                     }
                 });
@@ -1812,96 +1835,96 @@ export default class ThumbRaiser {
 
                 // Register the event handler to be called on window resize
                 window.addEventListener('resize', (event) =>
-                    this.windowResize(event)
+                    this.windowResize(event),
                 );
 
                 // Register the event handler to be called on key down
                 document.addEventListener('keydown', (event) =>
-                    this.keyChange(event, true)
+                    this.keyChange(event, true),
                 );
 
                 // Register the event handler to be called on key release
                 document.addEventListener('keyup', (event) =>
-                    this.keyChange(event, false)
+                    this.keyChange(event, false),
                 );
 
                 // Register the event handler to be called on mouse down
                 document.addEventListener('mousedown', (event) =>
-                    this.mouseDown(event)
+                    this.mouseDown(event),
                 );
 
                 // Register the event handler to be called on mouse move
                 document.addEventListener('mousemove', (event) =>
-                    this.mouseMove(event)
+                    this.mouseMove(event),
                 );
 
                 // Register the event handler to be called on mouse up
                 document.addEventListener('mouseup', (event) =>
-                    this.mouseUp(event)
+                    this.mouseUp(event),
                 );
 
                 // Register the event handler to be called on mouse wheel
                 this.renderer.domElement.addEventListener('wheel', (event) =>
-                    this.mouseWheel(event)
+                    this.mouseWheel(event),
                 );
 
                 // Register the event handler to be called on context menu
                 document.addEventListener('contextmenu', (event) =>
-                    this.contextMenu(event)
+                    this.contextMenu(event),
                 );
 
                 // Register the event handler to be called on select, input number, or input checkbox change
                 this.view.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.projection.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.horizontal.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.vertical.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.distance.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.zoom.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.fixedViewCamera.checkBox.addEventListener(
                     'change',
-                    (event) => this.elementChange(event)
+                    (event) => this.elementChange(event),
                 );
                 this.firstPersonViewCamera.checkBox.addEventListener(
                     'change',
-                    (event) => this.elementChange(event)
+                    (event) => this.elementChange(event),
                 );
                 this.thirdPersonViewCamera.checkBox.addEventListener(
                     'change',
-                    (event) => this.elementChange(event)
+                    (event) => this.elementChange(event),
                 );
                 this.topViewCamera.checkBox.addEventListener(
                     'change',
-                    (event) => this.elementChange(event)
+                    (event) => this.elementChange(event),
                 );
                 this.statistics.checkBox.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
                 this.userInterface.checkBox.addEventListener(
                     'change',
-                    (event) => this.elementChange(event)
+                    (event) => this.elementChange(event),
                 );
                 this.help.checkBox.addEventListener('change', (event) =>
-                    this.elementChange(event)
+                    this.elementChange(event),
                 );
 
                 // Register the event handler to be called on input button click
                 this.reset.addEventListener('click', (event) =>
-                    this.buttonClick(event)
+                    this.buttonClick(event),
                 );
                 this.resetAll.addEventListener('click', (event) =>
-                    this.buttonClick(event)
+                    this.buttonClick(event),
                 );
 
                 // Create the clock
@@ -1951,8 +1974,8 @@ export default class ThumbRaiser {
                             new THREE.Vector3(
                                 coveredDistance * Math.sin(directionRad),
                                 0.0,
-                                coveredDistance * Math.cos(directionRad)
-                            )
+                                coveredDistance * Math.cos(directionRad),
+                            ),
                         );
                     } else if (this.player.keyStates.forward) {
                         playerMoved = true;
@@ -1960,8 +1983,8 @@ export default class ThumbRaiser {
                             new THREE.Vector3(
                                 coveredDistance * Math.sin(directionRad),
                                 0.0,
-                                coveredDistance * Math.cos(directionRad)
-                            )
+                                coveredDistance * Math.cos(directionRad),
+                            ),
                         );
                     }
                     if (
@@ -1972,7 +1995,7 @@ export default class ThumbRaiser {
                                 'obb-aabb'
                                 ? this.player.radius
                                 : this.player.halfSize,
-                            directionRad - this.player.defaultDirection
+                            directionRad - this.player.defaultDirection,
                         )
                     ) {
                         this.audio.play(this.audio.deathClips, false);
@@ -1997,12 +2020,12 @@ export default class ThumbRaiser {
                         if (playerMoved) {
                             this.animations.fadeToAction(
                                 this.player.shiftKey ? 'Running' : 'Walking',
-                                0.2
+                                0.2,
                             );
                             this.player.position.set(
                                 position.x,
                                 position.y,
-                                position.z
+                                position.z,
                             );
                         } else {
                             if (this.animations.idleTimeOut()) {
@@ -2013,7 +2036,7 @@ export default class ThumbRaiser {
                                 'Idle',
                                 this.animations.activeName != 'Death'
                                     ? 0.2
-                                    : 0.6
+                                    : 0.6,
                             );
                         }
                     }
@@ -2022,7 +2045,8 @@ export default class ThumbRaiser {
                         directionRad - this.player.defaultDirection;
 
                     this.maze.foundDoor(position, this.doors, this);
-                    this.maze.foundPassage(position, this);
+                    // this.maze.foundPassage(position, this);
+                    this.maze.passage(position);
                     this.maze.foundElevator(position);
                 }
             }
@@ -2033,14 +2057,14 @@ export default class ThumbRaiser {
             let target = new THREE.Vector3(
                 this.player.position.x,
                 this.player.position.y + this.player.face.worldPosition.y,
-                this.player.position.z
+                this.player.position.z,
             );
             this.topViewCamera.playerOrientation = orientation;
             this.topViewCamera.setTarget(target);
             this.thirdPersonViewCamera.playerOrientation = orientation;
             this.thirdPersonViewCamera.setTarget(target);
             const directionRad = THREE.MathUtils.degToRad(
-                this.player.direction
+                this.player.direction,
             );
             if (!this.realisticViewMode.checkBox.checked) {
                 this.firstPersonViewCamera.playerOrientation = orientation;
@@ -2051,7 +2075,7 @@ export default class ThumbRaiser {
                         this.player.radius * Math.sin(directionRad),
                     this.player.position.y + this.player.size.y,
                     this.player.position.z +
-                        this.player.radius * Math.cos(directionRad)
+                        this.player.radius * Math.cos(directionRad),
                 );
                 this.flashLight.setTarget(target);
             } else {
@@ -2064,8 +2088,8 @@ export default class ThumbRaiser {
                     new THREE.Vector3(
                         this.player.radius * Math.sin(directionRad),
                         this.player.size.y - this.player.face.worldPosition.y,
-                        this.player.radius * Math.cos(directionRad)
-                    )
+                        this.player.radius * Math.cos(directionRad),
+                    ),
                 );
                 this.flashLight.setTarget(target);
             }
@@ -2088,13 +2112,13 @@ export default class ThumbRaiser {
                     camera.viewport.x,
                     camera.viewport.y,
                     camera.viewport.width,
-                    camera.viewport.height
+                    camera.viewport.height,
                 );
                 if (this.cubeTexture.name == 'None' || this.fog.enabled) {
                     this.background.children[0].material.color.set(
                         this.fog.enabled
                             ? this.fog.color
-                            : camera.backgroundColor
+                            : camera.backgroundColor,
                     );
                     this.renderer.render(this.background, this.camera2D); // Render the background
                 }
@@ -2114,19 +2138,19 @@ export default class ThumbRaiser {
                     this.miniMapCamera.viewport.x,
                     this.miniMapCamera.viewport.y,
                     this.miniMapCamera.viewport.width,
-                    this.miniMapCamera.viewport.height
+                    this.miniMapCamera.viewport.height,
                 );
                 this.background.children[0].material.color.set(
-                    this.miniMapCamera.backgroundColor
+                    this.miniMapCamera.backgroundColor,
                 );
                 this.renderer.render(this.background, this.camera2D); // Render the background
                 this.renderer.clearDepth();
                 this.renderer.render(
                     this.scene,
-                    this.miniMapCamera.activeProjection
+                    this.miniMapCamera.activeProjection,
                 ); // Render the scene
                 this.frame.children[0].material.color.set(
-                    this.miniMapCamera.frameColor
+                    this.miniMapCamera.frameColor,
                 );
                 this.renderer.render(this.frame, this.camera2D); // Render the frame
             }
