@@ -366,7 +366,7 @@ export default class Maze extends THREE.Group {
     }
 
     private _lastPassage?: THREE.Vector3; // HACK
-    passage(position: THREE.Vector3) {
+    foundPassage(position: THREE.Vector3) {
         const [row, col] = this.cartesianToCell(position);
 
         if (!!this._lastPassage) {
@@ -398,51 +398,6 @@ export default class Maze extends THREE.Group {
 
         this._lastPassage = position;
     }
-
-    // nearPassages: Set<string> = new Set();
-    // foundPassage(position: THREE.Vector3, thumbRaiser: ThumbRaiser) {
-    //     const indices = this.cartesianToCell(position);
-    //     const row = indices[0];
-    //     const column = indices[1];
-    //
-    //     this.passages.forEach((p) => {
-    //         let passagePosition: THREE.Vector3 = new THREE.Vector3();
-    //         passagePosition = this.cellToCartesian([p.x, p.y]);
-    //
-    //         const passageIndices = this.cartesianToCell(passagePosition);
-    //         const url = `http://localhost:4000/api/buildings/${p.to.building}/floors/${p.to.floor}/map`;
-    //
-    //         if (
-    //             // make this values more realistic
-    //             (passageIndices[0] == row - 0.5 ||
-    //                 passageIndices[0] == row ||
-    //                 passageIndices[0] == row + 0.5) &&
-    //             (passageIndices[1] == column - 0.5 ||
-    //                 passageIndices[1] == column ||
-    //                 passageIndices[1] == column + 0.5)
-    //         ) {
-    //             this.checkFloorMap(url).then((m) => {
-    //                 if (m != '' && m != null && m != undefined) {
-    //                     if (!this.nearPassages.has(url)) {
-    //                         //TODO: make this message more descriptive
-    //                         alert('Success!');
-    //                         this.nearPassages.add(url);
-    //                     }
-    //                     thumbRaiser.enterPassage(url);
-    //                 } else {
-    //                     if (!this.nearPassages.has(url)) {
-    //                         alert('Cannot go through this passage');
-    //                         this.nearPassages.add(url);
-    //                     }
-    //                 }
-    //             });
-    //         } else {
-    //             if (this.nearPassages.has(url)) {
-    //                 this.nearPassages.delete(url);
-    //             }
-    //         }
-    //     });
-    // }
 
     private _lastPos?: THREE.Vector3; // HACK
     foundElevator(position: THREE.Vector3) {

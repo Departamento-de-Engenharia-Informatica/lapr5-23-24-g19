@@ -714,8 +714,8 @@ export default class ThumbRaiser {
                 const url = `${import.meta.env.VITE_MDR_URL
                     }/buildings/${building}/floors/${floornumber}/map`;
 
-                this.enterPassage(url);
-            }
+                this.changeMap(url);
+            },
         );
 
         Dispatcher.subscribe(
@@ -727,7 +727,7 @@ export default class ThumbRaiser {
         Dispatcher.subscribe(
             'enter-passage',
             (b1: { b: string; f: number }, b2: { b: string; f: number }) =>
-                this.passage(b1, b2),
+                this.enterPassage(b1, b2),
         );
         Dispatcher.subscribe('exit-passage', () => this.exitPassage());
     }
@@ -750,7 +750,7 @@ export default class ThumbRaiser {
 
     private passageMenu?: PassageMenu;
 
-    private passage(
+    private enterPassage(
         b1: { b: string; f: number },
         b2: { b: string; f: number },
     ) {
@@ -947,7 +947,7 @@ export default class ThumbRaiser {
                     // Find tiles intersected by the picking ray
                     // console.log("THIS SCENE:", this.scene.children[8].children)
                     const intersects = raycaster.intersectObjects(this.scene.children[8].children, true);
-            
+
                     if (intersects.length > 0 && intersects[0].object.visible) {
                         const intersectedObject = intersects[0].object;
                         // Find the nearest parent of type Door
@@ -1686,7 +1686,7 @@ export default class ThumbRaiser {
     }
 
     // FIXME: this should receive building+floornumber only
-    enterPassage(url: string) {
+    changeMap(url: string) {
         const mazeParams = {
             url: url,
             designCredits:
@@ -2049,8 +2049,8 @@ export default class ThumbRaiser {
                     this.player.rotation.y =
                         directionRad - this.player.defaultDirection;
 
-
-                    this.maze.foundDoor(position, this.maze.doors, this);
+                    this.maze.foundDoor(position, this.doors, this);
+                    this.maze.foundPassage(position);
                     this.maze.foundElevator(position);
                 }
             }

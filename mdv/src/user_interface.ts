@@ -70,7 +70,7 @@ export default class UserInterface extends GUI {
                 const building = optionsBuildings.getValue();
                 const floor = optionsFloors.getValue();
                 if (newMap !== '' && building && floor) {
-                    thumbRaiser.enterPassage(newMap)
+                    thumbRaiser.changeMap(newMap);
                 } else {
                     alert('Both building and floor should be selected');
                 }
