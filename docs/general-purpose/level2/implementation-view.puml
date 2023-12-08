@@ -14,28 +14,35 @@ skinparam component {
 
 package system {
     package "UI" {
-
-
     }
 
     package "Planning" {
-
     }
 
     package "MDV" {
-
     }
 
     package "MDR" {
-
     }
 
-    "UI" .right.> "Planning"
-    "UI" .right.> "MDV"
-    "UI" .right.> "MDR"
+    package "MDT" {
+    }
 
-    "Planning" .down.> "MDV"
+    "UI" .right.> "MDR"
+    "UI" .right.> "MDV"
     "MDV" .down.> "MDR"
+    "MDR" .right.> "MDT"
+    "MDT" .right.> "Planning"
+    "MDR" ..> "Planning"
+    "Planning" ..> "MDR"
 }
+
+' 
+' Regarding this implementation view, we were unsure between connecting the MDR directly 
+' to Planning or not. There are pros and cons in both approaches: When not connecting the 
+' MDR to Planning, we reduce the coupling but the system becomes harder to scale and 
+' some use cases that do not require the MDT are now dependent on the MDT. 
+' On the other hand, if we do connect the MDR directly to planning there will be more coupling
+' and a circular dependency.
 
 @enduml
