@@ -31,3 +31,5 @@ coverage/
 # Other
 
 docs/**/*.png
+mdt/bin/
+mdt/obj/
