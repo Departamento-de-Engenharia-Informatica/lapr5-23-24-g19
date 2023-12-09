@@ -21,4 +21,8 @@ elev_cost(Cost) :-
     getenv('ELEV_COST', Cost), !;
     Cost = 30.
 
+task_sequence_alg(Alg) :-
+    getenv('TASK_SEQ_ALGORITHM', Alg), !;
+    Alg = 'permtutations'.
+
 % vim: ft=prolog

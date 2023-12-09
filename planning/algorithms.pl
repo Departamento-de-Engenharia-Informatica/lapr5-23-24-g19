@@ -2,7 +2,8 @@
 
 :- module(algorithms, [
     criteria/1,
-    compute_paths/4
+    compute_paths/4,
+    compute_path/4
 ]).
 
 
@@ -70,7 +71,7 @@ compute_paths(Orig, Dest, Criterion, Paths) :-
     resolve_criterion(Criterion, Crit),
 
     % TODO: environment variable
-    findnsols(30, Ligs, compute_path(Orig, Dest, Ligs, Cost), LLigs),
+    findnsols(30, Ligs, compute_path(Orig, Dest, Ligs, _Cost), LLigs),
 
     predsort(Crit, LLigs, Paths).
 
@@ -87,8 +88,6 @@ absolute_path(Building, Floor, Relative, Absolute) :-
 edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
 
 
-% FIXME: accumutate Cost
-
 compute_path_aux((B, F, X, Y), (B, F, X, Y), [], Acc, Acc):- !.
 % same building, same floor
 compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
@@ -98,8 +97,8 @@ compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
     edge_wrap(B, F, Wrapper),
 
     walk(cell(X1, Y1), cell(X2, Y2), Wrapper, PathRelative, CostPath),
-    
-    NewAcc is Acc + CostPath,
+
+    Cost is Acc + CostPath,
 
     absolute_path(B, F, PathRelative, Path).
 
@@ -120,7 +119,7 @@ compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path], Acc, Cost) :
     % FIXME: find coords of elevator in the other floor
     Xf2 = XElev, Yf2 = YElev,
 
-    elev_cost(ElevCost)
+    elev_cost(ElevCost),
     NewAcc is Acc + CostPath + ElevCost,
 
     append(CompAbs, [elev(B, F1, F2)], CompFull),
@@ -148,9 +147,9 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     loadmap(B2, Fb2),
     passage(B2, Fb2, Xb2, Yb2, B1, F1),
 
-    passage_cost(PassCost)
+    passage_cost(PassCost),
     NewAcc is Acc + CostPath + PassCost,
-    
+
     compute_path_aux((B2, Fb2, Xb2, Yb2), (B2, F2, X2, Y2), Path, NewAcc, Cost).
 
 
@@ -167,8 +166,8 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     % catch the elevator to another floor
     % FIXME: find coords of elevator in the other floor
     Xf2 = XElev, Yf2 = YElev,
-    
-    elev_cost(ElevCost)
+
+    elev_cost(ElevCost),
     NewAcc is Acc + CostPath + ElevCost,
 
     append(CompAbs, [elev(B1, F1, Fconn)], CompFull),
@@ -190,10 +189,10 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
 
     loadmap(B3, F3),
     passage(B3, F3, Xb3, Yb3, B1, F1),
-    
-    passage_cost(PassCost)
+
+    passage_cost(PassCost),
     NewAcc is Acc + CostPath + PassCost,
-    
+
     compute_path_aux((B3, F3, Xb3, Yb3), (B2, F2, X2, Y2), Path, NewAcc, Cost).
 
 

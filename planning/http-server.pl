@@ -20,14 +20,17 @@
 :- use_module(library(dicts)).
 
 
+:- use_module('util/functional', [ map/3 ]).
+
 :- use_module(algorithms, [
     criteria/1,
     compute_paths/4
 ]).
 
-:- use_module('dto/path-segment', [ segments_to_dto/2 ]).
+:- use_module('task-sequencer/sequencer', [ sequencer/2 ]).
 
-:- use_module('util/functional', [ map/3 ]).
+:- use_module('dto/path-segment', [ segments_to_dto/2 ]).
+:- use_module('dto/task-sequence', [ sequence_to_dto/2 ]).
 
 %%%%%%
 
@@ -73,3 +76,21 @@ get_paths(Request) :-
     map(path_segment_dto:segments_to_dto, Paths, PathsDTO),
 
     reply_json_dict(PathsDTO).
+
+
+
+:- http_handler('/api/task-sequence', get_sequence, [method(*)]).
+
+get_sequence(Request) :-
+    http_read_json_dict(Request, Body),
+
+    % TODO
+    TaskList = Body.tasks,
+
+
+    Tasks = [],
+
+    sequencer(Tasks, Order),
+    sequence_to_dto(Order, DTO),
+
+    reply_json_dict(DTO).
