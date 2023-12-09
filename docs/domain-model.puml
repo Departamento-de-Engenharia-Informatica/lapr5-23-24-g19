@@ -67,6 +67,25 @@ skinparam package {
     }
     note left: in order to fulfill the client's needs,\ncurrently there will be 2 types of tasks:\nSurveillance and deliveries, but it can scale as needed
 
+
+    class Role{
+        -name
+    }
+
+    class Client{
+        -name
+        -email
+        -phoneNumber
+        -nif
+    }
+
+    class BackOfficeUser{
+        -name
+        -email
+        -phoneNumber
+    }
+
+
     'ROBOTS
     Robot "*" --> "1" RobotType
 
@@ -82,7 +101,17 @@ skinparam package {
     Passage "1" ---> "2" Floor : connects
     Floor "1" ---> "0..*" Room
 
+
+    'USERS
+    Client --> "1" Role : has
+    BackOfficeUser --> "1" Role : has
+
+
+
+
     }
+
+
 
 
 @enduml
