@@ -70,12 +70,12 @@ compute_paths(Orig, Dest, Criterion, Paths) :-
     resolve_criterion(Criterion, Crit),
 
     % TODO: environment variable
-    findnsols(30, Ligs, compute_path(Orig, Dest, Ligs), LLigs),
+    findnsols(30, Ligs, compute_path(Orig, Dest, Ligs, Cost), LLigs),
 
     predsort(Crit, LLigs, Paths).
 
-compute_path(Orig, Dest, Path) :-
-    compute_path_aux(Orig, Dest, NestedPath),
+compute_path(Orig, Dest, Path, Cost) :-
+    compute_path_aux(Orig, Dest, NestedPath, 0, Cost),
     flatten(NestedPath, Path).
 
 
@@ -89,19 +89,22 @@ edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
 
 % FIXME: accumutate Cost
 
-compute_path_aux((B, F, X, Y), (B, F, X, Y), []):- !.
+compute_path_aux((B, F, X, Y), (B, F, X, Y), [], Acc, Acc):- !.
 % same building, same floor
-compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path) :-
+compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
     loadmap(B, F),
 
     % lambda wrapper around edge
     edge_wrap(B, F, Wrapper),
 
-    walk(cell(X1, Y1), cell(X2, Y2), Wrapper, PathRelative, _Cost),
+    walk(cell(X1, Y1), cell(X2, Y2), Wrapper, PathRelative, CostPath),
+    
+    NewAcc is Acc + CostPath,
+
     absolute_path(B, F, PathRelative, Path).
 
 % same building, different floor (catch elevator)
-compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path]) :-
+compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B, F1),
 
     elevator(B, F1, XElev, YElev, ElevFloors),
@@ -110,20 +113,23 @@ compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path]) :-
     edge_wrap(B, F1, Wrapper),
 
     % walk the floor until we reach the elevator
-    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Component, _Cost),
+    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Component, CostPath),
     absolute_path(B, F1, Component, CompAbs),
 
     % catch the elevator to another floor
     % FIXME: find coords of elevator in the other floor
     Xf2 = XElev, Yf2 = YElev,
 
+    elev_cost(ElevCost)
+    NewAcc is Acc + CostPath + ElevCost,
+
     append(CompAbs, [elev(B, F1, F2)], CompFull),
 
-    compute_path_aux((B, F2, Xf2, Yf2), (B, F2, X2, Y2), Path).
+    compute_path_aux((B, F2, Xf2, Yf2), (B, F2, X2, Y2), Path, NewAcc, Cost).
 
 % different building, different floor
 % try passage to B2
-compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
+compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B1, F1),
     % walk the floor until we reach the passage
     % go to the other building
@@ -133,7 +139,7 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
 
     edge_wrap(B1, F1, Wrapper),
 
-    walk(cell(X1, Y1), cell(Xb1, Yb1), Wrapper, Component, _Cost),
+    walk(cell(X1, Y1), cell(Xb1, Yb1), Wrapper, Component, CostPath),
     absolute_path(B1, F1, Component, CompAbs),
 
     append(CompAbs, [pass(B1, F2, B2, F2)], CompFull),
@@ -141,42 +147,53 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
     % get coords from the other side, Xb2 & Yb2
     loadmap(B2, Fb2),
     passage(B2, Fb2, Xb2, Yb2, B1, F1),
-    compute_path_aux((B2, Fb2, Xb2, Yb2), (B2, F2, X2, Y2), Path).
+
+    passage_cost(PassCost)
+    NewAcc is Acc + CostPath + PassCost,
+    
+    compute_path_aux((B2, Fb2, Xb2, Yb2), (B2, F2, X2, Y2), Path, NewAcc, Cost).
 
 
 % different building, different floor
 % try random elevator
-compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
+compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     elevator(B1, F1, XElev, YElev, ElevFloors),
     member(Fconn, ElevFloors),
 
     edge_wrap(B1, F1, Wrapper),
-    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, _Cost),
+    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, CostPath, NewAcc, Cost),
     absolute_path(B1, F1, Comp, CompAbs),
 
     % catch the elevator to another floor
     % FIXME: find coords of elevator in the other floor
     Xf2 = XElev, Yf2 = YElev,
+    
+    elev_cost(ElevCost)
+    NewAcc is Acc + CostPath + ElevCost,
 
     append(CompAbs, [elev(B1, F1, Fconn)], CompFull),
-    compute_path_aux((B1, Fconn, Xf2, Yf2), (B2, F2, X2, Y2), Path).
+    compute_path_aux((B1, Fconn, Xf2, Yf2), (B2, F2, X2, Y2), Path, NewAcc, Cost).
 
 
 % different building, different floor
 % try random passage
-compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path]) :-
+compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B1, F1),
 
     passage(B1, F1, Xf1, Yf1, B3, F3),
 
     edge_wrap(B1, F1, Wrapper),
-    walk(cell(X1, Y1), cell(Xf1, Yf1), Wrapper, Comp, _Cost),
+    walk(cell(X1, Y1), cell(Xf1, Yf1), Wrapper, Comp, CostPath),
     absolute_path(B1, F1, Comp, CompAbs),
 
     append(CompAbs, [pass(B1, F1, B3, F3)], CompFull),
 
     loadmap(B3, F3),
     passage(B3, F3, Xb3, Yb3, B1, F1),
-    compute_path_aux((B3, F3, Xb3, Yb3), (B2, F2, X2, Y2), Path).
+    
+    passage_cost(PassCost)
+    NewAcc is Acc + CostPath + PassCost,
+    
+    compute_path_aux((B3, F3, Xb3, Yb3), (B2, F2, X2, Y2), Path, NewAcc, Cost).
 
 
