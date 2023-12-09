@@ -33,3 +33,5 @@ coverage/
 docs/**/*.png
 mdt/bin/
 mdt/obj/
+
+lapr5.sln
