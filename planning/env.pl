@@ -1,7 +1,8 @@
 
 :- module(env, [
     loader_ttl/1,
-    mdr_url/1
+    mdr_url/1,
+    task_sequence_alg/1
 ]).
 
 

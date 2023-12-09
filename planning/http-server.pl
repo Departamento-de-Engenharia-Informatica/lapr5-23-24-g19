@@ -30,7 +30,7 @@
 :- use_module('task-sequencer/sequencer', [ sequencer/2 ]).
 
 :- use_module('dto/path-segment', [ segments_to_dto/2 ]).
-:- use_module('dto/task-sequence', [ sequence_to_dto/2 ]).
+:- use_module('dto/task-sequence', [ sequence_to_dto/2, dto_to_sequence/2 ]).
 
 %%%%%%
 
@@ -84,11 +84,7 @@ get_paths(Request) :-
 get_sequence(Request) :-
     http_read_json_dict(Request, Body),
 
-    % TODO
-    TaskList = Body.tasks,
-
-
-    Tasks = [],
+    dto_to_sequence(Body.tasks, Tasks),
 
     sequencer(Tasks, Order),
     sequence_to_dto(Order, DTO),
