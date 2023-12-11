@@ -931,6 +931,7 @@ export default class ThumbRaiser {
         const cameras = (
             this.miniMapCamera.checkBox.checked ? [this.miniMapCamera] : []
         ).concat(this.visibleViewportCameras);
+
         for (const camera of cameras) {
             if (
                 mouse.currentPosition.x >= camera.viewport.x &&
@@ -938,55 +939,22 @@ export default class ThumbRaiser {
                     camera.viewport.x + camera.viewport.width &&
                 mouse.currentPosition.y >= camera.viewport.y &&
                 mouse.currentPosition.y <
-                    camera.viewport.y + camera.viewport.height
-            ) {
-                const raycaster = new THREE.Raycaster();
-                // Compute mouse position in normalized device coordinates (-1.0 to +1.0)
-                const mouse2 = new THREE.Vector2(
-                    (mouse.currentPosition.x / camera.viewport.width) * 2.0 -
-                        1.0,
-                    -(mouse.currentPosition.y / camera.viewport.height) * 2.0 +
-                        1.0,
-                );
-                // Set the picking ray
-                raycaster.setFromCamera(mouse2, camera.activeProjection);
-                // Find tiles intersected by the picking ray
-                // console.log("THIS SCENE:", this.scene.children[8].children)
-                const intersects = raycaster.intersectObjects(
-                    this.scene.children[8].children,
-                    true,
-                );
-
-                if (intersects.length > 0 && intersects[0].object.visible) {
-                    const intersectedObject = intersects[0].object;
-                    // Find the nearest parent of type Door
-                    const doorParent = this.findParentOfType(
-                        intersectedObject,
-                        Door,
-                    );
-                    if (doorParent) {
-                        const doorName = doorParent.doorName;
-                        console.log('Door Name:', doorName);
-                        doorParent.label.visible = true;
-                        setTimeout(() => {
-                            doorParent.label.visible = false;
-                        }, 2000);
-                    }
-                }
-                mouse.camera = camera;
-                this.getPointedFrame(mouse, camera);
-                this.setCursor(
-                    this.mouse.frame == 'none' ? 'drag' : this.mouse.frame,
-                );
+                camera.viewport.y + camera.viewport.height
+                ) {
+                    mouse.camera = camera;
+                    this.getPointedFrame(mouse, camera);
+                    this.setCursor(
+                        this.mouse.frame == 'none' ? 'drag' : this.mouse.frame
+                        );
                 return;
-            }
+            // }
         }
 
         // No viewport is being pointed
         mouse.camera = 'none';
         mouse.frame = 'none';
         this.setCursor('auto');
-    }
+    }}
 
     // // Helper function to create a label
     // createLabel(text: string,door: Door): THREE.Sprite {
@@ -1374,6 +1342,7 @@ export default class ThumbRaiser {
                 if (event.buttons == 0) {
                     // No button down
                     this.getPointedViewport(this.mouse);
+                    this.checkLabels(this.mouse)
                 } else if (this.mouse.actionInProgress) {
                     // Primary or secondary button down and action in progress
                     if (this.mouse.camera != 'none') {
@@ -1434,6 +1403,46 @@ export default class ThumbRaiser {
         } else {
             this.setCursor('auto');
         }
+    }
+    checkLabels(mouse: Mouse) {
+        const camera = this.activeViewCamera
+        // for (const camera of cameras) {
+        if (
+            mouse.currentPosition.x >= camera.viewport.x &&
+            mouse.currentPosition.x <
+            camera.viewport.x + camera.viewport.width &&
+            mouse.currentPosition.y >= camera.viewport.y &&
+            mouse.currentPosition.y <
+            camera.viewport.y + camera.viewport.height
+            ) {
+
+                const raycaster = new THREE.Raycaster();                    
+
+                const x = (mouse.currentPosition.x) - this.activeViewCamera.viewport.x
+                const y = (mouse.currentPosition.y) - this.activeViewCamera.viewport.y
+                
+                const mouse2 = new THREE.Vector2(
+                    (x/ this.activeViewCamera.viewport.width) * 2.0 - 1.0,
+                        (y /  this.activeViewCamera.viewport.height) * 2.0 - 1.0);
+                raycaster.setFromCamera(mouse2, camera.activeProjection);
+
+                const intersects = raycaster.intersectObjects(this.scene.children[8].children, true);
+
+                if (intersects.length > 0 && intersects[0].object.visible) {
+                    const intersectedObject = intersects[0].object;
+                    // Find the nearest parent of type Door
+                    const doorParent = this.findParentOfType(intersectedObject, Door);
+                    if (doorParent) {
+                        const doorName = doorParent.doorName
+                        console.log("Door Name:", doorName)
+                        doorParent.label.visible=true
+                        setTimeout(() => {
+                            doorParent.label.visible = false;
+                        }, 2000);
+                    }
+                }
+            }
+
     }
 
     mouseUp(event) {
