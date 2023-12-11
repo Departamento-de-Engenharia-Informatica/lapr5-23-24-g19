@@ -47,6 +47,10 @@ export default class Elevator extends THREE.Group {
         return this.params.cellCoords
     }
 
+    get orientation() {
+        return this.params.orientation
+    }
+
     constructor(private params: ElevatorParams) {
         super();
         merge(this, { scale: params.scale });

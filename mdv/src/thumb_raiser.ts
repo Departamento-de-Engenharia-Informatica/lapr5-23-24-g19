@@ -586,7 +586,7 @@ export default class ThumbRaiser {
         // Create the cube texture
         this.cubeTexture = new CubeTexture(
             this.cubeTexturesParameters.skyboxes[
-                this.cubeTexturesParameters.selected
+            this.cubeTexturesParameters.selected
             ],
         );
 
@@ -710,19 +710,13 @@ export default class ThumbRaiser {
 
         Dispatcher.subscribe(
             'change-map',
-            (building: string, floornumber: number) => {
-                const url = `${
-                    import.meta.env.VITE_MDR_URL
-                }/buildings/${building}/floors/${floornumber}/map`;
-
-                this.changeMap(url);
-            },
+            (building: string, floor: number, position?: number[], direction?: number) => this.changeMap({ building, floor, position, direction })
         );
 
         Dispatcher.subscribe(
             'enter-elevator',
-            (b: string, f: number, fs: number[]) =>
-                this.enterElevator(b, f, fs),
+            (b: string, f: number, fs: number[], orientation: 'N'|'S'|'W'|'E') =>
+                this.enterElevator(b, f, fs, orientation),
         );
         Dispatcher.subscribe('exit-elevator', () => this.exitElevator());
 
@@ -739,10 +733,16 @@ export default class ThumbRaiser {
         building: string,
         floor: number,
         elevatorFloors: number[],
+        orientation: 'N'|'S'|'W'|'E'
     ) {
         const servedFloors = elevatorFloors.filter((f) => f !== floor);
 
-        this.elevatorMenu = new ElevatorMenu(building, floor, servedFloors);
+        const playerDTO = {
+            position: this.maze.cartesianToCell(this.player.position),
+            direction: this.maze.cardinalToDirection(orientation)
+        }
+
+        this.elevatorMenu = new ElevatorMenu(building, floor, servedFloors, playerDTO);
         this.elevatorMenu.show();
     }
 
@@ -894,13 +894,13 @@ export default class ThumbRaiser {
         const south = mouse.currentPosition.y - camera.viewport.y <= deltaY;
         const east =
             camera.viewport.x +
-                camera.viewport.width -
-                mouse.currentPosition.x <=
+            camera.viewport.width -
+            mouse.currentPosition.x <=
             deltaX;
         const north =
             camera.viewport.y +
-                camera.viewport.height -
-                mouse.currentPosition.y <=
+            camera.viewport.height -
+            mouse.currentPosition.y <=
             deltaY;
         if (west) {
             if (south) {
@@ -936,25 +936,26 @@ export default class ThumbRaiser {
             if (
                 mouse.currentPosition.x >= camera.viewport.x &&
                 mouse.currentPosition.x <
-                    camera.viewport.x + camera.viewport.width &&
+                camera.viewport.x + camera.viewport.width &&
                 mouse.currentPosition.y >= camera.viewport.y &&
                 mouse.currentPosition.y <
                 camera.viewport.y + camera.viewport.height
-                ) {
-                    mouse.camera = camera;
-                    this.getPointedFrame(mouse, camera);
-                    this.setCursor(
-                        this.mouse.frame == 'none' ? 'drag' : this.mouse.frame
-                        );
+            ) {
+                mouse.camera = camera;
+                this.getPointedFrame(mouse, camera);
+                this.setCursor(
+                    this.mouse.frame == 'none' ? 'drag' : this.mouse.frame
+                );
                 return;
-            // }
-        }
+                // }
+            }
 
-        // No viewport is being pointed
-        mouse.camera = 'none';
-        mouse.frame = 'none';
-        this.setCursor('auto');
-    }}
+            // No viewport is being pointed
+            mouse.camera = 'none';
+            mouse.frame = 'none';
+            this.setCursor('auto');
+        }
+    }
 
     // // Helper function to create a label
     // createLabel(text: string,door: Door): THREE.Sprite {
@@ -1381,14 +1382,14 @@ export default class ThumbRaiser {
                                         (this.miniMapCamera.orthographic.left -
                                             this.miniMapCamera.orthographic
                                                 .right)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                     0.0,
                                     ((mouseIncrement.y /
                                         this.miniMapCamera.viewport.height) *
                                         (this.miniMapCamera.orthographic.top -
                                             this.miniMapCamera.orthographic
                                                 .bottom)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                 );
                                 this.miniMapCamera.updateTarget(
                                     targetIncrement,
@@ -1414,34 +1415,34 @@ export default class ThumbRaiser {
             mouse.currentPosition.y >= camera.viewport.y &&
             mouse.currentPosition.y <
             camera.viewport.y + camera.viewport.height
-            ) {
+        ) {
 
-                const raycaster = new THREE.Raycaster();                    
+            const raycaster = new THREE.Raycaster();
 
-                const x = (mouse.currentPosition.x) - this.activeViewCamera.viewport.x
-                const y = (mouse.currentPosition.y) - this.activeViewCamera.viewport.y
-                
-                const mouse2 = new THREE.Vector2(
-                    (x/ this.activeViewCamera.viewport.width) * 2.0 - 1.0,
-                        (y /  this.activeViewCamera.viewport.height) * 2.0 - 1.0);
-                raycaster.setFromCamera(mouse2, camera.activeProjection);
+            const x = (mouse.currentPosition.x) - this.activeViewCamera.viewport.x
+            const y = (mouse.currentPosition.y) - this.activeViewCamera.viewport.y
 
-                const intersects = raycaster.intersectObjects(this.scene.children[8].children, true);
+            const mouse2 = new THREE.Vector2(
+                (x / this.activeViewCamera.viewport.width) * 2.0 - 1.0,
+                (y / this.activeViewCamera.viewport.height) * 2.0 - 1.0);
+            raycaster.setFromCamera(mouse2, camera.activeProjection);
 
-                if (intersects.length > 0 && intersects[0].object.visible) {
-                    const intersectedObject = intersects[0].object;
-                    // Find the nearest parent of type Door
-                    const doorParent = this.findParentOfType(intersectedObject, Door);
-                    if (doorParent) {
-                        const doorName = doorParent.doorName
-                        console.log("Door Name:", doorName)
-                        doorParent.label.visible=true
-                        setTimeout(() => {
-                            doorParent.label.visible = false;
-                        }, 2000);
-                    }
+            const intersects = raycaster.intersectObjects(this.scene.children[8].children, true);
+
+            if (intersects.length > 0 && intersects[0].object.visible) {
+                const intersectedObject = intersects[0].object;
+                // Find the nearest parent of type Door
+                const doorParent = this.findParentOfType(intersectedObject, Door);
+                if (doorParent) {
+                    const doorName = doorParent.doorName
+                    console.log("Door Name:", doorName)
+                    doorParent.label.visible = true
+                    setTimeout(() => {
+                        doorParent.label.visible = false;
+                    }, 2000);
                 }
             }
+        }
 
     }
 
@@ -1525,7 +1526,7 @@ export default class ThumbRaiser {
                 );
                 this.activeViewCamera.setActiveProjection(
                     ['perspective', 'orthographic'][
-                        this.projection.options.selectedIndex
+                    this.projection.options.selectedIndex
                     ],
                 );
                 this.activeViewCamera.activeProjection.add(this.audio.listener);
@@ -1705,10 +1706,14 @@ export default class ThumbRaiser {
         this.audio.play(this.audio.closeDoor, false);
     }
 
-    // FIXME: this should receive building+floornumber only
-    changeMap(url: string) {
+    changeMap(params: { building: string, floor: number, position?: number[], direction?: number }) {
+        const { building, floor } = params
+
+
         const mazeParams = {
-            url: url,
+            url: `${import.meta.env.VITE_MDR_URL}/buildings/${building}/floors/${floor}/map`,
+            startingPosition: params.position,
+            startingDirection: params.direction,
             designCredits:
                 "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
             texturesCredits:
@@ -2097,10 +2102,10 @@ export default class ThumbRaiser {
                 this.flashLight.playerOrientation = orientation;
                 target = new THREE.Vector3(
                     this.player.position.x +
-                        this.player.radius * Math.sin(directionRad),
+                    this.player.radius * Math.sin(directionRad),
                     this.player.position.y + this.player.size.y,
                     this.player.position.z +
-                        this.player.radius * Math.cos(directionRad),
+                    this.player.radius * Math.cos(directionRad),
                 );
                 this.flashLight.setTarget(target);
             } else {

@@ -1,13 +1,9 @@
-import * as Main from './main';
 import * as THREE from 'three';
 import Orientation from './orientation';
 import CubeTexture from './cubetexture';
 import { GUI } from 'lil-gui';
 import ThumbRaiser from './thumb_raiser';
-import Maze from './maze';
-import { floor } from 'lodash';
 import { Loader } from './loader';
-import Player from './player';
 
 export default class UserInterface extends GUI {
     constructor(
@@ -70,7 +66,7 @@ export default class UserInterface extends GUI {
                 const building = optionsBuildings.getValue();
                 const floor = optionsFloors.getValue();
                 if (newMap !== '' && building && floor) {
-                    thumbRaiser.changeMap(newMap);
+                    thumbRaiser.changeMap({ building, floor });
                 } else {
                     alert('Both building and floor should be selected');
                 }

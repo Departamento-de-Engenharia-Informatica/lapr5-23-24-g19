@@ -24,6 +24,8 @@ type position = { x: number; z: number };
 
 export type MazeParameters = {
     url: string;
+    startingPosition?: number[]
+    startingDirection?: number
     designCredits: string;
     texturesCredits: string;
     scale: THREE.Vector3;
@@ -139,7 +141,7 @@ export default class Maze extends THREE.Group {
     private building?: string;
     private floor?: number;
     public a: number = 0;
-    public doors : Door[] = []
+    public doors: Door[] = []
 
 
     public size: FloorMap['dimensions'] = { width: 0, length: 0 };
@@ -168,10 +170,10 @@ export default class Maze extends THREE.Group {
     private onProgress(url: string, xhr: ProgressEvent<EventTarget>) {
         console.log(
             "Resource '" +
-                url +
-                "' " +
-                ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
-                '% loaded.',
+            url +
+            "' " +
+            ((100.0 * xhr.loaded) / xhr.total).toFixed(0) +
+            '% loaded.',
         );
     }
 
@@ -299,8 +301,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.x -
-                            (this.cellToCartesian([row, column]).x +
-                                delta.x * this.scale.x),
+                        (this.cellToCartesian([row, column]).x +
+                            delta.x * this.scale.x),
                     ) < radius
                 ) {
                     console.log(this.rooms);
@@ -312,8 +314,8 @@ export default class Maze extends THREE.Group {
                 if (
                     Math.abs(
                         position.z -
-                            (this.cellToCartesian([row, column]).z +
-                                delta.z * this.scale.z),
+                        (this.cellToCartesian([row, column]).z +
+                            delta.z * this.scale.z),
                     ) < radius
                 ) {
                     console.log('Collision with ' + name + '.');
@@ -421,6 +423,7 @@ export default class Maze extends THREE.Group {
                 this.building!,
                 this.floor!,
                 elev.floors,
+                elev.orientation
             );
         } else if (!!this._lastPos) {
             const [oldR, oldC] = this.cartesianToCell(this._lastPos);
@@ -453,7 +456,7 @@ export default class Maze extends THREE.Group {
         // console.log(thumbRaiser.maze.doorSet.doors)
         // console.log(thumbRaiser.maze.doorSet)
         // if(thumbRaiser.maze.doorSet.doors.length>0){
-            // console.log("not null")
+        // console.log("not null")
         // }
         // this.doorSet.doors.forEach((d) => {
         doors.forEach((d) => {
@@ -797,7 +800,7 @@ export default class Maze extends THREE.Group {
                 `(from: ${p.buildingA.building}${p.buildingA.floor} to ${p.buildingB.building}${p.buildingB.floor})`,
             );
         });
-        
+
         // NEWW
         // this.add(new DoorSet({maze : this} as DoorSetParameters,description.door))
         // console.log("Child",this.children);
@@ -807,6 +810,12 @@ export default class Maze extends THREE.Group {
         this.rooms = description.map.rooms;
         console.log(this.rooms);
         // this.exitLocation = this.cellToCartesian(description.map.exitLocation);
+
+        // Store the player's initial position and direction
+        this.initialPosition = this.cellToCartesian(
+            this.parameters.startingPosition ?? description.player.initialPosition,
+        );
+        this.initialDirection = this.parameters.startingDirection ?? description.player.initialDirection;
 
         // Create the helpers
         this.helper = new THREE.Group();
@@ -998,12 +1007,6 @@ export default class Maze extends THREE.Group {
             this.add(mesh);
         }
 
-        // Store the player's initial position and direction
-        this.initialPosition = this.cellToCartesian(
-            description.player.initialPosition,
-        );
-        this.initialDirection = description.player.initialDirection;
-
         this._loaded = true;
     }
 
@@ -1043,5 +1046,14 @@ export default class Maze extends THREE.Group {
 
         const p = new Passage(params);
         return p;
+    }
+
+    cardinalToDirection(cardinal: 'N' | 'S' | 'W' | 'E') {
+        switch (cardinal) {
+            case 'N': return 180
+            case 'S': return 0
+            case 'W': return -90
+            case 'E': return 90
+        }
     }
 }

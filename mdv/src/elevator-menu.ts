@@ -2,8 +2,12 @@ import GUI from 'lil-gui';
 import Dispatcher from './dispatcher';
 
 export default class ElevatorMenu extends GUI {
-    constructor(building: string, currentFloor: number, floors: number[]) {
-        // TODO: position @ top-middle
+    constructor(
+        building: string,
+        currentFloor: number,
+        floors: number[],
+        player?: { position: number[], direction: number }
+    ) {
         super({ autoPlace: true });
 
         const fontSize = '1.5vmin';
@@ -13,7 +17,6 @@ export default class ElevatorMenu extends GUI {
         this.domElement.style.left = '0.5vw';
         this.domElement.style.top = '1.0vh';
         this.domElement.style.fontSize = fontSize;
-
 
         const floorOpt = this.add({ Floor: [] }, 'Floor', floors);
 
@@ -25,7 +28,7 @@ export default class ElevatorMenu extends GUI {
                     this.hide();
                     this.destroy();
 
-                    Dispatcher.emit('change-map', building, floor);
+                    Dispatcher.emit('change-map', building, floor, player?.position, player?.direction);
                 },
             },
             buttonFieldName
