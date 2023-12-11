@@ -940,7 +940,6 @@ export default class ThumbRaiser {
                 mouse.currentPosition.y <
                     camera.viewport.y + camera.viewport.height
             ) {
-                console.log(cameras);
                 const raycaster = new THREE.Raycaster();
                 // Compute mouse position in normalized device coordinates (-1.0 to +1.0)
                 const mouse2 = new THREE.Vector2(
@@ -1708,6 +1707,7 @@ export default class ThumbRaiser {
             scale: new THREE.Vector3(1.0, 1.0, 1.0),
             helpersColor: new THREE.Color(0xff0077),
         };
+        console.log('mudar de mapa');
 
         this.stop();
 
@@ -1829,14 +1829,6 @@ export default class ThumbRaiser {
                     this.scene.scale,
                 );
                 this.scene.add(this.doorSet);
-                console.log('childs', this.scene.children);
-
-                const doorSet = new DoorSet(
-                    { maze: this.maze },
-                    this.doorParameters,
-                    this.scene.scale,
-                );
-                this.scene.add(doorSet);
 
                 // Set the spotlight target
                 this.spotLight.target = this.player;
