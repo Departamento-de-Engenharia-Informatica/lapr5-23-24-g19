@@ -6,6 +6,8 @@ export const MDRUrl = 'http://localhost:4000/api/'
 
 export const loader: Loader = new NodeLoader()
 
+export const lobbyURI = './mazes/lobby.json'
+
 let thumbRaiser: ThumbRaiser
 function initialize() {
     // Create the game
@@ -228,7 +230,7 @@ function initialize() {
             selected: 1,
         }, // Cube texture parameters
         {
-            url: `${import.meta.env.VITE_MDR_URL}/buildings/K/floors/2/map`,
+            url: 'lobby',
             designCredits:
                 "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
             texturesCredits:

@@ -6,7 +6,7 @@ import Ground from './ground'
 import Wall from './wall'
 import Elevator from './elevator'
 import { Elevator as ElevatorComp, Passage as PassageComp, Room } from './map-components'
-import { Loader } from './loader'
+import { Loader, ThreeLoader } from './loader'
 import { elevatorData } from './default_data'
 import Door, { DoorParams } from './door'
 import SideWall from './side_wall'
@@ -14,12 +14,13 @@ import ThumbRaiser from './thumb_raiser'
 import Dispatcher from './dispatcher'
 import Passage from './passage'
 import DoorSet, { DoorSetParameters } from './door_set'
+import { lobbyURI } from './main'
 
 type AABB = THREE.Box3[][][]
 type position = { x: number; z: number }
 
 export type MazeParameters = {
-    url: string
+    url: string & 'lobby'
     startingPosition?: number[]
     startingDirection?: number
     designCredits: string
@@ -200,10 +201,21 @@ export default class Maze extends THREE.Group {
         // const floorNumber = 2;
         // const urlResource = `${import.meta.env.VITE_MDR_URL}/buildings/${buildingCode}/floors/${floorNumber}/map`;
 
-        this.fetchMap(parameters.url)
+        if (parameters.url === 'lobby') {
+            this.loadLobby()
+        } else {
+            this.fetchMap(parameters.url)
+        }
     }
 
-    async fetchMap(url: string) {
+    private async loadLobby() {
+        const description = await new ThreeLoader().load<MapFile>(lobbyURI)
+
+        console.log(JSON.stringify(description, null, 2))
+        this.onLoad(description)
+    }
+
+    private async fetchMap(url: string) {
         const description = await this.loader.load<MapFile>(url)
 
         console.log(JSON.stringify(description, null, 2))

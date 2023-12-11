@@ -1,0 +1,189 @@
+{
+    "map": {
+        "dimensions": {
+            "length": 6,
+            "width": 6
+        },
+        "mapContent": [
+            [
+                3,
+                2,
+                2,
+                2,
+                2,
+                2,
+                1
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            [
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                0
+            ]
+        ],
+        "passages": [],
+        "elevators": [],
+        "rooms": []
+    },
+    "ground": {
+        "size": {
+            "width": 6,
+            "height": 0.1,
+            "depth": 6
+        },
+        "segments": {
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/floor-wood/wood_floor_diff_2k.png"
+            },
+            "ao": {
+                "url": "./textures/floor-wood/wood_floor_ao_2k.png",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "./textures/floor-wood/wood_floor_nor_gl_2k.png",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./textures/floor-wood/wood_floor_rough_2k.png",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 1,
+        "repeat": {
+            "u": 4,
+            "v": 4
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "wall": {
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/wall-plastered/plastered_wall_diff_2k.png"
+            },
+            "ao": {
+                "url": "./textures/wall-plastered/plastered_wall_ao_2k.png",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "./textures/wall-plastered/plastered_wall_nor_gl_2k.png",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./textures/wall-plastered/plastered_wall_rough_2k.png",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 0,
+        "repeat": {
+            "u": 2,
+            "v": 1
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "elevator": {
+        "modelUri": "./models/gltf/elevator/elevator.glb"
+    },
+    "door": {
+        "modelUri": "./models/gltf/door/door.glb"
+    },
+    "player": {
+        "initialPosition": [
+            3,
+            3
+        ],
+        "initialDirection": 0
+    },
+    "buildingCode": "K",
+    "floorNumber": 2
+}

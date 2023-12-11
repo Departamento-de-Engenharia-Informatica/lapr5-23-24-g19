@@ -555,7 +555,7 @@ export default class ThumbRaiser {
 
         // Create the maze
         // TODO: Update the maze here
-        this.maze = new Maze(this.mazeParameters, loader, this.scene)
+        this.maze = new Maze(this.mazeParameters, loader)
 
         // Create the player
         this.player = new Player(this.playerParameters)
