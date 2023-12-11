@@ -1,12 +1,12 @@
-import * as THREE from 'three';
-import Orientation from './orientation';
-import ThumbRaiser from './thumb_raiser';
-import { Loader, NodeLoader } from './loader';
-export const MDRUrl = 'http://localhost:4000/api/';
+import * as THREE from 'three'
+import Orientation from './orientation'
+import ThumbRaiser from './thumb_raiser'
+import { Loader, NodeLoader } from './loader'
+export const MDRUrl = 'http://localhost:4000/api/'
 
-export const loader: Loader = new NodeLoader();
+export const loader: Loader = new NodeLoader()
 
-let thumbRaiser: ThumbRaiser;
+let thumbRaiser: ThumbRaiser
 function initialize() {
     // Create the game
     thumbRaiser = new ThumbRaiser(
@@ -148,8 +148,7 @@ function initialize() {
                 {
                     // Miramar
                     name: 'Miramar',
-                    texturePath:
-                        './cube_textures/red-eclipse-skyboxes/skyboxes/',
+                    texturePath: './cube_textures/red-eclipse-skyboxes/skyboxes/',
                     texturePositiveXUrl: 'miramar_ft.jpg',
                     textureNegativeXUrl: 'miramar_bk.jpg',
                     texturePositiveYUrl: 'miramar_up.jpg',
@@ -162,8 +161,7 @@ function initialize() {
                 {
                     // Flat sunset
                     name: 'Flat sunset',
-                    texturePath:
-                        './cube_textures/red-eclipse-skyboxes/skyboxes/',
+                    texturePath: './cube_textures/red-eclipse-skyboxes/skyboxes/',
                     texturePositiveXUrl: 'sunsetflat_ft.jpg',
                     textureNegativeXUrl: 'sunsetflat_bk.jpg',
                     texturePositiveYUrl: 'sunsetflat_up.jpg',
@@ -176,8 +174,7 @@ function initialize() {
                 {
                     // Calm sea
                     name: 'Calm sea',
-                    texturePath:
-                        './cube_textures/xonotic-skyboxes/skyboxes/calm_sea/',
+                    texturePath: './cube_textures/xonotic-skyboxes/skyboxes/calm_sea/',
                     texturePositiveXUrl: 'calm_sea_ft.jpg',
                     textureNegativeXUrl: 'calm_sea_bk.jpg',
                     texturePositiveYUrl: 'calm_sea_up.jpg',
@@ -204,8 +201,7 @@ function initialize() {
                 {
                     // Exosystem
                     name: 'Exosystem',
-                    texturePath:
-                        './cube_textures/xonotic-skyboxes/skyboxes/exosystem/',
+                    texturePath: './cube_textures/xonotic-skyboxes/skyboxes/exosystem/',
                     texturePositiveXUrl: 'exosystem_ft.jpg',
                     textureNegativeXUrl: 'exosystem_bk.jpg',
                     texturePositiveYUrl: 'exosystem_up.jpg',
@@ -218,8 +214,7 @@ function initialize() {
                 {
                     // Heaven
                     name: 'Heaven',
-                    texturePath:
-                        './cube_textures/xonotic-skyboxes/skyboxes/heaven/',
+                    texturePath: './cube_textures/xonotic-skyboxes/skyboxes/heaven/',
                     texturePositiveXUrl: 'heaven_ft.jpg',
                     textureNegativeXUrl: 'heaven_bk.jpg',
                     texturePositiveYUrl: 'heaven_up.jpg',
@@ -341,17 +336,17 @@ function initialize() {
             zoomMin: 0.32,
             zoomMax: 2.56,
         },
-    );
-    console.log(`Vite runinng mode: {${import.meta.env.MODE}}`);
-    console.log(`MDR url in use: {${import.meta.env.VITE_MDR_URL}}`);
-    console.log(`App: {${import.meta.env.VITE_APP_TITLE}}`);
+    )
+    console.log(`Vite runinng mode: {${import.meta.env.MODE}}`)
+    console.log(`MDR url in use: {${import.meta.env.VITE_MDR_URL}}`)
+    console.log(`App: {${import.meta.env.VITE_APP_TITLE}}`)
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animate)
     // Update the game
-    thumbRaiser.update();
+    thumbRaiser.update()
 }
 
-initialize();
-animate();
+initialize()
+animate()

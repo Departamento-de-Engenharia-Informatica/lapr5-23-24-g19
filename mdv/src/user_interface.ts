@@ -1,120 +1,111 @@
-import * as THREE from 'three';
-import Orientation from './orientation';
-import CubeTexture from './cubetexture';
-import { GUI } from 'lil-gui';
-import ThumbRaiser from './thumb_raiser';
-import { Loader } from './loader';
+import * as THREE from 'three'
+import Orientation from './orientation'
+import CubeTexture from './cubetexture'
+import { GUI } from 'lil-gui'
+import ThumbRaiser from './thumb_raiser'
+import { Loader } from './loader'
 
 export default class UserInterface extends GUI {
-    constructor(
-        private thumbRaiser: ThumbRaiser,
-        private loader: Loader,
-    ) {
-        super();
+    constructor(private thumbRaiser: ThumbRaiser, private loader: Loader) {
+        super()
 
         const audioCallback = function (enabled: boolean) {
             if (!enabled) {
-                thumbRaiser.audio.stopAll();
+                thumbRaiser.audio.stopAll()
             }
-        };
+        }
 
         const textureCallback = function (options, name) {
             thumbRaiser.cubeTexture = new CubeTexture(
-                thumbRaiser.cubeTexturesParameters.skyboxes[
-                    options.indexOf(name)
-                ],
-            );
-            thumbRaiser.buildCreditsPanel();
-        };
+                thumbRaiser.cubeTexturesParameters.skyboxes[options.indexOf(name)],
+            )
+            thumbRaiser.buildCreditsPanel()
+        }
 
         const createEmoteCallback = function (animations, name) {
             callbacks[name] = function () {
-                animations.fadeToAction(name, 0.2);
-            };
-            emotesFolder.add(callbacks, name);
-        };
+                animations.fadeToAction(name, 0.2)
+            }
+            emotesFolder.add(callbacks, name)
+        }
 
         const positionCallback = function (light, distance, orientation) {
-            const position = light.orientationToPosition(distance, orientation);
-            light.position.set(position.x, position.y, position.z);
-        };
+            const position = light.orientationToPosition(distance, orientation)
+            light.position.set(position.x, position.y, position.z)
+        }
 
-        const fontSize = '1.5vmin';
+        const fontSize = '1.5vmin'
 
-        this.title('RobDroneGo');
-        this.domElement.style.position = 'absolute';
-        this.domElement.style.right = '0.5vw';
-        this.domElement.style.top = '1.0vh';
-        this.domElement.style.fontSize = fontSize;
+        this.title('RobDroneGo')
+        this.domElement.style.position = 'absolute'
+        this.domElement.style.right = '0.5vw'
+        this.domElement.style.top = '1.0vh'
+        this.domElement.style.fontSize = fontSize
 
         // Campus
-        const campusFolder = this.addFolder('Campus');
-        campusFolder.domElement.style.fontSize = fontSize;
-        campusFolder.close();
+        const campusFolder = this.addFolder('Campus')
+        campusFolder.domElement.style.fontSize = fontSize
+        campusFolder.close()
 
-        const travelFolder = campusFolder.addFolder('Travel');
-        travelFolder.domElement.style.fontSize = fontSize;
+        const travelFolder = campusFolder.addFolder('Travel')
+        travelFolder.domElement.style.fontSize = fontSize
 
-        let buildings: string[] = [];
-        let floors: number[] = [];
-        let newMap: string = '';
+        let buildings: string[] = []
+        let floors: number[] = []
+        let newMap: string = ''
 
         const options = {
             building: [],
             floor: [],
             Travel: function () {
-                const building = optionsBuildings.getValue();
-                const floor = optionsFloors.getValue();
+                const building = optionsBuildings.getValue()
+                const floor = optionsFloors.getValue()
                 if (newMap !== '' && building && floor) {
-                    thumbRaiser.changeMap({ building, floor });
+                    thumbRaiser.changeMap({ building, floor })
                 } else {
-                    alert('Both building and floor should be selected');
+                    alert('Both building and floor should be selected')
                 }
             },
-        };
+        }
 
-        const optionsBuildings = travelFolder.add(
-            options,
-            'building',
-            buildings,
-        );
+        const optionsBuildings = travelFolder.add(options, 'building', buildings)
 
-        const optionsFloors = travelFolder.add(options, 'floor', floors);
+        const optionsFloors = travelFolder.add(options, 'floor', floors)
 
         optionsBuildings.onChange((val: string) => {
             this.updateFloors(val).then((codes) => {
-                floors = codes;
-                optionsFloors.options(floors);
-                optionsFloors.setValue('');
-            });
-        });
+                floors = codes
+                optionsFloors.options(floors)
+                optionsFloors.setValue('')
+            })
+        })
 
         optionsFloors.onChange((floor: number) => {
-            const building = optionsBuildings.getValue();
+            const building = optionsBuildings.getValue()
             this.getFloorMapUrl(building, floor).then((map) => {
-                if (map !== '') newMap = map;
-            });
-        });
+                if (map !== '') newMap = map
+            })
+        })
 
-        travelFolder.add(options, 'Travel');
+        travelFolder.add(options, 'Travel')
 
         travelFolder.onOpenClose(async () => {
-            const codes = await this.updateBuildings();
-            buildings = codes;
-            optionsBuildings.options(buildings);
-        });
-        travelFolder.close();
+            const codes = await this.updateBuildings()
+            buildings = codes
+            optionsBuildings.options(buildings)
+        })
+        travelFolder.close()
 
-        const settings = this.addFolder('Settings');
-        settings.domElement.style.fontSize = fontSize;
-        settings.close();
+        const settings = this.addFolder('Settings')
+        settings.domElement.style.fontSize = fontSize
+        settings.close()
 
         // Create the audio folder
-        const audioFolder = settings.addFolder('Audio');
-        audioFolder.domElement.style.fontSize = fontSize;
+        const audioFolder = settings.addFolder('Audio')
+        audioFolder.domElement.style.fontSize = fontSize
         audioFolder
             .add(thumbRaiser.audio, 'enabled')
-            .onChange((enabled) => audioCallback(enabled));
+            .onChange((enabled) => audioCallback(enabled))
         audioFolder
             .add(
                 thumbRaiser.audio,
@@ -123,120 +114,94 @@ export default class UserInterface extends GUI {
                 thumbRaiser.audio.volumeMax,
                 thumbRaiser.audio.volumeStep,
             )
-            .onChange((volume) =>
-                thumbRaiser.audio.listener.setMasterVolume(volume),
-            );
-        audioFolder.close();
+            .onChange((volume) => thumbRaiser.audio.listener.setMasterVolume(volume))
+        audioFolder.close()
 
         // Create the skyboxes folder and add cube textures
-        const skyboxesFolder = settings.addFolder('Skyboxes');
-        skyboxesFolder.domElement.style.fontSize = fontSize;
+        const skyboxesFolder = settings.addFolder('Skyboxes')
+        skyboxesFolder.domElement.style.fontSize = fontSize
         const cubeTexturesParameters = {
             name: thumbRaiser.cubeTexturesParameters.skyboxes[
                 thumbRaiser.cubeTexturesParameters.selected
             ].name,
-        };
-        const cubeTexturesOptions = [];
-        for (
-            let i = 0;
-            i < thumbRaiser.cubeTexturesParameters.skyboxes.length;
-            i++
-        ) {
-            cubeTexturesOptions[i] =
-                thumbRaiser.cubeTexturesParameters.skyboxes[i].name;
+        }
+        const cubeTexturesOptions = []
+        for (let i = 0; i < thumbRaiser.cubeTexturesParameters.skyboxes.length; i++) {
+            cubeTexturesOptions[i] = thumbRaiser.cubeTexturesParameters.skyboxes[i].name
         }
         skyboxesFolder
             .add(cubeTexturesParameters, 'name')
             .options(cubeTexturesOptions)
-            .onChange((name) => textureCallback(cubeTexturesOptions, name));
-        skyboxesFolder.close();
+            .onChange((name) => textureCallback(cubeTexturesOptions, name))
+        skyboxesFolder.close()
 
         // Create the character folder
-        const characterFolder = settings.addFolder('Character');
-        characterFolder.domElement.style.fontSize = fontSize;
+        const characterFolder = settings.addFolder('Character')
+        characterFolder.domElement.style.fontSize = fontSize
 
         // Create the emotes folder and add emotes
-        const emotesFolder = characterFolder.addFolder('Emotes');
-        emotesFolder.domElement.style.fontSize = fontSize;
-        const callbacks = [];
+        const emotesFolder = characterFolder.addFolder('Emotes')
+        emotesFolder.domElement.style.fontSize = fontSize
+        const callbacks = []
         for (let i = 0; i < thumbRaiser.animations.emotes.length; i++) {
-            createEmoteCallback(
-                thumbRaiser.animations,
-                thumbRaiser.animations.emotes[i],
-            );
+            createEmoteCallback(thumbRaiser.animations, thumbRaiser.animations.emotes[i])
         }
-        emotesFolder.close();
+        emotesFolder.close()
 
         // Create the expressions folder and add expressions
-        const expressionsFolder = characterFolder.addFolder('Expressions');
-        expressionsFolder.domElement.style.fontSize = fontSize;
-        const expressions = Object.keys(
-            thumbRaiser.player.face.morphTargetDictionary,
-        );
+        const expressionsFolder = characterFolder.addFolder('Expressions')
+        expressionsFolder.domElement.style.fontSize = fontSize
+        const expressions = Object.keys(thumbRaiser.player.face.morphTargetDictionary)
         for (let i = 0; i < expressions.length; i++) {
             expressionsFolder
-                .add(
-                    thumbRaiser.player.face.morphTargetInfluences,
-                    i,
-                    0.0,
-                    1.0,
-                    0.01,
-                )
-                .name(expressions[i]);
+                .add(thumbRaiser.player.face.morphTargetInfluences, i, 0.0, 1.0, 0.01)
+                .name(expressions[i])
         }
-        expressionsFolder.close();
+        expressionsFolder.close()
 
-        characterFolder.close();
+        characterFolder.close()
 
         // Create the lights folder
-        const lightsFolder = settings.addFolder('Lights');
-        lightsFolder.domElement.style.fontSize = fontSize;
+        const lightsFolder = settings.addFolder('Lights')
+        lightsFolder.domElement.style.fontSize = fontSize
 
         // Create the ambient light folder
-        const ambientLightFolder = lightsFolder.addFolder('Ambient light');
-        ambientLightFolder.domElement.style.fontSize = fontSize;
+        const ambientLightFolder = lightsFolder.addFolder('Ambient light')
+        ambientLightFolder.domElement.style.fontSize = fontSize
         const ambientLightParameters = {
-            color:
-                '#' +
-                new THREE.Color(thumbRaiser.ambientLight.color).getHexString(),
-        };
-        ambientLightFolder.add(thumbRaiser.ambientLight, 'visible').listen();
+            color: '#' + new THREE.Color(thumbRaiser.ambientLight.color).getHexString(),
+        }
+        ambientLightFolder.add(thumbRaiser.ambientLight, 'visible').listen()
         ambientLightFolder
             .addColor(ambientLightParameters, 'color')
-            .onChange((color) => thumbRaiser.ambientLight.color.set(color));
+            .onChange((color) => thumbRaiser.ambientLight.color.set(color))
         ambientLightFolder.add(
             thumbRaiser.ambientLight,
             'intensity',
             thumbRaiser.ambientLight.intensityMin,
             thumbRaiser.ambientLight.intensityMax,
             thumbRaiser.ambientLight.intensityStep,
-        );
-        ambientLightFolder.close();
+        )
+        ambientLightFolder.close()
 
         // Create the directional light folder
-        const directionalLightFolder =
-            lightsFolder.addFolder('Directional light');
-        directionalLightFolder.domElement.style.fontSize = fontSize;
+        const directionalLightFolder = lightsFolder.addFolder('Directional light')
+        directionalLightFolder.domElement.style.fontSize = fontSize
         const directionalLightParameters = {
             color:
-                '#' +
-                new THREE.Color(
-                    thumbRaiser.directionalLight.color,
-                ).getHexString(),
-        };
-        directionalLightFolder
-            .add(thumbRaiser.directionalLight, 'visible')
-            .listen();
+                '#' + new THREE.Color(thumbRaiser.directionalLight.color).getHexString(),
+        }
+        directionalLightFolder.add(thumbRaiser.directionalLight, 'visible').listen()
         directionalLightFolder
             .addColor(directionalLightParameters, 'color')
-            .onChange((color) => thumbRaiser.directionalLight.color.set(color));
+            .onChange((color) => thumbRaiser.directionalLight.color.set(color))
         directionalLightFolder.add(
             thumbRaiser.directionalLight,
             'intensity',
             thumbRaiser.directionalLight.intensityMin,
             thumbRaiser.directionalLight.intensityMax,
             thumbRaiser.directionalLight.intensityStep,
-        );
+        )
         directionalLightFolder
             .add(
                 thumbRaiser.directionalLight.orientation,
@@ -249,12 +214,9 @@ export default class UserInterface extends GUI {
                 positionCallback(
                     thumbRaiser.directionalLight,
                     thumbRaiser.directionalLight.distance,
-                    new Orientation(
-                        h,
-                        thumbRaiser.directionalLight.orientation.v,
-                    ),
+                    new Orientation(h, thumbRaiser.directionalLight.orientation.v),
                 ),
-            );
+            )
         directionalLightFolder
             .add(
                 thumbRaiser.directionalLight.orientation,
@@ -267,41 +229,36 @@ export default class UserInterface extends GUI {
                 positionCallback(
                     thumbRaiser.directionalLight,
                     thumbRaiser.directionalLight.distance,
-                    new Orientation(
-                        thumbRaiser.directionalLight.orientation.h,
-                        v,
-                    ),
+                    new Orientation(thumbRaiser.directionalLight.orientation.h, v),
                 ),
-            );
-        directionalLightFolder.close();
+            )
+        directionalLightFolder.close()
 
         // Create the spotlight folder
-        const spotLightFolder = lightsFolder.addFolder('Spotlight');
-        spotLightFolder.domElement.style.fontSize = fontSize;
+        const spotLightFolder = lightsFolder.addFolder('Spotlight')
+        spotLightFolder.domElement.style.fontSize = fontSize
         const spotLightParameters = {
-            color:
-                '#' +
-                new THREE.Color(thumbRaiser.spotLight.color).getHexString(),
+            color: '#' + new THREE.Color(thumbRaiser.spotLight.color).getHexString(),
             angle: THREE.MathUtils.radToDeg(thumbRaiser.spotLight.angle),
-        };
-        spotLightFolder.add(thumbRaiser.spotLight, 'visible').listen();
+        }
+        spotLightFolder.add(thumbRaiser.spotLight, 'visible').listen()
         spotLightFolder
             .addColor(spotLightParameters, 'color')
-            .onChange((color) => thumbRaiser.spotLight.color.set(color));
+            .onChange((color) => thumbRaiser.spotLight.color.set(color))
         spotLightFolder.add(
             thumbRaiser.spotLight,
             'intensity',
             thumbRaiser.spotLight.intensityMin,
             thumbRaiser.spotLight.intensityMax,
             thumbRaiser.spotLight.intensityStep,
-        );
+        )
         spotLightFolder.add(
             thumbRaiser.spotLight,
             'distance',
             thumbRaiser.spotLight.distanceMin,
             thumbRaiser.spotLight.distanceMax,
             thumbRaiser.spotLight.distanceStep,
-        );
+        )
         spotLightFolder
             .add(
                 spotLightParameters,
@@ -312,66 +269,63 @@ export default class UserInterface extends GUI {
             )
             .onChange(
                 (angle) =>
-                    (thumbRaiser.spotLight.angle =
-                        THREE.MathUtils.degToRad(angle)),
-            );
+                    (thumbRaiser.spotLight.angle = THREE.MathUtils.degToRad(angle)),
+            )
         spotLightFolder.add(
             thumbRaiser.spotLight,
             'penumbra',
             thumbRaiser.spotLight.penumbraMin,
             thumbRaiser.spotLight.penumbraMax,
             thumbRaiser.spotLight.penumbraStep,
-        );
+        )
         spotLightFolder.add(
             thumbRaiser.spotLight.position,
             'x',
             thumbRaiser.spotLight.positionMin.x,
             thumbRaiser.spotLight.positionMax.x,
             thumbRaiser.spotLight.positionStep.x,
-        );
+        )
         spotLightFolder.add(
             thumbRaiser.spotLight.position,
             'y',
             thumbRaiser.spotLight.positionMin.y,
             thumbRaiser.spotLight.positionMax.y,
             thumbRaiser.spotLight.positionStep.y,
-        );
+        )
         spotLightFolder.add(
             thumbRaiser.spotLight.position,
             'z',
             thumbRaiser.spotLight.positionMin.z,
             thumbRaiser.spotLight.positionMax.z,
             thumbRaiser.spotLight.positionStep.z,
-        );
-        spotLightFolder.close();
+        )
+        spotLightFolder.close()
 
         // Create the flashlight folder
-        const flashLightFolder = lightsFolder.addFolder('Flashlight');
-        flashLightFolder.domElement.style.fontSize = fontSize;
+        const flashLightFolder = lightsFolder.addFolder('Flashlight')
+        flashLightFolder.domElement.style.fontSize = fontSize
         const flashLightParameters = {
-            color:
-                '#' +
-                new THREE.Color(thumbRaiser.flashLight.color).getHexString(),
+            color: '#' + new THREE.Color(thumbRaiser.flashLight.color).getHexString(),
             angle: THREE.MathUtils.radToDeg(thumbRaiser.flashLight.angle),
-        };
-        flashLightFolder.add(thumbRaiser.flashLight, 'visible').listen();
+        }
+        flashLightFolder.add(thumbRaiser.flashLight, 'visible').listen()
         flashLightFolder
             .addColor(flashLightParameters, 'color')
-            .onChange((color) => thumbRaiser.flashLight.color.set(color));
+            .onChange((color) => thumbRaiser.flashLight.color.set(color))
         flashLightFolder.add(
             thumbRaiser.flashLight,
             'intensity',
             thumbRaiser.flashLight.intensityMin,
             thumbRaiser.flashLight.intensityMax,
             thumbRaiser.flashLight.intensityStep,
-        );
+        )
         flashLightFolder.add(
             thumbRaiser.flashLight,
             'distance',
             thumbRaiser.flashLight.distanceMin,
             thumbRaiser.flashLight.distanceMax,
             thumbRaiser.flashLight.distanceStep,
-        );
+        )
         flashLightFolder
             .add(
                 flashLightParameters,
@@ -382,16 +336,15 @@ export default class UserInterface extends GUI {
             )
             .onChange(
                 (angle) =>
-                    (thumbRaiser.flashLight.angle =
-                        THREE.MathUtils.degToRad(angle)),
-            );
+                    (thumbRaiser.flashLight.angle = THREE.MathUtils.degToRad(angle)),
+            )
         flashLightFolder.add(
             thumbRaiser.flashLight,
             'penumbra',
             thumbRaiser.flashLight.penumbraMin,
             thumbRaiser.flashLight.penumbraMax,
             thumbRaiser.flashLight.penumbraStep,
-        );
+        )
         flashLightFolder
             .add(
                 thumbRaiser.flashLight.orientation,
@@ -406,7 +359,7 @@ export default class UserInterface extends GUI {
                     thumbRaiser.flashLight.distance,
                     new Orientation(h, thumbRaiser.flashLight.orientation.v),
                 ),
-            );
+            )
         flashLightFolder
             .add(
                 thumbRaiser.flashLight.orientation,
@@ -421,28 +374,28 @@ export default class UserInterface extends GUI {
                     thumbRaiser.flashLight.distance,
                     new Orientation(thumbRaiser.flashLight.orientation.h, v),
                 ),
-            );
-        flashLightFolder.close();
+            )
+        flashLightFolder.close()
 
-        lightsFolder.close();
+        lightsFolder.close()
 
         // Create the shadows folder
-        const shadowsFolder = settings.addFolder('Shadows');
-        shadowsFolder.domElement.style.fontSize = fontSize;
-        shadowsFolder.add(thumbRaiser.shadowsParameters, 'enabled').listen();
-        shadowsFolder.close();
+        const shadowsFolder = settings.addFolder('Shadows')
+        shadowsFolder.domElement.style.fontSize = fontSize
+        shadowsFolder.add(thumbRaiser.shadowsParameters, 'enabled').listen()
+        shadowsFolder.close()
 
         // Create the fog folder
-        const fogFolder = settings.addFolder('Fog');
-        fogFolder.domElement.style.fontSize = fontSize;
+        const fogFolder = settings.addFolder('Fog')
+        fogFolder.domElement.style.fontSize = fontSize
         this.fogParameters = {
             color: '#' + new THREE.Color(thumbRaiser.fog.color).getHexString(),
             density: thumbRaiser.activeViewCamera.fogDensity,
-        };
-        fogFolder.add(thumbRaiser.fog, 'enabled').listen();
+        }
+        fogFolder.add(thumbRaiser.fog, 'enabled').listen()
         fogFolder
             .addColor(this.fogParameters, 'color')
-            .onChange((color) => thumbRaiser.fog.color.set(color));
+            .onChange((color) => thumbRaiser.fog.color.set(color))
         fogFolder
             .add(
                 this.fogParameters,
@@ -451,119 +404,103 @@ export default class UserInterface extends GUI {
                 thumbRaiser.fog.densityMax,
                 thumbRaiser.fog.densityStep,
             )
-            .onChange(
-                (density) =>
-                    (thumbRaiser.activeViewCamera.fogDensity = density),
-            )
-            .listen();
-        fogFolder.close();
+            .onChange((density) => (thumbRaiser.activeViewCamera.fogDensity = density))
+            .listen()
+        fogFolder.close()
 
         // Create the collision detection folder
-        const collisionDetectionFolder = settings.addFolder(
-            'Collision detection',
-        );
-        collisionDetectionFolder.domElement.style.fontSize = fontSize;
+        const collisionDetectionFolder = settings.addFolder('Collision detection')
+        collisionDetectionFolder.domElement.style.fontSize = fontSize
         const collisionDetectionParameters = {
             method:
                 thumbRaiser.collisionDetectionParameters.method == 'bc-aabb'
                     ? 'BC / AABB'
                     : 'OBB / AABB',
-        };
-        const collisionDetectionOptions = ['BC / AABB', 'OBB / AABB'];
+        }
+        const collisionDetectionOptions = ['BC / AABB', 'OBB / AABB']
         collisionDetectionFolder
             .add(collisionDetectionParameters, 'method')
             .options(collisionDetectionOptions)
             .onChange((name) =>
                 thumbRaiser.setCollisionDetectionMethod(
-                    ['bc-aabb', 'obb-aabb'][
-                        collisionDetectionOptions.indexOf(name)
-                    ],
+                    ['bc-aabb', 'obb-aabb'][collisionDetectionOptions.indexOf(name)],
                 ),
-            );
+            )
         collisionDetectionFolder
-            .add(
-                thumbRaiser.collisionDetectionParameters.boundingVolumes,
-                'visible',
-            )
-            .onChange((visible) =>
-                thumbRaiser.setBoundingVolumesVisibility(visible),
-            )
-            .listen();
-        collisionDetectionFolder.close();
+            .add(thumbRaiser.collisionDetectionParameters.boundingVolumes, 'visible')
+            .onChange((visible) => thumbRaiser.setBoundingVolumesVisibility(visible))
+            .listen()
+        collisionDetectionFolder.close()
 
         // Create the reset button
-        this.add({ reset: () => this.resetUserInterface() }, 'reset');
+        this.add({ reset: () => this.resetUserInterface() }, 'reset')
 
-        this.close();
+        this.close()
     }
 
     resetUserInterface() {
-        this.reset();
+        this.reset()
         this.thumbRaiser.fixedViewCamera.fogDensity =
-            this.thumbRaiser.fixedViewCamera.initialFogDensity;
+            this.thumbRaiser.fixedViewCamera.initialFogDensity
         this.thumbRaiser.firstPersonViewCamera.fogDensity =
-            this.thumbRaiser.firstPersonViewCamera.initialFogDensity;
+            this.thumbRaiser.firstPersonViewCamera.initialFogDensity
         this.thumbRaiser.thirdPersonViewCamera.fogDensity =
-            this.thumbRaiser.thirdPersonViewCamera.initialFogDensity;
+            this.thumbRaiser.thirdPersonViewCamera.initialFogDensity
         this.thumbRaiser.topViewCamera.fogDensity =
-            this.thumbRaiser.topViewCamera.initialFogDensity;
+            this.thumbRaiser.topViewCamera.initialFogDensity
     }
 
     async updateBuildings(): Promise<string[]> {
-        type Building = { code: string };
+        type Building = { code: string }
 
-        const url = `${import.meta.env.VITE_MDR_URL}/buildings`;
+        const url = `${import.meta.env.VITE_MDR_URL}/buildings`
         try {
-            const data = await this.loader.load<Building[]>(url);
+            const data = await this.loader.load<Building[]>(url)
 
             const codes = data.map((item) => {
-                return item.code;
-            });
+                return item.code
+            })
 
-            return codes;
+            return codes
         } catch (_) {
-            return [];
+            return []
         }
     }
 
     async updateFloors(building: string): Promise<number[]> {
-        type Floor = { floorNumber: number };
-        const url = `${
-            import.meta.env.VITE_MDR_URL
-        }/buildings/${building}/floors`;
+        type Floor = { floorNumber: number }
+        const url = `${import.meta.env.VITE_MDR_URL}/buildings/${building}/floors`
 
         try {
-            const data = await this.loader.load<Floor[]>(url);
+            const data = await this.loader.load<Floor[]>(url)
 
             const codes = data.map((item) => {
-                return item.floorNumber;
-            });
+                return item.floorNumber
+            })
 
-            return codes;
+            return codes
         } catch (_) {
-            return [];
+            return []
         }
     }
 
     async getFloorMapUrl(building: string, floor: number): Promise<string> {
-        return `${
-            import.meta.env.VITE_MDR_URL
-        }/buildings/${building}/floors/${floor}/map`;
+        return `${import.meta.env.VITE_MDR_URL}/buildings/${building}/floors/${floor}/map`
     }
 
     setVisibility(visible) {
         if ('show' in this && 'hide' in this) {
             if (visible) {
-                this.show();
+                this.show()
             } else {
-                this.hide();
+                this.hide()
             }
         } else {
             // Some lil-gui versions do not implement show() / hide() methods
             if (visible) {
-                this.domElement.style.display = 'block';
+                this.domElement.style.display = 'block'
             } else {
-                this.domElement.style.display = 'none';
+                this.domElement.style.display = 'none'
             }
         }
     }

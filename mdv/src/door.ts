@@ -1,14 +1,14 @@
-import * as THREE from 'three';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import MultiTexturedMaterial from './material';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/Addons.js';
-import { merge } from './merge';
-import TextSprite from '@seregpie/three.text-sprite';
+import * as THREE from 'three'
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import MultiTexturedMaterial from './material'
+import { GLTF, GLTFLoader } from 'three/examples/jsm/Addons.js'
+import { merge } from './merge'
+import TextSprite from '@seregpie/three.text-sprite'
 
 type Handle = THREE.Object3D & {
-    worldPosition: THREE.Vector3;
-    worldScale: THREE.Vector3;
-};
+    worldPosition: THREE.Vector3
+    worldScale: THREE.Vector3
+}
 // type wallMaterialParams = {
 //     color: THREE.Color;
 //     mapUrl: string;
@@ -40,14 +40,14 @@ type Handle = THREE.Object3D & {
 // };
 
 export type DoorParams = {
-    modelUri: string;
-    scale: THREE.Vector3;
-    helpersColor: THREE.Color;
-    defaultDirection: number;
-    name: string,
+    modelUri: string
+    scale: THREE.Vector3
+    helpersColor: THREE.Color
+    defaultDirection: number
+    name: string
 
-    credits?: string;
-};
+    credits?: string
+}
 
 export default class Door extends THREE.Mesh {
     public label!: THREE.Sprite
@@ -65,35 +65,35 @@ export default class Door extends THREE.Mesh {
     //     return this.parameters.groundHeight;
     // }
     get url() {
-        return this.params.modelUri;
+        return this.params.modelUri
     }
 
     get defaultDirection() {
-        return this.params.defaultDirection;
+        return this.params.defaultDirection
     }
 
     set defaultDirection(val) {
-        this.params.defaultDirection = val;
+        this.params.defaultDirection = val
     }
 
-    public handle: Handle = new THREE.Object3D() as unknown as Handle;
+    public handle: Handle = new THREE.Object3D() as unknown as Handle
     public doorName: string
 
-    private _loaded = false;
+    private _loaded = false
     get loaded() {
-        return this._loaded;
+        return this._loaded
     }
 
     // public geometries: THREE.BufferGeometry[];
     // public materials: THREE.MeshStandardMaterial[];
 
     constructor(private params: DoorParams) {
-        super();
-        merge(this, { scale: params.scale });
+        super()
+        merge(this, { scale: params.scale })
 
-        this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection);
+        this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection)
 
-        this.loadModel(params.modelUri);
+        this.loadModel(params.modelUri)
         this.doorName = params.name
 
         // merge(this, parameters);
@@ -246,35 +246,35 @@ export default class Door extends THREE.Mesh {
         // return geometry;
     }
     private loadModel(uri: string) {
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader()
 
         loader.load(
             uri,
             (model) => this.onLoad(model),
-            () => { }, // onProgress
-            () => { }, // onError
-        );
+            () => {}, // onProgress
+            () => {}, // onError
+        )
 
-        this._loaded = true;
+        this._loaded = true
     }
 
     private onLoad(model: GLTF) {
-        this.add(model.scene);
+        this.add(model.scene)
 
-        const aabb = new THREE.Box3();
-        aabb.setFromObject(this);
+        const aabb = new THREE.Box3()
+        aabb.setFromObject(this)
 
-        const size = new THREE.Vector3();
-        aabb.getSize(size);
+        const size = new THREE.Vector3()
+        aabb.getSize(size)
 
         // Adjust the object's oversized dimensions (hard-coded; see previous comments)
-        size.x = 3.0;
-        size.y = 4.4;
-        size.z = 2.6;
+        size.x = 3.0
+        size.y = 4.4
+        size.z = 2.6
 
-        size.multiply(this.scale);
+        size.multiply(this.scale)
 
-        this.handle = this.getObjectByName('D1-Door_D1_0') as Handle;
+        this.handle = this.getObjectByName('D1-Door_D1_0') as Handle
 
         // const halfSize = size.clone().divideScalar(2)
         // const radius = (halfSize.x + halfSize.z) / 2
@@ -291,73 +291,77 @@ export default class Door extends THREE.Mesh {
 
         // Set the position based on your door bounding box
         const doorBoundingBox = new THREE.Box3().setFromObject(this.handle)
-        this.label.position.set(0, doorBoundingBox.max.y * 6, 0);
+        this.label.position.set(0, doorBoundingBox.max.y * 6, 0)
 
-        this.label.visible=false
+        this.label.visible = false
         this.add(this.label)
-        
-        size.multiply(this.params.scale);
-        this.setShadow();
+
+        size.multiply(this.params.scale)
+        this.setShadow()
     }
 
-    createTextTexture(text:string, fontSize:number, color:string) {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const font = `${fontSize}px Arial, Helvetica, sans-serif`;
+    createTextTexture(text: string, fontSize: number, color: string) {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+        const font = `${fontSize}px Arial, Helvetica, sans-serif`
 
-        if(context==null){
+        if (context == null) {
             return
         }
-        context.font = font;
-        context.imageSmoothingEnabled = true;
-        
-        const textMetrics = context.measureText(text);
-        const textWidth = textMetrics.width;
+        context.font = font
+        context.imageSmoothingEnabled = true
+
+        const textMetrics = context.measureText(text)
+        const textWidth = textMetrics.width
 
         canvas.width = textWidth + 10
         canvas.height = fontSize + 10
 
-        context.font = font;
-        context.fillStyle = color;
+        context.font = font
+        context.fillStyle = color
 
         const totalWidth = textWidth + 5 * 2
-        const totalHeight = fontSize + 5 * 2;
+        const totalHeight = fontSize + 5 * 2
         const borderRadius = 10
 
-        context.fillStyle = "black"
-        context.beginPath();
-        context.moveTo(borderRadius, 0);
-        context.lineTo(totalWidth - borderRadius, 0);
-        context.quadraticCurveTo(totalWidth, 0, totalWidth, borderRadius);
-        context.lineTo(totalWidth, totalHeight - borderRadius);
-        context.quadraticCurveTo(totalWidth, totalHeight, totalWidth - borderRadius, totalHeight);
-        context.lineTo(borderRadius, totalHeight);
-        context.quadraticCurveTo(0, totalHeight, 0, totalHeight - borderRadius);
-        context.lineTo(0, borderRadius);
-        context.quadraticCurveTo(0, 0, borderRadius, 0);
-        context.closePath();
-        context.fill();
+        context.fillStyle = 'black'
+        context.beginPath()
+        context.moveTo(borderRadius, 0)
+        context.lineTo(totalWidth - borderRadius, 0)
+        context.quadraticCurveTo(totalWidth, 0, totalWidth, borderRadius)
+        context.lineTo(totalWidth, totalHeight - borderRadius)
+        context.quadraticCurveTo(
+            totalWidth,
+            totalHeight,
+            totalWidth - borderRadius,
+            totalHeight,
+        )
+        context.lineTo(borderRadius, totalHeight)
+        context.quadraticCurveTo(0, totalHeight, 0, totalHeight - borderRadius)
+        context.lineTo(0, borderRadius)
+        context.quadraticCurveTo(0, 0, borderRadius, 0)
+        context.closePath()
+        context.fill()
 
-        const textX = (totalWidth - textWidth) / 2;
-        const textY = 5 + fontSize;
-    
-        context.fillStyle = "white"
-        context.fillText(text, textX, textY);
+        const textX = (totalWidth - textWidth) / 2
+        const textY = 5 + fontSize
 
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.magFilter =  THREE.LinearFilter
-        texture.minFilter =  THREE.LinearFilter
-        return texture;
+        context.fillStyle = 'white'
+        context.fillText(text, textX, textY)
+
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.magFilter = THREE.LinearFilter
+        texture.minFilter = THREE.LinearFilter
+        return texture
     }
-
 
     private setShadow() {
         this.traverseVisible((child) => {
             // Modifying the scene graph inside the callback is discouraged: https://threejs.org/docs/index.html?q=object3d#api/en/core/Object3D.traverseVisible
             if (child instanceof THREE.Object3D) {
-                child.castShadow = true;
-                child.receiveShadow = true;
+                child.castShadow = true
+                child.receiveShadow = true
             }
-        });
+        })
     }
 }

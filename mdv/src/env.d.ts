@@ -2,10 +2,10 @@
 
 interface ImportMetaEnv {
     readonly VITE_APP_TITLE: string
-    readonly VITE_MDR_URL:string
+    readonly VITE_MDR_URL: string
     // more env variables...
-  }
-  
-  interface ImportMeta {
+}
+
+interface ImportMeta {
     readonly env: ImportMetaEnv
-  }
+}

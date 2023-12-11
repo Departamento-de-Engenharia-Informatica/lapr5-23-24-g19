@@ -1,11 +1,11 @@
-import * as THREE from 'three';
-import Orientation from './orientation';
-import { ElevatorParams } from './elevator';
-import Door, { DoorParams } from './door';
+import * as THREE from 'three'
+import Orientation from './orientation'
+import { ElevatorParams } from './elevator'
+import Door, { DoorParams } from './door'
 
 export const generalData = {
     setDevicePixelRatio: false,
-};
+}
 
 export const audioData = {
     enabled: false,
@@ -20,7 +20,7 @@ export const audioData = {
     danceClips: [],
     endClips: [],
     credits: '',
-};
+}
 
 export const cubeTextureData = {
     skyboxes: [
@@ -37,7 +37,7 @@ export const cubeTextureData = {
         },
     ],
     selected: 0,
-};
+}
 
 export const mazeData = {
     url: './mazes/Loquitas_10x10.json',
@@ -46,7 +46,7 @@ export const mazeData = {
         "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
     scale: new THREE.Vector3(1.0, 1.0, 1.0),
     helpersColor: new THREE.Color(0xffffff),
-};
+}
 
 export const playerData = {
     url: './models/gltf/RobotExpressive/RobotExpressive.glb',
@@ -86,21 +86,21 @@ export const playerData = {
         punch: 'KeyP',
         thumbsUp: 'KeyT',
     },
-};
+}
 
 export const elevatorData: ElevatorParams = {
     modelUri: './models/gltf/elevator/elevator.glb',
     scale: new THREE.Vector3(0.3, 0.3, 0.3),
     helpersColor: new THREE.Color(0xffffff),
     defaultDirection: 0.0,
-};
+}
 
 export const doorData: DoorParams = {
     modelUri: './models/gltf/door/door.glb',
     scale: new THREE.Vector3(0.2, 0.23, 0.4),
     helpersColor: new THREE.Color(0xffffff),
     defaultDirection: 0.0,
-};
+}
 
 export const ambientLightData = {
     visible: true,
@@ -109,7 +109,7 @@ export const ambientLightData = {
     intensityMin: 0.0,
     intensityMax: 1.0,
     intensityStep: 0.01,
-};
+}
 
 export const directionalLightData = {
     visible: true,
@@ -136,7 +136,7 @@ export const directionalLightData = {
             far: 500.0,
         },
     },
-};
+}
 
 export const spotLightData = {
     visible: true,
@@ -171,7 +171,7 @@ export const spotLightData = {
         },
         focus: 1.0,
     },
-};
+}
 
 export const flashLightData = {
     visible: true,
@@ -206,12 +206,12 @@ export const flashLightData = {
         },
         focus: 1.0,
     },
-};
+}
 
 export const shadowsData = {
     enabled: true,
     type: THREE.PCFShadowMap, // THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap or THREE.VSMShadowMap
-};
+}
 
 export const fogData = {
     enabled: false,
@@ -220,12 +220,12 @@ export const fogData = {
     densityMin: 0.01,
     densityMax: 1.0,
     densityStep: 0.01,
-};
+}
 
 export const collisionDetectionData = {
     method: 'bc-aabb', // Bounding cylinder / axis-aligned bounding box: "bc-aabb"; oriented bounding box / axis-aligned bounding box: "obb-aabb"
     boundingVolumes: { visible: false },
-};
+}
 
 export const cameraData = {
     view: 'fixed', // Fixed view: "fixed"; first-person view: "first-person"; third-person view: "third-person"; top view: "top"; mini-map: "mini-map"
@@ -253,4 +253,4 @@ export const cameraData = {
     near: 0.01, // Front clipping plane
     far: 100.0, // Back clipping plane
     initialFogDensity: 0.00025, // Doesn't apply to mini-map camera
-};
+}

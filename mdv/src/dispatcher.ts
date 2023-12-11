@@ -1,15 +1,12 @@
-import { EventDispatcher } from "three";
+import { EventDispatcher } from 'three'
 
-type DispatcherEvent = 'change-map'
-    | 'enter-elevator'
-    | string
+type DispatcherEvent = 'change-map' | 'enter-elevator' | string
 
 export default class Dispatcher {
     private static _inst = new EventDispatcher()
 
-
     public static subscribe(event: DispatcherEvent, handler: Function) {
-        Dispatcher._inst.addEventListener(event, ev => {
+        Dispatcher._inst.addEventListener(event, (ev) => {
             handler(...ev.message)
         })
     }
