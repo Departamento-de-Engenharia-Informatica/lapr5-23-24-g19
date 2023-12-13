@@ -1,0 +1,44 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "FE" as ui
+participant "MDT" as md
+participant "Planning" as plan
+
+activate usr
+    usr -> ui : wants to list task execution sequence
+    activate ui
+        ' should only get approved tasks
+        ui -> md : GET /tasks
+    alt tasks not found
+            activate md
+                note right : see usXXX documentation
+                md --> ui : 404: error
+                ui --> usr : informs error
+
+        else tasks found
+            md --> ui : 200: tasks
+            deactivate md
+            ui --> usr : requests tasks
+        deactivate ui
+
+        usr -> ui : provides tasks
+        activate ui
+            ui -> md : POST /tasksequence
+            activate md
+                md -> plan : POST
+                activate plan
+
+                note right : update later with proper requests
+                    plan --> md : 200: task execution sequence
+                deactivate plan
+                md --> ui : 200: task execution sequence
+            deactivate md
+        ui --> usr : lists task execution sequence
+    deactivate ui
+deactivate usr
+
+end
+@enduml

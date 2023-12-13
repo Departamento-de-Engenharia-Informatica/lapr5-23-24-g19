@@ -1,0 +1,25 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : wants to list task execution sequence
+    activate sys
+alt tasks not found
+        sys --> usr : informs error
+else tasks found
+        sys --> usr : requests tasks
+    deactivate sys
+
+    usr -> sys : provides tasks
+
+    activate sys
+        sys --> usr : lists task execution sequence
+    deactivate sys
+deactivate usr
+
+end
+@enduml
