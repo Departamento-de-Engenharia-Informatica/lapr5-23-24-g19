@@ -2,6 +2,8 @@
 :- module(env, [
     loader_ttl/1,
     mdr_url/1,
+    elev_cost/1,
+    passage_cost/1,
     task_sequence_alg/1
 ]).
 
@@ -16,11 +18,11 @@ mdr_url(Url) :-
 
 passage_cost(Cost) :-
     getenv('PASSAGE_COST', Cost), !;
-    Cost = 5.
+    Cost is 5.
 
 elev_cost(Cost) :-
     getenv('ELEV_COST', Cost), !;
-    Cost = 30.
+    Cost is 30.
 
 task_sequence_alg(Alg) :-
     getenv('TASK_SEQ_ALGORITHM', Alg), !;

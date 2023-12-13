@@ -16,7 +16,8 @@ a_star2(Dest, [(_, Ca, LA)|Outros], EdgePred, Cam, Custo):-
             CaX is CustoX + Ca, estimate(X, Dest, EstX),
             CEX is CaX + EstX
         ),
-        Novos),
+        Novos
+    ),
 	append(Outros, Novos, Todos),
 	sort(Todos, TodosOrd),
 	a_star2(Dest, TodosOrd, EdgePred, Cam, Custo).

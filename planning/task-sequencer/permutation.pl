@@ -22,7 +22,7 @@ permutation_cost(Tasks, (Cost, T)) :-
     path_cost(T, Cost).
 
 
-% TaskOrder = (start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), Task)
+% TaskOrder = (start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), TaskType)
 path_cost(TaskOrder, Cost) :-
     % EXTRA: walk from initial position to first task
     path_cost_aux(TaskOrder, 0, Cost).
@@ -36,7 +36,7 @@ path_cost_aux([T1, T2 | Tasks], Acc, Cost) :-
     (start(B2, F2, X2, Y2), _, _) = T2,
 
     compute_path((B1, F1, X1, Y1), (B2, F2, X2, Y2), _, CostPath), !,
-    NewAcc = Acc + CostPath,
+    NewAcc is Acc + CostPath,
 
     path_cost_aux([T2|Tasks], NewAcc, Cost).
 
