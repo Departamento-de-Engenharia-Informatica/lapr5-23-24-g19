@@ -178,7 +178,10 @@ export default class Maze extends THREE.Group {
         this.elevators.forEach((e) => this.remove(e))
     }
 
-    constructor(private parameters: MazeParameters, private loader: Loader) {
+    constructor(
+        private parameters: MazeParameters,
+        private loader: Loader,
+    ) {
         super()
         // merge(this, parameters);
         merge(this, { scale: parameters.scale })
@@ -220,6 +223,10 @@ export default class Maze extends THREE.Group {
 
         console.log(JSON.stringify(description, null, 2))
         this.onLoad(description)
+    }
+
+    setPosition(position: THREE.Vector3) {
+        this.position.copy(position)
     }
 
     disposeWalls() {
@@ -304,6 +311,7 @@ export default class Maze extends THREE.Group {
                     console.log(this.rooms)
                     console.log('Collision with ' + name + '.')
                     console.log('row', row, 'column', column)
+                    console.log('position: ', this.cartesianToCell(position))
                     return true
                 }
             } else {
@@ -316,6 +324,7 @@ export default class Maze extends THREE.Group {
                 ) {
                     console.log('Collision with ' + name + '.')
                     console.log('row', row, 'column', column)
+                    console.log('position: ', this.cartesianToCell(position))
                     return true
                 }
             }
