@@ -1,0 +1,14 @@
+using DDDSample1.Domain.Shared;
+
+namespace DDDSample1.Domain.Jobs
+{
+    public class JobSurveillance: Job, IAggregateRoot
+    {
+        private JobContact Contact { get; set; }
+
+        public JobSurveillance(string email, JobLocation location, JobContact contact) : base(email, location, JobTypeEnum.SURVEILLANCE)
+        {
+            this.Contact = contact;
+        }
+    }
+}

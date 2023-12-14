@@ -14,7 +14,7 @@ using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Categories;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Families;
-using DDDSample1.Domain.Tasks;
+using DDDSample1.Domain.Jobs;
 
 namespace DDDSample1
 {
@@ -78,8 +78,8 @@ namespace DDDSample1
             services.AddTransient<IFamilyRepository,FamilyRepository>();
             services.AddTransient<FamilyService>();
 
-            services.AddTransient<ITaskRepository,TaskRepository>();
-            services.AddTransient<TaskService>();
+            services.AddTransient<IJobRepository,JobRepository>();
+            services.AddTransient<JobService>();
         }
     }
 }

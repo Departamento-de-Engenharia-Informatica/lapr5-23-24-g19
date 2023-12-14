@@ -20,9 +20,11 @@ namespace DDDSample1.Controllers
 
         // POST: api/Jobs
         [HttpPost]
-        public async Task<ActionResult<JobDto>> Create(CreatingJobDto dto)
+        public async Task<ActionResult<CreatingJobDto>> Create(CreatingJobDto dto)
         {
-            throw new System.NotImplementedException();
+            var job = await _service.AddAsync(dto);
+
+            return Ok(job);
         }
 
         // PATCH: api/Jobs/{id}
