@@ -4,10 +4,9 @@ using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Jobs;
 
-
 namespace DDDSample1.Controllers
 {
-    [Route("api/Jobs")]
+    [Route("api/jobs")]
     [ApiController]
     public class JobsController : ControllerBase
     {
@@ -16,6 +15,12 @@ namespace DDDSample1.Controllers
         public JobsController(JobService service)
         {
             _service = service;
+        }
+
+        [HttpGet("status")]
+        public async Task<ActionResult<string>> Status()
+        {
+            return Ok("ola");
         }
 
         // POST: api/Jobs
