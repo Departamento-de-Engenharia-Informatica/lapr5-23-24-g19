@@ -1,0 +1,57 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "dto:\nBackofficeUserDTO" as xdto
+participant "Service" as svc
+participant "user:\nBackofficeUser" as b
+participant "Repository" as repo
+participant "DBDriver" as db
+
+
+participant "Mapper" as map
+
+participant "createdDto:\nCreatedBackofficeUserDTO" as dto
+
+
+[-> r : POST /users-backoffice
+activate r
+    r -> ctrl : createBackofficeUser(req,res)
+
+    activate ctrl
+        ctrl --> xdto ** : create()
+        ctrl -> svc : createBackofficeUser(dto)
+        activate svc
+            svc --> b ** : create()
+
+            alt user not created
+                svc --> ctrl : error
+                ctrl --> r : error (422)
+                [<-- r : 422: Unprocessable Content
+            else user created successfully
+                svc -> repo : save(user)
+                activate repo
+                    repo -> db : save
+                    activate db
+                    deactivate db
+                deactivate repo
+
+                svc -> map : toDTO(user)
+                activate map
+                    map --> dto **: create(user)
+                    activate dto
+                        map --> svc : createdDto
+                    deactivate dto
+                deactivate map
+
+                svc --> ctrl : createdDto
+            deactivate svc
+
+            ctrl --> r : createdDto (201)
+        deactivate ctrl
+    [<-- r : 201: Created
+deactivate r
+end
+
+@enduml
