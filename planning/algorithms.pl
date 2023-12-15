@@ -178,7 +178,7 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     member(Fconn, ElevFloors),
 
     edge_wrap(B1, F1, Wrapper),
-    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, CostPath, NewAcc, Cost),
+    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, CostPath),
     absolute_path(B1, F1, Comp, CompAbs),
 
     % catch the elevator to another floor
