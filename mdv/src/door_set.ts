@@ -39,7 +39,7 @@ export default class DoorSet extends THREE.Group {
             switch (e.orientation) {
                 case 'E':
                     door.rotateY(THREE.MathUtils.degToRad(180))
-                    door.position.set(position.x - 0.5, position.y, position.z)
+                    door.position.set(position.x + 0.5, position.y, position.z)
                     break
                 case 'N':
                     door.rotateY(THREE.MathUtils.degToRad(270))
@@ -51,7 +51,7 @@ export default class DoorSet extends THREE.Group {
                     break
                 case 'S':
                     door.rotateY(THREE.MathUtils.degToRad(90))
-                    door.position.set(position.x, position.y, position.z - 0.5)
+                    door.position.set(position.x, position.y, position.z + 0.5)
             }
             this.scale.set(scale.x, scale.y, scale.z)
             parameters.maze.doors.push(door)
