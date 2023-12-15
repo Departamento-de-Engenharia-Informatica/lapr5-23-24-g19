@@ -79,7 +79,8 @@ getmap(Building, Floor, Map) :-
         (retractall(floorcell(Building, Floor, _, _)), !; true),
         (retractall(elevator(Building, Floor, _, _, _)), !; true),
         (retractall(passage(Building, Floor, _, _, _, _)), !; true),
-        (retractall(connection(Building, Floor, _, _, _)), !; true)
+        (retractall(connection(Building, Floor, _, _, _)), !; true),
+        (retractall(room(Building, Floor, _, _, _)), !; true)
     ).
 
 % vim: ft=prolog

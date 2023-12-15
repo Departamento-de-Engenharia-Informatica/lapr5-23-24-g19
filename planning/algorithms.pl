@@ -19,7 +19,8 @@
     floorcell/4,
     elevator/5,
     passage/6,
-    edge/5
+    edge/5,
+    resolve_room/2
 ]).
 
 % :- use_module('algorithms/a-star', [ a_star/5 as walk ]).
@@ -81,7 +82,9 @@ compute_paths(Orig, Dest, Criterion, Paths) :-
     predsort(Crit, LLigs, Paths).
 
 compute_path(Orig, Dest, Path, Cost) :-
-    compute_path_aux(Orig, Dest, NestedPath, 0, Cost),
+    (resolve_room(Dest, ActDest), !; ActDest = Dest),
+
+    compute_path_aux(Orig, ActDest, NestedPath, 0, Cost),
     flatten(NestedPath, Path).
 
 

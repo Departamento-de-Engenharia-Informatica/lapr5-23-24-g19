@@ -16,8 +16,10 @@ loadmap(Building, Floor) :-
     getmap(Building, Floor, Map),
     _{length: Len, width: Wid} :< Map.dimensions,
 
-    % TODO: block access through room door cell
     populate_cells(Building, Floor, Len, Wid),
+
+    populate_rooms(Building, Floor, Map.rooms),
+    remove_door_cells(Building, Floor),
 
     build_graph(Building, Floor, Map.mapContent),
     add_diagonals(Building, Floor),
@@ -123,5 +125,18 @@ populate_elev(Building, Floor, [E|Es]) :-
     _{ x:X, y:Y, floors: Fs } :< E,
     assertz(elevator(Building, Floor, X, Y, Fs)),
     populate_elev(Building, Floor, Es).
+
+populate_rooms(_, _, []).
+populate_rooms(Building, Floor, [R|Rs]) :-
+    _{ x:X, y:Y, orientation:O } :< R,
+    assertz(room(Building, Floor, X, Y, O)),
+    populate_rooms(Building, Floor, Rs).
+
+remove_door_cells(Building, Floor) :-
+    forall(
+        room(Building, Floor, X, Y, _),
+        (retract(floorcell(Building, Floor, X, Y)), !; true)
+    ).
+
 
 % vim: ft=prolog
