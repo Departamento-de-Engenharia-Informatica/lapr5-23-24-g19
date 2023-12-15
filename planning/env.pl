@@ -28,4 +28,7 @@ task_sequence_alg(Alg) :-
     getenv('TASK_SEQ_ALGORITHM', Alg), !;
     Alg = 'permtutations'.
 
+time_limit(Time) :-
+    getenv('TIME_LIMIT', Time), !;
+    Time = 60.
 % vim: ft=prolog
