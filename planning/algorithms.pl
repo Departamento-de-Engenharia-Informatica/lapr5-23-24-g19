@@ -23,10 +23,10 @@
     resolve_room/2
 ]).
 
-% :- use_module('algorithms/a-star', [ a_star/5 as walk ]).
+:- use_module('algorithms/a-star', [ a_star/5 as walk ]).
 % :- use_module('algorithms/dfs', [ dfs/5 as walk ]).
 % :- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
-:- use_module('algorithms/beam', [ beam/5 as walk ]).
+% :- use_module('algorithms/beam', [ beam/5 as walk ]).
 
 
 % NOTE: Notation used for paths:
@@ -82,9 +82,13 @@ compute_paths(Orig, Dest, Criterion, Paths) :-
     predsort(Crit, LLigs, Paths).
 
 compute_path(Orig, Dest, Path, Cost) :-
+    (resolve_room(Orig, ActOrig), !; ActOrig = Orig),
     (resolve_room(Dest, ActDest), !; ActDest = Dest),
 
-    compute_path_aux(Orig, ActDest, NestedPath, 0, Cost),
+    write('dest: '), write(Dest), nl,
+    write('destino: '), write(ActDest), nl,
+
+    compute_path_aux(ActOrig, ActDest, NestedPath, 0, Cost),
     flatten(NestedPath, Path).
 
 

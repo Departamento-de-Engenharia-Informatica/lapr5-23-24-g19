@@ -128,7 +128,7 @@ populate_elev(Building, Floor, [E|Es]) :-
 
 populate_rooms(_, _, []).
 populate_rooms(Building, Floor, [R|Rs]) :-
-    _{ x:X, y:Y, orientation:O } :< R,
+    _{ x:Y, y:X, orientation:O } :< R,
     assertz(room(Building, Floor, X, Y, O)),
     populate_rooms(Building, Floor, Rs).
 
