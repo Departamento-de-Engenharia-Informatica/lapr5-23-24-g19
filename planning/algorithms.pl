@@ -24,7 +24,8 @@
 
 % :- use_module('algorithms/a-star', [ a_star/5 as walk ]).
 % :- use_module('algorithms/dfs', [ dfs/5 as walk ]).
-:- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
+% :- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
+:- use_module('algorithms/beam', [ beam/5 as walk ]).
 
 
 % NOTE: Notation used for paths:
@@ -209,5 +210,3 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     NewAcc is Acc + CostPath + PassCost,
 
     compute_path_aux((B3, F3, Xb3, Yb3), (B2, F2, X2, Y2), Path, NewAcc, Cost).
-
-

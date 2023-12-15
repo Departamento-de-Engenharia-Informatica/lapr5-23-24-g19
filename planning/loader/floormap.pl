@@ -23,7 +23,8 @@ loadmap(Building, Floor) :-
     add_diagonals(Building, Floor),
 
     populate_passage(Building, Floor, Map.passages),
-    populate_elev(Building, Floor, Map.elevators).
+    populate_elev(Building, Floor, Map.elevators),
+    !.
 
 
 populate_cells(_, _, 0, _) :- !.

@@ -21,9 +21,11 @@ compare_on(Func, X, Y, Sign) :-
         compare(Sign, X1, Y1)
     ).
 
-retain_n(0, [], []).
+retain_n(0, _, []).
+retain_n(_, [], []).
 retain_n(N, [X|Xs], [X|Rst]) :-
     N1 is N-1,
     retain_n(N1, Xs, Rst).
+
 
 % vim: ft=prolog

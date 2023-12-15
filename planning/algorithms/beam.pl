@@ -11,6 +11,7 @@ beam_aux(Dest, [(_, Custo, [Dest|T])|_], _, Cam, Custo):-
 	reverse([Dest|T], Cam).
 
 beam_aux(Dest, [(_, Ca, LA)|Outros], EdgePred, Cam, Custo):-
+    write('beam start'), nl,
     LA = [Act|_],
     findall((CEX, CaX, [X|LA]),
 		(
@@ -29,10 +30,11 @@ beam_aux(Dest, [(_, Ca, LA)|Outros], EdgePred, Cam, Custo):-
 
     paths_to_retain(N),
     retain_n(N, TodosOrd, AlgunsOrd),
+
 	beam_aux(Dest, AlgunsOrd, EdgePred, Cam, Custo).
 
 
-paths_to_retain(50).
+paths_to_retain(90).
 
 estimate(Node1, Node2, Estimate) :-
     Node1 = cell(X1, Y1),

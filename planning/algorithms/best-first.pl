@@ -11,10 +11,13 @@ bestfs_aux(Dest, [Dest|T], _, Path, Acc, Acc):-
     reverse([Dest|T], Path).
 
 bestfs_aux(Dest, LA, EdgePred, Path, Acc, Cost):-
+    write('comecou bestfs_aux'), nl,
 	LA = [Act|_],
 	findall((EstX, [X|LA], CostX),
 		(
+            format('encontrar edge de ~w ~n', [Act]),
             call(EdgePred, Act, X, CostX),
+            format('encontrada edge: ~w ~n', [X]),
             \+ member(X, LA),
             estimate(X, Dest, EstX)
         ),
