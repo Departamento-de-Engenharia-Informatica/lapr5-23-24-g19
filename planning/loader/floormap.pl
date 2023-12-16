@@ -9,11 +9,14 @@
     elevator/5,
     passage/6,
     connection/5,
-    edge/5
+    edge/5,
+    wipe_floor/2
 ]).
 
 loadmap(Building, Floor) :-
+    wipe_floor(Building, Floor),
     getmap(Building, Floor, Map),
+
     _{length: Len, width: Wid} :< Map.dimensions,
 
     populate_cells(Building, Floor, Len, Wid),
@@ -101,12 +104,14 @@ add_diagonal(Building, Floor, X, Y) :-
 add_diagonal_aux(Building, Floor, X_orig, Y_orig, X_dest, Y_dest) :-
     (
         (
-            connection(Building, Floor, cell(X_orig, Y_orig), cell(X_dest, Y_orig), _),
-            connection(Building, Floor, cell(X_dest, Y_orig), cell(X_dest, Y_dest), _)
+            (
+                edge(Building, Floor, cell(X_orig, Y_orig), cell(X_dest, Y_orig), _),
+                edge(Building, Floor, cell(X_dest, Y_orig), cell(X_dest, Y_dest), _)
+            ), !
         );
         (
-            connection(Building, Floor, cell(X_orig, Y_orig), cell(X_orig, Y_dest), _),
-            connection(Building, Floor, cell(X_orig, Y_dest), cell(X_dest, Y_dest), _)
+            edge(Building, Floor, cell(X_orig, Y_orig), cell(X_orig, Y_dest), _),
+            edge(Building, Floor, cell(X_orig, Y_dest), cell(X_dest, Y_dest), _)
         )
     ),
     assertz(connection(Building, Floor, cell(X_orig, Y_orig), cell(X_dest, Y_dest), sqrt(2))).

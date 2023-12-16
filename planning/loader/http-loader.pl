@@ -39,14 +39,8 @@ getmap(Building, Floor, Map) :-
     close(MapJSON),
 
     Map = MapDTO.map,
-    (
-        (retractall(loaded(Building, Floor, _, _)), !; true),
-        (retractall(floorcell(Building, Floor, _, _)), !; true),
-        (retractall(elevator(Building, Floor, _, _, _)), !; true),
-        (retractall(passage(Building, Floor, _, _, _, _)), !; true),
-        (retractall(connection(Building, Floor, _, _, _)), !; true),
-        (retractall(room(Building, Floor, _, _, _)), !; true)
-    ),
+
+    (retractall(loaded(Building, Floor, _, _)), !; true),
     get_time(Now),
     assertz(loaded(Building, Floor, Map, Now)).
 

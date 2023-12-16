@@ -23,10 +23,10 @@
     resolve_room/2
 ]).
 
-:- use_module('algorithms/a-star', [ a_star/5 as walk ]).
+% :- use_module('algorithms/a-star', [ a_star/5 as walk ]).
 % :- use_module('algorithms/dfs', [ dfs/5 as walk ]).
 % :- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
-% :- use_module('algorithms/beam', [ beam/5 as walk ]).
+:- use_module('algorithms/beam', [ beam/5 as walk ]).
 
 
 % NOTE: Notation used for paths:
@@ -102,7 +102,7 @@ edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
 
 compute_path_aux((B, F, X, Y), (B, F, X, Y), [], Acc, Acc):- !.
 % same building, same floor
-compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
+compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :- !,
     loadmap(B, F),
     format('~w~w (~w, ~w)', [B, F, X1, Y1]), nl,
 

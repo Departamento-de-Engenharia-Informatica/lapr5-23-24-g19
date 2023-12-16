@@ -6,7 +6,8 @@
     room/5,
 
     edge/5,
-    resolve_room/2
+    resolve_room/2,
+    wipe_floor/2
 ]).
 
 
@@ -31,5 +32,13 @@ resolve_room_aux(X, Y, 'S', X, Y1) :- Y1 is Y+1.
 
 resolve_room_aux(X, Y, 'W', X1, Y) :- X1 is X-1.
 resolve_room_aux(X, Y, 'E', X1, Y) :- X1 is X+1.
+
+
+wipe_floor(Building, Floor) :-
+    (retractall(floorcell(Building, Floor, _, _)), !; true),
+    (retractall(elevator(Building, Floor, _, _, _)), !; true),
+    (retractall(passage(Building, Floor, _, _, _, _)), !; true),
+    (retractall(connection(Building, Floor, _, _, _)), !; true),
+    (retractall(room(Building, Floor, _, _, _)), !; true).
 
 % vim: ft=prolog
