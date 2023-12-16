@@ -119,22 +119,25 @@ add_diagonal_aux(Building, Floor, X_orig, Y_orig, X_dest, Y_dest) :-
 
 populate_passage(_, _, []).
 populate_passage(Building, Floor, [P|Ps]) :-
-    _{ x:X, y:Y } :< P,
-    _{ building: BDest, floor: FDest } :< P.to,
+    _{ x:Y, y:X } :< P, % NOTE: X & Y flipped is not a bug
+    _{ building: BDestStr, floor: FDest } :< P.to,
+    atom_string(BDest, BDestStr),
 
     assertz(passage(Building, Floor, X, Y, BDest, FDest)),
     populate_passage(Building, Floor, Ps).
 
 populate_elev(_, _, []).
 populate_elev(Building, Floor, [E|Es]) :-
-    _{ x:X, y:Y, floors: Fs } :< E,
+    _{ x:Y, y:X, floors: Fs } :< E, % NOTE: X & Y flipped is not a bug
     assertz(elevator(Building, Floor, X, Y, Fs)),
     populate_elev(Building, Floor, Es).
 
 populate_rooms(_, _, []).
 populate_rooms(Building, Floor, [R|Rs]) :-
-    _{ x:Y, y:X, orientation:O } :< R,
-    assertz(room(Building, Floor, X, Y, O)),
+    _{ x:Y, y:X, orientation:O } :< R, % NOTE: X & Y flipped is not a bug
+    atom_string(Orientation, O),
+
+    assertz(room(Building, Floor, X, Y, Orientation)),
     populate_rooms(Building, Floor, Rs).
 
 remove_door_cells(Building, Floor) :-
