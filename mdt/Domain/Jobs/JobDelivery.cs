@@ -8,6 +8,9 @@ namespace DDDSample1.Domain.Jobs
         private JobContact DeliveryContact { get; set; }
         private string Description { get; set; }
 
+        protected JobDelivery():base(){
+
+        }
         public JobDelivery(string email, JobLocation location, JobContact pickupContact, JobContact deliveryContact, string description) : base(email, location, JobTypeEnum.DELIVERY)
         {
             this.PickupContact = pickupContact;

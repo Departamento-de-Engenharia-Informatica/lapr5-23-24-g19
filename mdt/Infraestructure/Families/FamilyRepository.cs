@@ -3,13 +3,13 @@ using DDDSample1.Infrastructure.Shared;
 
 namespace DDDSample1.Infrastructure.Families
 {
-    public class FamilyRepository : BaseRepository<Family, FamilyId>, IFamilyRepository
-    {
+    // public class FamilyRepository : BaseRepository<Family, FamilyId>, IFamilyRepository
+    // {
       
-        public FamilyRepository(DDDSample1DbContext context):base(context.Families)
-        {
+    //     public FamilyRepository(RobDroneDBContext context):base(context.Families)
+    //     {
             
-        }
+    //     }
 
-    }
+    // }
 }

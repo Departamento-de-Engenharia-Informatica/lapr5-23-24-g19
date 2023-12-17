@@ -2,6 +2,7 @@ using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Util.Coordinates;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DDDSample1.Domain.Jobs
@@ -17,6 +18,22 @@ namespace DDDSample1.Domain.Jobs
             this._repo = repo;
         }
 
+        public async Task<String> GetByIdAsync(String id)
+        {
+            // var fam = await this._repo.GetByIdAsync(id);
+            var job = await this._repo.GetByIdAsync(new JobId(id));
+            
+            if(job == null)
+                return null;
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true // This sets the indentation
+            };
+            return JsonSerializer.Serialize(job,options);
+        }
+
+
         public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
             Job job = dto.Type switch
@@ -24,13 +41,13 @@ namespace DDDSample1.Domain.Jobs
                 0 => new JobSurveillance(dto.Email,
                     new JobLocation(new Coordinates(dto.Location.StartingPoint.BuildingCode, dto.Location.StartingPoint.FloorNumber, dto.Location.StartingPoint.X, dto.Location.StartingPoint.Y),
                                     new Coordinates(dto.Location.EndingPoint.BuildingCode, dto.Location.EndingPoint.FloorNumber, dto.Location.EndingPoint.X, dto.Location.EndingPoint.Y)),
-                                    new JobContact(dto.Surveillance.Contact.Name, dto.Surveillance.Contact.PhoneNumber)),
+                                    new JobContact(dto.Surveillance.Contact.Name, dto.Surveillance.Contact.Phone)),
 
                 1 => new JobDelivery(dto.Email,
                     new JobLocation(new Coordinates(dto.Location.StartingPoint.BuildingCode, dto.Location.StartingPoint.FloorNumber, dto.Location.StartingPoint.X, dto.Location.StartingPoint.Y),
                                     new Coordinates(dto.Location.EndingPoint.BuildingCode, dto.Location.EndingPoint.FloorNumber, dto.Location.EndingPoint.X, dto.Location.EndingPoint.Y)),
-                                    new JobContact(dto.Delivery.PickupContact.Name, dto.Delivery.PickupContact.PhoneNumber),
-                                    new JobContact(dto.Delivery.DeliveryContact.Name, dto.Delivery.DeliveryContact.PhoneNumber),
+                                    new JobContact(dto.Delivery.PickupContact.Name, dto.Delivery.PickupContact.Phone),
+                                    new JobContact(dto.Delivery.DeliveryContact.Name, dto.Delivery.DeliveryContact.Phone),
                                     dto.Delivery.Description),
 
                 _ => throw new ArgumentException("Invalid job type")

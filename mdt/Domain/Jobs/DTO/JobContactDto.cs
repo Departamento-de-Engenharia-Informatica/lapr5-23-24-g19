@@ -3,12 +3,12 @@ namespace DDDSample1.Domain.Jobs
     public class JobContactDto
     {
         public string Name { get; private set; }
-        public int PhoneNumber { get; private set; }
+        public int Phone { get; private set; }
 
-        public JobContactDto(string Name, int PhoneNumber)
+        public JobContactDto(string Name, int Phone)
         {
             this.Name = Name;
-            this.PhoneNumber = PhoneNumber;
+            this.Phone = Phone;
         }
     }
 }

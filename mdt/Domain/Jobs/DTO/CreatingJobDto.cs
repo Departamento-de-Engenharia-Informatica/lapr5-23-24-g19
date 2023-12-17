@@ -18,9 +18,10 @@ namespace DDDSample1.Domain.Jobs
             this.Location = Location;
             this.Status = Status;
             this.Type = Type;
-            
-            this.Delivery = Delivery;
-            this.Surveillance = Surveillance;
+            if(Delivery!=null)
+                this.Delivery = Delivery;
+            if(Surveillance!=null)
+                this.Surveillance = Surveillance;
         }
     }
 }

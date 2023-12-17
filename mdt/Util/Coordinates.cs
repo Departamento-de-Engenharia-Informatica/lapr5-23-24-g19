@@ -10,6 +10,8 @@ namespace DDDSample1.Util.Coordinates
         public float X { get; private set; }
         public float Y { get; private set; }
 
+        private Coordinates(){}
+
         public Coordinates(string BuildingCode, int FloorNumber, float x, float y)
         {
             if (BuildingCode == null)

@@ -6,6 +6,8 @@ namespace DDDSample1.Domain.Jobs
     {
         private JobContact Contact { get; set; }
 
+        protected JobSurveillance():base(){}
+
         public JobSurveillance(string email, JobLocation location, JobContact contact) : base(email, location, JobTypeEnum.SURVEILLANCE)
         {
             this.Contact = contact;
