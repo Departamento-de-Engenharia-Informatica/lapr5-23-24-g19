@@ -35,6 +35,7 @@ import { CreateRobotTypeComponent } from './components/robot-type/create-robot-t
 import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component'
 import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
 import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
+import { CreateTaskComponent } from './components/task/create-task/create-task.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -50,6 +51,11 @@ export const routes: Routes = [
                 path: 'trace-route',
                 component: TraceRouteComponent,
                 title: 'Trace route',
+            },
+            {
+                path: 'create-task',
+                component: CreateTaskComponent,
+                title: 'Create task',
             },
         ],
     },

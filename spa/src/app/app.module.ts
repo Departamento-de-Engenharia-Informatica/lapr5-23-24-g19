@@ -52,8 +52,9 @@ import { CreateRobotTypeComponent } from './components/robot-type/create-robot-t
 import { RobotTypeRepo } from './repos/RobotTypeRepo'
 import { EditElevatorComponent } from './components/elevator/edit-elevator/edit-elevator.component'
 import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-robot.component'
-import { RobotRepo } from './repos/RobotRepo';
-import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
+import { RobotRepo } from './repos/RobotRepo'
+import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component';
+import { CreateTaskComponent } from './components/task/create-task/create-task.component'
 
 @NgModule({
     declarations: [
@@ -97,6 +98,7 @@ import { CreateRobotComponent } from './components/robot/create-robot/create-rob
         EditElevatorComponent,
         InhibitRobotComponent,
         CreateRobotComponent,
+        CreateTaskComponent,
     ],
     imports: [
         BrowserModule,

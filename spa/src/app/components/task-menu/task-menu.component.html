@@ -1,10 +1,20 @@
-<section class="text-gray-400 bg-gray-900 body-font" style="margin-bottom: 20px;">
-    <section class="text-gray-400 body-font bg-gray-900" style="display: flex;margin-left: 25%;margin-right: 25%;">
+<section class="text-gray-400 bg-gray-900 body-font" style="margin-bottom: 20px">
+    <section
+        class="text-gray-400 body-font bg-gray-900"
+        style="display: flex; margin-left: 25%; margin-right: 25%"
+    >
         <div class="top-menu">
             <div>
                 <a [routerLink]="['trace-route']">
                     <button class="button-top-menu" id="trace-route" type="button">
                         Trace Route
+                    </button>
+                </a>
+            </div>
+            <div>
+                <a [routerLink]="['create-task']">
+                    <button class="button-top-menu" id="create-task" type="button">
+                        Create Task
                     </button>
                 </a>
             </div>
