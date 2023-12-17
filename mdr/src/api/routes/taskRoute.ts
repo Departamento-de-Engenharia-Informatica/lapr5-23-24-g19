@@ -3,6 +3,7 @@ import { Container } from 'typedi'
 import { Router } from 'express'
 
 import ITaskController from '../../controllers/IControllers/ITaskController'
+import { Joi, celebrate } from 'celebrate'
 
 const route = Router()
 
@@ -14,6 +15,11 @@ export default (app: Router) => {
     route.get(
         '/types',
         (req, res, next) => ctrl.getTypes(req, res, next),
+    )
+    
+    route.post(
+        '',
+        (req, res, next) => ctrl.createTask(req, res, next),
     )
 
 }

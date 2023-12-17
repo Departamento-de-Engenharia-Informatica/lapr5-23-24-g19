@@ -15,5 +15,6 @@ export type TaskErrorResult = {
 }
 
 export default interface ITaskService {
+    createTask(String): Promise<Either<TaskErrorResult, String>>
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 }
