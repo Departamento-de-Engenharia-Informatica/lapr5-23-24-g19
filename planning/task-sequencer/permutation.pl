@@ -19,6 +19,7 @@ perm(Tasks, Order) :-
 
 permutation_cost(Tasks, (Cost, T)) :-
     permutation(Tasks, T),
+    write(T), nl,
     path_cost(T, Cost).
 
 

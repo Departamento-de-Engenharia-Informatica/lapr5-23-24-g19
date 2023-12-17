@@ -23,9 +23,10 @@ edge(Building, Floor, C1, C2, Cost) :-
     connection(Building, Floor, C2, C1, Cost).
 
 
-resolve_room((Building, Floor, X, Y), (Building, Floor, ActX, ActY)) :-
+resolve_room((Building, Floor, X, Y), Act) :-
     room(Building, Floor, X, Y, Orientation),
-    resolve_room_aux(X, Y, Orientation, ActX, ActY).
+    resolve_room_aux(X, Y, Orientation, ActX, ActY),
+    Act = (Building, Floor, ActX, ActY).
 
 resolve_room_aux(X, Y, 'N', X, Y1) :- Y1 is Y-1.
 resolve_room_aux(X, Y, 'S', X, Y1) :- Y1 is Y+1.

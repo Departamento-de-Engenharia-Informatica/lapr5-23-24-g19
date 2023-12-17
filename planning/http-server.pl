@@ -79,6 +79,8 @@ get_paths(Request) :-
 
 
 
+:- use_module('task-sequencer/permutation', [ perm/2 ]).
+
 :- http_handler('/api/task-sequence', get_sequence, [method(*)]).
 
 get_sequence(Request) :-
@@ -86,7 +88,11 @@ get_sequence(Request) :-
 
     dto_to_sequence(Body.tasks, Tasks),
 
-    sequencer(Tasks, Order),
+    % sequencer(Tasks, Order),
+    perm(Tasks, Order),
+    % format(string(S), '~w', [Tasks]),
+    % reply_json(S).
+    %
     sequence_to_dto(Order, DTO),
-
+    %
     reply_json_dict(DTO).

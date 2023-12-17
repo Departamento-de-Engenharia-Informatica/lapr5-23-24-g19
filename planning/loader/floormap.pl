@@ -7,6 +7,7 @@
 :- use_module('graph', [
     floorcell/4,
     elevator/5,
+    room/5,
     passage/6,
     connection/5,
     edge/5,

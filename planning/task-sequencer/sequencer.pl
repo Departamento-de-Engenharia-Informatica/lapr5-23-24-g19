@@ -6,11 +6,8 @@
 
 :- use_module('env', [ task_sequence_alg/1 ]).
 
-
 impls('permutations', permutation_sequencer:perm).
 impls('genetic', fail). % TODO
-
-
 
 sequencer(Tasks, Order) :-
     task_sequence_alg(Name),
