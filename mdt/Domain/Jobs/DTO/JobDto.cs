@@ -6,17 +6,15 @@ namespace DDDSample1.Domain.Jobs
     {
         public string Email { get; private set; }
         public JobLocationDto Location { get; private set; }
-        public string Status { get; private set; }
         public int Type { get; private set; }
 
         public JobDeliveryDto? Delivery { get; private set; }
         public JobSurveillanceDto? Surveillance { get; private set; }
 
-        public JobDto(string Email, JobLocationDto Location, string Status, int Type, JobDeliveryDto? Delivery, JobSurveillanceDto? Surveillance)
+        public JobDto(string Email, JobLocationDto Location, int Type, JobDeliveryDto? Delivery, JobSurveillanceDto? Surveillance)
         {
             this.Email = Email;
             this.Location = Location;
-            this.Status = Status;
             this.Type = Type;
             
             this.Delivery = Delivery;

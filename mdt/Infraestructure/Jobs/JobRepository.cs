@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using DDDSample1.Domain.Products;
 using DDDSample1.Infrastructure.Shared;
+using DDDSample1.Domain.Shared;
 
 namespace DDDSample1.Infrastructure.Families
 {

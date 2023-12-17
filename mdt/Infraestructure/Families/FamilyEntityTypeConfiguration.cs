@@ -8,9 +8,13 @@ namespace DDDSample1.Infrastructure.Categories
     {
         public void Configure(EntityTypeBuilder<Family> builder)
         {
-            //builder.ToTable("Families", SchemaNames.DDDSample1);
             builder.HasKey(b => b.Id);
-            //builder.Property<bool>("_active").HasColumnName("Active");
+            builder.Property(b => b.Id)
+                   .HasConversion(
+                       id => id.AsGuid(), // Convert from JobId to Guid
+                       guid => new FamilyId(guid.ToString()) // Convert from Guid to JobId
+                   );
+
         }
     }
 }

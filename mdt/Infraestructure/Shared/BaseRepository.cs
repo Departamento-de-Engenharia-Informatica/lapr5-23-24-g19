@@ -11,7 +11,7 @@ namespace DDDSample1.Infrastructure.Shared
     where TEntity : Entity<TEntityId>
     where TEntityId : EntityId
     {
-        private readonly DbSet<TEntity> _objs;
+        public readonly DbSet<TEntity> _objs;
         
         public BaseRepository(DbSet<TEntity> objs)
         {

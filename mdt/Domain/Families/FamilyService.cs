@@ -36,7 +36,7 @@ namespace DDDSample1.Domain.Families
 
         public async Task<FamilyDto> AddAsync(FamilyDto dto)
         {
-            var family = new Family(dto.Id, dto.Description);
+            var family = new Family();
 
             await this._repo.AddAsync(family);
 
@@ -53,7 +53,7 @@ namespace DDDSample1.Domain.Families
                 return null;   
 
             // change all field
-            family.ChangeDescription(dto.Description);
+            // family.ChangeDescription(dto.Description);
             
             await this._unitOfWork.CommitAsync();
 
@@ -68,7 +68,7 @@ namespace DDDSample1.Domain.Families
                 return null;   
 
             // change all fields
-            family.MarkAsInative();
+            // family.MarkAsInative();
             
             await this._unitOfWork.CommitAsync();
 
@@ -82,8 +82,8 @@ namespace DDDSample1.Domain.Families
             if (family == null)
                 return null;   
 
-            if (family.Active)
-                throw new BusinessRuleValidationException("It is not possible to delete an active family.");
+            // if (family.Active)
+                // throw new BusinessRuleValidationException("It is not possible to delete an active family.");
             
             this._repo.Remove(family);
             await this._unitOfWork.CommitAsync();

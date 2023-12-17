@@ -76,6 +76,7 @@ namespace DDDSample1
         public void ConfigureMyServices(IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork,UnitOfWork>();
+            // services.AddTransient<IValueObject,ValueObject>();
 
             // services.AddTransient<ICategoryRepository,CategoryRepository>();
             // services.AddTransient<CategoryService>();

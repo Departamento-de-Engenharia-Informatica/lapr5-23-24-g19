@@ -36,7 +36,7 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
-            Job job = dto.Type switch
+            Job job = dto.JobType switch
             {
                 0 => new JobSurveillance(dto.Email,
                     new JobLocation(new Coordinates(dto.Location.StartingPoint.BuildingCode, dto.Location.StartingPoint.FloorNumber, dto.Location.StartingPoint.X, dto.Location.StartingPoint.Y),
