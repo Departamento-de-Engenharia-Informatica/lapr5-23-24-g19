@@ -11,7 +11,7 @@ import { VatNumber } from "./vatNumber";
 interface Props {
     email: Email
     name: Name
-    phone: PhoneNumber
+    phoneNumber: PhoneNumber
     vatNumber: VatNumber
 
     password: UserPassword
@@ -22,11 +22,11 @@ export default class Client extends AggregateRoot<Props> {
         super(props, id)
     }
 
-    static create(props: Props, id?: UniqueEntityID) {
+    static create(props: Props, id?: UniqueEntityID): Result<Client> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.email, argumentName: 'Email' },
             { argument: props.name, argumentName: 'Name' },
-            { argument: props.phone, argumentName: 'PhoneNumber' },
+            { argument: props.phoneNumber, argumentName: 'PhoneNumber' },
             { argument: props.vatNumber, argumentName: 'VATnumber' },
             { argument: props.password, argumentName: 'Password' },
         ])
@@ -36,5 +36,25 @@ export default class Client extends AggregateRoot<Props> {
         }
 
         return Result.ok(new Client({ ...props }, id))
+    }
+
+    get id(): UniqueEntityID {
+        return this._id
+    }
+
+    get name() {
+        return this.props.name
+    }
+
+    get email() {
+        return this.props.email
+    }
+
+    get phoneNumber() {
+        return this.props.phoneNumber
+    }
+
+    get vatNumber() {
+        return this.props.vatNumber
     }
 }

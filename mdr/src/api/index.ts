@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import auth from './routes/userRoute'
 import user from './routes/userRoute'
+import client from './routes/clientRoute'
+
 import role from './routes/roleRoute'
 import building from './routes/buildingRoute'
 import passage from './routes/passageRoute'
@@ -13,7 +15,9 @@ export default () => {
     const app = Router()
 
     auth(app)
-    user(app)
+    // user(app)
+    client(app)
+
     role(app)
     building(app)
     passage(app)
@@ -21,6 +25,7 @@ export default () => {
     task(app)
     robotType(app)
     path(app)
+
 
     return app
 }

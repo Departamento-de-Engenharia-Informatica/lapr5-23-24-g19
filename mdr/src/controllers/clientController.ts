@@ -40,6 +40,9 @@ export default class ClientController implements IClientController {
             case ClientErrorCode.NotFound:
                 ret = 404
                 break
+            case ClientErrorCode.AlreadyExists:
+                ret = 422
+                break
             default:
                 ret = 400
                 break

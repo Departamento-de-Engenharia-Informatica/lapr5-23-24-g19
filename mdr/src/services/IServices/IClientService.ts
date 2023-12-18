@@ -4,6 +4,7 @@ import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
 
 export enum ClientErrorCode {
     NotFound,
+    AlreadyExists,
     BussinessRuleViolation,
 }
 

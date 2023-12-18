@@ -1,7 +1,7 @@
 import { Document, model, Schema } from 'mongoose'
-import { IRobotPersistence } from '../../dataschema/mongo/IRobotPersistence'
+import { IClientPersistence } from '../../dataschema/mongo/IClientPersistence'
 
-const Robot = new Schema({
+const Client = new Schema({
     domainId: {
         type: String,
         unique: true,
@@ -9,14 +9,15 @@ const Robot = new Schema({
         index: true,
     },
 
-    name: {
+    email: {
         type: String,
+        index: true,
+        unique: true,
         required: true,
     },
 
-    email: {
+    name: {
         type: String,
-        unique: true,
         required: true,
     },
 
@@ -32,14 +33,8 @@ const Robot = new Schema({
         required: true,
     },
 
-    password: {
-        type: String,
-        required: true,
-    },
-
-
+    password: String,
+    salt: String,
 })
-
-
 
 export default model<IClientPersistence & Document>('Client', Client)
