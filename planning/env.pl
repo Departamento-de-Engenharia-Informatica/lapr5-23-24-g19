@@ -8,7 +8,8 @@
     num_gen/1,
     dim_pop/1,
     prob_cruz/1,
-    prob_mut/1
+    prob_mut/1,
+    time_limit/1
 ]).
 
 
@@ -30,23 +31,25 @@ elev_cost(Cost) :-
 
 task_sequence_alg(Alg) :-
     getenv('TASK_SEQ_ALGORITHM', Alg), !;
-    Alg = 'permtutations'.
+    Alg = 'genetic'.
 
 time_limit(Time) :-
     getenv('TIME_LIMIT', Time), !;
-    Time = 60.
+    Time = 10.
 
-    
 num_gen(NG) :-
     NG = 6.
     
+% tem de ser tanto maior quantas permutacoes possiveis entre os individuos
 dim_pop(DP) :-
-    DP = 4.
+    DP = 6.
 
+% usar valores entre 60 e 80
 prob_cruz(PC) :-
-    PC =50.
+    PC =20.
 
+% usar valores muitooooooo baixos <5
 prob_mut(PM) :-
-    PM = 50.
+    PM = 5.
 
 % vim: ft=prolog

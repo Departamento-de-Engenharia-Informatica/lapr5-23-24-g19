@@ -11,13 +11,13 @@ generate_tasks(List):-
 calculate_and_assert_task_costs([],_).
 calculate_and_assert_task_costs([Task|Rest],List) :-
 
-    %calcular cada uma das sequencias Task-[lista total]
+    % calcular cada uma das sequencias Task-[lista total]
     calculate_task_cost(Task, List, Costs),
 
-    %assert cada uma das sequencias Task-[lista total]
+    %a ssert cada uma das sequencias Task-[lista total]
     assert_task_costs(Task, List, Costs),
 
-    % continuar a calcular para outras tarefas
+    % continuar a calcular para o resto das tarefas
     calculate_and_assert_task_costs(Rest,List).
 
 calculate_task_cost(_, [], []).
