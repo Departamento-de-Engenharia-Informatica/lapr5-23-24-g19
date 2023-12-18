@@ -38,6 +38,10 @@ export default {
         level: process.env.LOG_LEVEL || 'info',
     },
 
+    validEmailDomains: ['isep.ipp.pt'],
+    phoneNumberLength: 9,
+    vatNumberLength: 9,
+
     /**
      * API configs
      */
