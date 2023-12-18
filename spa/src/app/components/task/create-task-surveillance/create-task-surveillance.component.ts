@@ -63,6 +63,24 @@ export class CreateTaskSurveillanceComponent {
         }
 
         console.log(dto)
-        // this.taskService.createSurveillanceTask(dto).subscribe(
+        this.TaskService.createSurveillanceTask(dto).subscribe(
+            (task: CreateSurveillanceTaskDTO) => {
+                let alertMessage = `Task created successfully!`
+
+                alert(alertMessage)
+
+                // this.createSurveillanceForm.reset({
+                //     buildingCode: this.selectedBuilding,
+                //     description: '',
+                // })
+            },
+            (error) => {
+                alert(error.error)
+                // this.createFloorForm.reset({
+                //     buildingCode: this.selectedBuilding,
+                //     description: '',
+                // })
+            },
+        )
     }
 }

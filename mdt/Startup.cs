@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
+using System;
+using DDDSample1.Domain.Categories;
+using DDDSample1.Domain.Families;
+using DDDSample1.Domain.Jobs;
+using DDDSample1.Domain.Products;
+using DDDSample1.Domain.Shared;
+using DDDSample1.Infrastructure;
+using DDDSample1.Infrastructure.Categories;
+using DDDSample1.Infrastructure.Families;
+using DDDSample1.Infrastructure.Products;
+using DDDSample1.Infrastructure.Shared;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using DDDSample1.Infrastructure;
-using DDDSample1.Infrastructure.Categories;
-using DDDSample1.Infrastructure.Products;
-using DDDSample1.Infrastructure.Families;
-using DDDSample1.Infrastructure.Shared;
-using DDDSample1.Domain.Shared;
-using DDDSample1.Domain.Categories;
-using DDDSample1.Domain.Products;
-using DDDSample1.Domain.Families;
-using DDDSample1.Domain.Jobs;
-using System;
 
 namespace DDDSample1
 {
@@ -36,15 +36,17 @@ namespace DDDSample1
             //     .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
             services.AddControllers();
-            services.AddDbContext<RobDroneDBContext>(options =>
-                options.UseMySql(
-                    "Server=localhost;Port=3306;database=RobDroneGO;user=root;password=Password1",
-                    new MariaDbServerVersion(new Version(11, 1, 3)))); // Specify your MariaDB version here
+            services.AddDbContext<RobDroneDBContext>(
+                options =>
+                    options.UseMySql(
+                        "Server=localhost;Port=3306;database=RobDroneGO;user=root;password=Password1",
+                        new MariaDbServerVersion(new Version(11, 1, 3))
+                    )
+            ); // Specify your MariaDB version here
 
             ConfigureMyServices(services);
             services.AddControllers().AddNewtonsoftJson();
             services.AddEndpointsApiExplorer();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,12 +72,11 @@ namespace DDDSample1
             {
                 endpoints.MapControllers();
             });
-
         }
 
         public void ConfigureMyServices(IServiceCollection services)
         {
-            services.AddTransient<IUnitOfWork,UnitOfWork>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             // services.AddTransient<IValueObject,ValueObject>();
 
             // services.AddTransient<ICategoryRepository,CategoryRepository>();
@@ -87,7 +88,7 @@ namespace DDDSample1
             // services.AddTransient<IFamilyRepository,FamilyRepository>();
             // services.AddTransient<FamilyService>();
 
-            services.AddTransient<IJobRepository,JobRepository>();
+            services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<JobService>();
         }
     }

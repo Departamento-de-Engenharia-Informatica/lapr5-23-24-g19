@@ -6,6 +6,7 @@ import { RoomDTO } from 'src/app/dto/RoomDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { RoomService } from 'src/app/services/room.service'
+import { TaskService } from 'src/app/services/task.service'
 
 @Component({
     selector: 'app-create-task-delivery',
@@ -36,6 +37,7 @@ export class CreateTaskDeliveryComponent {
         private buildingService: BuildingService,
         private floorService: FloorService,
         private roomService: RoomService,
+        private taskService: TaskService,
     ) {
         this.createDeliveryForm = this.formBuilder.group({
             email: [null, [Validators.required]],
@@ -183,6 +185,24 @@ export class CreateTaskDeliveryComponent {
         if (description !== '') dto.description = description
 
         console.log(dto)
-        // call service to do the request
+        this.taskService.createDeliveryTask(dto).subscribe(
+            (task: CreateDeliveryTaskDTO) => {
+                let alertMessage = `Task created successfully!`
+
+                alert(alertMessage)
+
+                // this.createSurveillanceForm.reset({
+                //     buildingCode: this.selectedBuilding,
+                //     description: '',
+                // })
+            },
+            (error) => {
+                alert(error.error)
+                // this.createFloorForm.reset({
+                //     buildingCode: this.selectedBuilding,
+                //     description: '',
+                // })
+            },
+        )
     }
 }

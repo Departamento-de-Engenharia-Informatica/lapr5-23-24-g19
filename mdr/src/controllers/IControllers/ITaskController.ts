@@ -1,7 +1,7 @@
-import { Request, ParamsDictionary, Response, NextFunction } from 'express-serve-static-core'
-import { ParsedQs } from 'qs'
+import { Request, Response, NextFunction } from 'express-serve-static-core'
 
 export default interface ITaskController {
-    createTask(req: Request, res: Response, next: NextFunction)
+    createSurveillanceTask(req: Request, res: Response, next: NextFunction)
+    createDeliveryTask(req: Request, res: Response, next: NextFunction)
     getTypes(req: Request, res: Response, next: NextFunction)
 }

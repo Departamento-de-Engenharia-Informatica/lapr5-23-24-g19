@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using DDDSample1.Domain.Jobs;
 using System;
 using System.Text.Json;
+using System.Threading.Tasks;
+using DDDSample1.Domain.Jobs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DDDSample1.Controllers
 {
@@ -39,7 +39,7 @@ namespace DDDSample1.Controllers
             return Ok(job);
         }
 
-         // GET: api/jobs/{id}
+        // GET: api/jobs/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<string>> GetGetById(string id)
         {
@@ -49,7 +49,7 @@ namespace DDDSample1.Controllers
             {
                 return NotFound();
             }
-            
+
             return Ok(job);
         }
 

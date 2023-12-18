@@ -1,7 +1,5 @@
-import { IPathBetweenBuildingsDTO } from "../../dto/IPathBetweenBuildingsDTO";
-import { IPathCriterionDTO } from "../../dto/IPathCriterionDTO";
-import { IPathDTO } from "../../dto/IPathDTO";
+import { ITaskDTO } from '../../dto/ITaskDTO'
 
 export default interface IMdtAdapter {
-    create(String): Promise<String>
+    createSurveillanceTask(dto: ITaskDTO): Promise<String>
 }
