@@ -6,6 +6,8 @@ import { TaskTypeDTO } from '../dto/CreateRobotTypeDTO'
 import { Config } from '../config'
 import { PathDTO } from '../dto/PathDTO'
 import { GetPathsDTO } from '../dto/GetPathsDTO'
+import { CreateDeliveryTaskDTO } from '../dto/CreateDeliveryTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -22,15 +24,11 @@ export class TaskService {
     }
 
     findRoute(dto: GetPathsDTO) {
-        return this.http.post<PathDTO[]>(
-            `${Config.baseUrl}/paths`,
-            JSON.stringify(dto),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return this.http.post<PathDTO[]>(`${Config.baseUrl}/paths`, JSON.stringify(dto), {
+            headers: { 'Content-type': 'application/json' },
+            observe: 'body',
+            responseType: 'json',
+        })
     }
 
     tasksTypes(): Observable<TaskTypeDTO[]> {
@@ -52,5 +50,31 @@ export class TaskService {
                     return throwError(() => new Error(errorMessage))
                 }),
             )
+    }
+
+    createSurveillanceTask(
+        dto: CreateSurveillanceTaskDTO,
+    ): Observable<CreateSurveillanceTaskDTO> {
+        return this.http.post<CreateSurveillanceTaskDTO>(
+            `${Config.baseUrl}/task/surveillance`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
+    }
+
+    createDeliveryTask(dto: CreateDeliveryTaskDTO): Observable<CreateDeliveryTaskDTO> {
+        return this.http.post<CreateDeliveryTaskDTO>(
+            `${Config.baseUrl}/task/delivery`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 }

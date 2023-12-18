@@ -16,4 +16,5 @@ export interface CreateDeliveryTaskDTO {
     deliveryContactPhone: string
 
     description?: string
+    confirmationCode: number
 }

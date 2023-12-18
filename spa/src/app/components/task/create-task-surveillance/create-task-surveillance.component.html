@@ -1,20 +1,23 @@
-<form [formGroup]="createSurveillanceForm" (ngSubmit)="onSubmitSurveillance()">
-    <div>
-        <label for="email">Email:</label>
-        <input
-            type="text"
-            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            id="email"
-            formControlName="email"
-            required
-        />
+<form [formGroup]="createSurveillanceForm" (ngSubmit)="onSubmit()">
+    <div class="introduce">
+        <div class="box">
+            <div>
+                <label for="email">Email:</label>
+                <input
+                    type="text"
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                    id="email"
+                    formControlName="email"
+                    required
+                />
+            </div>
 
-        <div class="row">
             <div>
                 <label for="buildingCode">Select Building:</label>
                 <select
                     id="selectedBuilding"
                     formControlName="buildingCode"
+                    q
                     [(ngModel)]="selectedBuilding"
                     (ngModelChange)="listFloors()"
                     required
@@ -38,9 +41,7 @@
                     </option>
                 </select>
             </div>
-        </div>
 
-        <div class="row">
             <div>
                 <label for="contactName">Contact Name:</label>
                 <input id="contactName" formControlName="contactName" required />
@@ -57,20 +58,7 @@
                 />
             </div>
         </div>
-
-        <button type="submit" [disabled]="createSurveillanceForm.invalid">Submit</button>
     </div>
-</form>
 
-<!-- <form [formGroup]="createDeliveryForm" (ngSubmit)="onSubmitDelivery()"> -->
-<!--     <div> -->
-<!--         <label for="email">Email:</label> -->
-<!--         <input -->
-<!--             type="text" -->
-<!--             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" -->
-<!--             id="email" -->
-<!--             formControlName="email" -->
-<!--             required -->
-<!--         /> -->
-<!--     </div> -->
-<!-- </form> -->
+    <button type="submit" [disabled]="createSurveillanceForm.invalid">Submit</button>
+</form>
