@@ -21,10 +21,17 @@ export default class PassageService implements IPassageService {
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
     ) {}
 
-    public async createPassage(passageDTO: IPassageDTO): Promise<Either<ErrorResult, IPassageDTO>> {
+    public async createPassage(
+        passageDTO: IPassageDTO,
+    ): Promise<Either<ErrorResult, IPassageDTO>> {
         try {
             //verify if building exist
-            if (!this.existBuildings(passageDTO.floor1.buildingCode, passageDTO.floor2.buildingCode)) {
+            if (
+                !this.existBuildings(
+                    passageDTO.floor1.buildingCode,
+                    passageDTO.floor2.buildingCode,
+                )
+            ) {
                 return left({
                     errorCode: ErrorCode.NotFound,
                     message: 'Buildings not found',
@@ -70,7 +77,9 @@ export default class PassageService implements IPassageService {
             } else {
                 await this.passageRepo.save(passageOrError.getValue())
 
-                const passageDTOResult = PassageMap.toDTO(passageOrError.getValue()) as IPassageDTO
+                const passageDTOResult = PassageMap.toDTO(
+                    passageOrError.getValue(),
+                ) as IPassageDTO
 
                 return right(passageDTOResult)
             }
@@ -79,9 +88,16 @@ export default class PassageService implements IPassageService {
         }
     }
 
-    private async existBuildings(building1Str: string, building2Str: string): Promise<boolean> {
-        const building1 = await this.buildingRepo.findByCode(BuildingCode.create(building1Str).getValue())
-        const building2 = await this.buildingRepo.findByCode(BuildingCode.create(building2Str).getValue())
+    private async existBuildings(
+        building1Str: string,
+        building2Str: string,
+    ): Promise<boolean> {
+        const building1 = await this.buildingRepo.findByCode(
+            BuildingCode.create(building1Str).getValue(),
+        )
+        const building2 = await this.buildingRepo.findByCode(
+            BuildingCode.create(building2Str).getValue(),
+        )
 
         if (building1 === null || building2 === null) {
             return false
@@ -90,19 +106,30 @@ export default class PassageService implements IPassageService {
     }
 
     private async getPassage(passageDTO: IPassageDTO): Promise<Result<Passage>> {
-        const b1 = await this.buildingRepo.findByCode(BuildingCode.create(passageDTO.floor1.buildingCode).getValue())
+        const b1 = await this.buildingRepo.findByCode(
+            BuildingCode.create(passageDTO.floor1.buildingCode).getValue(),
+        )
 
         if (!b1) {
-            return Result.fail(`Building not found with code ${passageDTO.floor1.buildingCode}`)
+            return Result.fail(
+                `Building not found with code ${passageDTO.floor1.buildingCode}`,
+            )
         }
 
-        const b2 = await this.buildingRepo.findByCode(BuildingCode.create(passageDTO.floor2.buildingCode).getValue())
+        const b2 = await this.buildingRepo.findByCode(
+            BuildingCode.create(passageDTO.floor2.buildingCode).getValue(),
+        )
 
         if (!b2) {
-            return Result.fail(`Building not found with code ${passageDTO.floor2.buildingCode}`)
+            return Result.fail(
+                `Building not found with code ${passageDTO.floor2.buildingCode}`,
+            )
         }
 
-        const f1 = await this.floorRepo.find(b1, FloorNumber.create(passageDTO.floor1.floorNumber).getValue())
+        const f1 = await this.floorRepo.find(
+            b1,
+            FloorNumber.create(passageDTO.floor1.floorNumber).getValue(),
+        )
 
         if (!f1) {
             return Result.fail(
@@ -110,7 +137,10 @@ export default class PassageService implements IPassageService {
             )
         }
 
-        const f2 = await this.floorRepo.find(b2, FloorNumber.create(passageDTO.floor2.floorNumber).getValue())
+        const f2 = await this.floorRepo.find(
+            b2,
+            FloorNumber.create(passageDTO.floor2.floorNumber).getValue(),
+        )
         if (!f2) {
             return Result.fail(
                 `Floor ${passageDTO.floor2.floorNumber} not found in building ${passageDTO.floor2.buildingCode}`,
@@ -137,7 +167,9 @@ export default class PassageService implements IPassageService {
                     message: 'Passages Not found',
                 })
             } else {
-                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(
+                    passages.map((passage) => PassageMap.toDTO(passage)),
+                )
                 return right(dtoList)
             }
         } catch (e) {
@@ -195,7 +227,9 @@ export default class PassageService implements IPassageService {
                     message: 'Passages not found',
                 })
             } else {
-                const dtoList = await Promise.all(passages.map((passage) => PassageMap.toDTO(passage)))
+                const dtoList = await Promise.all(
+                    passages.map((passage) => PassageMap.toDTO(passage)),
+                )
                 return right(dtoList)
             }
         } catch (e) {
@@ -203,7 +237,9 @@ export default class PassageService implements IPassageService {
         }
     }
 
-    async editPassage(passageDTO: IUpdatePassageDTO): Promise<Either<ErrorResult, IPassageDTO>> {
+    async editPassage(
+        passageDTO: IUpdatePassageDTO,
+    ): Promise<Either<ErrorResult, IPassageDTO>> {
         const passageRes = await this.getPassage(passageDTO.old)
         if (passageRes.isFailure) {
             return left({
@@ -217,7 +253,9 @@ export default class PassageService implements IPassageService {
         if (!!passageDTO.new.floor1) {
             const f1Info = passageDTO.new.floor1
 
-            const b1 = await this.buildingRepo.findByCode(BuildingCode.create(f1Info.buildingCode).getValue())
+            const b1 = await this.buildingRepo.findByCode(
+                BuildingCode.create(f1Info.buildingCode).getValue(),
+            )
 
             if (!b1) {
                 return left({
@@ -225,7 +263,10 @@ export default class PassageService implements IPassageService {
                     message: 'Building not found',
                 })
             }
-            const floor = await this.floorRepo.find(b1, FloorNumber.create(f1Info.floorNumber).getValue())
+            const floor = await this.floorRepo.find(
+                b1,
+                FloorNumber.create(f1Info.floorNumber).getValue(),
+            )
 
             if (!floor) {
                 return left({
@@ -239,7 +280,9 @@ export default class PassageService implements IPassageService {
 
         if (!!passageDTO.new.floor2) {
             const f2Info = passageDTO.new.floor2
-            const b2 = await this.buildingRepo.findByCode(BuildingCode.create(f2Info.buildingCode).getValue())
+            const b2 = await this.buildingRepo.findByCode(
+                BuildingCode.create(f2Info.buildingCode).getValue(),
+            )
 
             if (!b2) {
                 return left({
@@ -248,7 +291,10 @@ export default class PassageService implements IPassageService {
                 })
             }
 
-            const floor = await this.floorRepo.find(b2, FloorNumber.create(f2Info.floorNumber).getValue())
+            const floor = await this.floorRepo.find(
+                b2,
+                FloorNumber.create(f2Info.floorNumber).getValue(),
+            )
 
             if (!floor) {
                 return left({

@@ -38,16 +38,16 @@ export default class PathService implements IPathService {
                 floor: dto.roomStart.floor,
                 coordinates: {
                     x: roomStart.positions.x,
-                    y: roomStart.positions.y
-                }
+                    y: roomStart.positions.y,
+                },
             },
             goal: {
                 building: dto.roomGoal.building,
                 floor: dto.roomGoal.floor,
                 coordinates: {
                     x: roomGoal.positions.x,
-                    y: roomGoal.positions.y
-                }
+                    y: roomGoal.positions.y,
+                },
             },
         }
 

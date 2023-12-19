@@ -9,7 +9,10 @@ describe('Room Dimensions', () => {
             width: 3,
         }
 
-        const roomDimensions = RoomDimensions.create(validDimensions.length, validDimensions.width)
+        const roomDimensions = RoomDimensions.create(
+            validDimensions.length,
+            validDimensions.width,
+        )
 
         assert.isOk(roomDimensions.isSuccess)
     })
@@ -28,7 +31,10 @@ describe('Room Dimensions', () => {
             width: -1,
         }
 
-        const roomDimensions = RoomDimensions.create(invalidDimensions.length, invalidDimensions.width)
+        const roomDimensions = RoomDimensions.create(
+            invalidDimensions.length,
+            invalidDimensions.width,
+        )
 
         assert.isNotOk(roomDimensions.isSuccess)
     })

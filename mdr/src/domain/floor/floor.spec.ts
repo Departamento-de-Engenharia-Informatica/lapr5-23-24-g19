@@ -24,7 +24,7 @@ describe('Floor', () => {
         stubCreate(Number)
 
         building = Building.create({} as BuildingProps).getValue()
-        description = Description.create("asdas").getValue()
+        description = Description.create('asdas').getValue()
         floorNumber = Number.create(3).getValue()
     })
 
@@ -64,7 +64,7 @@ describe('Floor', () => {
         const result = Floor.create({
             building,
             floorNumber,
-            path: undefined
+            path: undefined,
         })
 
         assert.isOk(result.isSuccess)
@@ -99,7 +99,7 @@ describe('Floor', () => {
         assert.isOk(result.isSuccess)
         const newFloor = FloorNumber.create(1)
         assert.isOk(newFloor.isSuccess)
-        result.getValue().floorNumber=newFloor.getValue()
+        result.getValue().floorNumber = newFloor.getValue()
         expect(result.getValue().floorNumber.value).to.equal(floorNumber.value)
     })
 
@@ -110,9 +110,9 @@ describe('Floor', () => {
             description,
         })
         assert.isOk(result.isSuccess)
-        const newDescription = Description.create("des")
+        const newDescription = Description.create('des')
         assert.isOk(newDescription)
-        result.getValue().description=newDescription.getValue()
+        result.getValue().description = newDescription.getValue()
         expect(result.getValue().description.value).to.equal(description.value)
     })
     it('return same building', () => {
@@ -124,5 +124,4 @@ describe('Floor', () => {
         assert.isOk(result.isSuccess)
         expect(result.getValue().building).to.equal(building)
     })
-
 })

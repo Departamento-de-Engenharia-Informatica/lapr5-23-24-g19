@@ -43,6 +43,10 @@ export default {
         level: process.env.LOG_LEVEL || 'info',
     },
 
+    validEmailDomains: ['isep.ipp.pt'],
+    phoneNumberLength: 9,
+    vatNumberLength: 9,
+
     /**
      * API configs
      */
@@ -54,6 +58,10 @@ export default {
         role: {
             name: 'RoleController',
             path: '../controllers/roleController',
+        },
+        client: {
+            name: 'ClientController',
+            path: '../controllers/clientController',
         },
         building: {
             name: 'BuildingController',
@@ -106,6 +114,10 @@ export default {
             name: 'UserRepo',
             path: '../repos/mongo/userRepo',
         },
+        client: {
+            name: 'ClientRepo',
+            path: '../repos/mongo/clientRepo',
+        },
         building: {
             name: 'BuildingRepo',
             path: '../repos/mongo/buildingRepo',
@@ -150,6 +162,10 @@ export default {
             name: 'userSchema',
             schema: '../persistence/schemas/userSchema',
         },
+        client: {
+            name: 'clientSchema',
+            schema: '../persistence/schemas/clientSchema',
+        },
         role: {
             name: 'roleSchema',
             schema: '../persistence/schemas/roleSchema',
@@ -188,6 +204,10 @@ export default {
         role: {
             name: 'RoleService',
             path: '../services/roleService',
+        },
+        client: {
+            name: 'ClientService',
+            path: '../services/clientService',
         },
         building: {
             name: 'BuildingService',

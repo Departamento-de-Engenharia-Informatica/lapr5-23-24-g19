@@ -10,7 +10,10 @@ export class MockJobAggregateRoot extends AggregateRoot<IMockJobProps> {
         super(props, id)
     }
 
-    public static createJob(props: IMockJobProps, id?: UniqueEntityID): MockJobAggregateRoot {
+    public static createJob(
+        props: IMockJobProps,
+        id?: UniqueEntityID,
+    ): MockJobAggregateRoot {
         const job = new this(props, id)
         job.addDomainEvent(new MockJobCreatedEvent(job.id))
         return job

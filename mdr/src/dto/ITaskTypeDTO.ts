@@ -1,3 +1,3 @@
-export interface ITaskTypeDTO{
+export interface ITaskTypeDTO {
     description: string
 }

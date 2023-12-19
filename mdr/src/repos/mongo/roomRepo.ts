@@ -14,7 +14,9 @@ import { RoomName } from '../../domain/room/roomName'
 export default class RoomRepo implements IRoomRepo {
     private models: any
 
-    constructor(@Inject('roomSchema') private roomSchema: Model<IRoomPersistence & Document>) {}
+    constructor(
+        @Inject('roomSchema') private roomSchema: Model<IRoomPersistence & Document>,
+    ) {}
     private createBaseQuery(): any {
         return {
             where: {},
@@ -66,14 +68,18 @@ export default class RoomRepo implements IRoomRepo {
         if (records.length === 0) {
             return []
         }
-        return await Promise.all(records.map(record => RoomMap.toDomain(record)))
+        return await Promise.all(records.map((record) => RoomMap.toDomain(record)))
     }
 
-    async find(building: BuildingCode, floor: FloorNumber, name: RoomName): Promise<Room> {
+    async find(
+        building: BuildingCode,
+        floor: FloorNumber,
+        name: RoomName,
+    ): Promise<Room> {
         const doc = await this.roomSchema.findOne({
             buildingCode: building.value,
             floorNumber: floor.value,
-            name: name.value
+            name: name.value,
         })
 
         if (!doc) {
@@ -82,5 +88,4 @@ export default class RoomRepo implements IRoomRepo {
 
         return RoomMap.toDomain(doc)
     }
-
 }

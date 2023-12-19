@@ -19,12 +19,14 @@
     floorcell/4,
     elevator/5,
     passage/6,
-    edge/5
+    edge/5,
+    resolve_room/2
 ]).
 
 % :- use_module('algorithms/a-star', [ a_star/5 as walk ]).
 % :- use_module('algorithms/dfs', [ dfs/5 as walk ]).
-:- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
+% :- use_module('algorithms/best-first', [ bestfs/5 as walk ]).
+:- use_module('algorithms/beam', [ beam/5 as walk ]).
 
 
 % NOTE: Notation used for paths:
@@ -80,7 +82,19 @@ compute_paths(Orig, Dest, Criterion, Paths) :-
     predsort(Crit, LLigs, Paths).
 
 compute_path(Orig, Dest, Path, Cost) :-
-    compute_path_aux(Orig, Dest, NestedPath, 0, Cost),
+    (BOrig, FOrig, _, _) = Orig,
+    (BDest, FDest, _, _) = Dest,
+
+    loadmap(BOrig, FOrig),
+    loadmap(BDest, FDest),
+
+    (resolve_room(Orig, ActOrig), !; ActOrig = Orig),
+    (resolve_room(Dest, ActDest), !; ActDest = Dest),
+
+    % write('dest: '), write(Dest), nl,
+    % write('destino: '), write(ActDest), nl,
+
+    compute_path_aux(ActOrig, ActDest, NestedPath, 0, Cost),
     flatten(NestedPath, Path).
 
 
@@ -94,16 +108,16 @@ edge_wrap(B, F, {B,F}/[C1, C2, Cost]>>(graph:edge(B, F, C1, C2, Cost))).
 
 compute_path_aux((B, F, X, Y), (B, F, X, Y), [], Acc, Acc):- !.
 % same building, same floor
-compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
+compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :- !,
     loadmap(B, F),
-    format('~w~w (~w, ~w)', [B, F, X1, Y1]), nl,
+    % format('~w~w (~w, ~w)', [B, F, X1, Y1]), nl,
 
     % lambda wrapper around edge
     edge_wrap(B, F, Wrapper),
 
-    write('comecou'), nl,
+    % write('comecou'), nl,
     walk(cell(X1, Y1), cell(X2, Y2), Wrapper, PathRelative, CostPath),
-    write('acabou'), nl,
+    % write('acabou'), nl,
 
     Cost is Acc + CostPath,
 
@@ -112,7 +126,7 @@ compute_path_aux((B, F, X1, Y1), (B, F, X2, Y2), Path, Acc, Cost) :-
 % same building, different floor (catch elevator)
 compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B, F1),
-    format('~w~w (~w, ~w)', [B, F1, X1, Y1]), nl,
+    % format('~w~w (~w, ~w)', [B, F1, X1, Y1]), nl,
 
     elevator(B, F1, XElev, YElev, ElevFloors),
     member(F2, ElevFloors),
@@ -120,9 +134,9 @@ compute_path_aux((B, F1, X1, Y1), (B, F2, X2, Y2), [CompFull|Path], Acc, Cost) :
     edge_wrap(B, F1, Wrapper),
 
     % walk the floor until we reach the elevator
-    write('comecou'), nl,
+    % write('comecou'), nl,
     walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Component, CostPath),
-    write('acabou'), nl,
+    % write('acabou'), nl,
     absolute_path(B, F1, Component, CompAbs),
 
     % catch the elevator to another floor
@@ -143,7 +157,7 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     % walk the floor until we reach the passage
     % go to the other building
     % use passage/6 to find where we end up in
-    format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
+    % format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
 
     passage(B1, F1, Xb1, Yb1, B2, Fb2),
 
@@ -168,13 +182,13 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
 % try random elevator
 compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B1, F1),
-    format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
+    % format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
 
     elevator(B1, F1, XElev, YElev, ElevFloors),
     member(Fconn, ElevFloors),
 
     edge_wrap(B1, F1, Wrapper),
-    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, CostPath, NewAcc, Cost),
+    walk(cell(X1, Y1), cell(XElev, YElev), Wrapper, Comp, CostPath),
     absolute_path(B1, F1, Comp, CompAbs),
 
     % catch the elevator to another floor
@@ -192,7 +206,7 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
 % try random passage
 compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost) :-
     loadmap(B1, F1),
-    format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
+    % format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
 
     passage(B1, F1, Xf1, Yf1, B3, F3),
 
@@ -209,5 +223,3 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     NewAcc is Acc + CostPath + PassCost,
 
     compute_path_aux((B3, F3, Xb3, Yb3), (B2, F2, X2, Y2), Path, NewAcc, Cost).
-
-

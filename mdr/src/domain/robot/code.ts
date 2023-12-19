@@ -18,7 +18,9 @@ export class RobotCode extends ValueObject<Props> {
 
     public static create(code: string): Result<RobotCode> {
         if (!regex.test(code)) {
-            return Result.fail(`Robot code should be alphanumeric and have less than 30 characters`)
+            return Result.fail(
+                `Robot code should be alphanumeric and have less than 30 characters`,
+            )
         }
 
         return Result.ok(new RobotCode({ value: code }))

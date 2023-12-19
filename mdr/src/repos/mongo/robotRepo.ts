@@ -13,7 +13,10 @@ import { RobotCode } from '../../domain/robot/code'
 export default class RobotRepo implements IRobotRepo {
     private readonly mapper: RobotDataMap<IRobotPersistence>
 
-    constructor(@Inject(config.schemas.robot.name) private schema: Model<IRobotPersistence & Document>) {
+    constructor(
+        @Inject(config.schemas.robot.name)
+        private schema: Model<IRobotPersistence & Document>,
+    ) {
         // this shouldn't be needed; check class impl for more info
         this.mapper = new MongoRobotDataMap()
     }
@@ -58,7 +61,9 @@ export default class RobotRepo implements IRobotRepo {
         if (records.length === 0) {
             return [] // Return an empty array when there are no records
         }
-        const robotList = await Promise.all(records.map(record => this.mapper.toDomain(record)))
+        const robotList = await Promise.all(
+            records.map((record) => this.mapper.toDomain(record)),
+        )
         return robotList
     }
 }

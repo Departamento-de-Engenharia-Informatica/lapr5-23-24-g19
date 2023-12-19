@@ -3,14 +3,19 @@ import { Inject, Service } from 'typedi'
 import config from '../../config'
 
 import IBuildingController from './IControllers/IBuildingController'
-import IBuildingService, { ErrorResult, ErrorCode } from '../services/IServices/IBuildingService'
+import IBuildingService, {
+    ErrorResult,
+    ErrorCode,
+} from '../services/IServices/IBuildingService'
 import { IBuildingDTO } from '../dto/IBuildingDTO'
 import { IBuildingEditDTO } from '../dto/IBuildingEditDTO'
 import { IBuildingMinMaxFloorsDTO } from '../dto/IBuildingMinMaxFloorsDTO'
 
 @Service()
 export default class BuildingController implements IBuildingController {
-    constructor(@Inject(config.services.building.name) private service: IBuildingService) {}
+    constructor(
+        @Inject(config.services.building.name) private service: IBuildingService,
+    ) {}
 
     public async createBuilding(req: Request, res: Response, next: NextFunction) {
         try {
@@ -88,15 +93,21 @@ export default class BuildingController implements IBuildingController {
             const maxFloors = parseInt(req.query.maxFloors.toString())
 
             if (minFloors < 0) {
-                return res.status(400).json({ error: 'minFloors cannot have a negative value' })
+                return res
+                    .status(400)
+                    .json({ error: 'minFloors cannot have a negative value' })
             }
 
             if (maxFloors < 0) {
-                return res.status(400).json({ error: 'maxFloors cannot have a negative value' })
+                return res
+                    .status(400)
+                    .json({ error: 'maxFloors cannot have a negative value' })
             }
 
             if (minFloors > maxFloors) {
-                return res.status(400).json({ error: 'minFloors cannot be greater than maxFloors' })
+                return res
+                    .status(400)
+                    .json({ error: 'minFloors cannot be greater than maxFloors' })
             }
 
             const dto = req.body as IBuildingMinMaxFloorsDTO

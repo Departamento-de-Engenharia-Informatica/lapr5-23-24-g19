@@ -1,4 +1,4 @@
-import config from "../../../config";
+import config from '../../../config'
 import { Service, Inject } from 'typedi'
 import { Document, Model } from 'mongoose'
 
@@ -10,7 +10,10 @@ import { RobotTypeCode } from '../../domain/robotType/robotTypeCode'
 
 @Service()
 export default class RobotTypeRepo implements IRobotTypeRepo {
-    constructor(@Inject(config.schemas.robotType.name) private robotTypeSchema: Model<IRobotTypePersistence & Document>) {}
+    constructor(
+        @Inject(config.schemas.robotType.name)
+        private robotTypeSchema: Model<IRobotTypePersistence & Document>,
+    ) {}
 
     private createBaseQuery(): any {
         return {
@@ -64,7 +67,9 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
         if (records.length === 0) {
             return [] // Return an empty array when there are no records
         }
-        const robotTypeList = await Promise.all(records.map(record => RobotTypeMap.toDomain(record)))
+        const robotTypeList = await Promise.all(
+            records.map((record) => RobotTypeMap.toDomain(record)),
+        )
         return robotTypeList
     }
 }

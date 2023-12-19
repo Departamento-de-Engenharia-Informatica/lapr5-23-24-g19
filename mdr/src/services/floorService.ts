@@ -25,7 +25,10 @@ export default class FloorService implements IFloorService {
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
     ) {}
 
-    public async createFloor(floorDTO: IFloorDTO, buildingCode: string): Promise<Either<ErrorResult, IFloorDTO>> {
+    public async createFloor(
+        floorDTO: IFloorDTO,
+        buildingCode: string,
+    ): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
             const code = BuildingCode.create(buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(code)
@@ -83,7 +86,9 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async patchFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>> {
+    public async patchFloor(
+        dto: IUpdateFloorDTO,
+    ): Promise<Either<ErrorResult, IFloorDTO>> {
         try {
             const buildingCode = BuildingCode.create(dto.buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(buildingCode)
@@ -97,7 +102,10 @@ export default class FloorService implements IFloorService {
 
             const oldFloorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
 
-            const floor = await this.floorRepo.findByCodeNumber(buildingCode, oldFloorNumber)
+            const floor = await this.floorRepo.findByCodeNumber(
+                buildingCode,
+                oldFloorNumber,
+            )
 
             if (floor === null) {
                 return left({
@@ -129,7 +137,10 @@ export default class FloorService implements IFloorService {
                     })
                 }
 
-                const newFloor = await this.floorRepo.findByCodeNumber(buildingCode, newFloorNumber.getValue())
+                const newFloor = await this.floorRepo.findByCodeNumber(
+                    buildingCode,
+                    newFloorNumber.getValue(),
+                )
 
                 if (newFloor !== null) {
                     return left({
@@ -162,7 +173,10 @@ export default class FloorService implements IFloorService {
 
             const oldFloorNumber = FloorNumber.create(dto.oldFloorNumber).getValue()
 
-            const floor = await this.floorRepo.findByCodeNumber(buildingCode, oldFloorNumber)
+            const floor = await this.floorRepo.findByCodeNumber(
+                buildingCode,
+                oldFloorNumber,
+            )
 
             if (floor === null) {
                 return left({
@@ -196,7 +210,10 @@ export default class FloorService implements IFloorService {
                     })
                 }
 
-                const newFloor = await this.floorRepo.findByCodeNumber(buildingCode, newFloorNumber.getValue())
+                const newFloor = await this.floorRepo.findByCodeNumber(
+                    buildingCode,
+                    newFloorNumber.getValue(),
+                )
 
                 if (newFloor !== null) {
                     return left({
@@ -215,7 +232,9 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>> {
+    public async getFloors(
+        buildingCode: string,
+    ): Promise<Either<ErrorResult, IFloorDTO[]>> {
         try {
             const code = BuildingCode.create(buildingCode).getValue()
             const building = await this.buildingRepo.findByCode(code)
@@ -229,15 +248,21 @@ export default class FloorService implements IFloorService {
 
             const floors = await this.floorRepo.findByBuildingCode(code)
 
-            const dtoList = await Promise.all(floors.map((floor) => FloorMap.toDTO(floor)))
+            const dtoList = await Promise.all(
+                floors.map((floor) => FloorMap.toDTO(floor)),
+            )
             return right(dtoList)
         } catch (e) {
             throw e
         }
     }
 
-    async floorsWithPassage(buildingDTO: IBuildingCodeDTO): Promise<Result<IFloorPassageDTO[]>> {
-        const building = await this.buildingRepo.findByCode(BuildingCode.create(buildingDTO.code).getValue())
+    async floorsWithPassage(
+        buildingDTO: IBuildingCodeDTO,
+    ): Promise<Result<IFloorPassageDTO[]>> {
+        const building = await this.buildingRepo.findByCode(
+            BuildingCode.create(buildingDTO.code).getValue(),
+        )
 
         if (!building) {
             return Result.fail(`Building with code ${buildingDTO.code} does not exist`)

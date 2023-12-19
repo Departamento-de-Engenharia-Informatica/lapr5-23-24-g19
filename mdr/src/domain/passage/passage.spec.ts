@@ -9,6 +9,6 @@ describe('Passage', () => {
             floor2: undefined,
         })
 
-        assert(result.isFailure, 'Undefined floor values should fail');
-    });
+        assert(result.isFailure, 'Undefined floor values should fail')
+    })
 })

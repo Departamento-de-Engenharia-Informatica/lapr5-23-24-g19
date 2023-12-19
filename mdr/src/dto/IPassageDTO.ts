@@ -3,7 +3,7 @@ export interface IPassageDTO {
         buildingCode: string
         floorNumber: number
     }
-    
+
     floor2: {
         buildingCode: string
         floorNumber: number

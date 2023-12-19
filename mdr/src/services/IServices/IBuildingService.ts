@@ -3,11 +3,11 @@ import { IBuildingDTO } from '../../dto/IBuildingDTO'
 import { IBuildingEditDTO } from '../../dto/IBuildingEditDTO'
 import { IBuildingMinMaxFloorsDTO } from '../../dto/IBuildingMinMaxFloorsDTO'
 
-export enum ErrorCode{
+export enum ErrorCode {
     NotFound,
     RequirementsNotMatch,
     AlreadyExists,
-    BusinessRuleViolation
+    BusinessRuleViolation,
 }
 
 export type ErrorResult = {
@@ -15,11 +15,14 @@ export type ErrorResult = {
     message: string
 }
 
-
 export default interface IBuildingService {
-    createBuilding(buildingDTO: IBuildingDTO): Promise<Either<ErrorResult,IBuildingDTO>>
-    getBuilding(buildingId: string): Promise<Either<ErrorResult,IBuildingDTO>>
-    getBuildings(): Promise<Either<ErrorResult,IBuildingDTO[]>>
-    getBuildingsByFloors(minMaxFloorsDTO: IBuildingMinMaxFloorsDTO): Promise<Either<ErrorResult,IBuildingDTO[]>>
-    editBuilding(buildingDTO: IBuildingEditDTO): Promise<Either<ErrorResult,IBuildingDTO>>
+    createBuilding(buildingDTO: IBuildingDTO): Promise<Either<ErrorResult, IBuildingDTO>>
+    getBuilding(buildingId: string): Promise<Either<ErrorResult, IBuildingDTO>>
+    getBuildings(): Promise<Either<ErrorResult, IBuildingDTO[]>>
+    getBuildingsByFloors(
+        minMaxFloorsDTO: IBuildingMinMaxFloorsDTO,
+    ): Promise<Either<ErrorResult, IBuildingDTO[]>>
+    editBuilding(
+        buildingDTO: IBuildingEditDTO,
+    ): Promise<Either<ErrorResult, IBuildingDTO>>
 }

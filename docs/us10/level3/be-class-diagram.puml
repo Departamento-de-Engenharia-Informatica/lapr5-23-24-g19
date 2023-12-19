@@ -1,0 +1,105 @@
+@startuml
+
+skinparam component {
+    FontSize 16
+    BackgroundColor<<Apache>> LightCoral
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor DeepSkyBlue
+    ArrowFontName Impact
+    ArrowColor #FF6655
+}
+
+package system {
+    package "Infrastructure" {
+        package "Routes" {
+            class BackofficeUserRoute
+        }
+
+        package "Persistence" {
+            interface IDBDriver
+            class DBDriver
+        }
+
+        DBDriver -right-|> IDBDriver
+    }
+
+    package "Interface Adapters" {
+        package "Controllers" {
+            package "IControllers" {
+                interface IBackofficeUserController
+            }
+
+            package "ImplControllers" {
+                class BackofficeUserController
+            }
+            BackofficeUserController -up-|> IBackofficeUserController
+        }
+
+        package "Repositories" {
+            class BackofficeUserRepo
+        }
+
+        BackofficeUserRepo .up.> DBDriver
+
+        BackofficeUserRoute ..> IBackofficeUserController
+    }
+
+    package "Application Services" {
+        package "App Services" {
+            package "IAppServices" {
+                interface IBackofficeUserAppService
+            }
+
+            package "ImplAppServices" {
+                class BackofficeUserAppService
+            }
+
+            BackofficeUserAppService --|> IBackofficeUserAppService
+
+            package "IRepositories" {
+                interface IBackofficeUserRepo
+            }
+
+            BackofficeUserRepo --|> IBackofficeUserRepo
+        }
+
+        BackofficeUserController ..> IBackofficeUserAppService
+
+        BackofficeUserAppService .up.> IBackofficeUserRepo
+    }
+
+    package "Entities/Core/Domain" {
+        package "BackofficeUser" as a_building {
+            class BackofficeUser <<root>> <<entity>>
+        }
+
+
+        class UserEmail <<Value Object>>
+        class UserName <<Value Object>>
+        class UserPhoneNumber <<Value Object>>
+        class UserPassword <<Value Object>>
+
+        BackofficeUserAppService ..> BackofficeUser
+
+        BackofficeUser ..> Email
+        BackofficeUser ..> Name
+        BackofficeUser ..> PhoneNumber
+        BackofficeUser ..> UserPassword
+    }
+
+    package "DTO" {
+        interface IBackofficeUserDTO
+        interface ICreatedBackofficeUserDTO
+    }
+
+    BackofficeUserAppService -up-> IBackofficeUserDTO
+    BackofficeUserController -up-> IBackofficeUserDTO
+
+    BackofficeUserAppService -up-> ICreatedBackofficeUserDTO
+    BackofficeUserController -up-> ICreatedBackofficeUserDTO
+}
+
+@enduml
+

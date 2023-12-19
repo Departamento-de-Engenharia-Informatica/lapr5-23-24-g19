@@ -6,7 +6,7 @@ import { IUpdateFloorDTO } from '../../dto/IUpdateFloorDTO'
 
 export enum ErrorCode {
     NotFound,
-    BusinessRuleViolation
+    BusinessRuleViolation,
 }
 
 export type ErrorResult = {
@@ -15,7 +15,10 @@ export type ErrorResult = {
 }
 
 export default interface IFloorService {
-    createFloor(floorDTO: IFloorDTO, buildingId: string): Promise<Either<ErrorResult, IFloorDTO>>
+    createFloor(
+        floorDTO: IFloorDTO,
+        buildingId: string,
+    ): Promise<Either<ErrorResult, IFloorDTO>>
     patchFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     putFloor(dto: IUpdateFloorDTO): Promise<Either<ErrorResult, IFloorDTO>>
     getFloors(buildingCode: string): Promise<Either<ErrorResult, IFloorDTO[]>>

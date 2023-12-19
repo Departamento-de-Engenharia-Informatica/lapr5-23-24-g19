@@ -33,12 +33,12 @@ describe('Building Service', () => {
         it('should fail if the code is not valid', async () => {
             const dto: IBuildingDTO = {
                 code: '#BuildingA',
-                maxFloorDimensions: { length: 20, width: 30 }
+                maxFloorDimensions: { length: 20, width: 30 },
             }
 
             const svc = new BuildingService(
                 {} as IBuildingRepo, // should not be needed here
-                {} as IFloorRepo // not needed here
+                {} as IFloorRepo, // not needed here
             )
 
             const result = await svc.createBuilding(dto)
@@ -51,7 +51,7 @@ describe('Building Service', () => {
         it('should succeed if the params are valid', async () => {
             const dto: IBuildingDTO = {
                 code: 'A',
-                maxFloorDimensions: { length: 20, width: 30 }
+                maxFloorDimensions: { length: 20, width: 30 },
             }
 
             const repo = Container.get('BuildingRepo') as IBuildingRepo
@@ -60,12 +60,12 @@ describe('Building Service', () => {
 
             sinon.stub(BuildingMap, 'toDTO').returns({
                 code: 'A',
-                maxFloorDimensions: { length: 20, width: 30 }
+                maxFloorDimensions: { length: 20, width: 30 },
             })
 
             const svc = new BuildingService(
                 repo, // should not be needed here
-                {} as IFloorRepo // not needed here
+                {} as IFloorRepo, // not needed here
             )
 
             const result = await svc.createBuilding(dto)
@@ -78,7 +78,7 @@ describe('Building Service', () => {
         it('should fail if the building already exists', async () => {
             const dto: IBuildingDTO = {
                 code: 'A',
-                maxFloorDimensions: { length: 20, width: 30 }
+                maxFloorDimensions: { length: 20, width: 30 },
             }
 
             const repo = Container.get('BuildingRepo') as IBuildingRepo
@@ -86,7 +86,7 @@ describe('Building Service', () => {
 
             const svc = new BuildingService(
                 repo, // should not be needed here
-                {} as IFloorRepo // not needed here
+                {} as IFloorRepo, // not needed here
             )
 
             const result = await svc.createBuilding(dto)
@@ -106,7 +106,7 @@ describe('Building Service', () => {
 
             const svc = new BuildingService(
                 repo, // should not be needed here
-                {} as IFloorRepo // not needed here
+                {} as IFloorRepo, // not needed here
             )
 
             const result = await svc.getBuilding(dto)
@@ -125,12 +125,12 @@ describe('Building Service', () => {
                 code: 'A',
                 name: 'Building A',
                 description: 'IT',
-                maxFloorDimensions: { length: 150, width: 40 }
+                maxFloorDimensions: { length: 150, width: 40 },
             })
 
             const svc = new BuildingService(
                 repo, // should not be needed here
-                {} as IFloorRepo // not needed here
+                {} as IFloorRepo, // not needed here
             )
 
             const result = await svc.getBuilding(dto)
@@ -142,7 +142,7 @@ describe('Building Service', () => {
                 code: 'A',
                 name: 'Building A',
                 description: 'IT',
-                maxFloorDimensions: { length: 150, width: 40 }
+                maxFloorDimensions: { length: 150, width: 40 },
             })
         })
     })
@@ -185,8 +185,6 @@ describe('Building Service', () => {
     //             maxFloorDimensions: { length: 20, width: 30 }
     //         })
 
-
-
     //         const svc = new BuildingService(
     //             repo, // should not be needed here
     //             {} as IFloorRepo // not needed here
@@ -220,5 +218,4 @@ describe('Building Service', () => {
     //         expect(err.errorCode).to.equal(ErrorCode.AlreadyExists)
     //     })
     // })
-
 })

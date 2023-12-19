@@ -2,7 +2,10 @@ import config from '../../config'
 import { Service, Inject } from 'typedi'
 import { Either, left, right } from '../core/logic/Result'
 
-import IRobotService, { RobotErrorCode, RobotErrorResult } from './IServices/IRobotService'
+import IRobotService, {
+    RobotErrorCode,
+    RobotErrorResult,
+} from './IServices/IRobotService'
 import { RobotMap } from '../mappers/RobotMap'
 import { IRobotDTO } from '../dto/IRobotDTO'
 
@@ -25,11 +28,15 @@ export default class RobotService implements IRobotService {
     constructor(
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
-    ) { }
+    ) {}
 
-    async createRobot(dto: IRobotDTO): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
+    async createRobot(
+        dto: IRobotDTO,
+    ): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
         try {
-            const type = await this.robotTypeRepo.find(RobotTypeCode.create(dto.typeCode).getValue())
+            const type = await this.robotTypeRepo.find(
+                RobotTypeCode.create(dto.typeCode).getValue(),
+            )
 
             if (!type) {
                 return left({
@@ -50,7 +57,8 @@ export default class RobotService implements IRobotService {
 
             const nickname = Nickname.create(dto.nickname).getOrThrow()
             const serialNumber = SerialNumber.create(dto.serialNumber).getOrThrow()
-            const description = dto.description && Description.create(dto.description).getOrThrow()
+            const description =
+                dto.description && Description.create(dto.description).getOrThrow()
 
             const robot = Robot.create({
                 code,
@@ -70,7 +78,9 @@ export default class RobotService implements IRobotService {
         }
     }
 
-    async inhibitRobot(dto: IRobotInhibitDTO): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
+    async inhibitRobot(
+        dto: IRobotInhibitDTO,
+    ): Promise<Either<RobotErrorResult, ICreatedRobotDTO>> {
         const code = RobotCode.create(dto.code)
         if (code.isFailure) {
             return left({

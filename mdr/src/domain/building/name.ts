@@ -26,7 +26,9 @@ export class BuildingName extends ValueObject<Props> {
 
         name = name.trim()
         if (name.length > maxLength) {
-            return Result.fail(`The name of the building must have at most ${maxLength} characters`)
+            return Result.fail(
+                `The name of the building must have at most ${maxLength} characters`,
+            )
         }
 
         return Result.ok(new BuildingName({ name }))

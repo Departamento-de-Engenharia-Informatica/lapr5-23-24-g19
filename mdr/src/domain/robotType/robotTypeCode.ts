@@ -27,7 +27,8 @@ export class RobotTypeCode extends ValueObject<Props> {
 
         if (!codeRegex.test(code)) {
             return Result.fail(
-                'Code must contain at most 25 characters, letters and numbers, ' + 'possibly with spaces in-between',
+                'Code must contain at most 25 characters, letters and numbers, ' +
+                    'possibly with spaces in-between',
             )
         } else {
             return Result.ok(new RobotTypeCode({ value: code }))

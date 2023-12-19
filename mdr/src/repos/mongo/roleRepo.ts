@@ -12,7 +12,9 @@ import { IRolePersistence } from '../../dataschema/mongo/IRolePersistence'
 export default class RoleRepo implements IRoleRepo {
     private models: any
 
-    constructor(@Inject('roleSchema') private roleSchema: Model<IRolePersistence & Document>) {}
+    constructor(
+        @Inject('roleSchema') private roleSchema: Model<IRolePersistence & Document>,
+    ) {}
 
     private createBaseQuery(): any {
         return {
@@ -24,7 +26,9 @@ export default class RoleRepo implements IRoleRepo {
         const idX = role.id instanceof RoleId ? (<RoleId>role.id).toValue() : role.id
 
         const query = { domainId: idX }
-        const roleDocument = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>)
+        const roleDocument = await this.roleSchema.findOne(
+            query as FilterQuery<IRolePersistence & Document>,
+        )
 
         return !!roleDocument === true
     }
@@ -54,7 +58,9 @@ export default class RoleRepo implements IRoleRepo {
 
     public async findByDomainId(roleId: RoleId | string): Promise<Role> {
         const query = { domainId: roleId }
-        const roleRecord = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>)
+        const roleRecord = await this.roleSchema.findOne(
+            query as FilterQuery<IRolePersistence & Document>,
+        )
 
         if (roleRecord != null) {
             return RoleMap.toDomain(roleRecord)

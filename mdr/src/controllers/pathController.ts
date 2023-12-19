@@ -14,7 +14,6 @@ export default class PathController implements IPathController {
             const dto = req.body as IGetPathsDTO
             const result = await this.service.pathsBetweenBuildings(dto)
 
-
             return res.json(result).status(200)
         } catch (e) {
             return next(e)

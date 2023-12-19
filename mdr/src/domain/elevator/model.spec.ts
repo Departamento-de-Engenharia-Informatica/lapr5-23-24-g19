@@ -18,7 +18,7 @@ describe('Elevator Model', () => {
             'UvWw0XxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMnOoPqRrSsTt1234567890UvWwXxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPqRrSsTt',
         ]
 
-        brands.forEach(b => assert.isNotOk(ElevatorModel.create(b).isSuccess))
+        brands.forEach((b) => assert.isNotOk(ElevatorModel.create(b).isSuccess))
 
         // less than 50 chars
         assert.isOk(ElevatorModel.create('3100').isSuccess)

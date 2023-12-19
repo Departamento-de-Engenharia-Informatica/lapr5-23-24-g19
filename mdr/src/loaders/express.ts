@@ -5,7 +5,6 @@ import routes from '../api'
 import config from '../../config'
 
 export default ({ app }: { app: express.Application }) => {
-    
     // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
     // It shows the real origin IP in the heroku or Cloudwatch logs
     app.enable('trust proxy')
@@ -28,7 +27,6 @@ export default ({ app }: { app: express.Application }) => {
     // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
     // It shows the real origin IP in the heroku or Cloudwatch logs
     app.enable('trust proxy')
-
 
     // Some sauce that always add since 2014
     // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."

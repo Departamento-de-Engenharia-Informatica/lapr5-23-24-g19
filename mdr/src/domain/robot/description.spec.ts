@@ -15,7 +15,7 @@ describe('Elevator Description', () => {
         assert.isOk(desc.isSuccess)
     })
 
-    it ('can contain spaces', () => {
+    it('can contain spaces', () => {
         let desc = RobotDescription.create('Number 1 Robot in the world')
         assert.isOk(desc.isSuccess)
 

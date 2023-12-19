@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Administrator" as usr
+
+participant "<<system>>\n RobDroneGo" as sys
+
+activate usr
+    usr -> sys : wants to create a backoffice user
+    activate sys
+        sys --> usr : request data
+    deactivate sys
+
+    usr -> sys : provides data
+    activate sys
+        alt user not created
+            sys --> usr : informs error
+        else success
+            sys --> usr : shows created user
+        end
+    deactivate sys
+deactivate usr
+
+@enduml

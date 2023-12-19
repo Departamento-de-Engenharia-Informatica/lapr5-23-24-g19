@@ -30,7 +30,9 @@ export class MaxFloorDimensions extends ValueObject<Props> {
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message)
         } else if (length <= 0 || width <= 0) {
-            return Result.fail('Dimensions must have positive values for length and width')
+            return Result.fail(
+                'Dimensions must have positive values for length and width',
+            )
         } else {
             return Result.ok(new MaxFloorDimensions({ length, width }))
         }

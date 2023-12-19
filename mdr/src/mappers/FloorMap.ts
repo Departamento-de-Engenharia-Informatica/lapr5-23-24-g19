@@ -21,9 +21,13 @@ export class FloorMap extends Mapper<Floor> {
 
     public static async toDomain(raw: any): Promise<Floor> {
         const buildingRepo = Container.get(BuildingRepo)
-        const building = await buildingRepo.findByCode(BuildingCode.create(raw.buildingCode).getValue())
-        const description = raw.description ? Description.create(raw.description).getValue() : undefined;
-        const path = raw.path ? raw.path:undefined
+        const building = await buildingRepo.findByCode(
+            BuildingCode.create(raw.buildingCode).getValue(),
+        )
+        const description = raw.description
+            ? Description.create(raw.description).getValue()
+            : undefined
+        const path = raw.path ? raw.path : undefined
         /*
         let map = undefined
         if (!!raw.map) {
@@ -51,7 +55,7 @@ export class FloorMap extends Mapper<Floor> {
                 floorNumber: FloorNumber.create(raw.floorNumber).getValue(),
                 description: description,
                 building: building,
-                path: path
+                path: path,
             },
             new UniqueEntityID(raw.domainId),
         )
@@ -70,7 +74,7 @@ export class FloorMap extends Mapper<Floor> {
             buildingCode: floor.building.code.value,
             floorNumber: floor.floorNumber.value,
             description: floor.description?.value,
-            path: floor.props.path
+            path: floor.props.path,
         } as IFloorPersistence
         /*
         if (floor != null && map != undefined) {
@@ -101,7 +105,6 @@ export class FloorMap extends Mapper<Floor> {
                 }),
             }
         }*/
-
     }
 
     public static toDTOFloorMap(floor: Floor): IFloorMapDTO {
@@ -125,7 +128,7 @@ export class FloorMap extends Mapper<Floor> {
             // rooms: map.rooms.map((room) => {
             //     return { x: room.x, y: room.y }
             // }),
-        //
+            //
         } as IFloorMapDTO
     }
 }

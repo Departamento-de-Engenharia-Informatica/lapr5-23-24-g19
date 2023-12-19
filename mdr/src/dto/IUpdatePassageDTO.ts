@@ -1,4 +1,4 @@
-import { IPassageDTO } from "./IPassageDTO";
+import { IPassageDTO } from './IPassageDTO'
 
 export default interface IUpdatePassageDTO {
     old: IPassageDTO

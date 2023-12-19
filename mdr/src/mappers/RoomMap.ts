@@ -24,12 +24,12 @@ export class RoomMap extends Mapper<Room> {
             category: room.category.value,
             dimensions: {
                 length: room.dimensions.length,
-                width: room.dimensions.width
+                width: room.dimensions.width,
             },
             positions: {
                 x: room.positions.x,
-                y: room.positions.y
-            }
+                y: room.positions.y,
+            },
         }
     }
 
@@ -43,7 +43,10 @@ export class RoomMap extends Mapper<Room> {
         const rawName = RoomName.create(raw.name).getValue()
         const rawDescription = RoomDescription.create(raw.description).getValue()
         const rawCategory = RoomCategory.create(raw.category).getValue()
-        const rawDimensions = RoomDimensions.create(raw.dimensions.length, raw.dimensions.width).getValue()
+        const rawDimensions = RoomDimensions.create(
+            raw.dimensions.length,
+            raw.dimensions.width,
+        ).getValue()
         const rawPositions = Coordinates.create(raw.position.x, raw.position.y).getValue()
 
         const roomOrError = Room.create(
@@ -53,10 +56,9 @@ export class RoomMap extends Mapper<Room> {
                 category: rawCategory,
                 dimensions: rawDimensions,
                 positions: rawPositions,
-                description: rawDescription
-
+                description: rawDescription,
             },
-            new UniqueEntityID(raw.domainId)
+            new UniqueEntityID(raw.domainId),
         )
 
         return roomOrError.isSuccess ? roomOrError.getValue() : null
@@ -72,12 +74,12 @@ export class RoomMap extends Mapper<Room> {
             category: room.category.value,
             dimensions: {
                 length: room.dimensions.length,
-                width: room.dimensions.width
+                width: room.dimensions.width,
             },
             position: {
                 x: room.positions.x,
-                y: room.positions.y
-            }
+                y: room.positions.y,
+            },
         }
     }
 }

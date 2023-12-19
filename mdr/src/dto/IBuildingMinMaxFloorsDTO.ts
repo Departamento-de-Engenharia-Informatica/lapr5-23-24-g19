@@ -1,3 +1,3 @@
 export interface IBuildingMinMaxFloorsDTO {
-    minMaxFloors: { min: number, max: number }
+    minMaxFloors: { min: number; max: number }
 }

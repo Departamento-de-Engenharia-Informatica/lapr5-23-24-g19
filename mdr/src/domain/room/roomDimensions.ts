@@ -29,7 +29,9 @@ export class RoomDimensions extends ValueObject<Props> {
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message)
         } else if (length < 1 || width < 1) {
-            return Result.fail('Dimensions must have at least 1unit value for length and for width')
+            return Result.fail(
+                'Dimensions must have at least 1unit value for length and for width',
+            )
         } else {
             return Result.ok(new RoomDimensions({ length, width }))
         }

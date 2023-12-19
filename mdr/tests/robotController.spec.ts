@@ -17,7 +17,8 @@ describe('Robot controller:', () => {
     beforeEach(function () {
         Container.reset()
 
-        let robotTypeSchema = require('../src/persistence/schemas/robotTypeSchema').default
+        let robotTypeSchema =
+            require('../src/persistence/schemas/robotTypeSchema').default
         Container.set('robotType', robotTypeSchema)
 
         let robotTypeRepoClass = require('../src/repos/mongo/robotTypeRepo').default
@@ -212,7 +213,7 @@ describe('Robot controller:', () => {
                 serviceSpy,
                 sandbox.match({
                     code: req.params.id,
-                    state: req.body!.state
+                    state: req.body!.state,
                 }),
             )
 
@@ -231,7 +232,7 @@ describe('Robot controller:', () => {
 
         it('should not work when robot not found', async () => {
             const req: Partial<Request> = {
-                body: { state: 0 }
+                body: { state: 0 },
             }
             req.params = { id: 'Robot12' }
 
@@ -265,7 +266,7 @@ describe('Robot controller:', () => {
                 serviceSpy,
                 sandbox.match({
                     code: req.params.id,
-                    state: req.body!.state
+                    state: req.body!.state,
                 }),
             )
 

@@ -3,7 +3,7 @@ import { describe, it } from 'mocha'
 //import { RoomCategory, CategoryType } from './roomCategory'
 
 describe('Room Category', () => {
-   /* it('should create a valid category', () => {
+    /* it('should create a valid category', () => {
         const validCategories = [
             CategoryType.GABINETE,
             CategoryType.ANFITEATRO,

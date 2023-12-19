@@ -5,7 +5,6 @@ import { IElevatorDTO } from '../../dto/IElevatorDTO'
 export enum ErrorCode {
     NotFound,
     BussinessRuleViolation,
-
 }
 
 export type ErrorResult = {
@@ -14,7 +13,12 @@ export type ErrorResult = {
 }
 
 export default interface IElevatorService {
-    createElevator(elevatorDto: IElevatorDTO): Promise<Either<ErrorResult, ICreatedElevatorDTO>>
-    editElevator(identifier: number, elevatorDto: IElevatorDTO): Promise<Either<ErrorResult, ICreatedElevatorDTO>>
+    createElevator(
+        elevatorDto: IElevatorDTO,
+    ): Promise<Either<ErrorResult, ICreatedElevatorDTO>>
+    editElevator(
+        identifier: number,
+        elevatorDto: IElevatorDTO,
+    ): Promise<Either<ErrorResult, ICreatedElevatorDTO>>
     getElevators(code: string): Promise<Either<ErrorResult, ICreatedElevatorDTO[]>>
 }

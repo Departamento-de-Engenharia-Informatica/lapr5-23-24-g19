@@ -1,6 +1,6 @@
-import { IPathBetweenBuildingsDTO } from "../../dto/IPathBetweenBuildingsDTO";
-import { IPathCriterionDTO } from "../../dto/IPathCriterionDTO";
-import { IPathDTO } from "../../dto/IPathDTO";
+import { IPathBetweenBuildingsDTO } from '../../dto/IPathBetweenBuildingsDTO'
+import { IPathCriterionDTO } from '../../dto/IPathCriterionDTO'
+import { IPathDTO } from '../../dto/IPathDTO'
 
 export default interface IPlanningAdapter {
     find(dto: IPathBetweenBuildingsDTO): Promise<IPathDTO[]>

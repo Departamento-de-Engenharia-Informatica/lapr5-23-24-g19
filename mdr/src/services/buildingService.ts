@@ -26,16 +26,28 @@ export default class BuildingService implements IBuildingService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
-    public async createBuilding(dto: IBuildingDTO): Promise<Either<ErrorResult, IBuildingDTO>> {
+    public async createBuilding(
+        dto: IBuildingDTO,
+    ): Promise<Either<ErrorResult, IBuildingDTO>> {
         try {
             const code = Code.create(dto.code).getOrThrow()
             const name = dto.name && Name.create(dto.name).getOrThrow()
-            const description = dto.description && BuildingDescription.create(dto.description).getOrThrow()
+            const description =
+                dto.description &&
+                BuildingDescription.create(dto.description).getOrThrow()
 
             const { length, width } = dto.maxFloorDimensions
-            const maxFloorDimensions = MaxFloorDimensions.create(length, width).getOrThrow()
+            const maxFloorDimensions = MaxFloorDimensions.create(
+                length,
+                width,
+            ).getOrThrow()
 
-            const result = Building.create({ code, name, description, maxFloorDimensions })
+            const result = Building.create({
+                code,
+                name,
+                description,
+                maxFloorDimensions,
+            })
             if (result.isFailure) {
                 return left({
                     errorCode: ErrorCode.BusinessRuleViolation,
@@ -108,10 +120,11 @@ export default class BuildingService implements IBuildingService {
         dto: IBuildingMinMaxFloorsDTO,
     ): Promise<Either<ErrorResult, IBuildingFloorNumberDTO[]>> {
         try {
-            const buildingsAndFloorCount = await this.floorRepo.findBuildingsByMinMaxFloors(
-                dto.minMaxFloors.min,
-                dto.minMaxFloors.max,
-            )
+            const buildingsAndFloorCount =
+                await this.floorRepo.findBuildingsByMinMaxFloors(
+                    dto.minMaxFloors.min,
+                    dto.minMaxFloors.max,
+                )
 
             if (buildingsAndFloorCount.length == 0) {
                 return left({
@@ -121,8 +134,10 @@ export default class BuildingService implements IBuildingService {
             }
 
             const dtoList = await Promise.all(
-                buildingsAndFloorCount.map(async value => {
-                    const building = await this.buildingRepo.findByCode(value.buildingCode)
+                buildingsAndFloorCount.map(async (value) => {
+                    const building = await this.buildingRepo.findByCode(
+                        value.buildingCode,
+                    )
                     return BuildingFloorNumberMap.toDTO(building, value.floorCount)
                 }),
             )
@@ -132,7 +147,9 @@ export default class BuildingService implements IBuildingService {
             throw e
         }
     }
-    public async editBuilding(dto: IBuildingEditDTO): Promise<Either<ErrorResult, IBuildingDTO>> {
+    public async editBuilding(
+        dto: IBuildingEditDTO,
+    ): Promise<Either<ErrorResult, IBuildingDTO>> {
         try {
             const bCode = Code.create(dto.code)
             if (bCode.isFailure) {

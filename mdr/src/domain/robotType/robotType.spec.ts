@@ -23,7 +23,7 @@ describe('RobotType', () => {
         const code = RobotTypeCode.create('R001').getValue()
         const brand = RobotTypeBrand.create('RoboTech').getValue()
         const model = RobotTypeModel.create('ModelX').getValue()
-        const taskType = [TaskType.toType("delivery"), TaskType.toType("Surveillance")]
+        const taskType = [TaskType.toType('delivery'), TaskType.toType('Surveillance')]
 
         const result = RobotType.create({
             code,
@@ -38,14 +38,13 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined code', () => {
         stubCreate(RobotTypeBrand)
         stubCreate(RobotTypeModel)
-        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
-        
+        sinon.stub(TaskType, 'toType').returns('asdasd' as TaskType)
 
         const result = RobotType.create({
             code: undefined,
             brand: RobotTypeBrand.create('').getValue(),
             model: RobotTypeModel.create('').getValue(),
-            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
+            taskType: [TaskType.toType('delivery'), TaskType.toType('Surveillance')],
         })
 
         assert.isNotOk(result.isSuccess)
@@ -54,13 +53,13 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined brand', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeModel)
-        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
+        sinon.stub(TaskType, 'toType').returns('asdasd' as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
             brand: undefined,
             model: RobotTypeModel.create('').getValue(),
-            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
+            taskType: [TaskType.toType('delivery'), TaskType.toType('Surveillance')],
         })
 
         assert.isNotOk(result.isSuccess)
@@ -69,13 +68,13 @@ describe('RobotType', () => {
     it('should fail when creating a robot type with null or undefined model', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
-        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
+        sinon.stub(TaskType, 'toType').returns('asdasd' as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),
             brand: RobotTypeBrand.create('').getValue(),
             model: undefined,
-            taskType: [TaskType.toType("delivery"), TaskType.toType("Surveillance")],
+            taskType: [TaskType.toType('delivery'), TaskType.toType('Surveillance')],
         })
 
         assert.isNotOk(result.isSuccess)
@@ -85,7 +84,7 @@ describe('RobotType', () => {
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
         stubCreate(RobotTypeModel)
-        sinon.stub(TaskType, 'toType').returns("asdasd"as TaskType)
+        sinon.stub(TaskType, 'toType').returns('asdasd' as TaskType)
 
         const result = RobotType.create({
             code: RobotTypeCode.create('').getValue(),

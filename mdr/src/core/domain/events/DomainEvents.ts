@@ -26,7 +26,9 @@ export class DomainEvents {
         aggregate.domainEvents.forEach((event: IDomainEvent) => this.dispatch(event))
     }
 
-    private static removeAggregateFromMarkedDispatchList(aggregate: AggregateRoot<any>): void {
+    private static removeAggregateFromMarkedDispatchList(
+        aggregate: AggregateRoot<any>,
+    ): void {
         const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
         this.markedAggregates.splice(index, 1)
     }
@@ -52,7 +54,10 @@ export class DomainEvents {
         }
     }
 
-    public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
+    public static register(
+        callback: (event: IDomainEvent) => void,
+        eventClassName: string,
+    ): void {
         if (!this.handlersMap.hasOwnProperty(eventClassName)) {
             this.handlersMap[eventClassName] = []
         }

@@ -11,7 +11,9 @@ const route = Router()
 export default (app: Router) => {
     app.use('/robottypes', route)
 
-    const robotTypeController = Container.get(config.controllers.robotType.name) as IRobotTypeController
+    const robotTypeController = Container.get(
+        config.controllers.robotType.name,
+    ) as IRobotTypeController
 
     route.post(
         '',
@@ -29,7 +31,5 @@ export default (app: Router) => {
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )
 
-    route.get('', (req, res, next) =>
-        robotTypeController.getRobotTypes(req, res, next),
-    )
+    route.get('', (req, res, next) => robotTypeController.getRobotTypes(req, res, next))
 }

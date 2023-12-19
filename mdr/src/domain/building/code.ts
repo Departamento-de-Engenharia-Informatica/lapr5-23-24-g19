@@ -28,7 +28,8 @@ export class BuildingCode extends ValueObject<Props> {
 
         if (!codeRegex.test(code)) {
             return Result.fail(
-                'Code must contain at most 5 characters, letters and numbers, ' + 'possibly with spaces in-between',
+                'Code must contain at most 5 characters, letters and numbers, ' +
+                    'possibly with spaces in-between',
             )
         } else {
             return Result.ok(new BuildingCode({ value: code }))

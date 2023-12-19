@@ -18,7 +18,9 @@ export class ElevatorModel extends ValueObject<Props> {
 
     public static create(model: string): Result<ElevatorModel> {
         if (!regex.test(model)) {
-            return Result.fail('Model must be alphanumeric and have no more than 50 characters')
+            return Result.fail(
+                'Model must be alphanumeric and have no more than 50 characters',
+            )
         }
 
         return Result.ok(new ElevatorModel({ value: model.trim() }))

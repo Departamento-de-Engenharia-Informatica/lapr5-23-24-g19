@@ -30,7 +30,9 @@ export default class UserService implements IUserService {
         @Inject('logger') private logger,
     ) {}
 
-    public async SignUp(userDTO: IUserDTO): Promise<Result<{ userDTO: IUserDTO; token: string }>> {
+    public async SignUp(
+        userDTO: IUserDTO,
+    ): Promise<Result<{ userDTO: IUserDTO; token: string }>> {
         try {
             const userDocument = await this.userRepo.findByEmail(userDTO.email)
             const found = !!userDocument
@@ -63,13 +65,18 @@ export default class UserService implements IUserService {
             const hashedPassword = await argon2.hash(userDTO.password, { salt })
             this.logger.silly('Creating user db record')
 
-            const password = await UserPassword.create({ value: hashedPassword, hashed: true }).getValue()
+            const password = await UserPassword.create({
+                value: hashedPassword,
+                hashed: true,
+            }).getValue()
             const email = await UserEmail.create(userDTO.email).getValue()
             let role: Role
 
             const roleOrError = await this.getRole(userDTO.role)
             if (roleOrError.isFailure) {
-                return Result.fail<{ userDTO: IUserDTO; token: string }>(roleOrError.error)
+                return Result.fail<{ userDTO: IUserDTO; token: string }>(
+                    roleOrError.error,
+                )
             } else {
                 role = roleOrError.getValue()
             }
@@ -98,14 +105,20 @@ export default class UserService implements IUserService {
 
             await this.userRepo.save(userResult)
             const userDTOResult = UserMap.toDTO(userResult) as IUserDTO
-            return Result.ok<{ userDTO: IUserDTO; token: string }>({ userDTO: userDTOResult, token: token })
+            return Result.ok<{ userDTO: IUserDTO; token: string }>({
+                userDTO: userDTOResult,
+                token: token,
+            })
         } catch (e) {
             this.logger.error(e)
             throw e
         }
     }
 
-    public async SignIn(email: string, password: string): Promise<Result<{ userDTO: IUserDTO; token: string }>> {
+    public async SignIn(
+        email: string,
+        password: string,
+    ): Promise<Result<{ userDTO: IUserDTO; token: string }>> {
         const user = await this.userRepo.findByEmail(email)
 
         if (!user) {
@@ -123,7 +136,10 @@ export default class UserService implements IUserService {
             const token = this.generateToken(user) as string
 
             const userDTO = UserMap.toDTO(user) as IUserDTO
-            return Result.ok<{ userDTO: IUserDTO; token: string }>({ userDTO: userDTO, token: token })
+            return Result.ok<{ userDTO: IUserDTO; token: string }>({
+                userDTO: userDTO,
+                token: token,
+            })
         } else {
             throw new Error('Invalid Password')
         }
@@ -159,7 +175,7 @@ export default class UserService implements IUserService {
                 firstName: firstName,
                 lastName: lastName,
                 exp: exp.getTime() / 1000,
-            }as UserToken,
+            } as UserToken,
             config.jwtSecret,
         )
     }
@@ -174,15 +190,13 @@ export default class UserService implements IUserService {
             return Result.fail<Role>("Couldn't find role by id=" + roleId)
         }
     }
-
 }
 
-export interface UserToken{
-    id: string,
-    email: string,
-    role: string,
-    firstName: string,
+export interface UserToken {
+    id: string
+    email: string
+    role: string
+    firstName: string
     lastName: string
     exp: number
-    
 }

@@ -10,7 +10,7 @@
 :- use_module(library(http/http_client)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
-:- use_module(library(http/http_unix_daemon)).
+% :- use_module(library(http/http_unix_daemon)).
 
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json_convert)).
@@ -79,6 +79,8 @@ get_paths(Request) :-
 
 
 
+:- use_module('task-sequencer/permutation', [ perm/2 ]).
+
 :- http_handler('/api/task-sequence', get_sequence, [method(*)]).
 
 get_sequence(Request) :-
@@ -86,7 +88,11 @@ get_sequence(Request) :-
 
     dto_to_sequence(Body.tasks, Tasks),
 
-    sequencer(Tasks, Order),
+    % sequencer(Tasks, Order),
+    perm(Tasks, Order),
+    % format(string(S), '~w', [Tasks]),
+    % reply_json(S).
+    %
     sequence_to_dto(Order, DTO),
-
+    %
     reply_json_dict(DTO).

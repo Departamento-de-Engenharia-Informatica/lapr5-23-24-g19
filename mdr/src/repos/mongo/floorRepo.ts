@@ -17,8 +17,9 @@ export default class FloorRepo implements IFloorRepo {
 
     constructor(
         @Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
-        @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
-    ) { }
+        @Inject('buildingSchema')
+        private buildingSchema: Model<IBuildingPersistence & Document>,
+    ) {}
 
     private createBaseQuery(): any {
         return {
@@ -28,7 +29,10 @@ export default class FloorRepo implements IFloorRepo {
 
     public async exists(floor: Floor | string): Promise<boolean> {
         if (floor instanceof Floor) {
-            const query = { buildingCode: floor.building.code.value, floorNumber: floor.floorNumber.value }
+            const query = {
+                buildingCode: floor.building.code.value,
+                floorNumber: floor.floorNumber.value,
+            }
             const floorDocument = await this.floorSchema.findOne(query)
             return !!floorDocument === true
         } else {
@@ -36,10 +40,13 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-    public async findByCodeNumber(buildingCode: BuildingCode, floorNumber: FloorNumber): Promise<Floor> {
+    public async findByCodeNumber(
+        buildingCode: BuildingCode,
+        floorNumber: FloorNumber,
+    ): Promise<Floor> {
         const query = {
             buildingCode: buildingCode.value,
-            floorNumber: floorNumber.value
+            floorNumber: floorNumber.value,
         }
 
         const floorDocument = await this.floorSchema.findOne(query)
@@ -60,7 +67,10 @@ export default class FloorRepo implements IFloorRepo {
         } else return null
     }
 
-    public async findBuildingsByMinMaxFloors(min: number, max: number): Promise<BuildingFloorCount[]> {
+    public async findBuildingsByMinMaxFloors(
+        min: number,
+        max: number,
+    ): Promise<BuildingFloorCount[]> {
         const aggregationPipeline = [
             {
                 $group: {
@@ -78,7 +88,9 @@ export default class FloorRepo implements IFloorRepo {
             },
         ]
 
-        return (await this.floorSchema.aggregate(aggregationPipeline as PipelineStage[])).map((result) => {
+        return (
+            await this.floorSchema.aggregate(aggregationPipeline as PipelineStage[])
+        ).map((result) => {
             return {
                 buildingCode: BuildingCode.create(result._id).getValue(),
                 floorCount: result.floorCount,
@@ -97,7 +109,9 @@ export default class FloorRepo implements IFloorRepo {
             return []
         }
 
-        const floorList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
+        const floorList = await Promise.all(
+            records.map((record) => FloorMap.toDomain(record)),
+        )
         return floorList
     }
 
@@ -144,7 +158,9 @@ export default class FloorRepo implements IFloorRepo {
         if (records.length === 0) {
             return []
         }
-        const passageList = await Promise.all(records.map((record) => FloorMap.toDomain(record)))
+        const passageList = await Promise.all(
+            records.map((record) => FloorMap.toDomain(record)),
+        )
 
         return passageList
     }

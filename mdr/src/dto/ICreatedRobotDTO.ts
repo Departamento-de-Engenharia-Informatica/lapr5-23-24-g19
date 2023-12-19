@@ -1,7 +1,7 @@
 export interface ICreatedRobotDTO {
     code: string
     nickname: string
-    state: number,
+    state: number
     typeCode: string
     serialNumber: string
     description?: string

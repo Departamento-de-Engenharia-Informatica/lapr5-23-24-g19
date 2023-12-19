@@ -11,7 +11,10 @@ import { BuildingCode } from '../../domain/building/code'
 export default class BuildingRepo implements IBuildingRepo {
     private models: any
 
-    constructor(@Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) {}
+    constructor(
+        @Inject('buildingSchema')
+        private buildingSchema: Model<IBuildingPersistence & Document>,
+    ) {}
 
     private createBaseQuery(): any {
         return {
@@ -73,6 +76,6 @@ export default class BuildingRepo implements IBuildingRepo {
             return []
         }
 
-        return doc.map(b => BuildingMap.toDomain(b))
+        return doc.map((b) => BuildingMap.toDomain(b))
     }
 }

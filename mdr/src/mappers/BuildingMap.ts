@@ -23,9 +23,13 @@ export class BuildingMap extends Mapper<Building> {
     static toDomain(raw: any): Building {
         const code = Code.create(raw.code).getOrThrow()
         const name = raw.name && Name.create(raw.name).getOrThrow()
-        const description = raw.description && Description.create(raw.description).getOrThrow()
+        const description =
+            raw.description && Description.create(raw.description).getOrThrow()
 
-        const maxFloorDimensions = MaxFloorDimensions.create(raw.maxFloorLength, raw.maxFloorWidth).getOrThrow()
+        const maxFloorDimensions = MaxFloorDimensions.create(
+            raw.maxFloorLength,
+            raw.maxFloorWidth,
+        ).getOrThrow()
 
         const result = Building.create(
             { code, name, description, maxFloorDimensions },

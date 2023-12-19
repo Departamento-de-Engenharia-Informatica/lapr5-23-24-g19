@@ -30,7 +30,10 @@ export class PassageMap extends Mapper<Passage> {
         const floor1 = await floorRepo.findByID(raw.floor1ID)
         const floor2 = await floorRepo.findByID(raw.floor2ID)
 
-        const passageOrError = Passage.create({ floor1, floor2 }, new UniqueEntityID(raw.domainID))
+        const passageOrError = Passage.create(
+            { floor1, floor2 },
+            new UniqueEntityID(raw.domainID),
+        )
         return passageOrError.isSuccess ? passageOrError.getValue() : null
     }
 

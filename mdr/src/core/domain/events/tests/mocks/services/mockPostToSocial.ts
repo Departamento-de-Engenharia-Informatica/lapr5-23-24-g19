@@ -3,7 +3,9 @@ import { MockJobDeletedEvent } from '../events/mockJobDeletedEvent'
 import { IHandle } from '../../../IHandle'
 import { DomainEvents } from '../../../DomainEvents'
 
-export class MockPostToSocial implements IHandle<MockJobCreatedEvent>, IHandle<MockJobDeletedEvent> {
+export class MockPostToSocial
+    implements IHandle<MockJobCreatedEvent>, IHandle<MockJobDeletedEvent>
+{
     constructor() {}
 
     /**

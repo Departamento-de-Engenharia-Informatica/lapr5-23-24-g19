@@ -3,18 +3,21 @@
 ]).
 
 bestfs(Orig, Dest, EdgePred, Path, Cost):-
-    write('hi'),nl,
+    % write('hi'),nl,
     bestfs_aux(Dest, [Orig], EdgePred, Path, 0, Cost),
-    write('bye'),nl.
+    % write('bye'),nl.
 
 bestfs_aux(Dest, [Dest|T], _, Path, Acc, Acc):-
     reverse([Dest|T], Path).
 
 bestfs_aux(Dest, LA, EdgePred, Path, Acc, Cost):-
+    % write('comecou bestfs_aux'), nl,
 	LA = [Act|_],
 	findall((EstX, [X|LA], CostX),
 		(
+            % format('encontrar edge de ~w ~n', [Act]),
             call(EdgePred, Act, X, CostX),
+            % format('encontrada edge: ~w ~n', [X]),
             \+ member(X, LA),
             estimate(X, Dest, EstX)
         ),

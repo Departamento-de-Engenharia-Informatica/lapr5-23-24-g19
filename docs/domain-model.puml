@@ -77,6 +77,7 @@ skinparam package {
         -email
         -phoneNumber
         -nif
+        -status
     }
 
     class BackOfficeUser{

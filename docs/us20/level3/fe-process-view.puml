@@ -1,0 +1,56 @@
+@startuml
+autonumber
+
+actor "Potential Client" as usr
+
+participant "View" as view
+participant ":Controller" as ctrl
+
+participant "dto:ClientDTO" as c_dto
+participant "createdDto:CreatedClientDTO" as b_dto
+
+' TODO: separate service into backoffice and client dedicated ones
+participant ":UserService" as svc
+
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to register as a client user
+    activate view
+        view --> usr : request data
+    deactivate view
+
+    usr -> view : provides data
+    activate view
+        view -> ctrl : submit()
+        activate ctrl
+            ctrl --> c_dto** : create()
+
+            ctrl -> svc : createUser(dto)
+            activate svc
+                svc -> http : post(API_URL/clients, dto)
+                activate http
+
+                    http ->] : POST /clients
+                    http <--] : user
+                    http --> svc : user
+                deactivate http
+
+                svc --> b_dto** : create()
+                svc --> ctrl : createdDto
+            deactivate svc
+alt user not created
+
+            ctrl --> view : error
+            view --> usr : inform error
+else success
+            ctrl --> view : user
+        deactivate ctrl
+
+        view --> usr : shows created user
+    deactivate view
+end
+
+deactivate usr
+@enduml

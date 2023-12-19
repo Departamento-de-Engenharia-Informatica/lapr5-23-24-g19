@@ -42,8 +42,14 @@ export default class RoomService implements IRoomService {
             const dtoName = RoomName.create(dto.name).getOrThrow()
             const dtoDescription = RoomDescription.create(dto.description).getOrThrow()
             const dtoCategory = RoomCategory.create(dto.category).getOrThrow()
-            const dtoDimensions = RoomDimensions.create(dto.dimensions.length, dto.dimensions.width).getOrThrow()
-            const dtoPositions = Coordinates.create(dto.positions.x, dto.positions.y).getOrThrow()
+            const dtoDimensions = RoomDimensions.create(
+                dto.dimensions.length,
+                dto.dimensions.width,
+            ).getOrThrow()
+            const dtoPositions = Coordinates.create(
+                dto.positions.x,
+                dto.positions.y,
+            ).getOrThrow()
 
             const room = Room.create({
                 name: dtoName,
@@ -106,7 +112,7 @@ export default class RoomService implements IRoomService {
 
             const rooms = await this.roomRepo.findAllInFloor(building, floor)
 
-            const dtoList = await Promise.all(rooms.map(room => RoomMap.toDTO(room)))
+            const dtoList = await Promise.all(rooms.map((room) => RoomMap.toDTO(room)))
             return right(dtoList)
         } catch (e) {
             throw e
