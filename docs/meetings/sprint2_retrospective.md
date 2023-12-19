@@ -17,7 +17,7 @@
 -   **Testing Enhancement:**
 
     -   Continue code refactoring and address incomplete tests from the previous sprint.
-    -   Ensure thorough testing for every user story during Sprint 2 development.
+    -   Ensure thorough testing for every user story during Sprint 3 development.
     -   Regularly review and update tests to reflect client requirements and workflow.
 
 -   **Early Task Initiation:**
@@ -46,3 +46,4 @@
     - Continue with daily scrum meetings at 17h, excluding Fridays (which will be held at 18h).
     - Evaluate the effectiveness of the meeting schedule for team coordination.
     - Monitor the impact of more frequent code reviews on code quality and overall collaboration.
+
