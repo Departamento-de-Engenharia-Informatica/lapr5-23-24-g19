@@ -14,6 +14,9 @@ import IFloorRepo from './IRepos/IFloorRepo'
 import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
 import { TaskMap } from '../mappers/TaskMap'
 import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
+import IRoomRepo from './IRepos/IRoomRepo'
+import { RoomName } from '../domain/room/roomName'
+import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -21,6 +24,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.mdt.name) private repo: HttpNodeMdtAdapter,
         @Inject(config.storage.name) private storage: IStorageFs,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
+        @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
     ) {}
 
     async getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>> {
@@ -93,11 +97,46 @@ export default class TaskService implements ITaskService {
     async createDeliveryTask(
         dto: CreateDeliveryTaskDTO,
     ): Promise<Either<TaskErrorResult, String>> {
-        console.log(dto)
+        const startRoom = await this.roomRepo.find(
+            BuildingCode.create(dto.startBuildingCode).getValue(),
+            FloorNumber.create(dto.startFloorNumber).getValue(),
+            RoomName.create(dto.startRoom).getValue(),
+        )
+
+        const goalRoom = await this.roomRepo.find(
+            BuildingCode.create(dto.goalBuildingCode).getValue(),
+            FloorNumber.create(dto.goalFloorNumber).getValue(),
+            RoomName.create(dto.goalRoom).getValue(),
+        )
 
         try {
             const saved = await this.repo.createDeliveryTask(
-                await TaskMap.deliveryDtoToTaskDto(dto),
+                await TaskMap.deliveryDtoToTaskDto({
+                    email: dto.email,
+
+                    startBuildingCode: dto.startBuildingCode,
+                    startFloorNumber: dto.startFloorNumber,
+                    startRoom: {
+                        x: startRoom.positions.x,
+                        y: startRoom.positions.y,
+                    },
+
+                    goalBuildingCode: dto.goalBuildingCode,
+                    goalFloorNumber: dto.goalFloorNumber,
+                    goalRoom: {
+                        x: goalRoom.positions.x,
+                        y: goalRoom.positions.y,
+                    },
+
+                    pickupContactName: dto.pickupContactName,
+                    pickupContactPhone: dto.pickupContactPhone,
+
+                    deliveryContactName: dto.deliveryContactName,
+                    deliveryContactPhone: dto.deliveryContactPhone,
+
+                    description: dto.description,
+                    confirmationCode: dto.confirmationCode,
+                } as ICreateDeliveryTaskToMapperDTO),
             )
 
             if (saved === null) {

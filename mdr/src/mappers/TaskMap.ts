@@ -4,6 +4,7 @@ import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurvei
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { RoomName } from '../domain/room/roomName'
+import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
 import { ITaskDTO } from '../dto/ITaskDTO'
 import RoomRepo from '../repos/mongo/roomRepo'
 
@@ -40,37 +41,24 @@ export class TaskMap {
     }
 
     public static async deliveryDtoToTaskDto(
-        dto: CreateDeliveryTaskDTO,
+        dto: ICreateDeliveryTaskToMapperDTO,
     ): Promise<ITaskDTO> {
-        const roomRepo = Container.get(RoomRepo)
-
-        const startRoom = await roomRepo.find(
-            BuildingCode.create(dto.startBuildingCode).getValue(),
-            FloorNumber.create(dto.startFloorNumber).getValue(),
-            RoomName.create(dto.startRoom).getValue(),
-        )
-
-        const goalRoom = await roomRepo.find(
-            BuildingCode.create(dto.goalBuildingCode).getValue(),
-            FloorNumber.create(dto.goalFloorNumber).getValue(),
-            RoomName.create(dto.goalRoom).getValue(),
-        )
-
+        console.log(dto)
         return {
             Email: dto.email,
             Location: {
                 StartingPoint: {
                     BuildingCode: dto.startBuildingCode,
                     FloorNumber: dto.startFloorNumber,
-                    X: startRoom.positions.x,
-                    Y: startRoom.positions.y,
+                    X: dto.startRoom.x,
+                    Y: dto.startRoom.y,
                 },
 
                 EndingPoint: {
                     BuildingCode: dto.goalBuildingCode,
                     FloorNumber: dto.goalFloorNumber,
-                    X: goalRoom.positions.x,
-                    Y: goalRoom.positions.y,
+                    X: dto.goalRoom.x,
+                    Y: dto.goalRoom.y,
                 },
             },
             JobType: 1,
