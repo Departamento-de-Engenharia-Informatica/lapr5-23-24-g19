@@ -1,0 +1,231 @@
+{
+    "map": {
+        "dimensions": {
+            "length": 10,
+            "width": 22
+        },
+        "mapContent": [
+            [
+                3, 2, 3, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 3, 2, 2,
+                2, 1
+            ],
+            [
+                1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1
+            ],
+            [
+                1, 0, 1, 0, 0, 0, 1, 0, 3, 2, 2, 2, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1
+            ],
+            [
+                3, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1
+            ],
+            [
+                0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 4, 2,
+                2, 1
+            ],
+            [
+                0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1
+            ],
+            [
+                1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1
+            ],
+            [
+                1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1
+            ],
+            [
+                1, 0, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2, 2, 2, 0, 0, 0,
+                0, 1
+            ],
+            [
+                1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0
+            ],
+            [
+                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0,
+                0, 0
+            ]
+        ],
+        "passages": [
+            {
+                "x": 4,
+                "y": 0,
+                "orientation": "N",
+                "to": {
+                    "building": "A",
+                    "floor": 2
+                }
+            },
+            {
+                "x": 9,
+                "y": 21,
+                "orientation": "S",
+                "to": {
+                    "building": "C",
+                    "floor": 2
+                }
+            },
+            {
+                "x": 9,
+                "y": 20,
+                "orientation": "W",
+                "to": {
+                    "building": "D",
+                    "floor": 2
+                }
+            }
+        ],
+        "elevators": [
+            {
+                "x": 7,
+                "y": 20,
+                "orientation": "W",
+                "floors": [1, 2, 3]
+            }
+        ],
+        "rooms": [
+            {
+                "x": 3,
+                "y": 1,
+                "orientation": "N",
+                "name": "D201"
+            },
+            {
+                "x": 3,
+                "y": 12,
+                "orientation": "W",
+                "name": "D202"
+            },
+            {
+                "x": 6,
+                "y": 6,
+                "orientation": "W",
+                "name": "D203"
+            },
+            {
+                "x": 6,
+                "y": 18,
+                "orientation": "W",
+                "name": "D205"
+            },
+            {
+                "x": 4,
+                "y": 19,
+                "orientation": "N",
+                "name": "D207"
+            }
+        ]
+    },
+    "ground": {
+        "size": {
+            "width": 22,
+            "height": 0.1,
+            "depth": 10
+        },
+        "segments": {
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/floor-wood/wood_floor_diff_2k.png"
+            },
+            "ao": {
+                "url": "./textures/floor-wood/wood_floor_ao_2k.png",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "./textures/floor-wood/wood_floor_nor_gl_2k.png",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./textures/floor-wood/wood_floor_rough_2k.png",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 1,
+        "repeat": {
+            "u": 4,
+            "v": 4
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "wall": {
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./textures/wall-plastered/plastered_wall_diff_2k.png"
+            },
+            "ao": {
+                "url": "./textures/wall-plastered/plastered_wall_ao_2k.png",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "./textures/wall-plastered/plastered_wall_nor_gl_2k.png",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./textures/wall-plastered/plastered_wall_rough_2k.png",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 0,
+        "repeat": {
+            "u": 2,
+            "v": 1
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "elevator": {
+        "modelUri": "./models/gltf/elevator/elevator.glb"
+    },
+    "door": {
+        "modelUri": "./models/gltf/door/door.glb"
+    },
+    "player": {
+        "initialPosition": [1, 3],
+        "initialDirection": -90
+    }
+}
