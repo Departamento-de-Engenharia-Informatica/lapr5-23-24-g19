@@ -31,8 +31,7 @@ export default class ClientService implements IClientService {
         try {
             const email = Email.create(dto.email).getOrThrow()
 
-            const exists = await this.repo.find(email)
-            if (!!exists) {
+            if (await this.repo.existsWithEmail(email)) {
                 return left({
                     errorCode: ClientErrorCode.AlreadyExists,
                     message: `User already exists: ${email.value}`

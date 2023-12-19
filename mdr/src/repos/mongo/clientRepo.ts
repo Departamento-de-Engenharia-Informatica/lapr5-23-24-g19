@@ -53,4 +53,8 @@ export default class ClientRepo implements IClientRepo {
     async exists(t: Client): Promise<boolean> {
         return !!(await this.find(t.email))
     }
+
+    async existsWithEmail(t: Email): Promise<boolean> {
+        return !!(await this.find(t))
+    }
 }

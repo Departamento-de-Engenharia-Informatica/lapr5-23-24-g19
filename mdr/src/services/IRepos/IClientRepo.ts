@@ -6,4 +6,5 @@ export default interface IClientRepo extends Repo<Client> {
     save(user: Client): Promise<Client>
     find(id: Email): Promise<Client>
     delete(user: Client): Promise<Client>
+    existsWithEmail(t: Email): Promise<boolean>
 }
