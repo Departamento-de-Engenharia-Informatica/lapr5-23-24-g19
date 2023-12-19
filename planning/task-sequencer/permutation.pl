@@ -18,8 +18,10 @@ perm(Tasks, Order) :-
 
 
 permutation_cost(Tasks, (Cost, T)) :-
+    % write('========= BEGIN PERMUTATION =========='), nl,
     permutation(Tasks, T),
-    path_cost(T, Cost).
+    path_cost(T, Cost)
+    % write('========= END PERMUTATION =========='), nl.
 
 
 % TaskOrder = (start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), TaskType)
