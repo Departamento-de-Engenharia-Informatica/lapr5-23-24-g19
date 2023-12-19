@@ -2,6 +2,7 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { Mapper } from '../core/infra/Mapper'
 import { IClientPersistence } from '../dataschema/mongo/IClientPersistence'
 import Client from '../domain/user/client/Client'
+import { ClientStatus } from '../domain/user/client/status'
 import { VatNumber } from '../domain/user/client/vatNumber'
 import { Email } from '../domain/user/email'
 import { Name } from '../domain/user/name'
@@ -16,6 +17,7 @@ export class ClientMap extends Mapper<Client> {
             email: client.email.value,
             phoneNumber: client.phoneNumber.value,
             vatNumber: client.vatNumber.value,
+            status: client.status
         }
     }
 
@@ -26,6 +28,7 @@ export class ClientMap extends Mapper<Client> {
             email: client.email.value,
             phoneNumber: client.phoneNumber.value,
             vatNumber: client.vatNumber.value,
+            status: client.status,
 
             password: client.props.password.value,
         }
@@ -53,6 +56,13 @@ export class ClientMap extends Mapper<Client> {
             new UniqueEntityID(raw.domainId),
         )
 
-        return client.isSuccess ? client.getValue() : null
+        if (client.isFailure) {
+            return null
+        }
+
+        const cl = client.getValue()
+        cl.status = raw.status as ClientStatus
+
+        return cl
     }
 }

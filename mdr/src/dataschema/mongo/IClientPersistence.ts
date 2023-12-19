@@ -5,6 +5,8 @@ export interface IClientPersistence {
     phoneNumber: string
     vatNumber: number
 
+    status: string
+
     password: string
     // salt: string
 }

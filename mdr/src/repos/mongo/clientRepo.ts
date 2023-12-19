@@ -29,6 +29,7 @@ export default class ClientRepo implements IClientRepo {
                 doc.phoneNumber = raw.phoneNumber
                 doc.vatNumber = raw.vatNumber
 
+                doc.status = raw.status
                 doc.password = raw.password
 
                 await doc.save()

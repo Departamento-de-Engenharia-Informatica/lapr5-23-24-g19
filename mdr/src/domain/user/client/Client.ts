@@ -6,9 +6,10 @@ import { Email } from '../email'
 import { Name } from '../name'
 import { PhoneNumber } from '../phoneNumber'
 import { UserPassword } from '../userPassword'
+import { ClientStatus } from './status'
 import { VatNumber } from './vatNumber'
 
-interface Props {
+interface CreateProps {
     email: Email
     name: Name
     phoneNumber: PhoneNumber
@@ -17,12 +18,16 @@ interface Props {
     password: UserPassword
 }
 
+interface Props extends CreateProps {
+    status: ClientStatus
+}
+
 export default class Client extends AggregateRoot<Props> {
     private constructor(props: Props, id?: UniqueEntityID) {
         super(props, id)
     }
 
-    static create(props: Props, id?: UniqueEntityID): Result<Client> {
+    static create(props: CreateProps, id?: UniqueEntityID): Result<Client> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.email, argumentName: 'Email' },
             { argument: props.name, argumentName: 'Name' },
@@ -35,7 +40,7 @@ export default class Client extends AggregateRoot<Props> {
             return Result.fail(guardResult.message ?? '')
         }
 
-        return Result.ok(new Client({ ...props }, id))
+        return Result.ok(new Client({ status: ClientStatus.PENDING, ...props }, id))
     }
 
     get id(): UniqueEntityID {
@@ -56,5 +61,13 @@ export default class Client extends AggregateRoot<Props> {
 
     get vatNumber() {
         return this.props.vatNumber
+    }
+
+    get status() {
+        return this.props.status
+    }
+
+    set status(newStatus: ClientStatus) {
+        this.status = newStatus
     }
 }
