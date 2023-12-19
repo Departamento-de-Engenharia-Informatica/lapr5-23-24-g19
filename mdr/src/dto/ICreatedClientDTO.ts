@@ -1,7 +1,7 @@
 export interface ICreatedClientDTO {
     name: string
     email: string
-    phoneNumber: number
+    phoneNumber: string
     vatNumber: number
 
     authToken?: string

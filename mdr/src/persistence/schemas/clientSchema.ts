@@ -22,7 +22,7 @@ const Client = new Schema({
     },
 
     phoneNumber: {
-        type: Number,
+        type: String,
         unique: true,
         required: true,
     },

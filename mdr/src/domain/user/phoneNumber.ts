@@ -3,10 +3,11 @@ import { ValueObject } from "../../core/domain/ValueObject"
 import { Result } from "../../core/logic/Result"
 
 interface Props {
-    value: number
+    value: string
 }
 
 const allowedLength = config.phoneNumberLength
+const numericRe = /^[0-9]+$/
 
 export class PhoneNumber extends ValueObject<Props> {
     get value() {
@@ -17,11 +18,18 @@ export class PhoneNumber extends ValueObject<Props> {
         super(props)
     }
 
-    static create(phoneNumber: number): Result<PhoneNumber> {
-        if (phoneNumber.toString().length != allowedLength) {
+    static create(phoneNumber: string | number): Result<PhoneNumber> {
+        const num = typeof(phoneNumber) === 'number'
+            ? phoneNumber.toString()
+            : phoneNumber
+
+        if (
+            num.length != allowedLength
+            || !numericRe.test(num)
+        ) {
             return Result.fail('Invalid phone number')
         }
 
-        return Result.ok(new PhoneNumber({ value: phoneNumber }))
+        return Result.ok(new PhoneNumber({ value: num }))
     }
 }

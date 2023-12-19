@@ -2,7 +2,7 @@ export interface IClientPersistence {
     domainId: string
     name: string
     email: string
-    phoneNumber: number
+    phoneNumber: string
     vatNumber: number
 
     password: string

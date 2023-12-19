@@ -1,4 +1,3 @@
-import { cli } from 'winston/lib/winston/config'
 import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { Mapper } from '../core/infra/Mapper'
 import { IClientPersistence } from '../dataschema/mongo/IClientPersistence'
