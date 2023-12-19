@@ -1,0 +1,176 @@
+<form [formGroup]="createDeliveryForm" (ngSubmit)="onSubmit()">
+    <div class="introduce">
+        <div class="box">
+            <div>
+                <label for="email">Email:</label>
+                <input
+                    type="text"
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                    id="email"
+                    formControlName="email"
+                    required
+                />
+            </div>
+
+            <div>
+                <label for="description">Description:</label>
+                <textarea id="description" formControlName="description"></textarea>
+            </div>
+
+            <div>
+                <label for="confirmationCode">Confirmation Code:</label>
+                <input
+                    type="text"
+                    pattern="[0-9]{4,6}"
+                    id="confirmationCode"
+                    formControlName="confirmationCode"
+                    required
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="introduce">
+        <div class="box">
+            <div>
+                <label
+                    ><strong><u>Pickup Options</u></strong></label
+                >
+                <label for="selectedBuilding1">Select Building:</label>
+                <select
+                    id="selectedBuilding1"
+                    formControlName="startBuildingCode"
+                    [(ngModel)]="selectedBuilding1"
+                    (ngModelChange)="listFloors1()"
+                    required
+                >
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="selectedFloor1">Select Floor:</label>
+                <select
+                    id="selectedFloor1"
+                    formControlName="startFloorNumber"
+                    [(ngModel)]="selectedFloor1"
+                    (ngModelChange)="listRooms1()"
+                    required
+                >
+                    <option *ngFor="let floor of floors1" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="selectedRoom1">Select Room:</label>
+                <select
+                    id="selectedRoom1"
+                    formControlName="startRoom"
+                    [(ngModel)]="selectedRoom1"
+                    (ngModelChange)="changedRoom1()"
+                    required
+                >
+                    <option *ngFor="let room of rooms1" [value]="room.name">
+                        {{ room.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="pickupContactName">Contact Name:</label>
+                <input
+                    id="pickupContactName"
+                    formControlName="pickupContactName"
+                    required
+                />
+            </div>
+
+            <div>
+                <label for="pickupContactPhone">Contact Phone Number:</label>
+                <input
+                    type="tel"
+                    id="contactPhone"
+                    pattern="[0-9]{9}"
+                    formControlName="pickupContactPhone"
+                    required
+                />
+            </div>
+        </div>
+
+        <div class="box">
+            <div>
+                <label
+                    ><strong><u>Delivery Options</u></strong></label
+                >
+                <label for="selectedBuilding2">Select Building:</label>
+                <select
+                    id="selectedBuilding2"
+                    formControlName="goalBuildingCode"
+                    [(ngModel)]="selectedBuilding2"
+                    (ngModelChange)="listFloors2()"
+                    required
+                >
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="selectedFloor2">Select Floor:</label>
+                <select
+                    id="selectedFloor2"
+                    formControlName="goalFloorNumber"
+                    [(ngModel)]="selectedFloor2"
+                    (ngModelChange)="listRooms2()"
+                    required
+                >
+                    <option *ngFor="let floor of floors2" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="selectedRoom2">Select Room:</label>
+                <select
+                    id="selectedRoom2"
+                    formControlName="goalRoom"
+                    [(ngModel)]="selectedRoom2"
+                    (ngModelChange)="changedRoom2()"
+                    required
+                >
+                    <option *ngFor="let room of rooms2" [value]="room.name">
+                        {{ room.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="deliveryContactName">Contact Name:</label>
+                <input
+                    id="deliveryContactName"
+                    formControlName="deliveryContactName"
+                    required
+                />
+            </div>
+
+            <div>
+                <label for="deliveryContactPhone">Contact Phone Number:</label>
+                <input
+                    type="tel"
+                    id="deliveryContactPhone"
+                    pattern="[0-9]{9}"
+                    formControlName="deliveryContactPhone"
+                    required
+                />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" [disabled]="createDeliveryForm.invalid">Submit</button>
+</form>

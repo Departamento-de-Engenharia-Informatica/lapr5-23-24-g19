@@ -26,6 +26,11 @@ export default {
      */
     planningURL: process.env.PLANNING_URI || 'http://localhost:8090/api',
 
+    
+    /**
+     */
+    mdtURL: process.env.MDT_URI || 'http://localhost:5000/api',
+
     /**
      * Your secret sauce
      */
@@ -144,7 +149,12 @@ export default {
         path: {
             name: 'HttpPlanningAdapter',
             path: '../repos/planning/httpNodePlanningAdapter'
+        },
+        mdt: {
+            name: 'HttpMdtAdapter',
+            path: '../repos/mdt/httpNodeMdtAdapter'
         }
+
     },
 
     schemas: {

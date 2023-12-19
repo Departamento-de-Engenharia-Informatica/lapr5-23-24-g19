@@ -1,0 +1,63 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+participant "MDT" as mdt
+
+activate usr
+usr -> ui : wants to register a new surveillance task
+    activate ui
+        ui -> mdr : GET /buildings
+    alt building(s) not found
+            activate mdr
+                note right : see us170 documentation
+                mdr --> ui : 404: error
+                ui --> usr : informs error
+
+    else building(s) found
+            mdr --> ui : 200: buildings
+            deactivate mdr
+
+            ui --> usr : requests building
+            deactivate ui
+
+            usr -> ui : provides buildings
+            activate ui
+                ui -> mdr : GET /floors
+                activate mdr
+                note right : see us210 documentation
+                    mdr --> ui : 200: floors
+                deactivate mdr
+
+                ui --> usr : requests floor
+            deactivate ui
+
+            usr -> ui : provides floor
+            activate ui
+                ui --> usr : requests task details
+            deactivate ui
+
+            usr -> ui : provides task details
+        activate ui
+            ui -> mdr : POST /task/surveillance
+            activate mdr
+                mdr -> mdt : POST /jobs
+                activate mdt
+                    alt success
+                        mdt --> mdr : 201: task
+                        mdr --> ui : 201: task
+                        ui --> usr : task
+                    else task not created
+                        mdt --> mdr : 404: error
+                        mdr --> ui : 404: error
+                        ui --> usr : informs error
+                deactivate mdt
+            deactivate mdr
+    deactivate ui
+deactivate usr
+end
+end
+@enduml

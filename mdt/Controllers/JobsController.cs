@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Text.Json;
 using System.Threading.Tasks;
-using DDDSample1.Domain.Shared;
-using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Jobs;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace DDDSample1.Controllers
 {
-    [Route("api/Jobs")]
+    [Route("api/jobs")]
     [ApiController]
     public class JobsController : ControllerBase
     {
@@ -18,36 +17,65 @@ namespace DDDSample1.Controllers
             _service = service;
         }
 
-        // POST: api/Jobs
-        [HttpPost]
-        public async Task<ActionResult<JobDto>> Create(CreatingJobDto dto)
+        [HttpGet("status")]
+        public async Task<ActionResult<string>> Status()
         {
-            throw new System.NotImplementedException();
+            return Ok("Status ok");
         }
 
-        // PATCH: api/Jobs/{id}
+        // POST: api/Jobs
+        [HttpPost]
+        public async Task<ActionResult<CreatingJobDto>> Create(CreatingJobDto dto)
+        {
+            // var options = new JsonSerializerOptions
+            // {
+            //     WriteIndented = true // This sets the indentation
+            // };
+            // Console.WriteLine("\nhelo\n");
+            // Console.WriteLine(JsonSerializer.Serialize(dto, options));
+            // Console.WriteLine("\nbye\n");
+            var job = await _service.AddAsync(dto);
+
+            return Ok(job);
+        }
+
+        // GET: api/jobs/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<string>> GetGetById(string id)
+        {
+            var job = await _service.GetByIdAsync(id);
+
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(job);
+        }
+
+        // PATCH: api/jobs/{id}
         [HttpPatch("{id}")]
         public async Task<ActionResult<JobDto>> Update(string id, UpdatingJobDto dto)
         {
             throw new System.NotImplementedException();
         }
 
-        // GET: api/Jobs/non-approved
+        // GET: api/jobs/non-approved
         [HttpGet("non-approved")]
         public async Task<ActionResult<JobDto[]>> GetNonApproved()
         {
             throw new System.NotImplementedException();
         }
 
-        // GET: api/Jobs/{filter}
+        // GET: api/jobs/{filter}
         // filter can be: "state", "device" or "client"
-        [HttpGet("{filter}")]
+        [HttpGet("/filter/{filter}")]
         public async Task<ActionResult<JobDto[]>> GetByFilter(string filter)
         {
             throw new System.NotImplementedException();
         }
 
-        // GET: api/Jobs/approved-jobs-sequence
+        // GET: api/jobs/approved-jobs-sequence
         [HttpGet("approved-jobs-sequence")]
         public async Task<ActionResult<JobDto[]>> GetApprovedJobsSequence()
         {

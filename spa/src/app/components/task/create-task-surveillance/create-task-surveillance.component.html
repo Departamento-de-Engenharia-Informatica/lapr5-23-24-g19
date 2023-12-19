@@ -1,0 +1,64 @@
+<form [formGroup]="createSurveillanceForm" (ngSubmit)="onSubmit()">
+    <div class="introduce">
+        <div class="box">
+            <div>
+                <label for="email">Email:</label>
+                <input
+                    type="text"
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                    id="email"
+                    formControlName="email"
+                    required
+                />
+            </div>
+
+            <div>
+                <label for="buildingCode">Select Building:</label>
+                <select
+                    id="selectedBuilding"
+                    formControlName="buildingCode"
+                    q
+                    [(ngModel)]="selectedBuilding"
+                    (ngModelChange)="listFloors()"
+                    required
+                >
+                    <option *ngFor="let building of buildings" [value]="building.code">
+                        {{ building.code }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="floorNumber">Select Floor:</label>
+                <select
+                    id="selectedFloor"
+                    formControlName="floorNumber"
+                    [(ngModel)]="selectedFloor"
+                    required
+                >
+                    <option *ngFor="let floor of floors" [value]="floor.floorNumber">
+                        {{ floor.floorNumber }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="contactName">Contact Name:</label>
+                <input id="contactName" formControlName="contactName" required />
+            </div>
+
+            <div>
+                <label for="contactPhone">Contact Phone Number:</label>
+                <input
+                    type="tel"
+                    id="contactPhone"
+                    pattern="[0-9]{9}"
+                    formControlName="contactPhone"
+                    required
+                />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" [disabled]="createSurveillanceForm.invalid">Submit</button>
+</form>
