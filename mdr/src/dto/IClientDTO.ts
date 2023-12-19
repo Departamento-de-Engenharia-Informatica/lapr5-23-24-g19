@@ -1,7 +1,7 @@
 export interface IClientDTO {
     name: string
     email: string
-    phoneNumber: number
+    phoneNumber: string
     vatNumber: number
     password: string
 }
