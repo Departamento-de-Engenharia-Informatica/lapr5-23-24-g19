@@ -10,7 +10,10 @@ import { ClientMap } from '../../mappers/ClientMap'
 
 @Service()
 export default class ClientRepo implements IClientRepo {
-    constructor(@Inject(config.schemas.client.name) private schema: Model<IClientPersistence & Document>) {}
+    constructor(
+        @Inject(config.schemas.client.name)
+        private schema: Model<IClientPersistence & Document>,
+    ) {}
 
     public async save(client: Client): Promise<Client> {
         const doc = await this.schema.findOne({ email: client.email.value })

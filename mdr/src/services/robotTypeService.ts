@@ -1,7 +1,10 @@
 import config from '../../config'
 import { Service, Inject } from 'typedi'
 import { Either, left, right } from '../core/logic/Result'
-import IRobotTypeService, { RobotTypeErrorCode, RobotTypeErrorResult } from './IServices/IRobotTypeService'
+import IRobotTypeService, {
+    RobotTypeErrorCode,
+    RobotTypeErrorResult,
+} from './IServices/IRobotTypeService'
 import { IRobotTypeDTO } from '../dto/IRobotTypeDTO'
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo'
 import { RobotTypeCode } from '../domain/robotType/robotTypeCode'
@@ -13,9 +16,13 @@ import { RobotTypeMap } from '../mappers/RobotTypeMap'
 
 @Service()
 export default class RobotTypeService implements IRobotTypeService {
-    constructor(@Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo) {}
+    constructor(
+        @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
+    ) {}
 
-    async createRobotType(dto: IRobotTypeDTO): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>> {
+    async createRobotType(
+        dto: IRobotTypeDTO,
+    ): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>> {
         try {
             const dtoCode = RobotTypeCode.create(dto.code).getOrThrow()
             const dtoBrand = RobotTypeBrand.create(dto.brand).getOrThrow()

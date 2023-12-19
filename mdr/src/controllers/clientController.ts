@@ -21,7 +21,9 @@ export default class ClientController implements IClientController {
 
             if (result.isLeft()) {
                 const err = result.value as ClientErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             const message = result.value as ICreatedClientDTO

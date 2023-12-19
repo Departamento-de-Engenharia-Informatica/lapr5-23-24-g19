@@ -31,7 +31,6 @@ describe('Building create', () => {
         })
 
         assert.isNotOk(result.isSuccess)
-
     })
     it('accepts no name', () => {
         stubCreate(BuildingCode)

@@ -18,7 +18,9 @@ export class RobotSerialNumber extends ValueObject<Props> {
 
     public static create(serialNumber: string): Result<RobotSerialNumber> {
         if (!regex.test(serialNumber)) {
-            return Result.fail('Serial number must be alphanumeric and have no more than 50 characters')
+            return Result.fail(
+                'Serial number must be alphanumeric and have no more than 50 characters',
+            )
         }
 
         return Result.ok(new RobotSerialNumber({ value: serialNumber }))

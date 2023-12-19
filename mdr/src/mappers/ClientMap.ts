@@ -9,14 +9,13 @@ import { PhoneNumber } from '../domain/user/phoneNumber'
 import { UserPassword } from '../domain/user/userPassword'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 
-
 export class ClientMap extends Mapper<Client> {
     static toDTO(client: Client): ICreatedClientDTO {
         return {
             name: client.name.value,
             email: client.email.value,
             phoneNumber: client.phoneNumber.value,
-            vatNumber: client.vatNumber.value
+            vatNumber: client.vatNumber.value,
         }
     }
 
@@ -28,7 +27,7 @@ export class ClientMap extends Mapper<Client> {
             phoneNumber: client.phoneNumber.value,
             vatNumber: client.vatNumber.value,
 
-            password: client.props.password.value
+            password: client.props.password.value,
         }
     }
 
@@ -37,7 +36,10 @@ export class ClientMap extends Mapper<Client> {
         const name = Name.create(raw.name).getOrThrow()
         const phoneNumber = PhoneNumber.create(raw.phoneNumber).getOrThrow()
         const vatNumber = VatNumber.create(raw.vatNumber).getOrThrow()
-        const password = UserPassword.create({ value: raw.password, hashed: true }).getOrThrow()
+        const password = UserPassword.create({
+            value: raw.password,
+            hashed: true,
+        }).getOrThrow()
 
         const client = Client.create(
             {
@@ -46,9 +48,9 @@ export class ClientMap extends Mapper<Client> {
                 phoneNumber,
                 vatNumber,
 
-                password
+                password,
             },
-            new UniqueEntityID(raw.domainId)
+            new UniqueEntityID(raw.domainId),
         )
 
         return client.isSuccess ? client.getValue() : null

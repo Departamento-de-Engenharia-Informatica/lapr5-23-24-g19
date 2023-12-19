@@ -9,12 +9,18 @@ import IRoleDTO from '../dto/IRoleDTO'
 import { Result } from '../core/logic/Result'
 
 @Service()
-export default class RoleController implements IRoleController /* TODO: extends ../core/infra/BaseController */ {
-    constructor(@Inject(config.services.role.name) private roleServiceInstance: IRoleService) {}
+export default class RoleController
+    implements IRoleController /* TODO: extends ../core/infra/BaseController */
+{
+    constructor(
+        @Inject(config.services.role.name) private roleServiceInstance: IRoleService,
+    ) {}
 
     public async createRole(req: Request, res: Response, next: NextFunction) {
         try {
-            const roleOrError = (await this.roleServiceInstance.createRole(req.body as IRoleDTO)) as Result<IRoleDTO>
+            const roleOrError = (await this.roleServiceInstance.createRole(
+                req.body as IRoleDTO,
+            )) as Result<IRoleDTO>
 
             if (roleOrError.isFailure) {
                 return res.status(402).send()
@@ -29,7 +35,9 @@ export default class RoleController implements IRoleController /* TODO: extends 
 
     public async updateRole(req: Request, res: Response, next: NextFunction) {
         try {
-            const roleOrError = (await this.roleServiceInstance.updateRole(req.body as IRoleDTO)) as Result<IRoleDTO>
+            const roleOrError = (await this.roleServiceInstance.updateRole(
+                req.body as IRoleDTO,
+            )) as Result<IRoleDTO>
 
             if (roleOrError.isFailure) {
                 return res.status(404).send()

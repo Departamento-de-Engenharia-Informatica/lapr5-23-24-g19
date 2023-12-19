@@ -14,5 +14,7 @@ export type ClientErrorResult = {
 }
 
 export default interface IClientService {
-    createClient(clientDTO: IClientDTO): Promise<Either<ClientErrorResult, ICreatedClientDTO>>
+    createClient(
+        clientDTO: IClientDTO,
+    ): Promise<Either<ClientErrorResult, ICreatedClientDTO>>
 }

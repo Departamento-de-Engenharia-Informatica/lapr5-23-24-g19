@@ -35,7 +35,7 @@ describe('Robot', () => {
 
         code = RobotCode.create('RobotCode').getValue()
         nick = RobotNickname.create('MarcoBot').getValue()
-        serial = RobotSerialNumber.create("ABC").getValue()
+        serial = RobotSerialNumber.create('ABC').getValue()
 
         stubCreate(RobotTypeCode)
         stubCreate(RobotTypeBrand)
@@ -46,7 +46,7 @@ describe('Robot', () => {
             code: RobotTypeCode.create('RobotTypeCode').getValue(),
             brand: RobotTypeBrand.create('BMW').getValue(),
             model: RobotTypeModel.create('MegaRobot').getValue(),
-            taskType: ["a" as TaskType, "b" as TaskType]
+            taskType: ['a' as TaskType, 'b' as TaskType],
         }).getValue()
     })
 
@@ -61,7 +61,7 @@ describe('Robot', () => {
             serialNumber: serial,
             type,
 
-            description
+            description,
         })
 
         assert.isOk(result.isSuccess)
@@ -72,7 +72,7 @@ describe('Robot', () => {
             serialNumber: serial,
             type,
 
-            description: undefined
+            description: undefined,
         })
 
         assert.isOk(result.isSuccess)
@@ -175,7 +175,6 @@ describe('Robot', () => {
 
         value = result.getValue().state
         assert.equal(value, RobotState.DISABLED)
-
     })
 
     it('should be able to get code value', () => {

@@ -31,10 +31,10 @@ export default (app: Router) => {
         '/:id/inhibit',
         celebrate({
             body: Joi.object({
-                state: Joi.number().integer().required()
-            })
+                state: Joi.number().integer().required(),
+            }),
         }),
-        (req, res, next) => ctrl.inhibitRobot(req, res, next)
+        (req, res, next) => ctrl.inhibitRobot(req, res, next),
     )
 
     route.get('', (req, res, next) => ctrl.getRobots(req, res, next))

@@ -7,14 +7,14 @@ const floorPropsSchema = new mongoose.Schema({
             length: Number,
             width: Number,
         },
-        required: true
+        required: true,
     },
-    
+
     mapContent: {
         type: [[Number]],
         required: true,
     },
-    
+
     passages: [
         {
             x: Number,
@@ -28,14 +28,14 @@ const floorPropsSchema = new mongoose.Schema({
             y: Number,
         },
     ],
-    
+
     elevators: [
         {
             x: Number,
             y: Number,
         },
     ],
-});
+})
 
 const Floor = new mongoose.Schema(
     {
@@ -61,11 +61,11 @@ const Floor = new mongoose.Schema(
             type: String,
             required: false,
         },
-        
+
         path: {
             type: String,
-            required: false
-        }
+            required: false,
+        },
         // map: {
         //     type: floorPropsSchema,
         //     required:false,

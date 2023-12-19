@@ -4,7 +4,10 @@ import { Request, Response, NextFunction } from 'express'
 
 import { RobotErrorCode, RobotErrorResult } from '../services/IServices/IRobotService'
 import ITaskController from './IControllers/ITaskController'
-import ITaskService, { TaskErrorCode, TaskErrorResult } from '../services/IServices/ITaskService'
+import ITaskService, {
+    TaskErrorCode,
+    TaskErrorResult,
+} from '../services/IServices/ITaskService'
 
 @Service()
 export default class TaskController implements ITaskController {
@@ -16,7 +19,9 @@ export default class TaskController implements ITaskController {
 
             if (result.isLeft()) {
                 const err = result.value as TaskErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             return res.json(result.value).status(200)

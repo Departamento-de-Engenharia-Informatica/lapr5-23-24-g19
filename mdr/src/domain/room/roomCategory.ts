@@ -1,11 +1,11 @@
 import { ValueObject } from '../../core/domain/ValueObject'
 import { Result } from '../../core/logic/Result'
 
-enum CategoryType{
-    GABINETE = "GABINETE",
-    ANFITEATRO = "ANFITEATRO",
-    LABORATORIO = "LABORATORIO",
-    OUTRO = "OUTRO"
+enum CategoryType {
+    GABINETE = 'GABINETE',
+    ANFITEATRO = 'ANFITEATRO',
+    LABORATORIO = 'LABORATORIO',
+    OUTRO = 'OUTRO',
 }
 interface Props {
     category: CategoryType
@@ -22,8 +22,8 @@ export class RoomCategory extends ValueObject<Props> {
 
     public static create(category: string): Result<RoomCategory> {
         let type: CategoryType
-        
-        switch(category.trim().toUpperCase()){
+
+        switch (category.trim().toUpperCase()) {
             case CategoryType.GABINETE:
                 type = CategoryType.GABINETE
                 break
@@ -37,6 +37,6 @@ export class RoomCategory extends ValueObject<Props> {
                 type = CategoryType.OUTRO
         }
 
-        return Result.ok(new RoomCategory({category: type}))
+        return Result.ok(new RoomCategory({ category: type }))
     }
 }

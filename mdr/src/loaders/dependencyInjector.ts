@@ -14,7 +14,7 @@ export default ({
     controllers: { name: string; path: string }[]
     repos: { name: string; path: string }[]
     services: { name: string; path: string }[]
-    storage: { name: string, path: string, prefix: string }
+    storage: { name: string; path: string; prefix: string }
 }) => {
     try {
         Container.set('logger', LoggerInstance)

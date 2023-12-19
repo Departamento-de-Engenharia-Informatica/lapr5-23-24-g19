@@ -11,9 +11,5 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.task.name) as ITaskController
 
-    route.get(
-        '/types',
-        (req, res, next) => ctrl.getTypes(req, res, next),
-    )
-
+    route.get('/types', (req, res, next) => ctrl.getTypes(req, res, next))
 }

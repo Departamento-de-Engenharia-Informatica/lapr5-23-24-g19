@@ -26,14 +26,12 @@ const attachCurrentUser = async (req, res, next) => {
 
         const jw = jwt.decode(req.token, { complete: true, json: true })
         const user = jw.payload as User
-        const isFound = await userRepo.findById(user.id.toString()) != null
+        const isFound = (await userRepo.findById(user.id.toString())) != null
 
         if (isFound) {
             req.user = user
             next()
-        }
-        else
-            next(new Error('Token não corresponde a qualquer utilizador do sistema'))
+        } else next(new Error('Token não corresponde a qualquer utilizador do sistema'))
     } catch (e) {
         Logger.error('🔥 Error attaching user to req: %o', e)
         return next(e)
@@ -41,25 +39,24 @@ const attachCurrentUser = async (req, res, next) => {
 }
 
 const checkRole = async (requiredRoles: string[], req, res, next) => {
-    const user: IUserDTO = req.user;
+    const user: IUserDTO = req.user
 
     console.log(req.user)
-    if (!user || user === undefined)
-        return res.status(401).json({ error: 'Forbidden' });
+    if (!user || user === undefined) return res.status(401).json({ error: 'Forbidden' })
 
     if (requiredRoles.includes(user.role)) {
-        return next();
-    } else{
-        return res.status(403).json({ error: 'Unauthorized' });
+        return next()
+    } else {
+        return res.status(403).json({ error: 'Unauthorized' })
     }
-
-};
-
-enum Roles {
-    FleetManager = "Fleet Manager"
 }
 
-const checkFleetManager = (req, res, next) => checkRole([Roles.FleetManager], req, res, next);
+enum Roles {
+    FleetManager = 'Fleet Manager',
+}
+
+const checkFleetManager = (req, res, next) =>
+    checkRole([Roles.FleetManager], req, res, next)
 
 export { checkFleetManager }
 export default attachCurrentUser

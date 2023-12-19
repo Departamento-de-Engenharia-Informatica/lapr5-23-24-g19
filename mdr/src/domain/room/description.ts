@@ -23,7 +23,9 @@ export class RoomDescription extends ValueObject<DescriptionProps> {
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message)
         } else if (description.length > MAX_LENGTH) {
-            return Result.fail(`Description should have no more than ${MAX_LENGTH} characters`)
+            return Result.fail(
+                `Description should have no more than ${MAX_LENGTH} characters`,
+            )
         }
 
         return Result.ok(new RoomDescription({ value: description }))

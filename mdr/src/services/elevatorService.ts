@@ -29,9 +29,13 @@ export default class ElevatorService implements IElevatorService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
-    async createElevator(dto: IElevatorDTO): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
+    async createElevator(
+        dto: IElevatorDTO,
+    ): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
         try {
-            const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
+            const building = await this.buildingRepo.findByCode(
+                BuildingCode.create(dto.buildingId).getValue(),
+            )
 
             if (!building) {
                 return left({
@@ -45,7 +49,7 @@ export default class ElevatorService implements IElevatorService {
             const floors =
                 (
                     await Promise.all(
-                        dto.floors.map(async fNum => {
+                        dto.floors.map(async (fNum) => {
                             const num = FloorNumber.create(fNum).getOrThrow()
                             try {
                                 return await this.floorRepo.find(building, num)
@@ -54,7 +58,7 @@ export default class ElevatorService implements IElevatorService {
                             }
                         }),
                     )
-                ).filter(f => f !== null && f !== undefined) ?? []
+                ).filter((f) => f !== null && f !== undefined) ?? []
 
             if (floors.length < dto.floors.length) {
                 return left({
@@ -65,8 +69,10 @@ export default class ElevatorService implements IElevatorService {
 
             const brand = dto.brand && Brand.create(dto.brand).getOrThrow()
             const model = dto.model && Model.create(dto.model).getOrThrow()
-            const serialNumber = dto.serialNumber && SerialNumber.create(dto.serialNumber).getOrThrow()
-            const description = dto.description && Description.create(dto.description).getOrThrow()
+            const serialNumber =
+                dto.serialNumber && SerialNumber.create(dto.serialNumber).getOrThrow()
+            const description =
+                dto.description && Description.create(dto.description).getOrThrow()
 
             const result = Elevator.create({
                 building,
@@ -95,7 +101,6 @@ export default class ElevatorService implements IElevatorService {
                 errorCode: ErrorCode.BussinessRuleViolation,
                 message: e.message ?? 'Business rule violation',
             } as ErrorResult)
-
         }
     }
 
@@ -104,7 +109,9 @@ export default class ElevatorService implements IElevatorService {
         dto: IElevatorDTO,
     ): Promise<Either<ErrorResult, ICreatedElevatorDTO>> {
         try {
-            const building = await this.buildingRepo.findByCode(BuildingCode.create(dto.buildingId).getValue())
+            const building = await this.buildingRepo.findByCode(
+                BuildingCode.create(dto.buildingId).getValue(),
+            )
 
             if (!building) {
                 return left({
@@ -115,7 +122,10 @@ export default class ElevatorService implements IElevatorService {
 
             const elevatorIdentifier = Identifier.create(identifier).getValue()
 
-            const existElevator = await this.repo.existsInBuilding(building, elevatorIdentifier)
+            const existElevator = await this.repo.existsInBuilding(
+                building,
+                elevatorIdentifier,
+            )
 
             if (existElevator === null) {
                 return left({
@@ -124,18 +134,25 @@ export default class ElevatorService implements IElevatorService {
                 })
             }
 
-            const elevator = await this.repo.findByIdentifier(building, elevatorIdentifier)
+            const elevator = await this.repo.findByIdentifier(
+                building,
+                elevatorIdentifier,
+            )
 
             elevator.brand = dto.brand ? Brand.create(dto.brand).getValue() : null
             elevator.model = dto.model ? Model.create(dto.model).getValue() : null
-            elevator.serialNumber = dto.serialNumber ? SerialNumber.create(dto.serialNumber).getValue() : null
-            elevator.description = dto.description ? Description.create(dto.description).getValue() : null
+            elevator.serialNumber = dto.serialNumber
+                ? SerialNumber.create(dto.serialNumber).getValue()
+                : null
+            elevator.description = dto.description
+                ? Description.create(dto.description).getValue()
+                : null
 
             if (dto.floors) {
                 const floors =
                     (
                         await Promise.all(
-                            dto.floors.map(async fNum => {
+                            dto.floors.map(async (fNum) => {
                                 const num = FloorNumber.create(fNum).getValue()
                                 try {
                                     return await this.floorRepo.find(building, num)
@@ -144,7 +161,7 @@ export default class ElevatorService implements IElevatorService {
                                 }
                             }),
                         )
-                    ).filter(f => f !== null && f !== undefined) ?? []
+                    ).filter((f) => f !== null && f !== undefined) ?? []
 
                 if (floors.length < dto.floors.length) {
                     return left({
@@ -167,7 +184,9 @@ export default class ElevatorService implements IElevatorService {
         }
     }
 
-    public async getElevators(code: string): Promise<Either<ErrorResult, ICreatedElevatorDTO[]>> {
+    public async getElevators(
+        code: string,
+    ): Promise<Either<ErrorResult, ICreatedElevatorDTO[]>> {
         try {
             const bCode = BuildingCode.create(code)
 
@@ -195,7 +214,9 @@ export default class ElevatorService implements IElevatorService {
                     message: 'Elevators not found',
                 })
             } else {
-                const dtoList = await Promise.all(elevators.map(elevator => ElevatorMap.toDTO(elevator)))
+                const dtoList = await Promise.all(
+                    elevators.map((elevator) => ElevatorMap.toDTO(elevator)),
+                )
                 return right(dtoList)
             }
         } catch (e) {

@@ -1,12 +1,12 @@
-import { AggregateRoot } from "../../../core/domain/AggregateRoot";
-import { UniqueEntityID } from "../../../core/domain/UniqueEntityID";
-import { Guard } from "../../../core/logic/Guard";
-import { Result } from "../../../core/logic/Result";
-import { Email } from "../email";
-import { Name } from "../name";
-import { PhoneNumber } from "../phoneNumber";
-import { UserPassword } from "../userPassword";
-import { VatNumber } from "./vatNumber";
+import { AggregateRoot } from '../../../core/domain/AggregateRoot'
+import { UniqueEntityID } from '../../../core/domain/UniqueEntityID'
+import { Guard } from '../../../core/logic/Guard'
+import { Result } from '../../../core/logic/Result'
+import { Email } from '../email'
+import { Name } from '../name'
+import { PhoneNumber } from '../phoneNumber'
+import { UserPassword } from '../userPassword'
+import { VatNumber } from './vatNumber'
 
 interface Props {
     email: Email

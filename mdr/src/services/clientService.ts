@@ -3,14 +3,16 @@ import config from '../../config'
 
 import jwt from 'jsonwebtoken'
 
-
 import argon2 from 'argon2'
 import { randomBytes } from 'crypto'
 
 import { UserPassword } from '../domain/user/userPassword'
 
 import { Either, left, right } from '../core/logic/Result'
-import IClientService, { ClientErrorCode, ClientErrorResult } from './IServices/IClientService'
+import IClientService, {
+    ClientErrorCode,
+    ClientErrorResult,
+} from './IServices/IClientService'
 import IClientRepo from './IRepos/IClientRepo'
 import { IClientDTO } from '../dto/IClientDTO'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
@@ -23,18 +25,18 @@ import { ClientMap } from '../mappers/ClientMap'
 
 @Service()
 export default class ClientService implements IClientService {
-    constructor(
-        @Inject(config.repos.client.name) private repo: IClientRepo,
-    ) { }
+    constructor(@Inject(config.repos.client.name) private repo: IClientRepo) {}
 
-    async createClient(dto: IClientDTO): Promise<Either<ClientErrorResult, ICreatedClientDTO>> {
+    async createClient(
+        dto: IClientDTO,
+    ): Promise<Either<ClientErrorResult, ICreatedClientDTO>> {
         try {
             const email = Email.create(dto.email).getOrThrow()
 
             if (await this.repo.existsWithEmail(email)) {
                 return left({
                     errorCode: ClientErrorCode.AlreadyExists,
-                    message: `User already exists: ${email.value}`
+                    message: `User already exists: ${email.value}`,
                 })
             }
 
@@ -49,7 +51,7 @@ export default class ClientService implements IClientService {
                 name,
                 phoneNumber,
                 vatNumber,
-                password
+                password,
             }).getOrThrow()
 
             const saved = await this.repo.save(client)
@@ -60,7 +62,7 @@ export default class ClientService implements IClientService {
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,
-                message: e.message
+                message: e.message,
             })
         }
     }

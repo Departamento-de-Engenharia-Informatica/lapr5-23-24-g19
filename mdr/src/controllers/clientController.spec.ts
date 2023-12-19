@@ -2,30 +2,27 @@ import 'reflect-metadata'
 
 import { Request, NextFunction, Response } from 'express'
 
-
 import { Container } from 'typedi'
 import { left, Result, right } from '../core/logic/Result'
 import IClientService from '../services/IServices/IClientService'
 import ClientController from './clientController'
 
 import sinon, { SinonStub } from 'sinon'
-import * as chai from 'chai';
-import * as sinonChai from 'sinon-chai';
+import * as chai from 'chai'
+import * as sinonChai from 'sinon-chai'
 
 chai.use(sinonChai.default)
 
 const { expect } = chai
 
-
-
 describe('Client controller Unit', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 
@@ -46,21 +43,21 @@ describe('Client controller Unit', () => {
                 status: sandbox.stub().returnsThis(),
                 send: sandbox.stub(),
             }
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             const service: Partial<IClientService> = {
                 async createClient(_dto) {
                     return left({
                         errorCode: 1,
-                        message: 'bad'
+                        message: 'bad',
                     })
-                }
+                },
             } as IClientService
 
             const ctrl = new ClientController(<IClientService>service)
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            expect(res.status).to.have.been.calledOnceWith(422);
+            expect(res.status).to.have.been.calledOnceWith(422)
         })
 
         it('should succeed to create with correct parameters', async () => {
@@ -74,14 +71,13 @@ describe('Client controller Unit', () => {
 
             const req: Partial<Request> = {}
 
-
             req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
                 send: sandbox.stub(),
             }
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             const service: Partial<IClientService> = {
                 async createClient(_dto) {
@@ -91,13 +87,13 @@ describe('Client controller Unit', () => {
                         phoneNumber: '912119482',
                         vatNumber: 110212558,
                     })
-                }
+                },
             } as IClientService
 
             const ctrl = new ClientController(<IClientService>service)
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            expect(res.status).to.have.been.calledOnceWith(201);
+            expect(res.status).to.have.been.calledOnceWith(201)
         })
     })
 })

@@ -4,12 +4,17 @@ import config from '../../config'
 
 import IRobotTypeController from './IControllers/IRobotTypeController'
 import { IRobotTypeDTO } from '../dto/IRobotTypeDTO'
-import IRobotTypeService, { RobotTypeErrorCode, RobotTypeErrorResult } from '../services/IServices/IRobotTypeService'
+import IRobotTypeService, {
+    RobotTypeErrorCode,
+    RobotTypeErrorResult,
+} from '../services/IServices/IRobotTypeService'
 import { IRobotDTO } from '../dto/IRobotDTO'
 
 @Service()
 export default class RobotTypeController implements IRobotTypeController {
-    constructor(@Inject(config.services.robotType.name) private service: IRobotTypeService) {}
+    constructor(
+        @Inject(config.services.robotType.name) private service: IRobotTypeService,
+    ) {}
 
     async createRobotType(req: Request, res: Response, next: NextFunction) {
         try {
@@ -19,7 +24,9 @@ export default class RobotTypeController implements IRobotTypeController {
 
             if (result.isLeft()) {
                 const err = result.value as RobotTypeErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             const message = result.value as IRobotTypeDTO
@@ -35,7 +42,9 @@ export default class RobotTypeController implements IRobotTypeController {
 
             if (result.isLeft()) {
                 const err = result.value as RobotTypeErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             const message = result.value as IRobotTypeDTO[]

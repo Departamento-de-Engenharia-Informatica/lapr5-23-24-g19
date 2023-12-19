@@ -7,16 +7,17 @@ import { TaskType } from '../domain/robotType/taskType'
 
 @Service()
 export default class TaskService implements ITaskService {
-    constructor(
-    ) {}
+    constructor() {}
 
     async getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>> {
         try {
-            const values = Object.values(TaskType).filter((value) => typeof value === 'string');
+            const values = Object.values(TaskType).filter(
+                (value) => typeof value === 'string',
+            )
 
             const res = values.map((type: TaskType) => ({
                 description: TaskType.toString(type),
-            })) as ITaskTypeDTO[];
+            })) as ITaskTypeDTO[]
 
             return right(res)
         } catch (e) {

@@ -24,16 +24,15 @@ describe('User email', () => {
     })
 
     it('cannot have two @ signs', () => {
-        config.validEmailDomains = [ 'isep.ipp.pt' ]
+        config.validEmailDomains = ['isep.ipp.pt']
         const addr = 'hello@123' + '@' + config.validEmailDomains[0]
 
         const email = Email.create(addr)
         expect(email.isSuccess).to.be.false
     })
 
-
     it('must have an @ sign', () => {
-        config.validEmailDomains = [ 'isep.ipp.pt' ]
+        config.validEmailDomains = ['isep.ipp.pt']
         const addr = 'hello' + '@' + config.validEmailDomains[0]
 
         const email = Email.create(addr)
@@ -41,7 +40,7 @@ describe('User email', () => {
     })
 
     it('must belong to an allowed domain name', () => {
-        config.validEmailDomains = [ 'isep.ipp.pt', 'dei.isep.ipp.pt' ]
+        config.validEmailDomains = ['isep.ipp.pt', 'dei.isep.ipp.pt']
 
         let addr = 'mzc@isep.ipp.pt'
 

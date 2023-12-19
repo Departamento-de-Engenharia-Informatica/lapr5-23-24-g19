@@ -17,7 +17,7 @@ import ClientController from '../src/controllers/clientController'
 describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
 
         const schema = require('../src/persistence/schemas/clientSchema').default
@@ -30,10 +30,9 @@ describe('Client controller:', () => {
         const serviceClass = require('../src/services/clientService').default
         const service = Container.get(serviceClass)
         Container.set('ClientService', service)
-
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 

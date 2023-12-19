@@ -11,7 +11,6 @@ import { Floor } from '../floor/floor'
 import { RoomCategory as Category } from './roomCategory'
 import { Coordinates } from '../floor/Coordinates'
 
-
 export interface RoomProps {
     name: Name
     category: Category

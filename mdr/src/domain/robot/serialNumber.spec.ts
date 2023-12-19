@@ -18,7 +18,7 @@ describe('Serial Number', () => {
             'UvWw0XxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMnOoPqRrSsTt1234567890UvWwXxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPqRrSsTt',
         ]
 
-        serialNumbers.forEach(b => assert.isNotOk(SerialNumber.create(b).isSuccess))
+        serialNumbers.forEach((b) => assert.isNotOk(SerialNumber.create(b).isSuccess))
 
         // less than 50 chars
         assert.isOk(SerialNumber.create('3100').isSuccess)

@@ -20,7 +20,9 @@ export class RoomName extends ValueObject<Props> {
         if (name.length <= maxLength) {
             return Result.ok(new RoomName({ name }))
         } else {
-            return Result.fail(`The name of the room must have at most ${maxLength} characters`)
+            return Result.fail(
+                `The name of the room must have at most ${maxLength} characters`,
+            )
         }
     }
 }

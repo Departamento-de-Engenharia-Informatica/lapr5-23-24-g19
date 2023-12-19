@@ -20,8 +20,8 @@ export class Coordinates extends ValueObject<Props> {
         super(props)
     }
 
-    public getValues(): number[]{
-        return [this.props.x,this.props.y]
+    public getValues(): number[] {
+        return [this.props.x, this.props.y]
     }
 
     public static create(x: number, y: number): Result<Coordinates> {

@@ -32,4 +32,7 @@ const Building = new mongoose.Schema(
     { timestamps: true },
 )
 
-export default mongoose.model<IBuildingPersistence & mongoose.Document>('Building', Building)
+export default mongoose.model<IBuildingPersistence & mongoose.Document>(
+    'Building',
+    Building,
+)

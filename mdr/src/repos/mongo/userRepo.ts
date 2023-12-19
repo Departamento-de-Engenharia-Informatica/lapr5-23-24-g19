@@ -24,15 +24,15 @@ export default class UserRepo implements IUserRepo {
         }
     }
 
-    public async exists(user: User ): Promise<boolean> {
-        const id = user instanceof User ? user.id: null
-        if (id === null){
+    public async exists(user: User): Promise<boolean> {
+        const id = user instanceof User ? user.id : null
+        if (id === null) {
             return false
         }
         const query = { domainId: id }
         const userDocument = await this.userSchema.findOne(query)
 
-        if(!!userDocument === true){
+        if (!!userDocument === true) {
             return true
         }
 

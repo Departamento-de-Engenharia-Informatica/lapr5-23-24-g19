@@ -1,7 +1,6 @@
 import { assert } from 'chai'
 import { describe, it } from 'mocha'
 
-
 import { VatNumber } from './vatNumber'
 
 describe('VatNumber', () => {
@@ -19,5 +18,4 @@ describe('VatNumber', () => {
         const vatNumber = VatNumber.create(12345678910)
         assert.isNotOk(vatNumber.isSuccess)
     })
-
 })

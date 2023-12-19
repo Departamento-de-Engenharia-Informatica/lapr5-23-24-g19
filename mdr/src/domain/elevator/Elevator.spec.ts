@@ -306,7 +306,7 @@ describe('Elevator', () => {
             model: Model.create('').getValue(),
             serialNumber: SerialNumber.create('').getValue(),
 
-            description
+            description,
         })
 
         assert.equal(description, result.getValue().description)
@@ -391,7 +391,7 @@ describe('Elevator', () => {
             model: Model.create('').getValue(),
             serialNumber: SerialNumber.create('').getValue(),
 
-            description
+            description,
         })
 
         result.getValue().description = newDescription
@@ -406,7 +406,7 @@ describe('Elevator', () => {
 
         const newFloor = Floor.create({
             building: building,
-            floorNumber: FloorNumber.create(4).getValue()
+            floorNumber: FloorNumber.create(4).getValue(),
         }).getValue()
 
         let result = Elevator.create({

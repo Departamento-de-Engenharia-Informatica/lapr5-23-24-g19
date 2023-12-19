@@ -3,13 +3,18 @@ import { Request, Response, NextFunction } from 'express'
 import { Inject, Service } from 'typedi'
 
 import IElevatorController from './IControllers/IElevatorController'
-import IElevatorService, { ErrorResult, ErrorCode } from '../services/IServices/IElevatorService'
+import IElevatorService, {
+    ErrorResult,
+    ErrorCode,
+} from '../services/IServices/IElevatorService'
 import { IElevatorDTO } from '../dto/IElevatorDTO'
 import { ICreatedElevatorDTO } from '../dto/ICreatedElevatorDTO'
 
 @Service()
 export default class ElevatorController implements IElevatorController {
-    constructor(@Inject(config.services.elevator.name) private service: IElevatorService) {}
+    constructor(
+        @Inject(config.services.elevator.name) private service: IElevatorService,
+    ) {}
 
     async createElevator(req: Request, res: Response, next: NextFunction) {
         try {
@@ -17,7 +22,6 @@ export default class ElevatorController implements IElevatorController {
 
             const body = req.body as IElevatorDTO
             body.buildingId = buildingId
-
 
             const result = await this.service.createElevator(body as IElevatorDTO)
 
@@ -42,7 +46,10 @@ export default class ElevatorController implements IElevatorController {
             const dto = req.body as IElevatorDTO
             dto.buildingId = firstId
 
-            const result = await this.service.editElevator(parseInt(secondId), req.body as IElevatorDTO)
+            const result = await this.service.editElevator(
+                parseInt(secondId),
+                req.body as IElevatorDTO,
+            )
 
             if (result.isLeft()) {
                 const error = result.value as ErrorResult
@@ -65,7 +72,10 @@ export default class ElevatorController implements IElevatorController {
             const dto = req.body as IElevatorDTO
             dto.buildingId = firstId
 
-            const result = await this.service.editElevator(parseInt(secondId), req.body as IElevatorDTO)
+            const result = await this.service.editElevator(
+                parseInt(secondId),
+                req.body as IElevatorDTO,
+            )
 
             if (result.isLeft()) {
                 const error = result.value as ErrorResult

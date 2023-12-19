@@ -12,6 +12,8 @@ export type RobotTypeErrorResult = {
 }
 
 export default interface IRobotTypeService {
-    createRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>>
+    createRobotType(
+        robotTypeDTO: IRobotTypeDTO,
+    ): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO>>
     getRobotTypes(): Promise<Either<RobotTypeErrorResult, IRobotTypeDTO[]>>
 }

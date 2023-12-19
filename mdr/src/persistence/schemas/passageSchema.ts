@@ -10,17 +10,15 @@ const Passage = new mongoose.Schema(
 
         floor1ID: {
             type: String,
-            required:true,
+            required: true,
             index: true,
         },
 
         floor2ID: {
             type: String,
-            required:true,
+            required: true,
             index: true,
         },
-
-        
     },
     { timestamps: true },
 )

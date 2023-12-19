@@ -11,7 +11,7 @@ export default async ({ expressApp }) => {
 
     const loaderProps: any = {
         mongoConnection,
-        storage: config.storage
+        storage: config.storage,
     }
 
     const keys = ['controllers', 'repos', 'services', 'schemas']

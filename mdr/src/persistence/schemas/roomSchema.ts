@@ -43,7 +43,7 @@ const Room = new Schema(
                 length: Number,
                 width: Number,
             },
-            required: true
+            required: true,
         },
 
         position: {
@@ -51,10 +51,8 @@ const Room = new Schema(
                 x: Number,
                 y: Number,
             },
-            required: true
+            required: true,
         },
-
-
     },
     { timestamps: true },
 )

@@ -1,6 +1,6 @@
-import config from "../../../config";
-import { ValueObject } from "../../core/domain/ValueObject";
-import { Result } from "../../core/logic/Result";
+import config from '../../../config'
+import { ValueObject } from '../../core/domain/ValueObject'
+import { Result } from '../../core/logic/Result'
 
 interface Props {
     value: string
@@ -9,7 +9,6 @@ interface Props {
 // source: https://stackoverflow.com/a/1373724
 const nameRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*$/
 const validDomains = config.validEmailDomains
-
 
 export class Email extends ValueObject<Props> {
     get value() {

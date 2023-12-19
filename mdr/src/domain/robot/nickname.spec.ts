@@ -17,14 +17,13 @@ describe('Robot Nickname', () => {
             'UvWw0XxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMnOoPqRrSsTt1234567890UvWwXxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPqRrSsTt',
         ]
 
-        nicks.forEach(b => assert.isNotOk(RobotNickname.create(b).isSuccess))
+        nicks.forEach((b) => assert.isNotOk(RobotNickname.create(b).isSuccess))
 
         // less than 30 chars
         assert.isOk(RobotNickname.create('Mario').isSuccess)
     })
 
     it('must be alphanumeric', () => {
-
         let nick = 'MarcoMaia'
         assert.isOk(RobotNickname.create(nick).isSuccess)
 

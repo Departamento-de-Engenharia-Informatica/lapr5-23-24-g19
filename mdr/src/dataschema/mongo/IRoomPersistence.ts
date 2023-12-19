@@ -6,12 +6,12 @@ export interface IRoomPersistence {
     description: string
     category: string
 
-    dimensions:{
+    dimensions: {
         length: number
         width: number
     }
     position: {
-        x:number,
-        y:number
+        x: number
+        y: number
     }
 }

@@ -4,7 +4,6 @@ import { RoomDescription } from './description'
 
 describe('Room Description', () => {
     it('should create a valid description', () => {
-
         const roomDescription = RoomDescription.create('RoomX')
         assert.isOk(roomDescription.isSuccess)
     })

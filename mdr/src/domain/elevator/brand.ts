@@ -18,7 +18,9 @@ export class ElevatorBrand extends ValueObject<Props> {
 
     public static create(brand: string): Result<ElevatorBrand> {
         if (!regex.test(brand)) {
-            return Result.fail('Brand must be alphanumeric and have no more than 50 characters')
+            return Result.fail(
+                'Brand must be alphanumeric and have no more than 50 characters',
+            )
         }
 
         return Result.ok(new ElevatorBrand({ value: brand.trim() }))

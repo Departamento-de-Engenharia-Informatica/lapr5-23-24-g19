@@ -19,7 +19,10 @@ export class Guard {
         return { succeeded: true }
     }
 
-    public static againstNullOrUndefined(argument: any, argumentName: string): IGuardResult {
+    public static againstNullOrUndefined(
+        argument: any,
+        argumentName: string,
+    ): IGuardResult {
         if (argument === null || argument === undefined) {
             return { succeeded: false, message: `${argumentName} is null or undefined` }
         } else {
@@ -27,7 +30,9 @@ export class Guard {
         }
     }
 
-    public static againstNullOrUndefinedBulk(args: GuardArgumentCollection): IGuardResult {
+    public static againstNullOrUndefinedBulk(
+        args: GuardArgumentCollection,
+    ): IGuardResult {
         for (let arg of args) {
             const result = this.againstNullOrUndefined(arg.argument, arg.argumentName)
             if (!result.succeeded) return result
@@ -36,7 +41,11 @@ export class Guard {
         return { succeeded: true }
     }
 
-    public static isOneOf(value: any, validValues: any[], argumentName: string): IGuardResult {
+    public static isOneOf(
+        value: any,
+        validValues: any[],
+        argumentName: string,
+    ): IGuardResult {
         let isValid = false
         for (let validValue of validValues) {
             if (value === validValue) {
@@ -56,16 +65,29 @@ export class Guard {
         }
     }
 
-    public static inRange(num: number, min: number, max: number, argumentName: string): IGuardResult {
+    public static inRange(
+        num: number,
+        min: number,
+        max: number,
+        argumentName: string,
+    ): IGuardResult {
         const isInRange = num >= min && num <= max
         if (!isInRange) {
-            return { succeeded: false, message: `${argumentName} is not within range ${min} to ${max}.` }
+            return {
+                succeeded: false,
+                message: `${argumentName} is not within range ${min} to ${max}.`,
+            }
         } else {
             return { succeeded: true }
         }
     }
 
-    public static allInRange(numbers: number[], min: number, max: number, argumentName: string): IGuardResult {
+    public static allInRange(
+        numbers: number[],
+        min: number,
+        max: number,
+        argumentName: string,
+    ): IGuardResult {
         let failingResult: IGuardResult = null
         for (let num of numbers) {
             const numIsInRangeResult = this.inRange(num, min, max, argumentName)
@@ -73,7 +95,10 @@ export class Guard {
         }
 
         if (failingResult) {
-            return { succeeded: false, message: `${argumentName} is not within the range.` }
+            return {
+                succeeded: false,
+                message: `${argumentName} is not within the range.`,
+            }
         } else {
             return { succeeded: true }
         }

@@ -23,7 +23,8 @@ class ParseArrayConfig {
 
 export class ParseUtils {
     public static parseBoolean(raw: any): boolean {
-        if (raw === '' || raw === undefined || raw === null || raw === 'null') return false
+        if (raw === '' || raw === undefined || raw === null || raw === 'null')
+            return false
         return JSON.parse(raw)
     }
 

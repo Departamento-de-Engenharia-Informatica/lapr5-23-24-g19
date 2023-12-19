@@ -16,7 +16,7 @@ export class RobotTypeMap extends Mapper<Room> {
             code: robotType.code.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            taskTypes: robotType.taskType.map(taskType => TaskType.toString(taskType))
+            taskTypes: robotType.taskType.map((taskType) => TaskType.toString(taskType)),
         }
     }
 
@@ -24,7 +24,7 @@ export class RobotTypeMap extends Mapper<Room> {
         const rawCode = RobotTypeCode.create(raw.code).getValue()
         const rawBrand = RobotTypeBrand.create(raw.brand).getValue()
         const rawModel = RobotTypeModel.create(raw.model).getValue()
-        const rawTaskType = raw.taskType.map(taskType => TaskType.toType(taskType));
+        const rawTaskType = raw.taskType.map((taskType) => TaskType.toType(taskType))
 
         const robotTypeOrError = RobotType.create(
             {
@@ -45,7 +45,7 @@ export class RobotTypeMap extends Mapper<Room> {
             code: robotType.code.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            taskType: robotType.taskType.map(taskType => TaskType.toString(taskType))
+            taskType: robotType.taskType.map((taskType) => TaskType.toString(taskType)),
         }
     }
 }

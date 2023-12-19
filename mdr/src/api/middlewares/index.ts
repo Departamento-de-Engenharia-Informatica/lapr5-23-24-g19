@@ -5,5 +5,5 @@ import { checkFleetManager } from './attachCurrentUser'
 export default {
     attachCurrentUser,
     isAuth,
-    checkFleetManager
+    checkFleetManager,
 }

@@ -31,15 +31,27 @@ export abstract class BaseController {
     }
 
     public clientError(message?: string) {
-        return BaseController.jsonResponse(this.res, 400, message ? message : 'Unauthorized')
+        return BaseController.jsonResponse(
+            this.res,
+            400,
+            message ? message : 'Unauthorized',
+        )
     }
 
     public unauthorized(message?: string) {
-        return BaseController.jsonResponse(this.res, 401, message ? message : 'Unauthorized')
+        return BaseController.jsonResponse(
+            this.res,
+            401,
+            message ? message : 'Unauthorized',
+        )
     }
 
     public paymentRequired(message?: string) {
-        return BaseController.jsonResponse(this.res, 402, message ? message : 'Payment required')
+        return BaseController.jsonResponse(
+            this.res,
+            402,
+            message ? message : 'Payment required',
+        )
     }
 
     public forbidden(message?: string) {
@@ -55,7 +67,11 @@ export abstract class BaseController {
     }
 
     public tooMany(message?: string) {
-        return BaseController.jsonResponse(this.res, 429, message ? message : 'Too many requests')
+        return BaseController.jsonResponse(
+            this.res,
+            429,
+            message ? message : 'Too many requests',
+        )
     }
 
     public todo() {

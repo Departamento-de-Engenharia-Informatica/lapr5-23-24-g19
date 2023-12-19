@@ -17,14 +17,13 @@ describe('Elevator Brand', () => {
             'UvWw0XxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMnOoPqRrSsTt1234567890UvWwXxYyZzAaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPqRrSsTt',
         ]
 
-        brands.forEach(b => assert.isNotOk(ElevatorBrand.create(b).isSuccess))
+        brands.forEach((b) => assert.isNotOk(ElevatorBrand.create(b).isSuccess))
 
         // less than 50 chars
         assert.isOk(ElevatorBrand.create('KONE').isSuccess)
     })
 
     it('must be alphanumeric', () => {
-
         let brand = 'MitsubishiElectric'
         assert.isOk(ElevatorBrand.create(brand).isSuccess)
 

@@ -19,12 +19,12 @@ export default (app: Router) => {
                 roomStart: Joi.object({
                     building: Joi.string().required(),
                     floor: Joi.number().integer().required(),
-                    name: Joi.string().required()
+                    name: Joi.string().required(),
                 }).required(),
                 roomGoal: Joi.object({
                     building: Joi.string().required(),
                     floor: Joi.number().integer().required(),
-                    name: Joi.string().required()
+                    name: Joi.string().required(),
                 }).required(),
             }),
         }),

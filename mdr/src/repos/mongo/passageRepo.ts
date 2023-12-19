@@ -12,7 +12,10 @@ import Building from '../../domain/building/building'
 
 @Service()
 export default class PassageRepo implements IPassageRepo {
-    constructor(@Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>) {}
+    constructor(
+        @Inject('passageSchema')
+        private passageSchema: Model<IPassagePersistence & Document>,
+    ) {}
 
     async exists(passage: Passage | string): Promise<boolean> {
         if (passage instanceof Passage) {
@@ -70,7 +73,9 @@ export default class PassageRepo implements IPassageRepo {
             return []
         }
 
-        return Promise.all(records.map(async (record) => await PassageMap.toDomain(record)))
+        return Promise.all(
+            records.map(async (record) => await PassageMap.toDomain(record)),
+        )
     }
 
     async passagesBetweenBuildings(b1: Building, b2: Building): Promise<Passage[]> {
@@ -94,7 +99,9 @@ export default class PassageRepo implements IPassageRepo {
                 domainID: { $in: passages },
             })
 
-            const passageList = await Promise.all(docs.map(async (d) => await PassageMap.toDomain(d)))
+            const passageList = await Promise.all(
+                docs.map(async (d) => await PassageMap.toDomain(d)),
+            )
 
             return passageList
         } catch (error) {
@@ -112,7 +119,10 @@ export default class PassageRepo implements IPassageRepo {
         const results: QueryResult[] = await this.passageSchema.aggregate([
             {
                 $match: {
-                    $or: [{ floor1ID: { $in: floorIDs } }, { floor2ID: { $in: floorIDs } }],
+                    $or: [
+                        { floor1ID: { $in: floorIDs } },
+                        { floor2ID: { $in: floorIDs } },
+                    ],
                 },
             },
             {
@@ -147,9 +157,13 @@ export default class PassageRepo implements IPassageRepo {
         return Promise.all(
             results.map(async ({ matchedField: connections }) => {
                 return {
-                    from: buildingFloors.find((f) => f.id.toString() === connections.from),
+                    from: buildingFloors.find(
+                        (f) => f.id.toString() === connections.from,
+                    ),
                     destinations: await Promise.all(
-                        connections.destinations.map(async (f) => await floorRepo.findById(f)),
+                        connections.destinations.map(
+                            async (f) => await floorRepo.findById(f),
+                        ),
                     ),
                 }
             }),

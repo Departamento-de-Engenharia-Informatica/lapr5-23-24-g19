@@ -1,6 +1,6 @@
-import config from "../../../../config"
-import { ValueObject } from "../../../core/domain/ValueObject"
-import { Result } from "../../../core/logic/Result"
+import config from '../../../../config'
+import { ValueObject } from '../../../core/domain/ValueObject'
+import { Result } from '../../../core/logic/Result'
 
 interface Props {
     value: number

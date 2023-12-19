@@ -26,7 +26,5 @@ export default () => {
     robotType(app)
     path(app)
 
-
     return app
 }
-

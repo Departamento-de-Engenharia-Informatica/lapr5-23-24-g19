@@ -3,7 +3,10 @@ import { Inject, Service } from 'typedi'
 import { Request, Response, NextFunction } from 'express'
 
 import IRobotController from './IControllers/IRobotController'
-import IRobotService, { RobotErrorCode, RobotErrorResult } from '../services/IServices/IRobotService'
+import IRobotService, {
+    RobotErrorCode,
+    RobotErrorResult,
+} from '../services/IServices/IRobotService'
 import { IRobotDTO } from '../dto/IRobotDTO'
 import { IRobotInhibitDTO } from '../dto/IRobotInhibitDTO'
 import { IPassageDTO } from '../dto/IPassageDTO'
@@ -19,7 +22,9 @@ export default class RobotController implements IRobotController {
 
             if (result.isLeft()) {
                 const err = result.value as RobotErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             const message = result.value as IRobotDTO
@@ -35,7 +40,9 @@ export default class RobotController implements IRobotController {
 
             if (result.isLeft()) {
                 const err = result.value as RobotErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             return res.json(result.value).status(200)
@@ -48,13 +55,15 @@ export default class RobotController implements IRobotController {
         try {
             const dto: IRobotInhibitDTO = {
                 code: req.params.id,
-                state: req.body.state
+                state: req.body.state,
             }
             const result = await this.service.inhibitRobot(dto)
 
             if (result.isLeft()) {
                 const err = result.value as RobotErrorResult
-                return res.status(this.resolveHttpCode(err.errorCode)).send(JSON.stringify(err.message))
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
             }
 
             return res.json(result.value).status(200)

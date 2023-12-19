@@ -6,9 +6,9 @@ import { MaxFloorDimensions } from '../building/maxFloorDimensions'
 import { Coordinates } from './Coordinates'
 
 export interface FloorMapProps {
-    path: string,
-    map?:{   
-        dimensions?: MaxFloorDimensions, //Dimensions
+    path: string
+    map?: {
+        dimensions?: MaxFloorDimensions //Dimensions
         // mapContent: number[][],
 
         // passages: Coordinates[], //Coordinates
@@ -19,8 +19,7 @@ export interface FloorMapProps {
 }
 
 export class FloorMapContent extends ValueObject<FloorMapProps> {
-
-    get path(): string{
+    get path(): string {
         return this.path
     }
     // get mapContent(): number[][] {
@@ -43,7 +42,7 @@ export class FloorMapContent extends ValueObject<FloorMapProps> {
         return this.props.map.dimensions
     }
 
-    set dimensions(dimensions: MaxFloorDimensions){
+    set dimensions(dimensions: MaxFloorDimensions) {
         this.dimensions = dimensions
     }
 
@@ -55,16 +54,15 @@ export class FloorMapContent extends ValueObject<FloorMapProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.map.dimensions, argumentName: 'dimensions' },
             // { argument: props.map.mapContent, argumentName: 'mapContent' },
-        
+
             // { argument: props.map.elevators, argumentName: 'buildingDescription' },
             // { argument: props.map.passages, argumentName: 'buildingDescription' },
             // { argument: props.map.rooms, argumentName: 'buildingDescription' },
         ])
         if (guardResult.succeeded) {
             return Result.ok<FloorMapContent>(new FloorMapContent({ ...props }))
-        }else{
+        } else {
             return Result.fail<FloorMapContent>(guardResult.message)
-
         }
     }
 }

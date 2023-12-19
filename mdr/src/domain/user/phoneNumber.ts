@@ -1,6 +1,6 @@
-import config from "../../../config"
-import { ValueObject } from "../../core/domain/ValueObject"
-import { Result } from "../../core/logic/Result"
+import config from '../../../config'
+import { ValueObject } from '../../core/domain/ValueObject'
+import { Result } from '../../core/logic/Result'
 
 interface Props {
     value: string
@@ -19,14 +19,9 @@ export class PhoneNumber extends ValueObject<Props> {
     }
 
     static create(phoneNumber: string | number): Result<PhoneNumber> {
-        const num = typeof(phoneNumber) === 'number'
-            ? phoneNumber.toString()
-            : phoneNumber
+        const num = typeof phoneNumber === 'number' ? phoneNumber.toString() : phoneNumber
 
-        if (
-            num.length != allowedLength
-            || !numericRe.test(num)
-        ) {
+        if (num.length != allowedLength || !numericRe.test(num)) {
             return Result.fail('Invalid phone number')
         }
 

@@ -12,7 +12,10 @@ import { ElevatorIdentifier } from '../../domain/elevator/identifier'
 export default class ElevatorRepo implements IElevatorRepo {
     private readonly mapper: ElevatorDataMap<IElevatorPersistence>
 
-    constructor(@Inject(config.schemas.elevator.name) private schema: Model<IElevatorPersistence & Document>) {
+    constructor(
+        @Inject(config.schemas.elevator.name)
+        private schema: Model<IElevatorPersistence & Document>,
+    ) {
         // this shouldn't be needed; check class impl for more info
         this.mapper = new MongoElevatorDataMap()
     }
@@ -27,7 +30,6 @@ export default class ElevatorRepo implements IElevatorRepo {
         try {
             const raw = await this.mapper.toPersistence(t)
             if (!doc) {
-
                 const elevator = await this.schema.create(raw)
 
                 return this.mapper.toDomain(elevator)
@@ -54,10 +56,13 @@ export default class ElevatorRepo implements IElevatorRepo {
             building: building.code.value,
         })
 
-        return Promise.all(result.map(async e => await this.mapper.toDomain(e))) ?? []
+        return Promise.all(result.map(async (e) => await this.mapper.toDomain(e))) ?? []
     }
 
-    async existsInBuilding(building: Building, identifier: ElevatorIdentifier): Promise<boolean> {
+    async existsInBuilding(
+        building: Building,
+        identifier: ElevatorIdentifier,
+    ): Promise<boolean> {
         const query: Partial<IElevatorPersistence> = {
             building: building.code.value,
             identifier: identifier.value,
@@ -68,7 +73,10 @@ export default class ElevatorRepo implements IElevatorRepo {
         return !!doc === true
     }
 
-    async findByIdentifier(building: Building, identifier: ElevatorIdentifier): Promise<Elevator> {
+    async findByIdentifier(
+        building: Building,
+        identifier: ElevatorIdentifier,
+    ): Promise<Elevator> {
         const query: Partial<IElevatorPersistence> = {
             building: building.code.value,
             identifier: identifier.value,
