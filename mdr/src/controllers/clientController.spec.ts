@@ -3,11 +3,11 @@ import 'reflect-metadata'
 import { Request, NextFunction, Response } from 'express'
 
 import { Container } from 'typedi'
-import { left, Result, right } from '../core/logic/Result'
+import { left, right } from '../core/logic/Result'
 import IClientService from '../services/IServices/IClientService'
 import ClientController from './clientController'
 
-import sinon, { SinonStub } from 'sinon'
+import sinon from 'sinon'
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 
