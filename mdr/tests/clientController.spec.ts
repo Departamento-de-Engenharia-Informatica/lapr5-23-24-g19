@@ -63,6 +63,7 @@ describe('Client controller:', () => {
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
                 vatNumber: req.body.vatNumber,
+                status: 'Pending',
             })
 
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -121,6 +122,7 @@ describe('Client controller:', () => {
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
                 vatNumber: req.body.vatNumber,
+                status: 'Pending',
             })
 
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -179,6 +181,7 @@ describe('Client controller:', () => {
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
                 vatNumber: req.body.vatNumber,
+                status: 'Pending',
             })
 
             const repo = Container.get('ClientRepo') as IClientRepo
