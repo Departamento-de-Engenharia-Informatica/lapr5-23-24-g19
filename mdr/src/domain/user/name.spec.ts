@@ -4,14 +4,9 @@ import { describe, it } from 'mocha'
 import { Name } from './name'
 
 describe('Client Name', () => {
-    it('cannot be null', () => {
-        const name = Name.create(null)
-        assert.isNotOk(name.isSuccess)
-    })
-
-    it('cannot be undefined', () => {
-        const name = Name.create(undefined)
-        assert.isNotOk(name.isSuccess)
+    it('can have any type of characters and size', () => {
+        const name = Name.create('nameofclient')
+        assert.isOk(name.isSuccess)
     })
 
     it('allows blanks', () => {

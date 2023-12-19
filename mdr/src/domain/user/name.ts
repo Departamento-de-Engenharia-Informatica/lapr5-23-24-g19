@@ -16,12 +16,6 @@ export class Name extends ValueObject<Props> {
     }
 
     public static create(name: string) {
-        const guardResult = Guard.againstNullOrUndefined(name, 'name')
-
-        if (!guardResult.succeeded) {
-            return Result.fail(guardResult.message)
-        }
-
         return Result.ok(new Name({ value: name }))
     }
 }
