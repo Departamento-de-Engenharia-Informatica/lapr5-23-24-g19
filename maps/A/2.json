@@ -33,7 +33,10 @@
                 "x": 1,
                 "y": 21,
                 "orientation": "S",
-                "floors": [1, 2]
+                "floors": [
+                    1,
+                    2
+                ]
             }
         ],
         "rooms": [
@@ -198,7 +201,10 @@
         "modelUri": "./models/gltf/door/door.glb"
     },
     "player": {
-        "initialPosition": [4, 19],
+        "initialPosition": [
+            4,
+            19
+        ],
         "initialDirection": -90
     }
 }

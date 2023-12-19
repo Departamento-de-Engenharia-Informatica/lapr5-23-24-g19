@@ -23,7 +23,11 @@
                 "x": 6,
                 "y": 21,
                 "orientation": "N",
-                "floors": [1, 2, 3]
+                "floors": [
+                    1,
+                    2,
+                    3
+                ]
             }
         ],
         "rooms": [
@@ -182,7 +186,10 @@
         "modelUri": "./models/gltf/door/door.glb"
     },
     "player": {
-        "initialPosition": [9, 15],
+        "initialPosition": [
+            9,
+            15
+        ],
         "initialDirection": -90
     }
 }

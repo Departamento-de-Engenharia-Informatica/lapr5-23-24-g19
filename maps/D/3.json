@@ -31,16 +31,9 @@
                 "orientation": "E",
                 "to": { "building": "C", "floor": 3 }
             },
-            {
-                "x": 0,
-                "y": 9,
-                "orientation": "N",
-                "to": { "building": "B", "floor": 3 }
-            }
+            { "x": 0, "y": 9, "orientation": "N", "to": { "building": "B", "floor": 2 } }
         ],
-        "elevators": [
-            { "x": 0, "y": 1, "orientation": "E", "floors": [1, 2, 3] }
-        ],
+        "elevators": [{ "x": 0, "y": 1, "orientation": "E", "floors": [1, 2, 3] }],
         "rooms": [
             { "x": 8, "y": 3, "orientation": "E", "name": "D301" },
             { "x": 8, "y": 8, "orientation": "W", "name": "D302" },
@@ -55,10 +48,7 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": { "url": "./textures/floor-wood/wood_floor_diff_2k.png" },
-            "ao": {
-                "url": "./textures/floor-wood/wood_floor_ao_2k.png",
-                "intensity": 1
-            },
+            "ao": { "url": "./textures/floor-wood/wood_floor_ao_2k.png", "intensity": 1 },
             "displacement": { "url": "", "scale": 1, "bias": 0 },
             "normal": {
                 "url": "./textures/floor-wood/wood_floor_nor_gl_2k.png",
@@ -82,9 +72,7 @@
         "segments": { "width": 1, "height": 1 },
         "primaryColor": "0xffffff",
         "maps": {
-            "color": {
-                "url": "./textures/wall-plastered/plastered_wall_diff_2k.png"
-            },
+            "color": { "url": "./textures/wall-plastered/plastered_wall_diff_2k.png" },
             "ao": {
                 "url": "./textures/wall-plastered/plastered_wall_ao_2k.png",
                 "intensity": 1
