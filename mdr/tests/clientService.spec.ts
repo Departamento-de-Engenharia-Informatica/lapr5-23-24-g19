@@ -4,52 +4,40 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { createSandbox } from 'sinon'
 import Container from 'typedi'
-import { Result } from '../core/logic/Result'
-import Client from '../domain/user/client/Client'
-import { VatNumber } from '../domain/user/client/vatNumber'
-import { Email } from '../domain/user/email'
-import { Name } from '../domain/user/name'
-import { PhoneNumber } from '../domain/user/phoneNumber'
-import { UserPassword } from '../domain/user/userPassword'
-import { IClientDTO } from '../dto/IClientDTO'
-import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
-import { ClientMap } from '../mappers/ClientMap'
-import ClientService from './clientService'
-import IClientRepo from './IRepos/IClientRepo'
+import Client from '../src/domain/user/client/Client'
+import { IClientDTO } from '../src/dto/IClientDTO'
+import { ICreatedClientDTO } from '../src/dto/ICreatedClientDTO'
+import { ClientMap } from '../src/mappers/ClientMap'
+import ClientService from '../src/services/clientService'
+import IClientRepo from '../src/services/IRepos/IClientRepo'
 
-describe('Client Service: Unit tests', () => {
+describe('Client Service: Integration tests', () => {
     const sinon = createSandbox()
 
-    function stubCreate<K>(klass: K) {
-        sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
-    }
+    // function stubCreate<K>(klass: K) {
+    //     sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
+    // }
 
     beforeEach(() => {
         Container.reset()
 
-        const clientSchema = require('../persistence/schemas/clientSchema').default
+        const clientSchema = require('../src/persistence/schemas/clientSchema').default
         Container.set('clientSchema', clientSchema)
 
-        const clientRepoClass = require('../repos/mongo/clientRepo').default
+        const clientRepoClass = require('../src/repos/mongo/clientRepo').default
         const clientRepo = Container.get(clientRepoClass)
         Container.set('ClientRepo', clientRepo)
-
-        stubCreate(Client)
-        stubCreate(Email)
-        stubCreate(Name)
-        stubCreate(PhoneNumber)
-        stubCreate(VatNumber)
-
-        stubCreate(UserPassword)
     })
 
     afterEach(() => sinon.restore())
 
-    describe('createClient()', () => {
+    describe('createClient(): service + domain tests', () => {
+
         it('should fail if client exists', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
             sinon.stub(clientRepo, 'existsWithEmail').resolves(true)
             sinon.stub(clientRepo, 'save').rejects()
+
 
             const dto: IClientDTO = {
                 email: 'mzc@isep.ipp.pt',
@@ -85,5 +73,6 @@ describe('Client Service: Unit tests', () => {
 
             expect(result.isRight()).to.be.true
         })
+
     })
 })
