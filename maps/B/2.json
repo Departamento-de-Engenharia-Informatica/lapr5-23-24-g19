@@ -60,34 +60,34 @@
         ],
         "rooms": [
             {
-                "x": 3,
+                "x": 2,
                 "y": 1,
-                "orientation": "N",
-                "name": "D201"
+                "orientation": "S",
+                "name": "B201"
             },
             {
                 "x": 3,
-                "y": 12,
-                "orientation": "W",
-                "name": "D202"
+                "y": 11,
+                "orientation": "E",
+                "name": "B202"
             },
             {
                 "x": 6,
-                "y": 6,
-                "orientation": "W",
-                "name": "D203"
+                "y": 5,
+                "orientation": "E",
+                "name": "B203"
             },
             {
                 "x": 6,
-                "y": 18,
-                "orientation": "W",
-                "name": "D205"
+                "y": 17,
+                "orientation": "E",
+                "name": "B205"
             },
             {
-                "x": 4,
+                "x": 3,
                 "y": 19,
-                "orientation": "N",
-                "name": "D207"
+                "orientation": "S",
+                "name": "B207"
             }
         ]
     },
@@ -197,8 +197,8 @@
     },
     "player": {
         "initialPosition": [
-            1,
-            3
+            9,
+            19
         ],
         "initialDirection": -90
     }

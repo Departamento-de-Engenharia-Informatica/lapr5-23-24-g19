@@ -43,8 +43,8 @@
         "rooms": [
             {
                 "x": 1,
-                "y": 4,
-                "orientation": "W",
+                "y": 3,
+                "orientation": "E",
                 "name": "B301"
             },
             {
