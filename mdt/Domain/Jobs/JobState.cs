@@ -5,7 +5,7 @@ public enum JobStateEnum
     PENDING
 }
 
-public static class JobState
+public class JobState
 {
     public static string ToString(JobStateEnum state)
     {

@@ -12,6 +12,7 @@ namespace DDDSample1.Domain.Jobs
     {
         public string Name { get; private set; }
         public int PhoneNumber { get; private set; }
+        public JobContact(){}
 
         public JobContact(string name, int phoneNumber)
         {

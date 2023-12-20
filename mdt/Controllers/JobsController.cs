@@ -67,12 +67,23 @@ namespace DDDSample1.Controllers
             throw new System.NotImplementedException();
         }
 
-        // GET: api/jobs/{filter}
-        // filter can be: "state", "device" or "client"
-        [HttpGet("/filter/{filter}")]
-        public async Task<ActionResult<JobDto[]>> GetByFilter(string filter)
+        // GET: api/jobs/filter/{filter}?rule=someRule
+        [HttpGet("filter/{filter}")]
+        // GET: api/jobs?filter=filter&rule=someRule
+        // [HttpGet], com parametros para filter e rule
+        public async Task<ActionResult<String>> GetByFilter(string filter,string rule)
         {
-            throw new System.NotImplementedException();
+            var dto = FilterMapper.ToDto(filter,rule);
+            if(dto==null){
+                //TODO: better error message
+                return NotFound("Dto asdnull");
+            }
+            var jobs = await _service.GetByFilter(dto);
+            if (jobs == null)
+            {
+                return NotFound("Akshually not foound");
+            }
+            return Ok(jobs);
         }
 
         // GET: api/jobs/approved-jobs-sequence

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Products;
@@ -97,5 +98,42 @@ namespace DDDSample1.Domain.Jobs
 
             return dto;
         }
+        public async Task<List<Job>> GetByFilter(FilterDTO dto)
+        {
+            //TOOD: strategy pattern
+            var jobs = new List<Job>();
+            switch (dto.Filter)
+            {
+                case "STATE":
+                    if (dto.State.HasValue)
+                    {
+                        Console.WriteLine("dto");
+                        Console.WriteLine(dto.State.Value);
+                        jobs = await this._repo.GetByState(JobState.FromCode(dto.State.Value));
+                    }
+                    break;
+                //TODO: TYPE OR LIST OF TYPES??
+                case "TYPE":
+                    if (dto.Type.HasValue)
+                    {
+                        Console.WriteLine("dto");
+                        Console.WriteLine(dto.Type.Value);
+                        jobs = await this._repo.GetByType(JobType.FromCode(dto.Type.Value));
+                    }
+                    break;
+                case "CLIENT":
+                    if (dto.Email.Length > 0)
+                    {
+                        jobs = await this._repo.GetByEmail(dto.Email);
+                    }
+                    break;
+                default:
+                    //TODO: throw error?
+                    return null;
+            }
+            return jobs;
+        }
+
     }
+
 }

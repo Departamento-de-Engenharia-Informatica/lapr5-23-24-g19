@@ -12,7 +12,7 @@
 % tasks number
 :-dynamic tasks/1.
 
-
+% RELATORIO
 inicializa_env:-
 	num_gen(NG),
     (retract(geracoes(_));true), asserta(geracoes(NG)),
@@ -66,38 +66,27 @@ gera_geracao(G,G,_,[]):-!.
 
 gera_geracao(N, G, Pop, [NextGen|Res]) :-
 
-	% nl,write('Geracao'),write(N),nl,nl,
-
 	start_time(StartTime),
 	time_limit(TimeLimit),
 
 	% TODO: CHECK, stop conditions:/  Terminar o programa se retornar verdadeiro??
 	verifica_tempo_limite(StartTime, TimeLimit),
+	
 
 	% Permutação aleatória da população, para o cruzamento ser entre individuos diferentes
 	random_permutation(Pop, PermutedPop),
+	
 	% cruzamento e mutação de acordo com o que foi fornecido em ALGAV
     cruzamento(PermutedPop, NPop1),
     mutacao(NPop1, NPop),
-	% nl,write('PopMUTACAO'),write(NPop),nl,nl,
 
     % % Avalia e combina populações atual e nova
     avalia_populacao(NPop, NPopAv),
-	% nl,write('Pop'),write(Pop),nl,nl,
-	% nl,write('Av'),write(NPopAv),nl,nl,
 
     append(Pop, NPopAv, CombinedPop),
 
     ordena_populacao(CombinedPop, CombinedPopOrd),
 	
-	% nl,write('Append'),write(CombinedPopOrd),nl,nl,
-
-
-    % % Seleção elitista : preserva os 20% melhores da população antiga
-	% length(Pop,L),
-    % P is round(0.3 *L),  % Exemplo: 30% de N
-    % take_best(P, CombinedPopOrd, ElitistSelection),
-
 	selecao_elitista(CombinedPopOrd,NPop1,ElitistSelection),
 
 	selecao_nao_elitista(CombinedPopOrd,ElitistSelection,PermutedPop,NonElitistSelection),
@@ -106,10 +95,11 @@ gera_geracao(N, G, Pop, [NextGen|Res]) :-
     append(ElitistSelection, NonElitistSelection, NextGen),
 
     N1 is N + 1,
-	% nl,write('NextGen'),write(NextGen),nl,nl,
 
-	
-    gera_geracao(N1, G, NextGen,Res).
+	gera_geracao(N1, G, NextGen,Res).
+
+% RELATORIO FIM
+
 
 
 write_res([]).
@@ -118,6 +108,8 @@ write_res([X|Res]):-
 	write_res(Res).
 
 %CHECKED
+
+%Relatorio
 gera_populacao(TasksList, Pop):-
 	populacao(TamPop),
 	length(TasksList,NumT),
@@ -151,12 +143,15 @@ retira(N,[G1|Rest],G,[G1|Rest1]):-
 	N1 is N-1,
 	retira(N1,Rest,G,Rest1).
 
+
+
 avalia_populacao([],[]).
 avalia_populacao([Ind|Rest],[Ind*V|Rest1]):-
 	avalia(Ind,V),
 	avalia_populacao(Rest,Rest1).
 
 
+%RELATORIO
 % caso base: existe apenas 1 elemento na lista
 avalia([_],0).
 
@@ -164,6 +159,8 @@ avalia([T,H |Rest], V):-
 	tasks_cost(T,H,V1),
     avalia([H | Rest], VRest),
     V is V1 + VRest.
+%RELATORIO FIM
+
 
 % FIX: returing multiple orders
 ordena_populacao(PopAv,PopAvOrd):-
@@ -184,7 +181,7 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
-
+%Relatorio
 selecao_elitista(CombinedPopOrd, Pop, ElitistSelection) :-
 	length(Pop,L),
     P is round(0.6 * L),  % Exemplo: 30% de N
@@ -234,9 +231,9 @@ verifica_tempo_limite(StartTime, TimeLimit) :-
     ElapsedTime is CurrentTime - StartTime,
     ElapsedTime < TimeLimit.
 
+%Relatorio FIM
 
-% TODO:
-% Estabilização da População: Encerrar o algoritmo se a população permanecer inalterada durante um número G de gerações consecutivas. A estabilização é mais provável em seleções puramente elitistas, mas é importante observar que mesmo populações estáveis podem sofrer alterações devido a cruzamentos e mutações diferentes.
+% TODO:Estabilização da População: Encerrar o algoritmo se a população permanecer inalterada durante um número G de gerações consecutivas. A estabilização é mais provável em seleções puramente elitistas, mas é importante observar que mesmo populações estáveis podem sofrer alterações devido a cruzamentos e mutações diferentes.
 % % Avaliar a população atual
 % avalia_populacao(Pop, PopAv),
 % ordena_populacao(PopAv, PopAvOrd),
