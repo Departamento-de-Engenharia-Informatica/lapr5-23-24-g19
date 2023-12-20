@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using Microsoft.AspNetCore.Mvc;
