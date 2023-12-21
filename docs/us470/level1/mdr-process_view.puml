@@ -1,0 +1,25 @@
+@startuml
+autonumber
+
+participant "<<system>>\n RobDroneGo" as sys
+
+[-> sys: GET /task/tasks
+
+activate sys
+    alt task(s) not found
+        [<-- sys : 404: Not Found
+    else task(s) found
+        [<-- sys : 200: "OK" Successful
+        alt selects task
+            [-> sys: PATCH /task/{id}
+        else
+            alt task not found
+            [<-- sys : 404: Not Found
+        else task approved successfully
+            [<-- sys : 200: "OK" Successful
+            end
+        end
+    end
+deactivate sys
+
+@enduml

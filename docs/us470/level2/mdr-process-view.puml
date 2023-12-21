@@ -1,0 +1,25 @@
+@startuml
+autonumber
+
+participant "MDR" as mdr
+
+[-> mdr: GET /task/tasks
+
+activate mdr
+    alt task(s) not found
+        [<-- mdr : 404: Not Found
+    else task(s) found
+        [<-- mdr : 200: "OK" Successful
+        alt selects task
+            [-> mdr: PATCH /task/{id}
+        else
+            alt task not found
+            [<-- mdr : 404: Not Found
+        else task approved successfully
+            [<-- mdr : 200: "OK" Successful
+            end
+        end
+    end
+deactivate mdr
+
+@enduml
