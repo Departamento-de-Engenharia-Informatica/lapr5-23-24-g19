@@ -1,0 +1,39 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "SPA" as ui
+
+participant "MD" as md
+
+activate usr
+    usr -> ui : wants to approve or refuse a task
+    activate ui
+        ui -> md : GET /task/tasks
+        activate md
+            alt task(s) not found
+                md --> ui : 404:error
+                ui --> usr: informs error
+            else task(s) found
+            md --> ui : tasks
+            ui --> usr : request task
+    deactivate ui
+
+
+    usr -> ui : provides task
+    activate ui
+        ui -> md : PATCH /task/{id}
+        alt task not found
+            md --> ui : 404:error
+            ui --> usr : informs error
+        else task approved successfully
+            md --> ui : task
+            ui --> usr : shows updated task
+        end
+
+        end
+    deactivate ui
+deactivate usr
+
+@enduml
