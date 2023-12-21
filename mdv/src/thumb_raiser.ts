@@ -711,10 +711,10 @@ export default class ThumbRaiser {
         b1: { building: string; floor: number },
         b2: { building: string; floor: number; x: number; y: number },
     ) {
-        this.passageMenu = new PassageMenu(b1, b2)
-        this.passageMenu.show()
-        // const pos = [b2.x, b2.y]
-        // Dispatcher.emit('change-map', b2.building, b2.floor, pos)
+        // this.passageMenu = new PassageMenu(b1, b2)
+        // this.passageMenu.show()
+        const pos = [b2.x, b2.y]
+        Dispatcher.emit('change-map', b2.building, b2.floor, pos)
     }
 
     private exitPassage() {
@@ -1841,6 +1841,11 @@ export default class ThumbRaiser {
                 this._gameRunning = true
             }
         } else {
+            const initialPosition = this.player.position.clone()
+            // if (!this.maze?._lastPassage) {
+            //     this.maze._lastPassage = initialPosition
+            // }
+
             // Update the model animations
             const deltaT = this.clock.getDelta()
             this.animations.update(deltaT)
@@ -1939,6 +1944,31 @@ export default class ThumbRaiser {
                     }
 
                     this.player.rotation.y = directionRad - this.player.defaultDirection
+
+                    const initPosCell = this.maze.cartesianToCell(initialPosition)
+                    const playerPosCell = this.maze.cartesianToCell(position)
+
+                    if (
+                        !(
+                            initPosCell[0] == playerPosCell[0] &&
+                            initPosCell[1] == playerPosCell[1]
+                        )
+                    ) {
+                        this.maze._lastPassage = initialPosition.clone()
+                        console.log('ENTROU!!')
+                        console.log(
+                            'LP: ',
+                            this.maze.cartesianToCell(
+                                this.maze._lastPassage ?? new THREE.Vector3(),
+                            ),
+                        )
+                        console.log('IP: ', this.maze.cartesianToCell(initialPosition))
+                        console.log(
+                            'PP: ',
+                            this.maze.cartesianToCell(this.player.position),
+                        )
+                        console.log('=====================')
+                    }
 
                     this.maze.foundDoor(position, this.maze.doors, this)
                     this.maze.foundPassage(position)

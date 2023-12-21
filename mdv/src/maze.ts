@@ -266,7 +266,22 @@ export default class Maze extends THREE.Group {
     ) {
         const row = indices[0] + offsets[0]
         const column = indices[1] + offsets[1]
-        if (this.map[row][column] == 2 - orientation || this.map[row][column] == 3) {
+
+        if (
+            row >= this.map.length ||
+            row < 0 ||
+            column >= this.map[0].length ||
+            column < 0
+        ) {
+            return false
+        }
+
+        if (
+            // this.map.length > row &&
+            // this.map[0].length > column &&
+            this.map[row][column] == 2 - orientation ||
+            this.map[row][column] == 3
+        ) {
             const x =
                 position.x -
                 (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)
@@ -299,35 +314,55 @@ export default class Maze extends THREE.Group {
                 (r.y == column - 1 || r.y == column || r.y == column + 1)
         })
 
-        if (this.map[row][column] == 2 - orientation || this.map[row][column] == 3) {
-            if (orientation != 0) {
-                if (
-                    Math.abs(
-                        position.x -
-                            (this.cellToCartesian([row, column]).x +
-                                delta.x * this.scale.x),
-                    ) < radius
-                ) {
-                    console.log(this.rooms)
-                    console.log('Collision with ' + name + '.')
-                    console.log('row', row, 'column', column)
-                    console.log('position: ', this.cartesianToCell(position))
-                    return true
-                }
-            } else {
-                if (
-                    Math.abs(
-                        position.z -
-                            (this.cellToCartesian([row, column]).z +
-                                delta.z * this.scale.z),
-                    ) < radius
-                ) {
-                    console.log('Collision with ' + name + '.')
-                    console.log('row', row, 'column', column)
-                    console.log('position: ', this.cartesianToCell(position))
-                    return true
+        if (
+            row >= this.map.length ||
+            row < 0 ||
+            column >= this.map[0].length ||
+            column < 0
+        ) {
+            return false
+        }
+
+        try {
+            if (
+                // this.map.length > row &&
+                // this.map[0].length > column &&
+                this.map[row][column] == 2 - orientation ||
+                this.map[row][column] == 3
+            ) {
+                if (orientation != 0) {
+                    if (
+                        Math.abs(
+                            position.x -
+                                (this.cellToCartesian([row, column]).x +
+                                    delta.x * this.scale.x),
+                        ) < radius
+                    ) {
+                        console.log(this.rooms)
+                        console.log('Collision with ' + name + '.')
+                        console.log('row', row, 'column', column)
+                        console.log('position: ', this.cartesianToCell(position))
+                        return true
+                    }
+                } else {
+                    if (
+                        Math.abs(
+                            position.z -
+                                (this.cellToCartesian([row, column]).z +
+                                    delta.z * this.scale.z),
+                        ) < radius
+                    ) {
+                        console.log('Collision with ' + name + '.')
+                        console.log('row', row, 'column', column)
+                        console.log('position: ', this.cartesianToCell(position))
+                        return true
+                    }
                 }
             }
+        } catch (e) {
+            console.log('row', row, 'column', column)
+            console.log('position: ', this.cartesianToCell(position))
+            throw e
         }
 
         return false
@@ -369,7 +404,7 @@ export default class Maze extends THREE.Group {
         }
     }
 
-    private _lastPassage?: THREE.Vector3 // HACK
+    public _lastPassage?: THREE.Vector3 // HACK
     foundPassage(position: THREE.Vector3) {
         const [row, col] = this.cartesianToCell(position)
 
@@ -407,7 +442,7 @@ export default class Maze extends THREE.Group {
             }
         }
 
-        this._lastPassage = position
+        // this._lastPassage = position
     }
 
     private _lastPos?: THREE.Vector3 // HACK
@@ -786,6 +821,8 @@ export default class Maze extends THREE.Group {
         this.initialPosition = this.cellToCartesian(
             this.parameters.startingPosition ?? description.player.initialPosition,
         )
+        this._lastPassage = this.initialPosition.clone()
+
         this.initialDirection =
             this.parameters.startingDirection ?? description.player.initialDirection
 
