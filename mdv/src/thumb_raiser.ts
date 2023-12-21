@@ -676,8 +676,8 @@ export default class ThumbRaiser {
         Dispatcher.subscribe(
             'enter-passage',
             (
-                b1: { b: string; f: number },
-                b2: { b: string; f: number; x: number; y: number },
+                b1: { building: string; floor: number },
+                b2: { building: string; floor: number; x: number; y: number },
             ) => this.enterPassage(b1, b2),
         )
         Dispatcher.subscribe('exit-passage', () => this.exitPassage())
@@ -713,6 +713,8 @@ export default class ThumbRaiser {
     ) {
         this.passageMenu = new PassageMenu(b1, b2)
         this.passageMenu.show()
+        // const pos = [b2.x, b2.y]
+        // Dispatcher.emit('change-map', b2.building, b2.floor, pos)
     }
 
     private exitPassage() {
