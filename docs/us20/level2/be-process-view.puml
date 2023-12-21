@@ -6,7 +6,9 @@ participant "MDR" as mdr
 [-> mdr: POST /clients
 
 activate mdr
-    alt user not created
+    alt user already exists
+        [<-- mdr : 422: already exists
+    else user not created
         [<-- mdr : 422: Unprocessable Content
     else user created successfully
         [<-- mdr : 201: Created

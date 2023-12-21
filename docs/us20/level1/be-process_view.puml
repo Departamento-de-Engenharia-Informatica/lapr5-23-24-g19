@@ -6,7 +6,9 @@ participant "<<system>>\n RobDroneGo" as sys
 [-> sys: POST /clients
 
 activate sys
-    alt user not created
+    alt user already exists
+        [<-- sys : 422: already exists
+    else user not created
         [<-- sys : 422: Unprocessable Content
     else user created successfully
         [<-- sys : 201: Created
