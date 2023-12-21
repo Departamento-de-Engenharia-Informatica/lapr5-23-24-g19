@@ -26,7 +26,7 @@ export default {
      */
     planningURL: process.env.PLANNING_URI || 'http://localhost:8090/api',
 
-    
+
     /**
      */
     mdtURL: process.env.MDT_URI || 'http://localhost:5000/api',
@@ -62,6 +62,10 @@ export default {
         client: {
             name: 'ClientController',
             path: '../controllers/clientController',
+        },
+        backofficeUser: {
+            name: 'BackofficeUserController',
+            path: '../controllers/backofficeUserController',
         },
         building: {
             name: 'BuildingController',
@@ -118,6 +122,10 @@ export default {
             name: 'ClientRepo',
             path: '../repos/mongo/clientRepo',
         },
+        backofficeUser: {
+            name: 'BackofficeUserRepo',
+            path: '../repos/mongo/backofficeUserRepo',
+        },
         building: {
             name: 'BuildingRepo',
             path: '../repos/mongo/buildingRepo',
@@ -166,6 +174,10 @@ export default {
             name: 'clientSchema',
             schema: '../persistence/schemas/clientSchema',
         },
+        backofficeUser: {
+            name: 'backofficeUserSchema',
+            schema: '../persistence/schemas/backofficeUserSchema',
+        },
         role: {
             name: 'roleSchema',
             schema: '../persistence/schemas/roleSchema',
@@ -208,6 +220,10 @@ export default {
         client: {
             name: 'ClientService',
             path: '../services/clientService',
+        },
+        backofficeUser: {
+            name: 'BackofficeUserService',
+            path: '../services/backofficeUserService',
         },
         building: {
             name: 'BuildingService',
