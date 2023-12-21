@@ -20,7 +20,7 @@ perm(Tasks, Order) :-
 permutation_cost(Tasks, (Cost, T)) :-
     % write('========= BEGIN PERMUTATION =========='), nl,
     permutation(Tasks, T),
-    path_cost(T, Cost)
+    path_cost(T, Cost).
     % write('========= END PERMUTATION =========='), nl.
 
 
