@@ -4,7 +4,7 @@ import Dispatcher from './dispatcher'
 export default class PassageMenu extends GUI {
     constructor(
         b1: { building: string; floor: number },
-        b2: { building: string; floor: number },
+        b2: { building: string; floor: number; x: number; y: number },
     ) {
         super({ autoPlace: true })
 
@@ -25,7 +25,8 @@ export default class PassageMenu extends GUI {
                     this.hide()
                     this.destroy()
 
-                    Dispatcher.emit('change-map', b2.building, b2.floor)
+                    const pos = [b2.x, b2.y]
+                    Dispatcher.emit('change-map', b2.building, b2.floor, pos)
                 },
             },
             buttonFieldName,

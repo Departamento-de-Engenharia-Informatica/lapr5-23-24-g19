@@ -98,7 +98,7 @@ type FloorMap = {
     exitLocation: number[] // len = 2
 }
 
-type MapFile = {
+export type MapFile = {
     map: FloorMap
     wall: WallT
     sidewall: SideWallT
@@ -386,7 +386,14 @@ export default class Maze extends THREE.Group {
         })
 
         if (!!pas) {
-            Dispatcher.emit('enter-passage', pas.buildingA, pas.buildingB)
+            const b = {
+                building: pas.buildingB.building,
+                floor: pas.buildingB.floor,
+                x: pas.cellCoordsB.x,
+                y: pas.cellCoordsB.y,
+            }
+
+            Dispatcher.emit('enter-passage', pas.buildingA, b)
         } else if (!!this._lastPassage) {
             const [oldR, oldC] = this.cartesianToCell(this._lastPassage)
 
@@ -990,7 +997,7 @@ export default class Maze extends THREE.Group {
             buildingB: props.to,
         }
 
-        const p = new Passage(params)
+        const p = new Passage(params, this.loader)
         return p
     }
 
