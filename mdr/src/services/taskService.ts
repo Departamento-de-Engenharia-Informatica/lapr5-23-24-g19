@@ -17,6 +17,7 @@ import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTa
 import IRoomRepo from './IRepos/IRoomRepo'
 import { RoomName } from '../domain/room/roomName'
 import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
+import { IFilterDTO } from '../dto/IFilterDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -26,6 +27,26 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
     ) {}
+
+    async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
+        try {
+            const saved = await this.repo.getByFilter(dto)
+
+            if (saved === null) {
+                console.log("null")
+                return left({
+                    errorCode: TaskErrorCode.BussinessRuleViolation,
+                    message: 'Error fetching tasks',
+                })
+            }
+            return right(saved)
+        } catch (e) {
+            return left({
+                errorCode: TaskErrorCode.BussinessRuleViolation,
+                message: e.message ?? e.toString(),
+            })
+        }
+    }
 
     async getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>> {
         try {

@@ -8,12 +8,25 @@ import { PathDTO } from '../dto/PathDTO'
 import { GetPathsDTO } from '../dto/GetPathsDTO'
 import { CreateDeliveryTaskDTO } from '../dto/CreateDeliveryTaskDTO'
 import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
+import { FilterDTO } from '../dto/FilterDTO'
+
+export enum StateEnum {
+    PENDING = 'Pending',
+    ACCEPTED = 'Accepted',
+    REJECTED = 'Rejected',
+  }
+  
+  export enum TypeEnum {
+    DELIVERY = 'Delivery',
+    SURVEILLANCE = 'Surveillance',
+  }
+  
 
 @Injectable({
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getCriteria() {
         const url = `${Config.baseUrl}/paths/criteria`
@@ -75,6 +88,27 @@ export class TaskService {
                 observe: 'body',
                 responseType: 'json',
             },
+        )
+    }
+    getByCriteria(dto: FilterDTO): Observable<CreateDeliveryTaskDTO[]> { 
+        console.log(`${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`)
+        return this.http
+        .get<CreateDeliveryTaskDTO[]>(`${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`, {
+            observe: 'body',
+            responseType: 'json',
+        })
+        .pipe(
+            catchError((response: HttpErrorResponse) => {
+                let errorMessage: string
+
+                if (response.error) {
+                    errorMessage = response.error
+                } else {
+                    errorMessage = `An unexpected error occurred: ${response.message}`
+                }
+
+                return throwError(() => new Error(errorMessage))
+            }),
         )
     }
 }

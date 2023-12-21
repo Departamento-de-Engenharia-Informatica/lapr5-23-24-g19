@@ -1,6 +1,7 @@
 import { CreateDeliveryTaskDTO } from '../../../../spa/src/app/dto/CreateDeliveryTaskDTO'
 import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
 import { Either } from '../../core/logic/Result'
+import { IFilterDTO } from '../../dto/IFilterDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
 
 export enum TaskErrorCode {
@@ -14,6 +15,7 @@ export type TaskErrorResult = {
 }
 
 export default interface ITaskService {
+    getByFilter(DTO: IFilterDTO): Promise<Either<TaskErrorResult, String>>
     createSurveillanceTask(
         dto: CreateSurveillanceTaskDTO,
     ): Promise<Either<TaskErrorResult, String>>

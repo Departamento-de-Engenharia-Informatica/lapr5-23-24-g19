@@ -5,13 +5,16 @@ import ITaskService, {
     TaskErrorCode,
     TaskErrorResult,
 } from '../services/IServices/ITaskService'
-import { Request, Response, NextFunction } from 'express-serve-static-core'
+import { Request, Response, NextFunction, ParamsDictionary } from 'express-serve-static-core'
 import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
 import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
+import { ParsedQs } from 'qs'
+import { IFilterDTO } from '../dto/IFilterDTO'
 
 @Service()
 export default class TaskController implements ITaskController {
     constructor(@Inject(config.services.task.name) private service: ITaskService) {}
+   
 
     async getTypes(_: Request, res: Response, next: NextFunction) {
         try {
@@ -53,6 +56,27 @@ export default class TaskController implements ITaskController {
             const result = await this.service.createDeliveryTask(
                 req.body as CreateDeliveryTaskDTO,
             )
+
+            if (result.isLeft()) {
+                const err = result.value as TaskErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            return res.json(result.value).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
+    async getByFilter(req: Request, res: Response, next: NextFunction) {
+        try {
+            var dto = {
+                criteria: req.query.criteria.toString(),
+                rule: req.query.rule.toString()
+            }as IFilterDTO
+
+            const result = await this.service.getByFilter(dto)
 
             if (result.isLeft()) {
                 const err = result.value as TaskErrorResult

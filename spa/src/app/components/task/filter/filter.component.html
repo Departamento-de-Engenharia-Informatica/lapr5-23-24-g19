@@ -1,0 +1,92 @@
+<section class="text-gray-400 body-font bg-gray-900">
+    <div class="container px-5 py-20 mx-auto">
+        <!-- TODO: make this pretty -->
+        <div class="relative w-full"style="width: 75%;position: relative;margin-left: auto;
+        margin-right: auto;">
+            <div>
+                <form [formGroup]="filterForm" (ngSubmit)="onSubmit()" style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    ">
+                    <div style="display: flex; justify-content: space-between; width: 100%">
+                        <div class="criteria">
+                            <label for="criteria">Select criteria</label>
+                            <select id="criteria" formControlName="criteria" [(ngModel)]="criteria">
+                                <option *ngFor="let crit of criterion" [value]="crit">
+                                    {{ crit }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div *ngIf="filterForm.value.criteria !== 'Client' && filterForm.value.criteria !== 'State' && filterForm.value.criteria !== 'Type'"
+                        style="flex: 1; margin-left: 10px; margin-top: 22px">
+                            <input [readonly]="true" id="rule" type="text" formControlName="rule" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        </div>
+
+                        <!-- Email Input Field -->
+                        <div *ngIf="filterForm.value.criteria === 'Client'"  style="flex: 1; margin-left: 10px">
+                            <label for="rule">Email:</label>
+                            <input id="rule" type="email" formControlName="rule" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" /> 
+                        </div>
+
+                        <!-- State Dropdown Field -->
+                        <div *ngIf="filterForm.value.criteria === 'State'" class="criteria">
+                            <label for="rule">State:</label>
+                            <select id="rule" formControlName="rule" class="input-style">
+                                <option *ngFor="let state of states" [value]="state">
+                                    {{ state }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Type Dropdown Field -->
+                        <div *ngIf="filterForm.value.criteria === 'Type'" class="criteria">
+                            <label for="rule">Type:</label>
+                            <select id="rule" formControlName="rule" class="input-style">
+                                <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+                            </select>
+                        </div>
+                        <button type="submit" [disabled]="filterForm.invalid">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </div>
+
+                    <input (input)="filter($event)" placeholder="Search building" type="text"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                </div>
+            </div>
+
+        <div class="building-list">
+            <div *ngFor="let task of tasks" class="building-card">
+                <h2>{{ task.email }}</h2>
+                <p>{{ task.confirmationCode }}</p>
+                <div class="dimension-box">
+                    <span class="dimension-label">Length:</span>
+                    {{ task.email }}
+                </div>
+                <div class="dimension-box">
+                    <span class="dimension-label">Width:</span>
+                    {{ task.email }}
+                </div>
+                <div class="dimension-box">
+                    <span class="dimension-label">Floors:</span>
+                    {{ task.email }}
+                </div>
+            </div>
+        </div>
+</section>

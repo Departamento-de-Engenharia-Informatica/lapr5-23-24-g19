@@ -4,6 +4,8 @@ import config from '../../../config'
 import fetch from 'node-fetch'
 import { ITaskDTO } from '../../dto/ITaskDTO'
 import IMdtAdapter from '../../services/IRepos/IMdtRepo'
+import { IFilterDTO } from '../../dto/IFilterDTO'
+import { Console } from 'console'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
@@ -42,5 +44,15 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         const paths = await res.json()
 
         return paths
+    }
+    async getByFilter(dto: IFilterDTO): Promise<String> {
+        var a= dto.criteria.toUpperCase()
+        const res = await fetch(`${this.url}/jobs/filter?filter=${a}&rule=${dto.rule}`)
+
+        if (!res.ok) {
+            return Promise.reject()
+        }
+
+        return await res.json()
     }
 }

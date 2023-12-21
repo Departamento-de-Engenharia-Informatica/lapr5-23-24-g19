@@ -55,7 +55,8 @@ import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-
 import { RobotRepo } from './repos/RobotRepo'
 import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
 import { CreateTaskSurveillanceComponent } from './components/task/create-task-surveillance/create-task-surveillance.component'
-import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component'
+import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component';
+import { TasksFilterComponent } from './components/task/filter/filter.component'
 
 @NgModule({
     declarations: [
@@ -101,6 +102,7 @@ import { CreateTaskDeliveryComponent } from './components/task/create-task-deliv
         CreateRobotComponent,
         CreateTaskSurveillanceComponent,
         CreateTaskDeliveryComponent,
+        TasksFilterComponent,
     ],
     imports: [
         BrowserModule,

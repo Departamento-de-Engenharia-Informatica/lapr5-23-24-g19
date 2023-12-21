@@ -67,7 +67,7 @@ namespace DDDSample1.Controllers
         }
 
         // GET: api/jobs/filter/{filter}?rule=someRule
-        [HttpGet("filter/{filter}")]
+        [HttpGet("filter")]
         // GET: api/jobs?filter=filter&rule=someRule
         // [HttpGet], com parametros para filter e rule
         public async Task<ActionResult<String>> GetByFilter(string filter,string rule)
