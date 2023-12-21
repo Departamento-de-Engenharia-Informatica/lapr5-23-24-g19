@@ -19,7 +19,9 @@ export default (app: Router) => {
             body: Joi.object({
                 name: Joi.string().required(),
                 email: Joi.string().required(),
-                phoneNumber: Joi.number().integer().required(),
+                phoneNumber: Joi.string()
+                    .regex(/^[0-9]+$/)
+                    .required(),
                 vatNumber: Joi.number().integer().required(),
                 password: Joi.string().required(),
             }),

@@ -9,7 +9,7 @@ import IBackofficeUserController from '../../controllers/IControllers/IBackoffic
 const route = Router()
 
 export default (app: Router) => {
-    app.use('/backofficeusers', route)
+    app.use('/users-backoffice', route)
 
     const ctrl = Container.get(
         config.controllers.backofficeUser.name,
@@ -21,8 +21,8 @@ export default (app: Router) => {
             body: Joi.object({
                 name: Joi.string().required(),
                 email: Joi.string().required(),
-                phoneNumber: Joi.number()
-                    .integer()
+                phoneNumber: Joi.string()
+                    .regex(/^[0-9]+$/)
                     .required(),
                 password: Joi.string().required(),
             }),

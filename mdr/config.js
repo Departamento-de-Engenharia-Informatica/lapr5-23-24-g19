@@ -47,6 +47,8 @@ export default {
     phoneNumberLength: 9,
     vatNumberLength: 9,
 
+    systemRoles: ['ADMINISTRATOR', 'FLEET_MANAGER', 'CAMPUS_MANAGER', 'TASK_MANAGER'],
+
     /**
      * API configs
      */

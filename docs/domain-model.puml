@@ -80,7 +80,7 @@ skinparam package {
         -status
     }
 
-    class BackOfficeUser{
+    class BackofficeUser{
         -name
         -email
         -phoneNumber
@@ -104,8 +104,8 @@ skinparam package {
 
 
     'USERS
-    Client --> "1" Role : has
-    BackOfficeUser --> "1" Role : has
+    'Client --> "1" Role : has
+    BackofficeUser --> "1" Role : has
 
 
 

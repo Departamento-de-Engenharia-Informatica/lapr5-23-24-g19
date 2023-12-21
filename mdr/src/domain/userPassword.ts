@@ -7,7 +7,7 @@ interface UserPasswordProps {
     value: string
     hashed?: boolean
 }
-
+// TODO :criterio de aceitacao
 export class UserPassword extends ValueObject<UserPasswordProps> {
     get value(): string {
         return this.props.value
