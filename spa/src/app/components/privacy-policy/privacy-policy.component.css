@@ -1,0 +1,44 @@
+div {
+    padding: 50px;
+}
+
+h1 {
+    margin-bottom: 8px;
+    font-weight: bolder;
+    font-size: 30px;
+    color: #fcd979;
+}
+
+h2 {
+    margin-bottom: 8px;
+    margin-top: 20px;
+    font-weight: bolder;
+    font-size: 25px;
+    color: var(--secondary-color);
+}
+
+h3 {
+    margin-bottom: 8px;
+    font-weight: bolder;
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 20px;
+    color: var(--secondary-color);
+}
+
+p {
+    color: white;
+    overflow: hidden;
+    margin-left: 50px;
+    white-space: wrap;
+    font-size: 15px;
+    max-height: 3em;
+}
+
+.hide-scroll-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+    display: none;
+}

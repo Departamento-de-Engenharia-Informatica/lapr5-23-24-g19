@@ -38,6 +38,7 @@ import { CreateRobotComponent } from './components/robot/create-robot/create-rob
 import { CreateTaskSurveillanceComponent } from './components/task/create-task-surveillance/create-task-surveillance.component'
 import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component'
 import { TasksFilterComponent } from './components/task/filter/filter.component'
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -241,6 +242,11 @@ export const routes: Routes = [
                 title: 'Create Passage',
             },
         ],
+    },
+    {
+        path: 'privacy-policy',
+        component: PrivacyPolicyComponent,
+        title: 'Privacy Policy',
     },
 
     { path: '**', component: PageNotFoundComponent },

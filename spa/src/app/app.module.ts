@@ -61,6 +61,7 @@ import {CreateBackofficeUserComponent} from "./components/user/create-backoffice
 import {CreateClientComponent} from "./components/user/create-client/create-client.component";
 import {BackofficeUserService} from "./services/backofficeUser.service";
 import {ClientService} from "./services/client.service";
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 
 @NgModule({
     declarations: [
@@ -109,6 +110,7 @@ import {ClientService} from "./services/client.service";
         TasksFilterComponent,
         CreateBackofficeUserComponent,
         CreateClientComponent,
+        PrivacyPolicyComponent,
     ],
     imports: [
         BrowserModule,
