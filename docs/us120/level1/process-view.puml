@@ -1,0 +1,28 @@
+@startuml
+autonumber
+
+actor "Client" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : wants to delete account
+    activate sys
+alt client not found
+        sys --> usr : informs error
+else client found
+        sys --> usr : requests password
+    deactivate sys
+
+    usr -> sys : provides password
+    activate sys
+alt wrong client password
+        sys --> usr : informs error
+else success
+        sys --> usr : success message
+    deactivate sys
+deactivate usr
+end
+end
+
+@enduml

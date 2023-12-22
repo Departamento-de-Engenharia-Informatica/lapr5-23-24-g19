@@ -1,0 +1,92 @@
+@startuml
+autonumber
+
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Mapper" as map
+participant "dto:\nICreatedClientDTO" as cp_dto
+
+participant "Repository" as repo
+database "Database" as db
+
+[-> r: GET (/clients/{email})
+activate r
+    r -> ctrl : getClient(req,res,...)
+    activate ctrl
+        ctrl -> svc : getClient(email)
+        activate svc
+            svc -> repo : find(email)
+            activate repo
+                repo -> db : find()
+                activate db
+                    db --> repo : client
+                deactivate db
+                repo --> svc : client
+            deactivate repo
+alt client not found
+            svc --> ctrl : error
+            ctrl --> r : response 404
+            [<--r : 404: Not Found
+else client found
+            svc -> map : toDTO(client)
+            activate map
+                map --> cp_dto **: create()
+                activate cp_dto
+                    map --> svc : dto
+                deactivate cp_dto
+            deactivate map
+            svc --> ctrl : dto
+        deactivate svc
+        ctrl --> r : response 200
+    deactivate ctrl
+    [<--r: 200: OK
+deactivate r
+end
+
+[-> r: DELETE (/clients/{token})
+activate r
+    r -> ctrl : deleteClient(req,res,...)
+    activate ctrl
+        ctrl -> cp_dto** : create(req.body)
+
+        ctrl -> svc : deleteClient(dto)
+        activate svc
+            svc -> repo : find(email)
+            activate repo
+                repo -> db : find()
+                activate db
+                    db --> repo : client
+                deactivate db
+                repo --> svc : client
+            deactivate repo
+alt wrong client password
+                svc --> ctrl : error
+                ctrl --> r : response 422
+                [<--r : 422: Unprocessable Content
+else success
+            svc -> repo : delete(client)
+            activate repo
+                repo -> db : delete()
+                activate db
+                deactivate db
+
+                repo --> svc : true
+
+                svc -> svc : logout(client)
+                note right : DEPOIS DE APAGAR A CONTA \nDEVE AUTOMATICAMENTE DAR LOGOUT !!!!!!!!!!!!!!!\nIMPLEMENTAR AINDA
+                deactivate repo
+
+
+            svc --> ctrl : true
+        deactivate svc
+        ctrl --> r : response 200
+    deactivate ctrl
+    [<--r: 200: OK
+deactivate r
+end
+
+
+@enduml

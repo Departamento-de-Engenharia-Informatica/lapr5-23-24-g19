@@ -1,0 +1,88 @@
+@startuml
+autonumber
+
+actor "Client" as usr
+
+participant "View" as view
+participant "Controller" as ctrl
+
+participant "Service" as svc
+
+participant "dto:\nICreatedClientDTO" as cp_dto
+participant "dto:\nIEditClientDTO" as ec_dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to delete account
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+        note right of ctrl : client email should be retrieved \nfrom the active session
+            ctrl -> svc : getClient(email)
+            activate svc
+                svc -> http : getClient()
+                activate http
+                    http ->] : GET /clients/{email}
+alt client not found
+                    http <--] : 404: error
+                    http --> svc : observable
+                    svc --> ctrl : error
+                    note left : creates alert with the error message
+                    ctrl --> view : alert
+                    view --> usr : informs error
+else client found
+                    http <--] : 200: client
+                    http --> svc : observable
+                deactivate http
+                svc --> cp_dto** : create()
+                activate cp_dto
+                    cp_dto --> svc : dto
+                deactivate cp_dto
+                svc --> ctrl : dto
+            deactivate svc
+            ctrl --> view : dto
+        deactivate ctrl
+        view --> usr : requests password
+    deactivate view
+
+    usr -> view : provides password
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+
+
+            ctrl -> svc : deleteClient(dto)
+            activate svc
+                svc -> http : deleteClient()
+                activate http
+                    http ->] : DELETE /clients/{email}
+alt wrong client password
+                    http <--] : 422: error
+                    http --> svc : observable
+                    svc --> ctrl : error
+                    note left : creates alert with the error message
+                    ctrl --> view : alert
+                    view --> usr : informs error
+else success and  client logged out
+                    http <--] : 200: OK
+                    http --> svc : observable
+                deactivate http
+
+                svc --> ctrl : OK
+            deactivate svc
+            note left : creates alert with the success operation
+            ctrl --> view : alert
+
+        deactivate ctrl
+
+        view --> usr : success message \nand  logout message
+    deactivate view
+
+
+
+
+deactivate usr
+end
+end
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+
+autonumber
+
+actor "Client" as usr
+
+participant "SPA" as ui
+
+participant "MDR" as md
+
+activate usr
+usr -> ui : wants to delete account
+    activate ui
+        ui -> md : GET /clients/{email}
+        activate md
+alt client not found
+            md --> ui : 404: error
+            ui --> usr : informs error
+else client found
+            md --> ui : 200 : client
+        deactivate md
+        ui --> usr : requests password
+    deactivate ui
+
+    usr -> ui : provides password
+    activate ui
+    ui -> md : DELETE /clients/{token}
+        activate md
+alt wrong client password
+            md --> ui : 422: error
+            ui --> usr : informs error
+else success
+            md --> ui : 200: message
+            ui --> usr : success message
+        deactivate md
+    deactivate ui
+deactivate usr
+end
+end
+
+@enduml
