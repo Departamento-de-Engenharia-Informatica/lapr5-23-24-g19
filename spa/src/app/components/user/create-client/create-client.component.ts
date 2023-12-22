@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
-import {UserService} from "../../../services/user.Service";
+
 import {ClientDTO} from "../../../dto/ClientDTO";
+import {ClientService} from "../../../services/client.service";
 
 @Component({
     selector: 'app-create-client',
@@ -15,7 +16,7 @@ export class CreateClientComponent {
 
     constructor(
         private fb: FormBuilder,
-        private service: UserService,
+        private service: ClientService,
     ) {
         this.form = this.fb.group({
             name: [null, Validators.required],

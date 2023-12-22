@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
-import {UserService} from "../../../services/user.Service";
 import {BackofficeUserDTO} from "../../../dto/BackofficeUserDTO";
+import {BackofficeUserService} from "../../../services/backofficeUser.service";
 
 @Component({
     selector: 'app-create-backoffice-user',
@@ -15,7 +15,7 @@ export class CreateBackofficeUserComponent {
 
     constructor(
         private fb: FormBuilder,
-        private service: UserService,
+        private service: BackofficeUserService,
     ) {
         this.form = this.fb.group({
             name: [null, Validators.required],

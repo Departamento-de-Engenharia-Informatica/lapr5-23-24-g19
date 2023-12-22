@@ -58,8 +58,9 @@ import { CreateTaskSurveillanceComponent } from './components/task/create-task-s
 import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component';
 import { TasksFilterComponent } from './components/task/filter/filter.component'
 import {CreateBackofficeUserComponent} from "./components/user/create-backoffice-user/create-backoffice-user.component";
-import {UserService} from "./services/user.Service";
 import {CreateClientComponent} from "./components/user/create-client/create-client.component";
+import {BackofficeUserService} from "./services/backofficeUser.service";
+import {ClientService} from "./services/client.service";
 
 @NgModule({
     declarations: [
@@ -127,7 +128,8 @@ import {CreateClientComponent} from "./components/user/create-client/create-clie
         FloorService,
         RobotTypeRepo,
         RobotRepo,
-        UserService,
+        BackofficeUserService,
+        ClientService,
     ],
     bootstrap: [AppComponent],
 })
