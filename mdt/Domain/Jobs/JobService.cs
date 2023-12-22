@@ -108,40 +108,6 @@ namespace DDDSample1.Domain.Jobs
             _ = await _unitOfWork.CommitAsync(); // ??
 
             return jobs;
-
-
-            //TOOD: strategy pattern
-            // var jobs = new List<Job>();
-            // switch (dto.Filter)
-            // {
-            //     case "STATE":
-            //         if (dto.State.HasValue)
-            //         {
-            //             Console.WriteLine("dto");
-            //             Console.WriteLine(dto.State.Value);
-            //             jobs = await this._repo.GetByState(JobState.FromCode(dto.State.Value));
-            //         }
-            //         break;
-            //     //TODO: TYPE OR LIST OF TYPES??
-            //     case "TYPE":
-            //         if (dto.Type.HasValue)
-            //         {
-            //             Console.WriteLine("dto");
-            //             Console.WriteLine(dto.Type.Value);
-            //             jobs = await this._repo.GetByType(JobType.FromCode(dto.Type.Value));
-            //         }
-            //         break;
-            //     case "CLIENT":
-            //         if (dto.Email.Length > 0)
-            //         {
-            //             jobs = await this._repo.GetByEmail(dto.Email);
-            //         }
-            //         break;
-            //     default:
-            //         //TODO: throw error?
-            //         return null;
-            // }
-            // return jobs;
         }
 
         public async Task<Job> UpdateJob(UpdatingJobDto dto)

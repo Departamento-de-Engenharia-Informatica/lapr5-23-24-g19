@@ -8,7 +8,7 @@ participant "MDR" as mdr
 participant "MDT" as mdt
 
 activate usr
-    usr -> ui : wants to approve or refuse a task
+    usr -> ui : wants to approve or reject a task
     activate ui
         ui -> mdr : GET /tasks?status=pending
         activate mdr

@@ -48,7 +48,7 @@ namespace DDDSample1.Controllers
             return CreatedAtAction(nameof(GetGetById), new { id = cat.Id }, cat);
         }
 
-        
+
         // PUT: api/Categories/5
         [HttpPut("{id}")]
         public async Task<ActionResult<CategoryDto>> Update(Guid id, CategoryDto dto)
@@ -61,7 +61,7 @@ namespace DDDSample1.Controllers
             try
             {
                 var cat = await _service.UpdateAsync(dto);
-                
+
                 if (cat == null)
                 {
                     return NotFound();
@@ -87,7 +87,7 @@ namespace DDDSample1.Controllers
 
             return Ok(cat);
         }
-        
+
         // DELETE: api/Categories/5
         [HttpDelete("{id}/hard")]
         public async Task<ActionResult<CategoryDto>> HardDelete(Guid id)
