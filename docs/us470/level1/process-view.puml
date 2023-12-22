@@ -6,25 +6,19 @@ actor "Task Manager" as usr
 participant "<<system>>\n RobDroneGo" as sys
 
 activate usr
-    usr -> sys : wants to approve or refuse a task
+    usr -> sys : wants to approve or reject a task
     activate sys
         alt task(s) not found
             sys --> usr: informs error
         else task(s) found
-        sys --> usr : request task
+        sys --> usr : shows tasks & requests one
     deactivate sys
 
-
-    usr -> sys : provides task
+    usr -> sys : approves/rejects chosen task
     activate sys
-        alt task not found
-            sys --> usr : informs error
-        else task approved successfully
-            sys --> usr : shows updated task
-        end
-
-        end
+        sys --> usr : shows updated task
     deactivate sys
 deactivate usr
+end
 
 @enduml

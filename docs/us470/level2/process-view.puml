@@ -1,0 +1,51 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+participant "MDT" as mdt
+
+activate usr
+    usr -> ui : wants to approve or refuse a task
+    activate ui
+        ui -> mdr : GET /tasks?status=pending
+        activate mdr
+            mdr -> mdt : GET /jobs?status=pending
+
+            activate mdt
+
+alt task(s) not found
+                mdt --> mdr : 404: error
+                mdr --> ui : 404: Not Found
+                ui --> usr: informs error
+
+else task(s) found
+                mdt --> mdr : tasks
+            deactivate mdt
+
+            mdr --> ui : tasks
+        deactivate mdr
+
+        ui --> usr : shows tasks & requests one
+    deactivate ui
+
+    usr -> ui : provides task
+    activate ui
+        ui -> mdr : PATCH /tasks/{id}
+        activate mdr
+            mdr -> mdt : PATCH /jobs/{id}
+            activate mdt
+                mdt --> mdr : 200: updated task
+            deactivate mdt
+
+            mdr --> ui : task
+        deactivate mdr
+
+            ui --> usr : shows updated task
+    deactivate ui
+deactivate usr
+end
+
+@enduml
