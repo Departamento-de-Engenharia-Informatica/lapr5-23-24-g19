@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
+using DDDSample1.Domain.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDSample1.Controllers
@@ -56,7 +57,27 @@ namespace DDDSample1.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<JobDto>> Update(string id, UpdatingJobDto dto)
         {
-            throw new System.NotImplementedException();
+            if (dto == null)
+            {
+                return BadRequest();
+            }
+
+            dto.JobId = id;
+
+            try
+            {
+                var updatedJob = await _service.UpdateJob(dto);
+                return Ok(updatedJob);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException or BusinessRuleValidationException)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/jobs/non-approved
@@ -70,10 +91,11 @@ namespace DDDSample1.Controllers
         [HttpGet("filter")]
         // GET: api/jobs?filter=filter&rule=someRule
         // [HttpGet], com parametros para filter e rule
-        public async Task<ActionResult<String>> GetByFilter(string filter,string rule)
+        public async Task<ActionResult<String>> GetByFilter(string filter, string rule)
         {
-            var dto = FilterMapper.ToDto(filter,rule);
-            if(dto==null){
+            var dto = FilterMapper.ToDto(filter, rule);
+            if (dto == null)
+            {
                 //TODO: better error message
                 return NotFound("Dto asdnull");
             }

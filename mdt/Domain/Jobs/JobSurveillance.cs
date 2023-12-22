@@ -1,3 +1,4 @@
+using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Shared;
 
 namespace DDDSample1.Domain.Jobs
@@ -14,5 +15,7 @@ namespace DDDSample1.Domain.Jobs
         {
             this.SurveillanceContact = contact;
         }
+
+        protected override Job InternalUpdate(JobUpdateProps updateInfo) => this;
     }
 }

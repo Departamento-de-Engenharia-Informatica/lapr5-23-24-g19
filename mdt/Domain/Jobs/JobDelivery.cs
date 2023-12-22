@@ -1,3 +1,5 @@
+using DDDSample1.Domain.Jobs.DTO;
+
 namespace DDDSample1.Domain.Jobs
 {
     public class JobDelivery : Job
@@ -25,5 +27,7 @@ namespace DDDSample1.Domain.Jobs
             this.ConfirmationCode = confirmationCode;
             this.Description = description;
         }
+
+        protected override Job InternalUpdate(JobUpdateProps updateInfo) => this;
     }
 }

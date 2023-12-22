@@ -1,0 +1,69 @@
+@startuml
+autonumber
+
+participant ":JobApiController" as ctrl
+
+participant "dto:UpdatingJobDto" as dto
+
+participant ":JobService" as svc
+
+participant "props:JobUpdateProps" as props
+
+participant ":JobRepository" as repo
+
+participant ":Job" as job
+
+participant ":JobMapper" as mapper
+participant "jobDto:JobDto" as j_dto
+
+[-> ctrl : PATCH /jobs/{:id}
+
+activate ctrl
+
+    ctrl --> dto** : create()
+    ' activate dto
+    ' deactivate dto
+
+    ctrl -> svc : UpdateJob(dto)
+    activate svc
+        svc -> repo : GetByIdAsync(dto.JobId)
+        activate repo
+            repo --> svc : job
+        deactivate repo
+
+alt job not found
+        svc --> ctrl : not found error
+        [<-- ctrl : 404 Not Found
+else found
+
+        svc --> props** : create()
+        ' activate props
+        ' deactivate props
+
+        svc -> job : Update(props)
+        activate job
+        deactivate job
+
+        svc -> repo : Update(job)
+        activate repo
+        deactivate repo
+
+        svc -> mapper : toDto(job)
+        activate mapper
+            mapper --> j_dto** : create()
+            ' activate j_dto
+            ' deactivate j_dto
+
+            mapper --> svc : jobDto
+        deactivate mapper
+
+        svc --> ctrl : jobDto
+    deactivate svc
+
+    [<-- ctrl : 200: jobDto
+deactivate ctrl
+
+end
+
+
+@enduml

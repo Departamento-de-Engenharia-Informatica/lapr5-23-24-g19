@@ -2,28 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using DDDSample1.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace DDDSample1.Infrastructure.Shared
 {
-    public class BaseRepository<TEntity,TEntityId> : IRepository<TEntity,TEntityId>
+    public class BaseRepository<TEntity, TEntityId> : IRepository<TEntity, TEntityId>
     where TEntity : Entity<TEntityId>
     where TEntityId : EntityId
     {
         public readonly DbSet<TEntity> _objs;
-        
+
         public BaseRepository(DbSet<TEntity> objs)
         {
             this._objs = objs ?? throw new ArgumentNullException(nameof(objs));
-        
+
         }
 
         public async Task<List<TEntity>> GetAllAsync()
         {
             return await this._objs.ToListAsync();
         }
-        
+
         public async Task<TEntity> GetByIdAsync(TEntityId id)
         {
             //return await this._context.Categories.FindAsync(id);
@@ -45,5 +45,14 @@ namespace DDDSample1.Infrastructure.Shared
         {
             this._objs.Remove(obj);
         }
+
+        public async Task<TEntity> Update(TEntity obj)
+        {
+            _objs.Update(obj);
+            await _objs.SaveChangesAsync();
+
+            return obj;
+        }
+
     }
 }

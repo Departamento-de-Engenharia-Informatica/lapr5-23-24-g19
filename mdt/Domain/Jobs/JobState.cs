@@ -1,31 +1,52 @@
 using System;
+using System.Globalization;
 
-public enum JobStateEnum
+namespace DDDSample1.Domain.Jobs
 {
-    PENDING
-}
 
-public class JobState
-{
-    public static string ToString(JobStateEnum state)
+    public enum JobStateEnum
     {
-        switch (state)
-        {
-            case JobStateEnum.PENDING:
-                return "Pending";
-            default:
-                return "Unknown";
-        }
+        PENDING,
+        APPROVED,
+        REJECTED,
+        PLANNED,
     }
 
-    public static JobStateEnum FromCode(int code)
+    public class JobState
     {
-        switch (code)
+        public static string ToString(JobStateEnum state)
         {
-            case 0:
-                return JobStateEnum.PENDING;
-            default:
-                throw new ArgumentException($"Invalid code: {code}", nameof(code));
+            return state switch
+            {
+                JobStateEnum.PENDING => "Pending",
+                JobStateEnum.APPROVED => "Approved",
+                JobStateEnum.REJECTED => "Rejected",
+                JobStateEnum.PLANNED => "Planned",
+                _ => "Unknown"
+            };
+        }
+
+        public static JobStateEnum FromString(string state)
+        {
+            return state.ToUpper(CultureInfo.InvariantCulture) switch
+            {
+                "PENDING" => JobStateEnum.PENDING,
+                "APPROVED" => JobStateEnum.APPROVED,
+                "REJECTED" => JobStateEnum.REJECTED,
+                "PLANNED" => JobStateEnum.PLANNED,
+                _ => throw new ArgumentException($"Bad job state: {state}")
+            };
+        }
+
+        public static JobStateEnum FromCode(int code)
+        {
+            switch (code)
+            {
+                case 0:
+                    return JobStateEnum.PENDING;
+                default:
+                    throw new ArgumentException($"Invalid code: {code}", nameof(code));
+            }
         }
     }
 }

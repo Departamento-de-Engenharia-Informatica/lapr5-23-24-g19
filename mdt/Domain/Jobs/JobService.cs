@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Jobs.Filter;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Shared;
@@ -143,6 +144,27 @@ namespace DDDSample1.Domain.Jobs
             // return jobs;
         }
 
+        public async Task<Job> UpdateJob(UpdatingJobDto dto)
+        {
+            var job = await _repo.GetByIdAsync(new JobId(dto.JobId));
+            if (job == null)
+            {
+
+                throw new NotFoundException($"No job found: {dto.JobId}");
+            }
+
+            var props = new JobUpdateProps
+            {
+                Status = JobState.FromString(dto.JobStatus)
+            };
+
+            _ = job.Update(props);
+            var updatedJob = await _repo.Update(job);
+            _ = await _unitOfWork.CommitAsync();
+
+            // TODO: DTO
+            return updatedJob;
+        }
     }
 
 }

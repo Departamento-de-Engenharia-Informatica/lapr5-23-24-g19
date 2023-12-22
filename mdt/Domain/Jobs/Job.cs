@@ -1,4 +1,5 @@
 using System;
+using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Shared;
 
 namespace DDDSample1.Domain.Jobs
@@ -14,11 +15,40 @@ namespace DDDSample1.Domain.Jobs
 
         public Job(string Email, JobLocation location, JobTypeEnum type)
         {
-            this.Id = new JobId(Guid.NewGuid());
+            Id = new JobId(Guid.NewGuid());
             this.Email = Email;
-            this.Location = location;
-            this.Status = JobStateEnum.PENDING;
-            this.JobType = type;
+            Location = location;
+            Status = JobStateEnum.PENDING;
+            JobType = type;
+        }
+
+        public Job Update(JobUpdateProps updateInfo)
+        {
+            if (updateInfo.Status.HasValue)
+            {
+                UpdateStatus(updateInfo.Status.Value);
+            }
+            return InternalUpdate(updateInfo);
+        }
+
+        protected abstract Job InternalUpdate(JobUpdateProps updateInfo);
+
+        private void UpdateStatus(JobStateEnum newStatus)
+        {
+            if (newStatus == Status)
+            {
+                return;
+            }
+
+            Status = (Status, newStatus) switch
+            {
+                (JobStateEnum.PENDING, JobStateEnum.APPROVED) => newStatus,
+                (JobStateEnum.PENDING, JobStateEnum.REJECTED) => newStatus,
+                (JobStateEnum.APPROVED, JobStateEnum.PLANNED) => newStatus,
+                _ =>
+                throw new BusinessRuleValidationException(
+                    $"Task status cannot be altered from {JobState.ToString(Status)} to {JobState.ToString(newStatus)}"),
+            };
         }
     }
 }
