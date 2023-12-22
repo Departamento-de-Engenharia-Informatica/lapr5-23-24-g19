@@ -4,14 +4,14 @@ autonumber
 
 actor "User" as usr
 
-participant "FE" as ui
+participant "SPA" as ui
 
-participant "MD" as md
+participant "MDR" as md
 
 activate usr
 usr -> ui : wants to edit client data
     activate ui
-        ui -> md : GET /clients/?email={email}
+        ui -> md : GET /clients/{email}
         activate md
 alt client not found
             md --> ui : 404: error
@@ -24,7 +24,7 @@ else client found
 
     usr -> ui : provides data
     activate ui
-        ui -> md : PATCH /clients
+    ui -> md : PATCH /clients/{email}
         activate md
 alt bad client parameters
             md --> ui : 422: error

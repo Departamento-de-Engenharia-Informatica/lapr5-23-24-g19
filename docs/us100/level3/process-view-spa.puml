@@ -1,0 +1,91 @@
+@startuml
+autonumber
+
+actor "Client" as usr
+
+participant "HTML + CSS + JS" as view
+participant "Controller" as ctrl
+
+participant "Service" as svc
+
+participant "dto:\nIClientWithoutPasswordDTO" as cp_dto
+participant "dto:\nIEditClientDTO" as ec_dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to edit client data
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+        note right of ctrl : client email should be retrieved \nfrom the active session
+            ctrl -> svc : getClient(email)
+            activate svc
+                svc -> http : getClient()
+                activate http
+                    http ->] : GET /clients/{email}
+alt client not found
+                    http <--] : 404: error
+                    http --> svc : observable
+                    svc --> ctrl : error
+                    note left : creates alert with the error message
+                    ctrl --> view : alert
+                    view --> usr : informs error
+else client found
+                    http <--] : 200: client
+                    http --> svc : observable
+                deactivate http
+                svc --> cp_dto** : create()
+                activate cp_dto
+                    cp_dto --> svc : dto
+                deactivate cp_dto
+                svc --> ctrl : dto
+            deactivate svc
+            ctrl --> view : dto
+        deactivate ctrl
+        view --> usr : requests data
+    deactivate view
+
+    usr -> view : provides data
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+            ctrl --> ctrl : patchClient()
+            ctrl --> ec_dto** : create()
+            activate ec_dto
+            ec_dto --> ctrl : dto
+            deactivate ec_dto
+
+            ctrl -> svc : patchClient(dto)
+            activate svc
+                svc -> http : patchClient()
+                activate http
+                    http ->] : PATCH /clients/{email}
+alt bad client parameters
+                    http <--] : 422: error
+                    http --> svc : observable
+                    svc --> ctrl : error
+                    note left : creates alert with the error message
+                    ctrl --> view : alert
+                    view --> usr : informs error
+else success
+                    http <--] : 201: client
+                    http --> svc : observable
+                deactivate http
+
+                svc --> ec_dto** : create()
+                activate ec_dto
+                    ec_dto --> svc : dto
+                deactivate ec_dto
+
+                svc --> ctrl : dto
+            deactivate svc
+            note left : creates alert with the dto information
+            ctrl --> view : alert
+        deactivate ctrl
+        view --> usr : previews edited client data
+    deactivate view
+deactivate usr
+end
+end
+@enduml
