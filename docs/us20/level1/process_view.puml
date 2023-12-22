@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+actor "Potential Client" as usr
+participant "<<system>>\n RobDroneGo" as sys
+
+
+usr -> sys: wants to register as a client user
+
+activate usr
+activate sys
+
+        sys --> usr : request data
+        usr -> sys : provides data
+        alt user already exists
+
+           usr<-- sys : 422: already exists
+        else user not created
+           usr<-- sys : 422: Unprocessable Content
+        else user created successfully
+            usr<-- sys : 201: Created
+        end
+
+deactivate sys
+deactivate usr
+
+@enduml

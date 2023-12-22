@@ -1,0 +1,39 @@
+@startuml
+autonumber
+
+actor "Administrator" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+
+
+
+activate usr
+    usr -> ui : wants to create a backoffice user
+    activate ui
+        ui --> usr : request data
+    deactivate ui
+
+    usr -> ui : provides data
+
+    activate ui
+        ui -> mdr  : POST /users-backoffice
+        activate mdr
+
+            alt user already exists
+                ui <-- mdr  : 422: error
+                ui --> usr : informs error
+
+            else user not created
+                ui <-- mdr  : 422: error
+                ui --> usr : informs error
+
+            else user created successfully
+                ui <-- mdr : 201: user
+                ui --> usr : shows created user
+            end
+        deactivate mdr
+    deactivate ui
+deactivate usr
+
+@enduml

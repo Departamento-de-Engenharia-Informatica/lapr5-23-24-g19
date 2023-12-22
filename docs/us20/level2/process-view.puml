@@ -1,0 +1,39 @@
+@startuml
+autonumber
+
+actor "Potential Client" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+
+
+
+activate usr
+    usr -> ui : wants to register as a client user
+    activate ui
+        ui --> usr : request data
+    deactivate ui
+
+    usr -> ui : provides data
+
+    activate ui
+        ui -> mdr  : POST /clients
+        activate mdr
+
+            alt user already exists
+                ui <-- mdr  : 422: error
+                ui --> usr : informs error
+
+            else user not created
+                ui <-- mdr  : 422: error
+                ui --> usr : informs error
+
+            else user created successfully
+                ui <-- mdr : 201: user
+                ui --> usr : shows created user
+            end
+        deactivate mdr
+    deactivate ui
+deactivate usr
+
+@enduml
