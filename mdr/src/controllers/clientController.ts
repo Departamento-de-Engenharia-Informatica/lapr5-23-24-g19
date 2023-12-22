@@ -9,6 +9,7 @@ import IClientService, {
 import IClientController from './IControllers/IClientController'
 import { IClientDTO } from '../dto/IClientDTO'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
+import {IDeletedClientDTO} from "../dto/IDeletedClientDTO";
 
 @Service()
 export default class ClientController implements IClientController {
@@ -44,6 +45,25 @@ export default class ClientController implements IClientController {
             }
 
             const message = result.value as IClientDTO
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
+    async deleteClient(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto = req.body as ICreatedClientDTO
+            const result = await this.service.deleteClient(dto)
+
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            const message = result.value as IDeletedClientDTO
             return res.status(200).send(message)
         } catch (e) {
             return next(e)

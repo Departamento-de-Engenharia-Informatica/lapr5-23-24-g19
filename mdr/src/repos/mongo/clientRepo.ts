@@ -50,8 +50,14 @@ export default class ClientRepo implements IClientRepo {
         return ClientMap.toDomain(doc)
     }
 
-    delete(user: Client): Promise<Client> {
-        throw new Error('Method not implemented.')
+    async delete(user: Client): Promise<boolean> {
+        const doc = await this.schema.deleteOne({ email: user.email.value })
+
+        if (!doc) {
+            return null
+        }
+
+        return true
     }
 
     async exists(t: Client): Promise<boolean> {

@@ -23,6 +23,7 @@ import { PhoneNumber } from '../domain/user/phoneNumber'
 import { VatNumber } from '../domain/user/client/vatNumber'
 import { ClientMap } from '../mappers/ClientMap'
 import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
+import {IDeletedClientDTO} from "../dto/IDeletedClientDTO";
 
 @Service()
 export default class ClientService implements IClientService {
@@ -88,6 +89,31 @@ export default class ClientService implements IClientService {
                 phoneNumber: client.phoneNumber,
                 vatNumber: client.vatNumber,
             } as IClientWithoutPasswordDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async deleteClient(
+        dto: ICreatedClientDTO,
+    ): Promise<Either<ClientErrorResult, IDeletedClientDTO>> {
+        try {
+            const email = Email.create(dto.email).getOrThrow()
+
+            //TODO: existe o user
+
+            const client = await this.repo.find(email)
+
+            //TODO : VERIFICAR TOKEN PASSWORD ANTES DE DAR DELETE AO CLIENT
+            if (await this.repo.delete(client)) {
+                //TODO : LOGOUT BEFORE RETURN
+                return right({
+                    message: 'Account deleted',
+                } as IDeletedClientDTO)
+            }
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,
