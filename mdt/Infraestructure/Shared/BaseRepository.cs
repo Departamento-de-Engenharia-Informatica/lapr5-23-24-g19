@@ -49,8 +49,6 @@ namespace DDDSample1.Infrastructure.Shared
         public async Task<TEntity> Update(TEntity obj)
         {
             _objs.Update(obj);
-            await _objs.SaveChangesAsync();
-
             return obj;
         }
 

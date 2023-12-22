@@ -29,10 +29,5 @@ Thumbs.db
 coverage/
 
 # Other
-
 docs/**/*.png
-mdt/bin/
-mdt/obj/
-
-lapr5.sln
-Migrations
+*.sln
