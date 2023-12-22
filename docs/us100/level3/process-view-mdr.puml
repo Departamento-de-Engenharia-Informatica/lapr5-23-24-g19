@@ -1,0 +1,159 @@
+@startuml
+autonumber
+
+
+participant "Route" as r
+participant "Controller" as ctrl
+participant "Service" as svc
+
+participant "Mapper" as map
+participant "dto:\nIClientWithoutPasswordDTO" as cp_dto
+
+participant "Repository" as repo
+database "Database" as db
+
+[-> r: GET (/clients/{email})
+activate r
+    r -> ctrl : getClient(req,res,...)
+    activate ctrl
+        ctrl -> svc : getClient(email)
+        activate svc
+            svc -> repo : find(email)
+            activate repo
+                repo -> db : find()
+                activate db
+                    db --> repo : client
+                deactivate db
+                repo --> svc : client
+            deactivate repo
+alt client not found
+            svc --> ctrl : error
+            ctrl --> r : response 404
+            [<--r : 404: Not Found
+else client found
+            svc -> map : toDTO(client)
+            activate map
+                map --> cp_dto **: create()
+                activate cp_dto
+                    map --> svc : dto
+                deactivate cp_dto
+            deactivate map
+            svc --> ctrl : dto
+        deactivate svc
+        ctrl --> r : response 200
+    deactivate ctrl
+    [<--r: 200: OK
+deactivate r
+end
+
+[-> r: PATCH (/clients/{email})
+activate r
+    r -> ctrl : patchClient(req,res,...)
+    activate ctrl
+        ctrl -> cp_dto** : create(req.body)
+
+        ctrl -> svc : patchClient(dto)
+        activate svc
+            svc -> repo : find(email)
+            activate repo
+                repo -> db : find()
+                activate db
+                    db --> repo : client
+                deactivate db
+                repo --> svc : client
+            deactivate repo
+alt bad client parameters
+                svc --> ctrl : error
+                ctrl --> r : response 422
+                [<--r : 422: Unprocessable Content
+else success
+            svc -> repo : save(client)
+            activate repo
+                repo -> db : save()
+                activate db
+                deactivate db
+                deactivate repo
+            svc -> map : toDTO(client)
+            activate map
+                map --> cp_dto **: create(client)
+                activate cp_dto
+                    map --> svc : dto
+                deactivate cp_dto
+            deactivate map
+            svc --> ctrl : dto
+        deactivate svc
+        ctrl --> r : response 200
+    deactivate ctrl
+    [<--r: 200: OK
+deactivate r
+end
+
+' [-> r: PATCH (buildings/{id}/floors/{floor})
+' activate r
+'     r -> ctrl : patchFloor(req,res,...)
+'         activate ctrl
+'             ctrl -> svc : patchFloor(dto)
+'             activate svc
+'                 svc -> repo : findByCode(buildingCode)
+'                 activate repo
+'                     repo -> db : find()
+'                     activate db
+'                         db --> repo : building
+'                     deactivate db
+'                     repo --> svc : building
+'                 deactivate repo
+'
+'                 alt building not found
+'                     svc --> ctrl : error
+'                     ctrl --> r : response 404
+'                     [<--r : 404: Not Found
+'                 else building found
+'                     svc -> repo : findByCodeNumber(buildingCode, floorNumber)
+'                     activate repo
+'                         repo -> db : find()
+'                         activate db
+'                             db --> repo : floor
+'                         deactivate db
+'                         repo --> svc : floor
+'                     deactivate repo
+'
+'                     alt floor not found
+'                         svc --> ctrl : error
+'                         ctrl --> r : response 404
+'                         [<--r : 404: Not Found
+'                     else floor found
+'                         note right of svc
+'                             edit floor specifications
+'                             based on new ones
+'                         end note
+'
+'                         alt floor bad parameters
+'                             svc --> ctrl : error
+'                             ctrl --> r : response 422
+'                             [<--r : 422: Unprocessable Content
+'                         else floor correct parameters
+'                             svc -> repo : save(floor)
+'                             activate repo
+'                                 repo -> db : save()
+'                                 activate db
+'                                 deactivate db
+'                             deactivate repo
+'
+'                             svc -> map : toDTO(floor)
+'                             activate map
+'                                 map --> dto **: create(floor)
+'                                 activate dto
+'                                     map --> svc : dto
+'                                 deactivate dto
+'                             deactivate map
+'                             svc --> ctrl : dto
+'                         deactivate svc
+'                     ctrl --> r : response 200
+'                 deactivate ctrl
+'                 [<--r: 200: OK
+'             end
+'         end
+'     end
+' deactivate r
+'
+@enduml

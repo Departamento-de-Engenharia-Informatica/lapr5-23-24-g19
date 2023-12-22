@@ -69,7 +69,7 @@ alt bad client parameters
                     ctrl --> view : alert
                     view --> usr : informs error
 else success
-                    http <--] : 201: client
+                    http <--] : 200: client
                     http --> svc : observable
                 deactivate http
 

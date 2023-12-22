@@ -30,10 +30,9 @@ alt bad client parameters
             md --> ui : 422: error
             ui --> usr : informs error
 else success
-            md --> ui : 201: robot
+            md --> ui : 200: client
             ui --> usr : previews edited client data
         deactivate md
-
     deactivate ui
 deactivate usr
 end
