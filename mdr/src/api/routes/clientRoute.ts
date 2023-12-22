@@ -1,9 +1,8 @@
-import config from '../../../config'
-import { Container } from 'typedi'
-import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
+import { Router } from 'express'
+import { Container } from 'typedi'
+import config from '../../../config'
 
-import middlewares from '../middlewares'
 import IClientController from '../../controllers/IControllers/IClientController'
 
 const route = Router()
@@ -22,10 +21,14 @@ export default (app: Router) => {
                 phoneNumber: Joi.string()
                     .regex(/^[0-9]+$/)
                     .required(),
-                vatNumber: Joi.number().integer().required(),
+                vatNumber: Joi.number()
+                    .integer()
+                    .required(),
                 password: Joi.string().required(),
             }),
         }),
         (req, res, next) => ctrl.createClient(req, res, next),
     )
+
+    route.get('/:email', (req, res, next) => ctrl.getClient(req, res, next))
 }

@@ -22,6 +22,7 @@ import { Name } from '../domain/user/name'
 import { PhoneNumber } from '../domain/user/phoneNumber'
 import { VatNumber } from '../domain/user/client/vatNumber'
 import { ClientMap } from '../mappers/ClientMap'
+import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
 
 @Service()
 export default class ClientService implements IClientService {
@@ -59,6 +60,34 @@ export default class ClientService implements IClientService {
             const clientDTO = ClientMap.toDTO(saved)
 
             return right(clientDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async getClient(
+        clientEmail: string,
+    ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>> {
+        try {
+            const email = Email.create(clientEmail).getOrThrow()
+
+            if (!email) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const client = ClientMap.toDTO(await this.repo.find(email))
+            return right({
+                name: client.name,
+                email: client.email,
+                phoneNumber: client.phoneNumber,
+                vatNumber: client.vatNumber,
+            } as IClientWithoutPasswordDTO)
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,

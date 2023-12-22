@@ -1,5 +1,6 @@
 import { Either } from '../../core/logic/Result'
 import { IClientDTO } from '../../dto/IClientDTO'
+import { IClientWithoutPasswordDTO } from '../../dto/IClientWithoutPasswordDTO'
 import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
 
 export enum ClientErrorCode {
@@ -17,4 +18,7 @@ export default interface IClientService {
     createClient(
         clientDTO: IClientDTO,
     ): Promise<Either<ClientErrorResult, ICreatedClientDTO>>
+    getClient(
+        email: string,
+    ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>>
 }

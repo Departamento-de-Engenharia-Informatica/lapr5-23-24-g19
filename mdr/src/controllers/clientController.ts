@@ -33,6 +33,23 @@ export default class ClientController implements IClientController {
         }
     }
 
+    async getClient(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.getClient(req.params.email as string)
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            const message = result.value as IClientDTO
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     private resolveHttpCode(result: ClientErrorCode) {
         let ret: number
         switch (result) {
