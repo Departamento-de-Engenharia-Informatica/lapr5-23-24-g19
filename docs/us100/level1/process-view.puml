@@ -1,0 +1,28 @@
+@startuml
+autonumber
+
+actor "User" as usr
+
+participant "<<system>>\n System RobDroneGo" as sys
+
+activate usr
+    usr -> sys : wants to edit client data
+    activate sys
+alt client not found
+        sys --> usr : informs error
+else client found
+        sys --> usr : requests data
+    deactivate sys
+
+    usr -> sys : provides data
+    activate sys
+alt bad client parameters
+        sys --> usr : informs error
+else success
+        sys --> usr : previews edited client data
+    deactivate sys
+deactivate usr
+end
+end
+
+@enduml

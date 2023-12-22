@@ -1,0 +1,42 @@
+@startuml
+
+autonumber
+
+actor "User" as usr
+
+participant "FE" as ui
+
+participant "MD" as md
+
+activate usr
+usr -> ui : wants to edit client data
+    activate ui
+        ui -> md : GET /clients/?email={email}
+        activate md
+alt client not found
+            md --> ui : 404: error
+            ui --> usr : informs error
+else client found
+            md --> ui : 200 : client
+        deactivate md
+        ui --> usr : requests data
+    deactivate ui
+
+    usr -> ui : provides data
+    activate ui
+        ui -> md : PATCH /clients
+        activate md
+alt bad client parameters
+            md --> ui : 422: error
+            ui --> usr : informs error
+else success
+            md --> ui : 201: robot
+            ui --> usr : previews edited client data
+        deactivate md
+
+    deactivate ui
+deactivate usr
+end
+end
+
+@enduml
