@@ -1,0 +1,49 @@
+@startuml
+autonumber
+
+participant ":JobApiController" as ctrl
+
+participant "dto:StatusJobDto" as dto
+
+participant ":JobService" as svc
+
+participant "jobDto:JobDto" as j_dto
+
+participant ":JobRepository" as repo
+
+
+[-> ctrl : GET /jobs/{:status}
+
+activate ctrl
+
+    ctrl --> dto** : create()
+
+    ctrl -> svc : getJobsByStatus(dto)
+    activate svc
+        svc -> repo : GetByStatus(dto)
+        activate repo
+            repo --> svc : jobs
+        deactivate repo
+
+alt job(s) not found
+        svc --> ctrl : not found error
+        [<-- ctrl : 404 Not Found
+else job(s) found
+
+        loop for each job
+             svc --> j_dto** : create()
+             activate j_dto
+                 svc <-- j_dto : jobDto
+             deactivate j_dto
+        end
+
+        svc --> ctrl : jobDto[]
+    deactivate svc
+
+    [<-- ctrl : 200: jobDto[]
+deactivate ctrl
+
+end
+
+
+@enduml
