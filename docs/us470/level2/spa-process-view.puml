@@ -5,7 +5,7 @@ actor "Task Manager" as usr
 
 participant "SPA" as ui
 
-participant "MD" as md
+participant "MDR" as md
 
 activate usr
     usr -> ui : wants to approve or refuse a task

@@ -57,6 +57,9 @@ import { CreateRobotComponent } from './components/robot/create-robot/create-rob
 import { CreateTaskSurveillanceComponent } from './components/task/create-task-surveillance/create-task-surveillance.component'
 import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component';
 import { TasksFilterComponent } from './components/task/filter/filter.component'
+import {CreateBackofficeUserComponent} from "./components/user/create-backoffice-user/create-backoffice-user.component";
+import {UserService} from "./services/user.Service";
+import {CreateClientComponent} from "./components/user/create-client/create-client.component";
 
 @NgModule({
     declarations: [
@@ -103,6 +106,8 @@ import { TasksFilterComponent } from './components/task/filter/filter.component'
         CreateTaskSurveillanceComponent,
         CreateTaskDeliveryComponent,
         TasksFilterComponent,
+        CreateBackofficeUserComponent,
+        CreateClientComponent,
     ],
     imports: [
         BrowserModule,
@@ -122,6 +127,7 @@ import { TasksFilterComponent } from './components/task/filter/filter.component'
         FloorService,
         RobotTypeRepo,
         RobotRepo,
+        UserService,
     ],
     bootstrap: [AppComponent],
 })

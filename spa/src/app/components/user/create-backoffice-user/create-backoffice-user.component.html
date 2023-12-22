@@ -1,0 +1,58 @@
+<div>
+        <div class="form-popup" id="myForm">
+            <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+                <div class="form-container">
+                    <div class="row">
+                        <div>
+                            <label for="name">Name:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="name"
+                                type="text"
+                                formControlName="name"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label for="email">Email:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="email"
+                                type="text"
+                                formControlName="email"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label for="phoneNumber">PhoneNumber:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="phoneNumber"
+                                type="text"
+                                formControlName="phoneNumber"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label for="password">Password:</label>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                id="password"
+                                type="password"
+                                formControlName="password"
+                            />
+                        </div>
+                    </div>
+
+
+                    <button type="submit" [disabled]="form.invalid">Submit</button>
+                </div>
+            </form>
+        </div>
+</div>
