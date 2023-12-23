@@ -26,6 +26,7 @@ export default class BackofficeUserRepo implements IBackofficeUserRepo {
                 return BackofficeUserMap.toDomain(created)
             } else {
                 doc.name = raw.name
+                doc.role = raw.role
                 doc.phoneNumber = raw.phoneNumber
 
                 doc.password = raw.password

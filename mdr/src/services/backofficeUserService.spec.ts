@@ -15,6 +15,9 @@ import { IBackofficeUserDTO } from '../dto/IBackofficeUserDTO'
 import BackofficeUserService from './backofficeUserService'
 import { BackofficeUserMap } from '../mappers/BackofficeUserMap'
 import { ICreatedBackofficeUserDTO } from '../dto/ICreatedBackofficeUserDTO'
+import config from '../../config'
+import IRoleRepo from './IRepos/IRoleRepo'
+import { Role } from '../domain/role'
 
 describe('BackofficeUser Service: Unit tests', () => {
     const sinon = createSandbox()
@@ -55,12 +58,16 @@ describe('BackofficeUser Service: Unit tests', () => {
 
             const dto: IBackofficeUserDTO = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Campus Manager',
                 name: 'Maria',
                 phoneNumber: '912201029',
                 password: 'Password1$',
             }
 
-            const service = new BackofficeUserService(backofficeUserRepo)
+            const roleRepo = Container.get(config.repos.role.name) as IRoleRepo
+            sinon.stub(roleRepo, 'find').resolves(<Role>{ name: dto.role })
+
+            const service = new BackofficeUserService(backofficeUserRepo, roleRepo)
             const result = await service.createBackofficeUser(dto)
 
             expect(result.isLeft()).to.be.true
@@ -81,12 +88,16 @@ describe('BackofficeUser Service: Unit tests', () => {
 
             const dto: IBackofficeUserDTO = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Campus Manager',
                 name: 'Maria',
                 phoneNumber: '912201029',
                 password: 'Password1$',
             }
 
-            const service = new BackofficeUserService(backofficeUserRepo)
+            const roleRepo = Container.get(config.repos.role.name) as IRoleRepo
+            sinon.stub(roleRepo, 'find').resolves(<Role>{ name: dto.role })
+
+            const service = new BackofficeUserService(backofficeUserRepo, roleRepo)
             const result = await service.createBackofficeUser(dto)
 
             expect(result.isRight()).to.be.true

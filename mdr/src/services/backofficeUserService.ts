@@ -21,11 +21,13 @@ import { ICreatedBackofficeUserDTO } from '../dto/ICreatedBackofficeUserDTO'
 import { IBackofficeUserDTO } from '../dto/IBackofficeUserDTO'
 import BackofficeUser from '../domain/user/backofficeUser/backofficeUser'
 import { BackofficeUserMap } from '../mappers/BackofficeUserMap'
+import IRoleRepo from './IRepos/IRoleRepo'
 
 @Service()
 export default class BackofficeUserService implements IBackofficeUserService {
     constructor(
         @Inject(config.repos.backofficeUser.name) private repo: IBackofficeUserRepo,
+        @Inject(config.repos.role.name) private roleRepo: IRoleRepo
     ) {}
 
     async createBackofficeUser(
@@ -41,6 +43,15 @@ export default class BackofficeUserService implements IBackofficeUserService {
                 })
             }
 
+            const role = await this.roleRepo.find(dto.role)
+
+            if (!role) {
+                return left({
+                    errorCode: BackofficeUserErrorCode.NotFound,
+                    message: `No such role: ${dto.role}`
+                })
+            }
+
             const password = await this.hashPassword(dto.password)
 
             const name = Name.create(dto.name).getOrThrow()
@@ -48,6 +59,7 @@ export default class BackofficeUserService implements IBackofficeUserService {
 
             const backofficeUser = BackofficeUser.create({
                 email,
+                role,
                 name,
                 phoneNumber,
                 password,
@@ -55,7 +67,7 @@ export default class BackofficeUserService implements IBackofficeUserService {
 
             const saved = await this.repo.save(backofficeUser)
             // TODO: TOKEN
-            const backofficeUserDTO = BackofficeUserMap.toDTO(backofficeUser)
+            const backofficeUserDTO = BackofficeUserMap.toDTO(saved)
 
             return right(backofficeUserDTO)
         } catch (e) {

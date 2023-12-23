@@ -1,6 +1,7 @@
 export interface ICreatedBackofficeUserDTO {
-    name: string
     email: string
+    role: string
+    name: string
     phoneNumber: string
     authToken?: string
 }

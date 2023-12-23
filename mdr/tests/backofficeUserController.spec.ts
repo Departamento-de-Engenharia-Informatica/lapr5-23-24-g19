@@ -39,6 +39,7 @@ describe('BackofficeUser controller:', () => {
         it('should work with correct values', async () => {
             const body = {
                 email: Email.create('1181478@isep.ipp.pt').getValue(),
+                role: 'Fleet Manager',
                 name: Name.create('jonas').getValue(),
                 phoneNumber: PhoneNumber.create(123456789).getValue(),
                 password: UserPassword.create({
@@ -58,6 +59,7 @@ describe('BackofficeUser controller:', () => {
 
             sandbox.stub(BackofficeUserMap, 'toDTO').returns({
                 email: req.body.email,
+                role: req.body.role,
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
             })
@@ -99,6 +101,7 @@ describe('BackofficeUser controller:', () => {
         it('should not work with invalid password', async () => {
             const body = {
                 email: Email.create('1181478@isep.ipp.pt').getValue(),
+                role: 'Fleet Manager',
                 name: Name.create('jonas').getValue(),
                 phoneNumber: PhoneNumber.create(123456789).getValue(),
                 password: UserPassword.create({
@@ -118,6 +121,7 @@ describe('BackofficeUser controller:', () => {
 
             sandbox.stub(BackofficeUserMap, 'toDTO').returns({
                 email: req.body.email,
+                role: req.body.role,
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
             })
@@ -159,6 +163,7 @@ describe('BackofficeUser controller:', () => {
         it('should not work with invalid phoneNumber value', async () => {
             const body = {
                 email: Email.create('1181478@isep.ipp.pt').getValue(),
+                role: 'Fleet Manager',
                 name: Name.create('jonas').getValue(),
                 phoneNumber: undefined,
                 password: UserPassword.create({
@@ -178,6 +183,7 @@ describe('BackofficeUser controller:', () => {
 
             sandbox.stub(BackofficeUserMap, 'toDTO').returns({
                 email: req.body.email,
+                role: req.body.role,
                 name: req.body.name,
                 phoneNumber: req.body.phoneNumber,
             })

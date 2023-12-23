@@ -10,6 +10,9 @@ import { ICreatedBackofficeUserDTO } from '../src/dto/ICreatedBackofficeUserDTO'
 import { BackofficeUserMap } from '../src/mappers/BackofficeUserMap'
 import { IBackofficeUserDTO } from '../src/dto/IBackofficeUserDTO'
 import BackofficeUser from '../src/domain/user/backofficeUser/backofficeUser'
+import config from '../config'
+import IRoleRepo from '../src/services/IRepos/IRoleRepo'
+import { Role } from '../src/domain/role'
 
 describe('Backoffice user Service: Integration tests', () => {
     const sinon = createSandbox()
@@ -41,14 +44,19 @@ describe('Backoffice user Service: Integration tests', () => {
             sinon.stub(backofficeUserRepo, 'existsWithEmail').resolves(true)
             sinon.stub(backofficeUserRepo, 'save').rejects()
 
+
             const dto: IBackofficeUserDTO = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Task Manager',
                 name: 'Maria',
                 phoneNumber: '912201029',
                 password: 'Password1$',
             }
 
-            const service = new BackofficeUserService(backofficeUserRepo)
+            const roleRepo = Container.get(config.repos.role.name) as IRoleRepo
+            sinon.stub(roleRepo, 'find').resolves(<Role>{ name: dto.role })
+
+            const service = new BackofficeUserService(backofficeUserRepo, roleRepo)
             const result = await service.createBackofficeUser(dto)
 
             expect(result.isLeft()).to.be.true
@@ -69,12 +77,16 @@ describe('Backoffice user Service: Integration tests', () => {
 
             const dto: IBackofficeUserDTO = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Task Manager',
                 name: 'Maria',
                 phoneNumber: '912201029',
                 password: 'Password1$',
             }
 
-            const service = new BackofficeUserService(backofficeUserRepo)
+            const roleRepo = Container.get(config.repos.role.name) as IRoleRepo
+            sinon.stub(roleRepo, 'find').resolves(<Role>{ name: dto.role })
+
+            const service = new BackofficeUserService(backofficeUserRepo, roleRepo)
             const result = await service.createBackofficeUser(dto)
 
             expect(result.isRight()).to.be.true

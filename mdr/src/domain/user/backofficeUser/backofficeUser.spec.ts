@@ -8,6 +8,7 @@ import { UserPassword } from '../userPassword'
 import { Email } from '../email'
 import { Name } from '../name'
 import BackofficeUser from './backofficeUser'
+import { Role } from '../../role'
 
 describe('BackofficeUser create', () => {
     const sinon = createSandbox()
@@ -23,9 +24,11 @@ describe('BackofficeUser create', () => {
         stubCreate(Name)
         stubCreate(PhoneNumber)
         stubCreate(UserPassword)
+        stubCreate(Role)
 
         const result = BackofficeUser.create({
             email: undefined,
+            role: Role.create({ name: 'Task Manager', active: true }).getValue(),
             name: Name.create('').getValue(),
             phoneNumber: PhoneNumber.create(0).getValue(),
             password: UserPassword.create({ value: '', hashed: false }).getValue(),
@@ -42,6 +45,7 @@ describe('BackofficeUser create', () => {
 
         const result = BackofficeUser.create({
             email: Email.create('').getValue(),
+            role: Role.create({ name: 'Task Manager', active: true }).getValue(),
             name: undefined,
             phoneNumber: PhoneNumber.create(0).getValue(),
             password: UserPassword.create({ value: '', hashed: false }).getValue(),
@@ -58,6 +62,7 @@ describe('BackofficeUser create', () => {
 
         const result = BackofficeUser.create({
             email: Email.create('').getValue(),
+            role: Role.create({ name: 'Task Manager', active: true }).getValue(),
             name: Name.create('').getValue(),
             phoneNumber: undefined,
             password: UserPassword.create({ value: '', hashed: false }).getValue(),
@@ -74,6 +79,7 @@ describe('BackofficeUser create', () => {
 
         const result = BackofficeUser.create({
             email: Email.create('').getValue(),
+            role: Role.create({ name: 'Task Manager', active: true }).getValue(),
             name: Name.create('').getValue(),
             phoneNumber: PhoneNumber.create(0).getValue(),
             password: undefined,

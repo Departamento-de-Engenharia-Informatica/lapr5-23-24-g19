@@ -16,6 +16,12 @@ const BackofficeUser = new Schema({
         required: true,
     },
 
+    role: {
+        type: String,
+        required: true,
+        index: true
+    },
+
     name: {
         type: String,
         required: true,
@@ -31,7 +37,4 @@ const BackofficeUser = new Schema({
     //salt: String,
 })
 
-export default model<IBackofficeUserPersistence & Document>(
-    'BackofficeUser',
-    BackofficeUser,
-)
+export default model<IBackofficeUserPersistence & Document>('BackofficeUser', BackofficeUser)
