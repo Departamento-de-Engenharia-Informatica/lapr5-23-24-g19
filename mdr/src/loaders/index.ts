@@ -1,6 +1,7 @@
 import expressLoader from './express'
 import dependencyInjectorLoader from './dependencyInjector'
 import mongooseLoader from './mongoose'
+import roleLoader from './roleLoader'
 import Logger from './logger'
 
 import config from '../../config'
@@ -21,9 +22,13 @@ export default async ({ expressApp }) => {
         }
     }
 
-    await dependencyInjectorLoader(loaderProps)
+    dependencyInjectorLoader(loaderProps)
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded')
 
-    await expressLoader({ app: expressApp })
+    await roleLoader(config.systemRoles)
+    Logger.info('✌️ Loaded system roles')
+
+    expressLoader({ app: expressApp })
     Logger.info('✌️ Express loaded')
+
 }

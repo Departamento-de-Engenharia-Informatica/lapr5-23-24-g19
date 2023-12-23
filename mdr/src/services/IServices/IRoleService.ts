@@ -1,9 +1,11 @@
 import { Result } from '../../core/logic/Result'
-import IRoleDTO from '../../dto/IRoleDTO'
+import ICreateRoleDTO from '../../dto/ICreateRoleDTO'
+import IUpdateRoleDTO from '../../dto/IUpdateRoleDTO'
 
 export default interface IRoleService {
-    createRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>>
-    updateRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>>
+    createRole(roleDTO: ICreateRoleDTO): Promise<Result<ICreateRoleDTO>>
+    updateRole(roleDTO: IUpdateRoleDTO): Promise<Result<ICreateRoleDTO>>
+    getRoles(): Promise<Result<ICreateRoleDTO[]>>
 
-    getRole(roleId: string): Promise<Result<IRoleDTO>>
+    getRole(roleId: string): Promise<Result<ICreateRoleDTO>>
 }
