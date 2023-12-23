@@ -87,20 +87,20 @@ get_sequence(Request) :-
     http_read_json_dict(Request, Body),
 
     dto_to_sequence(Body.tasks, Tasks),
-    dto_to_robot(Body.robot, Robot),
+    % dto_to_robot(Body.robot, Robot),
     % write(Tasks),
     % write(Robot)
 
-    sequencer(Robot,Tasks, Order),
+    sequencer(Tasks, Order, Robot),
     % perm(Tasks, Order),
     % format(string(S), '~w~n~n~w', [Tasks,Robot]),
     % reply_json(S).
     %
-    sequence_to_dto(Order, DTO),
+    sequence_to_dto(Robot, Order, DTO),
     %
     reply_json_dict(DTO).
 
-    
+
 % get_sequence(Request) :-
 %     http_read_json_dict(Request, Body),
 

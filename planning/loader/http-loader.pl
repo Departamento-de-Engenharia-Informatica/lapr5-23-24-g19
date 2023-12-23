@@ -1,5 +1,6 @@
 :- module('http-loader', [
-    getmap/3
+    getmap/3,
+    getrobotpos/3
 ]).
 
 :- use_module(library(http/http_open)).
@@ -19,11 +20,11 @@
     mdr_url/1
 ]).
 
-:- dynamic loaded/4. % loaded(Building, Floor, Cache, UNIX_time)
+:- dynamic loaded/5. % loaded(Building, Floor, Cache, RobotPos, UNIX_time)
 
 already_loaded(Building, Floor) :-
     get_time(Now),
-    loaded(Building, Floor, _, Time),
+    loaded(Building, Floor, _, _, Time),
 
     ttl(Hold),
     Now - Time =< Hold.
@@ -39,12 +40,17 @@ getmap(Building, Floor, Map) :-
     close(MapJSON),
 
     Map = MapDTO.map,
+    RobotPos = MapDTO.player.initialPosition,
 
-    (retractall(loaded(Building, Floor, _, _)), !; true),
+    (retractall(loaded(Building, Floor, _, _, _)), !; true),
     get_time(Now),
-    assertz(loaded(Building, Floor, Map, Now)).
+    assertz(loaded(Building, Floor, Map, RobotPos, Now)).
 
 % grab cache if already_loaded
-getmap(Building, Floor, Map) :- loaded(Building, Floor, Map, _).
+getmap(Building, Floor, Map) :- loaded(Building, Floor, Map, _, _).
+
+getrobotpos(Building, Floor, (Building, Floor, X, Y)) :-
+    getmap(Building, Floor, _),
+    loaded(Building, Floor, _, [Y,X|_], _).
 
 % vim: ft=prolog

@@ -1,5 +1,3 @@
-% vim: ft=prolog
-
 :- module(task_sequence_dto, [
     sequence_to_dto/2,
     dto_to_sequence/2,
@@ -10,12 +8,19 @@
 :- use_module('util/functional', [ map/3 ]).
 
 
-sequence_to_dto((Cost, Order), DTO) :-
+sequence_to_dto(Robot, (Cost, Order), DTO) :-
     map(task_sequence_dto:task_to_dto, Order, OrderDTO),
+    (B, F, Y, X) = Robot,
 
     DTO = _{
         cost: Cost,
-        order: OrderDTO
+        order: OrderDTO,
+        initialPosition: _{
+            building: B,
+            floor: F,
+            x: X,
+            y: Y
+        }
     }.
 
 
@@ -33,13 +38,13 @@ dto_to_task(DTO, Task) :-
             DTO.end.x,
             DTO.end.y
         ),
-        DTO.type
+        DTO.taskId
     ).
 
 
-task_to_dto((start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), Type), DTO) :-
+task_to_dto((start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), Id), DTO) :-
     DTO = _{
-        type: Type,
+        taskId: Id,
         start: _{
             building: B1,
             floor: F1,
@@ -57,13 +62,15 @@ task_to_dto((start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), Type), DTO) :-
 
 dto_to_sequence(DTOList, Tasks) :- map(task_sequence_dto:dto_to_task, DTOList, Tasks).
 
-dto_to_robot(DTORobot, (pos(B ,F ,X ,Y),Name)) :- 
-     _{
-            name: Name,
-            pos: _{
-                building: B,
-                floor: F,
-                x: X,
-                y: Y
-            }
-        } :< DTORobot.
+dto_to_robot(DTORobot, (pos(B, F, X, Y), Name)) :-
+    _{
+        name: Name,
+        pos: _{
+            building: B,
+            floor: F,
+            x: X,
+            y: Y
+        }
+    } :< DTORobot.
+
+% vim: ft=prolog
