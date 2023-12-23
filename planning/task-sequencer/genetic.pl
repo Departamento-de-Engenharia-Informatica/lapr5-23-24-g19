@@ -1,7 +1,7 @@
-:- module('genetic', [ gera/2 ]).
+:- module('genetic', [ gera/3 ]).
 
 :- use_module('env', [ time_limit/1, num_gen/1, prob_mut/1, prob_cruz/1, dim_pop/1 ]).
-:- use_module('task-sequencer/tasks_cost', [ generate_tasks/1,tasks_cost/3]).
+:- use_module('task-sequencer/tasks_cost', [ generate_tasks/2,tasks_cost/3,robot/1]).
 
 :-dynamic geracoes/1.
 :-dynamic populacao/1.
@@ -34,7 +34,7 @@ update_start_limit :-
     asserta(start_time(CurrentTime)).
 
 
-gera(TasksList,Res) :-
+gera(Robot,TasksList,Res) :-
 	% inicializa as variaveis necessarias
 	inicializa_env,
 	% incializa o nº de tasks
@@ -42,7 +42,7 @@ gera(TasksList,Res) :-
 	(retract(tasks(_)),!;true),
     asserta(tasks(NumT)),
 	% gera os factos tasks_cost(T1,T2,Cost)
-	generate_tasks(TasksList),
+	generate_tasks(Robot,TasksList),
 	% marcar o tempo incial em que o programa irá começar a computar a solução
     update_start_limit,
 	% gera a primeira população
@@ -54,7 +54,7 @@ gera(TasksList,Res) :-
 	% verifca o numero de populacoes necessárias
 	geracoes(NG),
 	% gerar NG geracoes
-	gera_geracao(0,NG,PopOrd,R),
+	gera_geracao(0,NG,PopOrd,R),!,
 	reverse(R,L),
 	[H|_]= L,
 	[Res|_] = H.
@@ -147,7 +147,13 @@ retira(N,[G1|Rest],G,[G1|Rest1]):-
 
 avalia_populacao([],[]).
 avalia_populacao([Ind|Rest],[Ind*V|Rest1]):-
-	avalia(Ind,V),
+	robot(Robot),
+	[H|_]= Ind,
+	tasks_cost(Robot,H,V1),
+	avalia(Ind,V2),
+	[_|T]= Ind,
+	tasks_cost(Robot,T,V3),
+	V is V1 + V2 + V3,
 	avalia_populacao(Rest,Rest1).
 
 

@@ -2,7 +2,8 @@
 
 :- module(task_sequence_dto, [
     sequence_to_dto/2,
-    dto_to_sequence/2
+    dto_to_sequence/2,
+    dto_to_robot/2
 ]).
 
 
@@ -55,3 +56,14 @@ task_to_dto((start(B1, F1, X1, Y1), end(B2, F2, X2, Y2), Type), DTO) :-
 
 
 dto_to_sequence(DTOList, Tasks) :- map(task_sequence_dto:dto_to_task, DTOList, Tasks).
+
+dto_to_robot(DTORobot, (pos(B ,F ,X ,Y),Name)) :- 
+     _{
+            name: Name,
+            pos: _{
+                building: B,
+                floor: F,
+                x: X,
+                y: Y
+            }
+        } :< DTORobot.

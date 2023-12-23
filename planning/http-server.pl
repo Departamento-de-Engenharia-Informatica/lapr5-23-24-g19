@@ -27,10 +27,10 @@
     compute_paths/4
 ]).
 
-:- use_module('task-sequencer/sequencer', [ sequencer/2 ]).
+:- use_module('task-sequencer/sequencer', [ sequencer/3 ]).
 
 :- use_module('dto/path-segment', [ segments_to_dto/2 ]).
-:- use_module('dto/task-sequence', [ sequence_to_dto/2, dto_to_sequence/2 ]).
+:- use_module('dto/task-sequence', [ sequence_to_dto/2, dto_to_sequence/2,dto_to_robot/2 ]).
 
 %%%%%%
 
@@ -87,12 +87,32 @@ get_sequence(Request) :-
     http_read_json_dict(Request, Body),
 
     dto_to_sequence(Body.tasks, Tasks),
+    dto_to_robot(Body.robot, Robot),
+    % write(Tasks),
+    % write(Robot)
 
-    % sequencer(Tasks, Order),
-    perm(Tasks, Order),
-    % format(string(S), '~w', [Tasks]),
+    sequencer(Robot,Tasks, Order),
+    % perm(Tasks, Order),
+    % format(string(S), '~w~n~n~w', [Tasks,Robot]),
     % reply_json(S).
     %
     sequence_to_dto(Order, DTO),
     %
     reply_json_dict(DTO).
+
+    
+% get_sequence(Request) :-
+%     http_read_json_dict(Request, Body),
+
+%     dto_to_sequence(Body.tasks, Tasks),
+%     dto_to_robot(Body.robot, Robot),
+
+%     % sequencer(Robot,Tasks, Order),
+%     % perm(Tasks, Order),
+%     format(string(S), '~w', Robot),
+%     reply_json(S).
+%     %
+%     % sequence_to_dto(Order, DTO),
+%     %
+%     % reply_json_dict(Robot).
+
