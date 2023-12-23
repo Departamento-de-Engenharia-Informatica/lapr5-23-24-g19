@@ -38,7 +38,7 @@ export class CreateClientComponent {
                     )
                     this.form.reset()
                 },
-                error: (error) => alert(JSON.stringify(error)),
+                error: (error) => alert(JSON.stringify(error.error)),
             })
         }
     }

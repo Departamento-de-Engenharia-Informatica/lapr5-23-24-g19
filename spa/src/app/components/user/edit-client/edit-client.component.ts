@@ -26,7 +26,7 @@ export class EditClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.email = 'joao.dias@isep.ipp.pt'
+        this.email = '1210951@isep.ipp.pt'
         this.getClient()
     }
 

@@ -1,9 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable, catchError, throwError } from 'rxjs'
+import { Observable, catchError, from, switchMap, throwError } from 'rxjs'
 import { Config } from '../config'
 import { BuildingDTO } from '../dto/BuildingDTO'
 import { CreateBuildingDTO } from '../dto/CreateBuildingDTO'
+import { AuthService } from '@auth0/auth0-angular'
+import { firstValueFrom } from 'rxjs';
+
 
 // interface BuildingProps{
 //   code:string
@@ -40,28 +43,35 @@ export interface MinMaxDTO {
 
 @Injectable()
 export class BuildingService {
-    constructor(private http: HttpClient) {}
+    constructor( private http: HttpClient) { }
+
+    async getToken(): Promise<string> {
+        // const tokenObservable = this.auth.getAccessTokenSilently();
+        // const token = await firstValueFrom(tokenObservable);
+        return "asda";
+    }
 
     getBuildings(): Observable<BuildingDTO[]> {
         const url = `${Config.baseUrl}/buildings`
-        return this.http
-            .get<BuildingDTO[]>(url, {
+
+        return from(this.getToken()).pipe(
+            switchMap(token => this.http.get<BuildingDTO[]>(url, {
                 observe: 'body',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 responseType: 'json',
+            })),
+            catchError((response: HttpErrorResponse) => {
+                let errorMessage: string
+                if (response.error) {
+                    errorMessage = response.error
+                } else {
+                    errorMessage = `An unexpected error occurred: ${response.message}`
+                }
+                return throwError(() => new Error(errorMessage))
             })
-            .pipe(
-                catchError((response: HttpErrorResponse) => {
-                    let errorMessage: string
-
-                    if (response.error) {
-                        errorMessage = response.error
-                    } else {
-                        errorMessage = `An unexpected error occurred: ${response.message}`
-                    }
-
-                    return throwError(() => new Error(errorMessage))
-                }),
-            )
+        );
     }
 
     getBuildingsByFloors(dto: MinMaxDTO): Observable<BuildingByFloorsDTO[]> {

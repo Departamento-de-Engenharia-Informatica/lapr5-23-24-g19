@@ -8,6 +8,10 @@ body {
 
 /* Add styles to the form container */
 .form-container {
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center items horizontally in the container */
+    justify-content: center; /* Center items vertically in the container */
     border-radius: 5px;
     width: 100%;
     padding: 15px;
@@ -89,14 +93,14 @@ select {
     background-color: var(--primary-color);
     color: white;
 }
-
 .row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
     width: 100%;
-    margin-bottom: 16px;
-    /* Adjust as needed for spacing between the rows */
+    margin-bottom: 16px; /* Adjust as needed for spacing between the rows */
 }
+
 
 .row div {
     width: 48%;

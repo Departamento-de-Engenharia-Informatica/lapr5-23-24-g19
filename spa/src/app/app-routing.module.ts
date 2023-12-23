@@ -41,10 +41,17 @@ import { TasksFilterComponent } from './components/task/filter/filter.component'
 import { ApproveRejectTaskComponent } from './components/task/approve-reject-task/approve-reject-task.component'
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 import { EditClientComponent } from './components/user/edit-client/edit-client.component'
+import { AuthComponent } from './components/auth/auth.component'
+import { CreateBackofficeUserComponent } from './components/user/create-backoffice-user/create-backoffice-user.component'
+import { CreateClientComponent } from './components/user/create-client/create-client.component'
+import { AuthGuard } from '@auth0/auth0-angular'
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'modules', pathMatch: 'full' },
-
+    { path: '', redirectTo: 'modules', pathMatch: 'full'},
+    { path: 'auth', component: AuthComponent, title: 'Auth' },
+    { path: 'backoffice', component: CreateBackofficeUserComponent },
+    { path: 'client', component: CreateClientComponent, title: 'User' },
+    
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
     {

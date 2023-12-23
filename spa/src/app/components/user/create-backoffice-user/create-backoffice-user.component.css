@@ -92,10 +92,10 @@ select {
 
 .row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
     width: 100%;
-    margin-bottom: 16px;
-    /* Adjust as needed for spacing between the rows */
+    margin-bottom: 16px; /* Adjust as needed for spacing between the rows */
 }
 
 .row div {
