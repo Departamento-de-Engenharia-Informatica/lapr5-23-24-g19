@@ -1,4 +1,4 @@
-import {HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { CreatedRoomDTO } from 'src/app/dto/CreatedRoomDTO'
@@ -27,13 +27,14 @@ export class RoomService {
         )
     }
 
-    getRooms(buildingCode: string, floorNumber: string|number): Observable<CreatedRoomDTO[]> {
+    getRooms(
+        buildingCode: string,
+        floorNumber: string | number,
+    ): Observable<CreatedRoomDTO[]> {
         const url = `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`
         return this.http.get<CreatedRoomDTO[]>(url, {
             observe: 'body',
             responseType: 'json',
         })
     }
-
-
 }

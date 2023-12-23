@@ -51,19 +51,26 @@
 
         <div class="floors-with-passage-list">
             <div *ngFor="let floorPassage of floorPassages" class="floors-card mb-8">
-                <h2>Floor {{floorPassage.floor.buildingCode}}{{floorPassage.floor.floorNumber}}</h2>
+                <h2>
+                    Floor {{ floorPassage.floor.buildingCode
+                    }}{{ floorPassage.floor.floorNumber }}
+                </h2>
                 <!-- <p>Building Code: {{ floorPassage.floor.buildingCode }}</p> -->
                 <!-- <p>Floor Number: {{ floorPassage.floor.floorNumber }}</p> -->
                 <p>Description: {{ floorPassage.floor.description }}</p>
 
-                <div *ngFor="let passage of floorPassage.passages" class="floors-passage-card mb-8">
-                    <h2>Passage to {{passage.buildingCode}}{{passage.floorNumber}}</h2>
+                <div
+                    *ngFor="let passage of floorPassage.passages"
+                    class="floors-passage-card mb-8"
+                >
+                    <h2>
+                        Passage to {{ passage.buildingCode }}{{ passage.floorNumber }}
+                    </h2>
                     <!-- <p>Building Code: {{ passage.buildingCode }}</p> -->
                     <!-- <p>Floor Number: {{ passage.floorNumber }}</p> -->
                     <p>Description: {{ passage.description }}</p>
                 </div>
             </div>
         </div>
-
     </div>
 </section>

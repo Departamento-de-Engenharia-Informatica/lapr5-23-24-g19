@@ -79,7 +79,7 @@ button:disabled {
 }
 
 button[type='submit'] {
-    width: 20%; 
+    width: 20%;
     margin: 0 auto;
     margin-top: 25px;
     padding: 10px 20px;

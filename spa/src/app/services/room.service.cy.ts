@@ -4,9 +4,9 @@ import {
     HttpTestingController,
 } from '@angular/common/http/testing'
 import { Config } from '../config'
-import {RoomService} from "./room.service";
-import {RoomDTO} from "../dto/RoomDTO";
-import {CreatedRoomDTO} from "../dto/CreatedRoomDTO";
+import { RoomService } from './room.service'
+import { RoomDTO } from '../dto/RoomDTO'
+import { CreatedRoomDTO } from '../dto/CreatedRoomDTO'
 
 describe('RoomService: Unit Tests', () => {
     let service: RoomService
@@ -34,8 +34,8 @@ describe('RoomService: Unit Tests', () => {
                 name: 'ktm',
                 category: 'GABINETE',
                 description: 'A new room',
-                dimensions : { length: 10, width: 10 },
-                positions: { x: 1, y: 2 }
+                dimensions: { length: 10, width: 10 },
+                positions: { x: 1, y: 2 },
             }
 
             const expectedRoom = {
@@ -44,13 +44,15 @@ describe('RoomService: Unit Tests', () => {
                 name: dto.name,
                 category: dto.category,
                 description: dto.description,
-                dimensions : dto.dimensions,
-                positions: dto.positions
+                dimensions: dto.dimensions,
+                positions: dto.positions,
             }
 
-            service.createRoom(buildingCode, floorNumber,dto).subscribe((createdRoom) => {
-                expect(createdRoom).to.eq(expectedRoom)
-            })
+            service
+                .createRoom(buildingCode, floorNumber, dto)
+                .subscribe((createdRoom) => {
+                    expect(createdRoom).to.eq(expectedRoom)
+                })
 
             const req = httpMock.expectOne(
                 `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/rooms`,
@@ -67,14 +69,14 @@ describe('RoomService: Unit Tests', () => {
                 name: 'ktm',
                 category: 'GABINETE',
                 description: 'A new room',
-                dimensions : { length: 10, width: 10 },
-                positions: { x: 1, y: 2 }
+                dimensions: { length: 10, width: 10 },
+                positions: { x: 1, y: 2 },
             }
 
             const errorMessage = 'Error creating room'
             const expectedError = new ErrorEvent(errorMessage)
 
-            service.createRoom(buildingCode, floorNumber,dto).subscribe({
+            service.createRoom(buildingCode, floorNumber, dto).subscribe({
                 error: (error) => {
                     expect(error.message).to.eq(errorMessage)
                 },
@@ -91,15 +93,14 @@ describe('RoomService: Unit Tests', () => {
 
     describe('getRooms()', () => {
         it('should get rooms successfully', () => {
-
             const buildingCode = 'B001'
             const floorNumber = 1
             const dto: RoomDTO = {
                 name: 'ktm',
                 category: 'GABINETE',
                 description: 'A new room',
-                dimensions : { length: 10, width: 10 },
-                positions: { x: 1, y: 2 }
+                dimensions: { length: 10, width: 10 },
+                positions: { x: 1, y: 2 },
             }
 
             const expectedRooms: CreatedRoomDTO[] = [
@@ -109,12 +110,12 @@ describe('RoomService: Unit Tests', () => {
                     floorNumber: floorNumber,
                     category: dto.category,
                     description: dto.description,
-                    dimensions : dto.dimensions,
-                    positions: dto.positions
+                    dimensions: dto.dimensions,
+                    positions: dto.positions,
                 },
             ]
 
-            service.getRooms(buildingCode,floorNumber).subscribe((rooms) => {
+            service.getRooms(buildingCode, floorNumber).subscribe((rooms) => {
                 expect(rooms).to.eq(expectedRooms)
             })
 
@@ -132,7 +133,7 @@ describe('RoomService: Unit Tests', () => {
             const errorMessage = 'Error getting rooms'
             const expectedError = new ErrorEvent(errorMessage)
 
-            service.getRooms(buildingCode,floorNumber).subscribe({
+            service.getRooms(buildingCode, floorNumber).subscribe({
                 error: (error) => {
                     expect(error.message).to.eq(errorMessage)
                 },
@@ -146,6 +147,4 @@ describe('RoomService: Unit Tests', () => {
             req.error(expectedError)
         })
     })
-
-
 })

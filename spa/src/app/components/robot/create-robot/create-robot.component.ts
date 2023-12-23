@@ -17,10 +17,7 @@ export class CreateRobotComponent implements OnInit {
     robotTypes: CreateRobotTypeDTO[] = []
     robots: RobotDTO[] = []
 
-    constructor(
-        private fb: FormBuilder,
-        private svc: RobotService,
-    ) {
+    constructor(private fb: FormBuilder, private svc: RobotService) {
         this.createRobotForm = this.fb.group({
             code: [null, [Validators.required]],
             nickname: [null, [Validators.required]],

@@ -16,7 +16,7 @@ import { TaskDTO, TaskState, TaskType } from '../dto/TaskDTO'
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     getCriteria() {
         const url = `${Config.baseUrl}/paths/criteria`
@@ -89,11 +89,15 @@ export class TaskService {
 
         // return of({})
 
-        return this.http.patch<TaskDTO>(`${Config.baseUrl}/task/${taskId}`, JSON.stringify(body), {
-            headers: { 'Content-type': 'application/json' },
-            observe: 'body',
-            responseType: 'json',
-        })
+        return this.http.patch<TaskDTO>(
+            `${Config.baseUrl}/task/${taskId}`,
+            JSON.stringify(body),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 
     // TODO: napoles & jonas
@@ -119,12 +123,12 @@ export class TaskService {
                 requesterName: 'Jose Rente',
                 type: TaskType.DELIVERY,
                 state: TaskState.PENDING,
-            }
+            },
         ])
 
         return this.http.get<TaskDTO[]>(`${Config.baseUrl}/task?state=pending`, {
             observe: 'body',
-            responseType: 'json'
+            responseType: 'json',
         })
     }
 

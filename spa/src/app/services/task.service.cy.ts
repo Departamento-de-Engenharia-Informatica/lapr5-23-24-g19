@@ -1,10 +1,13 @@
-import { TestBed } from "@angular/core/testing"
-import { TaskService } from "./task.service"
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing"
-import { assert, expect } from "chai"
-import { UpdateTaskDTO } from "../dto/UpdateTaskDTO"
-import { TaskDTO, TaskState } from "../dto/TaskDTO"
-import { Config } from "../config"
+import { TestBed } from '@angular/core/testing'
+import { TaskService } from './task.service'
+import {
+    HttpClientTestingModule,
+    HttpTestingController,
+} from '@angular/common/http/testing'
+import { assert, expect } from 'chai'
+import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
+import { TaskDTO, TaskState } from '../dto/TaskDTO'
+import { Config } from '../config'
 
 describe('Task Service Unit Testing', () => {
     let service: TaskService
@@ -13,7 +16,7 @@ describe('Task Service Unit Testing', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [TaskService],
-            imports: [HttpClientTestingModule]
+            imports: [HttpClientTestingModule],
         })
 
         service = TestBed.inject(TaskService)
@@ -27,10 +30,10 @@ describe('Task Service Unit Testing', () => {
     })
 
     describe('updateTask()', () => {
-        it('should be able to update a task\'s approval state', () => {
+        it("should be able to update a task's approval state", () => {
             const dto: UpdateTaskDTO = {
                 id: 'ffc15596-4322-4a67-b4f8-880140a23232',
-                taskStatus: 'Approved'
+                taskStatus: 'Approved',
             }
 
             const expected: Partial<TaskDTO> = {
@@ -43,7 +46,7 @@ describe('Task Service Unit Testing', () => {
                     expect(updatedTask.id).to.equal(expected.id)
                     expect(updatedTask.state).to.equal(expected.state)
                 },
-                error: () => assert.fail()
+                error: () => assert.fail(),
             })
 
             const req = httpMock.expectOne(`${Config.baseUrl}/task/${dto.id}`)
@@ -52,10 +55,10 @@ describe('Task Service Unit Testing', () => {
             req.flush(expected)
         })
 
-        it('should error when updating a tak\'s approval state fails', () => {
+        it("should error when updating a tak's approval state fails", () => {
             const dto: UpdateTaskDTO = {
                 id: 'ffc15596-4322-4a67-b4f8-880140a23232',
-                taskStatus: 'BadState'
+                taskStatus: 'BadState',
             }
 
             const errmsg = 'Task not updated'
@@ -64,7 +67,7 @@ describe('Task Service Unit Testing', () => {
                 next: () => assert.fail(),
                 error: (err) => {
                     expect(err.message).to.equal(errmsg)
-                }
+                },
             })
 
             const req = httpMock.expectOne(`${Config.baseUrl}/task/${dto.id}`)
@@ -73,5 +76,4 @@ describe('Task Service Unit Testing', () => {
             req.error(new ErrorEvent(errmsg), { status: 422 })
         })
     })
-
 })

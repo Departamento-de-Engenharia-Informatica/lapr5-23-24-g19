@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
-import {BackofficeUserDTO} from "../../../dto/BackofficeUserDTO";
-import {BackofficeUserService} from "../../../services/backofficeUser.service";
+import { BackofficeUserDTO } from '../../../dto/BackofficeUserDTO'
+import { BackofficeUserService } from '../../../services/backofficeUser.service'
 
 @Component({
     selector: 'app-create-backoffice-user',
@@ -12,11 +12,7 @@ import {BackofficeUserService} from "../../../services/backofficeUser.service";
 export class CreateBackofficeUserComponent {
     form: UntypedFormGroup
 
-
-    constructor(
-        private fb: FormBuilder,
-        private service: BackofficeUserService,
-    ) {
+    constructor(private fb: FormBuilder, private service: BackofficeUserService) {
         this.form = this.fb.group({
             name: [null, Validators.required],
             email: [null, Validators.required],
@@ -36,7 +32,7 @@ export class CreateBackofficeUserComponent {
             this.service.createBackofficeUser(dto).subscribe({
                 next: (backofficeUser) => {
                     alert(
-                        `Created Backoffice User: \nName: ${backofficeUser.name}\nEmail: ${backofficeUser.email}\nPhoneNumber: ${backofficeUser.phoneNumber}`
+                        `Created Backoffice User: \nName: ${backofficeUser.name}\nEmail: ${backofficeUser.email}\nPhoneNumber: ${backofficeUser.phoneNumber}`,
                     )
                     this.form.reset()
                 },

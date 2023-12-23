@@ -3,16 +3,16 @@ import { FormsModule } from '@angular/forms'
 import { of } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import {ListPassagesBetweenBuildingsComponent} from "./list-passages-between-buildings.component";
-import {PassageService} from "../../../services/passage.service";
-import {PassageDTO} from "../../../dto/PassageDTO";
+import { ListPassagesBetweenBuildingsComponent } from './list-passages-between-buildings.component'
+import { PassageService } from '../../../services/passage.service'
+import { PassageDTO } from '../../../dto/PassageDTO'
 
 describe('ListPassagesBetweenBuildingsComponent', () => {
-    let buildingServiceStub: Partial<BuildingService>;
-    let passageServiceStub: Partial<PassageService>;
+    let buildingServiceStub: Partial<BuildingService>
+    let passageServiceStub: Partial<PassageService>
 
-    let component: ListPassagesBetweenBuildingsComponent;
-    let fixture: ComponentFixture<ListPassagesBetweenBuildingsComponent>;
+    let component: ListPassagesBetweenBuildingsComponent
+    let fixture: ComponentFixture<ListPassagesBetweenBuildingsComponent>
 
     const buildings: BuildingDTO[] = [
         {
@@ -45,7 +45,6 @@ describe('ListPassagesBetweenBuildingsComponent', () => {
             },
         }
 
-
         passageServiceStub = {
             getPassagesBetweenBuildings: function () {
                 return of(passages)
@@ -77,12 +76,9 @@ describe('ListPassagesBetweenBuildingsComponent', () => {
     })
 
     it('should load elevators when getPassagesBetweenBuildings is called', () => {
-
-
         component.getPassagesBetweenBuildings()
 
         expect(component.allPassages).to.eq(passages)
         expect(component.passages).to.eq(passages)
     })
 })
-

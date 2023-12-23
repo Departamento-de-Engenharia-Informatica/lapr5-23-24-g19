@@ -3,19 +3,19 @@ import { Observable } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
-import {ElevatorService} from "../../../services/elevator.service";
-import {CreatedElevatorDTO} from "../../../dto/CreatedElevatorDTO";
-import {RoomService} from "../../../services/room.service";
-import {CreateRoomComponent} from "./create-room.component";
-import {CreatedRoomDTO} from "../../../dto/CreatedRoomDTO";
+import { ElevatorService } from '../../../services/elevator.service'
+import { CreatedElevatorDTO } from '../../../dto/CreatedElevatorDTO'
+import { RoomService } from '../../../services/room.service'
+import { CreateRoomComponent } from './create-room.component'
+import { CreatedRoomDTO } from '../../../dto/CreatedRoomDTO'
 
 describe('CreateRoomComponent: Unit Tests', () => {
-    let buildingServiceStub: Partial<BuildingService>;
-    let floorServiceStub: Partial<FloorService>;
-    let roomServiceStub: Partial<RoomService>;
+    let buildingServiceStub: Partial<BuildingService>
+    let floorServiceStub: Partial<FloorService>
+    let roomServiceStub: Partial<RoomService>
 
-    let component: CreateRoomComponent;
-    let fixture: ComponentFixture<CreateRoomComponent>;
+    let component: CreateRoomComponent
+    let fixture: ComponentFixture<CreateRoomComponent>
 
     const buildings: BuildingDTO[] = [
         {
@@ -119,9 +119,6 @@ describe('CreateRoomComponent: Unit Tests', () => {
 
         component.onSubmit()
 
-        expect(alertSpy).calledWith(
-            `Room created successfully!\n`,
-        )
-
+        expect(alertSpy).calledWith(`Room created successfully!\n`)
     })
 })

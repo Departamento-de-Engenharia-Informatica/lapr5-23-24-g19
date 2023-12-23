@@ -22,7 +22,6 @@ export class EditBuildingComponent {
         private service: BuildingService,
         private route: ActivatedRoute,
     ) {
-
         this.buildingCode = this.route.snapshot.params['buildingCode']
         this.buildingForm = this.fb.group({
             buildingCode: [null, Validators.required],
@@ -114,15 +113,17 @@ export class EditBuildingComponent {
             },
         } as BuildingDTO
 
-        this.service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
-            this.buildings = buildingsList
-            if (this.buildings.length == 0) {
-                alert("No buildings Found")
-            }
-        },
+        this.service.getBuildings().subscribe(
+            (buildingsList: BuildingDTO[]) => {
+                this.buildings = buildingsList
+                if (this.buildings.length == 0) {
+                    alert('No buildings Found')
+                }
+            },
             (error) => {
                 alert(error)
-            })
+            },
+        )
     }
 
     onBuildingSelected(event: any): void {

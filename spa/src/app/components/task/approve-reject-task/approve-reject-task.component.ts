@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
-import { TaskDTO, TaskState } from 'src/app/dto/TaskDTO';
-import { UpdateTaskDTO } from 'src/app/dto/UpdateTaskDTO';
-import { TaskService } from 'src/app/services/task.service';
+import { Component } from '@angular/core'
+import { TaskDTO, TaskState } from 'src/app/dto/TaskDTO'
+import { UpdateTaskDTO } from 'src/app/dto/UpdateTaskDTO'
+import { TaskService } from 'src/app/services/task.service'
 
 @Component({
     selector: 'app-approve-reject-task',
     templateUrl: './approve-reject-task.component.html',
-    styleUrls: ['./approve-reject-task.component.css']
+    styleUrls: ['./approve-reject-task.component.css'],
 })
 export class ApproveRejectTaskComponent {
-
     tasks: TaskDTO[]
 
     constructor(private service: TaskService) {
@@ -28,7 +27,7 @@ export class ApproveRejectTaskComponent {
             error: (err) => {
                 console.error(err)
                 this.tasks = []
-            }
+            },
         })
     }
 
@@ -52,12 +51,12 @@ export class ApproveRejectTaskComponent {
                 // TODO: display message
                 alert('Updated task!')
 
-                this.tasks = this.tasks.filter(t => t.id !== dto.id)
+                this.tasks = this.tasks.filter((t) => t.id !== dto.id)
             },
             error: (err) => {
                 console.error(JSON.stringify(err))
                 alert('An error has occured!')
-            }
+            },
         })
     }
 }

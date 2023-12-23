@@ -1,4 +1,9 @@
-<form id="passageForm" [formGroup]="passageForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
+<form
+    id="passageForm"
+    [formGroup]="passageForm"
+    (ngSubmit)="submitForm()"
+    enctype="multipart/form-data"
+>
     <div class="introduce">
         <div class="row">
             <div>
@@ -58,5 +63,7 @@
             </div>
         </div>
     </div>
-    <button id="submitPassage" type="submit" [disabled]="this.passageForm.invalid">Submit</button>
+    <button id="submitPassage" type="submit" [disabled]="this.passageForm.invalid">
+        Submit
+    </button>
 </form>

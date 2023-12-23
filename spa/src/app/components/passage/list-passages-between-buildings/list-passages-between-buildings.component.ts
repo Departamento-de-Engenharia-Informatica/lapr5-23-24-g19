@@ -38,12 +38,13 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
         this.passages = []
         this.passageService
             .getPassagesBetweenBuildings(this.selectedBuilding1, this.selectedBuilding2)
-            .subscribe((list: PassageDTO[]) => {
-                this.allPassages = list
-                this.passages = this.allPassages
-            },
+            .subscribe(
+                (list: PassageDTO[]) => {
+                    this.allPassages = list
+                    this.passages = this.allPassages
+                },
                 (error) => {
-                alert(error.error)
+                    alert(error.error)
                     this.allPassages = []
                     this.passages = this.allPassages
                 },
@@ -57,7 +58,8 @@ export class ListPassagesBetweenBuildingsComponent implements OnInit {
         } else {
             this.passages = this.allPassages.filter(
                 (b) =>
-                    b.floor1.floorNumber.toString().includes(prop) ||  b.floor2.floorNumber.toString().includes(prop),
+                    b.floor1.floorNumber.toString().includes(prop) ||
+                    b.floor2.floorNumber.toString().includes(prop),
             )
         }
     }

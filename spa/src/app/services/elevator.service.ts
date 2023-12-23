@@ -12,7 +12,10 @@ import { CreateElevatorDTO } from '../dto/CreateElevatorDTO'
 export class ElevatorService {
     constructor(private http: HttpClient) {}
 
-    createElevator(buildingId: string, dto: CreateElevatorDTO): Observable<CreatedElevatorDTO> {
+    createElevator(
+        buildingId: string,
+        dto: CreateElevatorDTO,
+    ): Observable<CreatedElevatorDTO> {
         return this.http.post<CreatedElevatorDTO>(
             `${Config.baseUrl}/buildings/${buildingId}/elevators`,
             JSON.stringify(dto),
@@ -36,9 +39,9 @@ export class ElevatorService {
         const dtoElevator = {
             floors: dto.floors,
             brand: dto.brand ?? undefined,
-            model: dto.model  ?? undefined,
-            serialNumber: dto.serialNumber  ?? undefined,
-            description: dto.description  ?? undefined,
+            model: dto.model ?? undefined,
+            serialNumber: dto.serialNumber ?? undefined,
+            description: dto.description ?? undefined,
         } as ElevatorDTO
 
         return this.http.patch<ElevatorDTO>(
@@ -56,10 +59,9 @@ export class ElevatorService {
         const dtoElevator = {
             floors: dto.floors,
             brand: dto.brand ?? undefined,
-            model: dto.model  ?? undefined,
-            serialNumber: dto.serialNumber  ?? undefined,
-            description: dto.description  ?? undefined,
-
+            model: dto.model ?? undefined,
+            serialNumber: dto.serialNumber ?? undefined,
+            description: dto.description ?? undefined,
         } as ElevatorDTO
 
         return this.http.put<ElevatorDTO>(

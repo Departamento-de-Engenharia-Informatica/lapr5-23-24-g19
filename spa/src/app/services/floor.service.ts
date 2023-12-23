@@ -146,4 +146,3 @@ export class FloorService {
 }
 
 export { FloorPassageDTO }
-

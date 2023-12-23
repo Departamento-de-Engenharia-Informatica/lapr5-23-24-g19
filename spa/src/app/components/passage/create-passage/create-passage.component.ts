@@ -52,10 +52,11 @@ export class CreatePassageComponent {
                 floorNumber: this.passageForm.value.floor2,
             },
         } as PassageDTO
-        this.passageService.postPassage(dto).subscribe((response: PassageDTO) => {
-            alert("Passage created successfully")
-            this.passageForm.reset()
-        },
+        this.passageService.postPassage(dto).subscribe(
+            (response: PassageDTO) => {
+                alert('Passage created successfully')
+                this.passageForm.reset()
+            },
             (error: string) => {
                 alert(error)
             },
@@ -63,23 +64,25 @@ export class CreatePassageComponent {
     }
 
     onBuilding1Selected(event: any) {
-        this.floorService
-            .getFloors(event.target.value as string).subscribe((list: FloorAndBuildingDTO[]) => {
+        this.floorService.getFloors(event.target.value as string).subscribe(
+            (list: FloorAndBuildingDTO[]) => {
                 this.floors1 = list
             },
-                (error) => {
-                    alert(error.message)
-                },)
+            (error) => {
+                alert(error.message)
+            },
+        )
     }
 
     onBuilding2Selected(event: any) {
-        this.floorService
-            .getFloors(event.target.value as string).subscribe((list: FloorAndBuildingDTO[]) => {
+        this.floorService.getFloors(event.target.value as string).subscribe(
+            (list: FloorAndBuildingDTO[]) => {
                 this.floors2 = list
             },
-                (error) => {
-                    alert(error.message)
-                },)
+            (error) => {
+                alert(error.message)
+            },
+        )
     }
 
     ngOnInit(): void {
@@ -97,7 +100,6 @@ export class CreatePassageComponent {
         return !!control && control.invalid && (control.dirty || control.touched)
     }
 
-
     isEmpty(obj: any): boolean {
         return obj != null && obj != undefined && obj.length == 0
     }
@@ -107,5 +109,4 @@ export class CreatePassageComponent {
     noFloors2(): boolean {
         return this.isEmpty(this.floors2)
     }
-
 }

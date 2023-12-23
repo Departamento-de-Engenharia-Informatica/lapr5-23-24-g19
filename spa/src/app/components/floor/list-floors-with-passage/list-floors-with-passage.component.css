@@ -4,7 +4,6 @@
     flex-wrap: wrap;
 }
 
-
 .floors-card {
     border: 1px solid var(--third-color);
     border-radius: 8px;
@@ -85,4 +84,3 @@ select {
     background-color: var(--primary-color);
     color: white;
 }
-

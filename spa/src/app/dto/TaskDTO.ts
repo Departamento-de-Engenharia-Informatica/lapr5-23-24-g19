@@ -24,7 +24,6 @@ export enum TaskType {
     SURVEILLANCE = 'Surveillance',
 }
 
-
 export interface TaskDTO {
     // NOTE: add fields as needed
 

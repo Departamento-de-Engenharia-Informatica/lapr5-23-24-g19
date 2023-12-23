@@ -80,7 +80,9 @@ export class TraceRouteComponent {
         this.taskService.findRoute(dto).subscribe({
             next: (paths) => {
                 alert('Path(s) computed, agora implementai a UI bonita')
-                alert('Isto as vezes demora a computar, por isso uma msg/simbolo de loading n e mal pensado')
+                alert(
+                    'Isto as vezes demora a computar, por isso uma msg/simbolo de loading n e mal pensado',
+                )
                 console.log(paths)
             },
             error: (error) => alert(JSON.stringify(error)),

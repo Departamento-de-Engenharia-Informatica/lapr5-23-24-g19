@@ -68,9 +68,7 @@ export class EditElevatorComponent implements OnInit {
 
     onElevatorSelect(event: Event): void {
         const elevatorId = parseInt((event.target as HTMLSelectElement).value)
-        this.selectedElevator = this.elevators.find(
-            (e) => e.identifier == elevatorId,
-        )!
+        this.selectedElevator = this.elevators.find((e) => e.identifier == elevatorId)!
         this.selectedFloors = this.selectedElevator.floors
     }
 
@@ -86,13 +84,12 @@ export class EditElevatorComponent implements OnInit {
                     this.selectedElevator = undefined
                     this.selectedFloors = []
                 },
-                error: (error) => alert(JSON.stringify(error))
+                error: (error) => alert(JSON.stringify(error)),
             })
         } else {
             console.error('Attempted to submit invalid form')
         }
     }
-
 
     private getFloors(buildingCode: string) {
         this.floorService.getFloors(buildingCode).subscribe({
@@ -145,5 +142,4 @@ export class EditElevatorComponent implements OnInit {
             return this.elevatorService.patchElevator(dto)
         }
     }
-
 }

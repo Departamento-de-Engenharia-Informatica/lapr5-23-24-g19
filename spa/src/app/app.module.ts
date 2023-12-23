@@ -55,14 +55,14 @@ import { InhibitRobotComponent } from './components/robot/inhibit-robot/inhibit-
 import { RobotRepo } from './repos/RobotRepo'
 import { CreateRobotComponent } from './components/robot/create-robot/create-robot.component'
 import { CreateTaskSurveillanceComponent } from './components/task/create-task-surveillance/create-task-surveillance.component'
-import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component';
+import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component'
 import { TasksFilterComponent } from './components/task/filter/filter.component'
-import {CreateBackofficeUserComponent} from "./components/user/create-backoffice-user/create-backoffice-user.component";
-import {CreateClientComponent} from "./components/user/create-client/create-client.component";
-import {BackofficeUserService} from "./services/backofficeUser.service";
-import {ClientService} from "./services/client.service";
-import { ApproveRejectTaskComponent } from './components/task/approve-reject-task/approve-reject-task.component';
-import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { CreateBackofficeUserComponent } from './components/user/create-backoffice-user/create-backoffice-user.component'
+import { CreateClientComponent } from './components/user/create-client/create-client.component'
+import { BackofficeUserService } from './services/backofficeUser.service'
+import { ClientService } from './services/client.service'
+import { ApproveRejectTaskComponent } from './components/task/approve-reject-task/approve-reject-task.component'
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 
 @NgModule({
     declarations: [

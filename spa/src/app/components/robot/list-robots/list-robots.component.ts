@@ -17,10 +17,11 @@ export class ListRobotsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.robotService.getRobots().subscribe((list: RobotDTO[]) => {
-            this.allRobots = list
-            this.robots = this.allRobots
-        },
+        this.robotService.getRobots().subscribe(
+            (list: RobotDTO[]) => {
+                this.allRobots = list
+                this.robots = this.allRobots
+            },
             (error) => {
                 alert(error.error)
                 this.allRobots = []

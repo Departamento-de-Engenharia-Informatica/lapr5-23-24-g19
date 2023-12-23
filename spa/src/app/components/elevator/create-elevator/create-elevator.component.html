@@ -58,18 +58,11 @@
             <label for="description">Description:</label>
             <textarea id="description" formControlName="description"></textarea>
         </div>
-
-
     </div>
 
-        <button
-            id="submitElevator"
-            type="submit"
-            [disabled]="createElevatorForm.invalid"
-        >
-            Submit
-        </button>
-
+    <button id="submitElevator" type="submit" [disabled]="createElevatorForm.invalid">
+        Submit
+    </button>
 </form>
 
 <div class="elevator-list">

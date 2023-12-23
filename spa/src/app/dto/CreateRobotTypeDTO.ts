@@ -1,10 +1,10 @@
-export interface CreateRobotTypeDTO{
-    code: string,
-    brand: string,
-    model: string,
+export interface CreateRobotTypeDTO {
+    code: string
+    brand: string
+    model: string
     taskTypes: string[]
 }
 
-export interface TaskTypeDTO{
+export interface TaskTypeDTO {
     description: string
 }

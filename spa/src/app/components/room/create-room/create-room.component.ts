@@ -60,15 +60,15 @@ export class CreateRoomComponent implements OnInit {
 
     listFloors(): void {
         if (this.selectedBuilding.length !== 0) {
-            this.floorService
-                .getFloors(this.selectedBuilding)
-                .subscribe((list: FloorAndBuildingDTO[]) => {
+            this.floorService.getFloors(this.selectedBuilding).subscribe(
+                (list: FloorAndBuildingDTO[]) => {
                     this.floors = list
-                },(error) => {
+                },
+                (error) => {
                     alert(error.error)
                     this.floors = []
                 },
-                )
+            )
         }
     }
 
@@ -90,20 +90,18 @@ export class CreateRoomComponent implements OnInit {
         const buildingCode = this.createRoomForm.value.buildingCode
         const floorNumber = this.createRoomForm.value.floorNumber
 
-        this.roomService
-            .createRoom(buildingCode, floorNumber, dto)
-            .subscribe((room: CreatedRoomDTO) => {
-
+        this.roomService.createRoom(buildingCode, floorNumber, dto).subscribe(
+            (room: CreatedRoomDTO) => {
                 let alertMessage = 'Room created successfully!\n'
                 alert(alertMessage)
 
                 this.createdRoom = room
-                this.createRoomForm.reset();
+                this.createRoomForm.reset()
             },
-                (error) => {
-                    alert(error.error)
-                    this.createRoomForm.reset()
-                },
-            )
+            (error) => {
+                alert(error.error)
+                this.createRoomForm.reset()
+            },
+        )
     }
 }

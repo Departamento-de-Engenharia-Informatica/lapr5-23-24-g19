@@ -1,9 +1,9 @@
-import {HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Config } from '../config'
-import {BackofficeUserDTO} from "../dto/BackofficeUserDTO";
-import {CreatedBackofficeUserDTO} from "../dto/CreatedBackofficeUserDTO";
+import { BackofficeUserDTO } from '../dto/BackofficeUserDTO'
+import { CreatedBackofficeUserDTO } from '../dto/CreatedBackofficeUserDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +22,4 @@ export class BackofficeUserService {
             },
         )
     }
-
-
 }

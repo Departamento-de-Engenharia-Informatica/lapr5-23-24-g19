@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
-
-import {ClientDTO} from "../../../dto/ClientDTO";
-import {ClientService} from "../../../services/client.service";
+import { ClientDTO } from '../../../dto/ClientDTO'
+import { ClientService } from '../../../services/client.service'
 
 @Component({
     selector: 'app-create-client',
@@ -13,11 +12,7 @@ import {ClientService} from "../../../services/client.service";
 export class CreateClientComponent {
     form: UntypedFormGroup
 
-
-    constructor(
-        private fb: FormBuilder,
-        private service: ClientService,
-    ) {
+    constructor(private fb: FormBuilder, private service: ClientService) {
         this.form = this.fb.group({
             name: [null, Validators.required],
             email: [null, Validators.required],
@@ -39,7 +34,7 @@ export class CreateClientComponent {
             this.service.createClient(dto).subscribe({
                 next: (client) => {
                     alert(
-                        `Created Client: \nName: ${client.name}\nEmail: ${client.email}\nPhoneNumber: ${client.phoneNumber}\nVatNumber: ${client.vatNumber}`
+                        `Created Client: \nName: ${client.name}\nEmail: ${client.email}\nPhoneNumber: ${client.phoneNumber}\nVatNumber: ${client.vatNumber}`,
                     )
                     this.form.reset()
                 },

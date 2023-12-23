@@ -98,13 +98,14 @@ export class UpdateMapComponent {
                 this.updateMapForm.value.buildingCode,
                 this.updateMapForm.value.floorNumber,
             )
-            .subscribe((map: UpdateMapDTO) => {
-                alert("Map updated successfully")
-            }
-                ,
+            .subscribe(
+                (map: UpdateMapDTO) => {
+                    alert('Map updated successfully')
+                },
                 (error) => {
                     alert(JSON.stringify(error))
-                },)
+                },
+            )
     }
 
     checkValid() {

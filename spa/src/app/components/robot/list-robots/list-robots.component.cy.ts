@@ -1,26 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { of } from 'rxjs'
-import {ListRobotsComponent} from "./list-robots.component";
-import {RobotDTO} from "../../../dto/RobotDTO";
-import {RobotService} from "../../../services/robot.service";
+import { ListRobotsComponent } from './list-robots.component'
+import { RobotDTO } from '../../../dto/RobotDTO'
+import { RobotService } from '../../../services/robot.service'
 
 describe('ListFloorsComponent', () => {
-    let robotServiceStub: Partial<RobotService>;
+    let robotServiceStub: Partial<RobotService>
 
-    let component: ListRobotsComponent;
-    let fixture: ComponentFixture<ListRobotsComponent>;
+    let component: ListRobotsComponent
+    let fixture: ComponentFixture<ListRobotsComponent>
 
-    const robots: RobotDTO[] = [{
-        code: 'R1',
-        nickname: 'Robot1',
-        typeCode: 'T1',
-        serialNumber: 'SN1',
-        description: 'Robot 1 Description',
-        state:0,
-    }]
-
-
+    const robots: RobotDTO[] = [
+        {
+            code: 'R1',
+            nickname: 'Robot1',
+            typeCode: 'T1',
+            serialNumber: 'SN1',
+            description: 'Robot 1 Description',
+            state: 0,
+        },
+    ]
 
     beforeEach(() => {
         robotServiceStub = {
@@ -32,9 +32,7 @@ describe('ListFloorsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ListRobotsComponent],
             imports: [FormsModule],
-            providers: [
-                { provide: RobotService, useValue: robotServiceStub },
-            ],
+            providers: [{ provide: RobotService, useValue: robotServiceStub }],
         })
 
         fixture = TestBed.createComponent(ListRobotsComponent)
@@ -51,6 +49,4 @@ describe('ListFloorsComponent', () => {
 
         expect(component.robots).to.eq(robots)
     })
-
 })
-

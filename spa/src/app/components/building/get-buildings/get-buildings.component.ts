@@ -14,25 +14,25 @@ export class GetBuildingsComponent {
 
     searchFilter?: string
 
-    constructor(
-        private service: BuildingService,
-    ) { }
+    constructor(private service: BuildingService) {}
 
     ngOnInit() {
         this.listBuildings()
     }
 
     listBuildings() {
-        this.service.getBuildings().subscribe((buildingsList: BuildingDTO[]) => {
-            this.allBuildings = buildingsList
-            this.buildings = this.allBuildings
-            if (this.buildings.length == 0) {
-                alert("No buildings Found")
-            }
-        },
+        this.service.getBuildings().subscribe(
+            (buildingsList: BuildingDTO[]) => {
+                this.allBuildings = buildingsList
+                this.buildings = this.allBuildings
+                if (this.buildings.length == 0) {
+                    alert('No buildings Found')
+                }
+            },
             (error) => {
                 alert(error)
-            },)
+            },
+        )
     }
     filter(event: Event) {
         const prop = (event.target as HTMLInputElement).value.trim().toLowerCase()

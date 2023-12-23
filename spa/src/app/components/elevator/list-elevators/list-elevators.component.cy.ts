@@ -3,16 +3,16 @@ import { FormsModule } from '@angular/forms'
 import { of } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
-import {ElevatorService} from "../../../services/elevator.service";
-import {CreatedElevatorDTO} from "../../../dto/CreatedElevatorDTO";
-import {ListElevatorsComponent} from "./list-elevators.component";
+import { ElevatorService } from '../../../services/elevator.service'
+import { CreatedElevatorDTO } from '../../../dto/CreatedElevatorDTO'
+import { ListElevatorsComponent } from './list-elevators.component'
 
 describe('ListElevatorsComponent', () => {
-    let buildingServiceStub: Partial<BuildingService>;
-    let elevatorServiceStub: Partial<ElevatorService>;
+    let buildingServiceStub: Partial<BuildingService>
+    let elevatorServiceStub: Partial<ElevatorService>
 
-    let component: ListElevatorsComponent;
-    let fixture: ComponentFixture<ListElevatorsComponent>;
+    let component: ListElevatorsComponent
+    let fixture: ComponentFixture<ListElevatorsComponent>
 
     const buildings: BuildingDTO[] = [
         {
@@ -25,15 +25,17 @@ describe('ListElevatorsComponent', () => {
         },
     ]
 
-    const elevators: CreatedElevatorDTO[] = [{
-        buildingId: 'P',
-        identifier: 1,
-        floors: [1],
-        brand: 'a',
-        model: 'a',
-        serialNumber: 'a',
-        description: 'a',
-    }]
+    const elevators: CreatedElevatorDTO[] = [
+        {
+            buildingId: 'P',
+            identifier: 1,
+            floors: [1],
+            brand: 'a',
+            model: 'a',
+            serialNumber: 'a',
+            description: 'a',
+        },
+    ]
 
     beforeEach(() => {
         buildingServiceStub = {
@@ -41,7 +43,6 @@ describe('ListElevatorsComponent', () => {
                 return of(buildings)
             },
         }
-
 
         elevatorServiceStub = {
             getElevators: function () {
@@ -74,8 +75,6 @@ describe('ListElevatorsComponent', () => {
     })
 
     it('should load elevators when getElevators is called', () => {
-
-
         component.getElevators()
 
         expect(component.allElevators).to.eq(elevators)

@@ -2,7 +2,9 @@ export type PathDTO = PathSegmentDTO[]
 
 export type PathSegmentDTO = CellSegmentDTO | ElevatorSegmentDTO | PassageSegmentDTO
 
-interface Segment { type: 'cell' | 'elevator' | 'passage' }
+interface Segment {
+    type: 'cell' | 'elevator' | 'passage'
+}
 
 export type CellSegmentDTO = Segment & {
     building: string

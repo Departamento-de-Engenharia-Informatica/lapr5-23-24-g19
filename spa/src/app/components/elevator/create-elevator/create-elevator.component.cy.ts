@@ -3,17 +3,17 @@ import { Observable } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { BuildingService } from 'src/app/services/building.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
-import {ElevatorService} from "../../../services/elevator.service";
-import {CreateElevatorComponent} from "./create-elevator.component";
-import {CreatedElevatorDTO} from "../../../dto/CreatedElevatorDTO";
+import { ElevatorService } from '../../../services/elevator.service'
+import { CreateElevatorComponent } from './create-elevator.component'
+import { CreatedElevatorDTO } from '../../../dto/CreatedElevatorDTO'
 
 describe('CreateElevatorComponent: Unit Tests', () => {
-    let buildingServiceStub: Partial<BuildingService>;
-    let floorServiceStub: Partial<FloorService>;
-    let elevatorServiceStub: Partial<ElevatorService>;
+    let buildingServiceStub: Partial<BuildingService>
+    let floorServiceStub: Partial<FloorService>
+    let elevatorServiceStub: Partial<ElevatorService>
 
-    let component: CreateElevatorComponent;
-    let fixture: ComponentFixture<CreateElevatorComponent>;
+    let component: CreateElevatorComponent
+    let fixture: ComponentFixture<CreateElevatorComponent>
 
     const buildings: BuildingDTO[] = [
         {
@@ -114,9 +114,6 @@ describe('CreateElevatorComponent: Unit Tests', () => {
 
         component.onSubmit()
 
-        expect(alertSpy).calledWith(
-            `Elevator created successfully!\n`,
-        )
-
+        expect(alertSpy).calledWith(`Elevator created successfully!\n`)
     })
 })
