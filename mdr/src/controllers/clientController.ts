@@ -54,8 +54,10 @@ export default class ClientController implements IClientController {
 
     async patchClient(req: Request, res: Response, next: NextFunction) {
         try {
+            console.log('oi')
             const dto = req.body as IClientWithoutPasswordDTO
             dto.email = req.params.email as string
+            console.log(dto)
 
             const result = await this.service.patchClient(dto)
             if (result.isLeft()) {

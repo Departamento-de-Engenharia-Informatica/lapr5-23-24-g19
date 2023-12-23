@@ -40,6 +40,7 @@ import { CreateTaskDeliveryComponent } from './components/task/create-task-deliv
 import { TasksFilterComponent } from './components/task/filter/filter.component'
 import { ApproveRejectTaskComponent } from './components/task/approve-reject-task/approve-reject-task.component'
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
+import { EditClientComponent } from './components/user/edit-client/edit-client.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -253,6 +254,11 @@ export const routes: Routes = [
         path: 'privacy-policy',
         component: PrivacyPolicyComponent,
         title: 'Privacy Policy',
+    },
+    {
+        path: 'edit-client',
+        component: EditClientComponent,
+        title: 'Edit Client',
     },
 
     { path: '**', component: PageNotFoundComponent },

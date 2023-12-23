@@ -1,1 +1,42 @@
-<p>edit-client works!</p>
+<h2 class="page-title">Edit Client Information</h2>
+<form
+    *ngIf="emailExists()"
+    [formGroup]="editClientForm"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data"
+>
+    <label>Logged in as: {{ email }}</label>
+    <div>
+        <label for="name">Name:</label>
+        <input
+            type="text"
+            id="name"
+            formControlName="name"
+            placeholder="{{ client.name }}"
+        />
+
+        <div>
+            <label for="phoneNumber">Phone number:</label>
+            <input
+                id="phoneNumber"
+                formControlName="phoneNumber"
+                pattern="[0-9]{9}"
+                placeholder="{{ client.phoneNumber }}"
+            />
+        </div>
+
+        <label for="vatNumber">VAT number:</label>
+        <textarea
+            id="vatNumber"
+            formControlName="vatNumber"
+            pattern="[0-9]{9}"
+            placeholder="{{ client.vatNumber }}"
+        ></textarea>
+
+        <button type="submit" [disabled]="editClientForm.invalid">Submit</button>
+    </div>
+</form>
+
+<div *ngIf="!emailExists()">
+    <h2 class="page-title">Client Not Found</h2>
+</div>

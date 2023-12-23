@@ -5,6 +5,7 @@ import { Config } from '../config'
 import { ClientDTO } from '../dto/ClientDTO'
 import { CreatedClientDTO } from '../dto/CreatedClientDTO'
 import { IClientWithoutPasswordDTO } from '../../../../mdr/src/dto/IClientWithoutPasswordDTO'
+import { IEditClientDTO } from '../dto/IEditClientDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -29,9 +30,15 @@ export class ClientService {
     }
 
     patchClient(dto: IClientWithoutPasswordDTO): Observable<IClientWithoutPasswordDTO> {
+        const editClientDTO: IEditClientDTO = {
+            name: dto.name,
+            phoneNumber: dto.phoneNumber,
+            vatNumber: dto.vatNumber,
+        }
+
         return this.http.patch<IClientWithoutPasswordDTO>(
-            `${Config.baseUrl}/clients`,
-            JSON.stringify(dto),
+            `${Config.baseUrl}/clients/${dto.email}`,
+            JSON.stringify(editClientDTO),
             {
                 headers: { 'Content-type': 'application/json' },
                 observe: 'body',

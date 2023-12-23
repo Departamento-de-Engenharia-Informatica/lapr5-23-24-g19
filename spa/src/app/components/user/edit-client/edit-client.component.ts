@@ -19,34 +19,67 @@ export class EditClientComponent implements OnInit {
         private clientService: ClientService,
     ) {
         this.editClientForm = this.formBuilder.group({
-            name: [null, [Validators.required]],
-            phoneNumber: [null, [Validators.required]],
-            vatNumber: [null, [Validators.required]],
+            name: [null],
+            phoneNumber: [null],
+            vatNumber: [null],
         })
     }
 
     ngOnInit(): void {
-        // initialize email
+        this.email = 'joao.dias@isep.ipp.pt'
+        this.getClient()
     }
 
     getClient(): void {
-        this.clientService
-            .getClient(this.email)
-            .subscribe((c: IClientWithoutPasswordDTO) => {
+        this.clientService.getClient(this.email).subscribe(
+            (c: IClientWithoutPasswordDTO) => {
                 this.client = c
-            })
+            },
+            (error) => {
+                alert('User not found!')
+
+                this.email = ''
+                this.editClientForm.reset()
+            },
+        )
     }
 
-    patchClient(): void {
+    emailExists(): boolean {
+        return this.email.length !== 0
+    }
+
+    onSubmit(): void {
         const dto: IClientWithoutPasswordDTO = {
             email: this.email,
-            name: this.editClientForm.get('name')?.value,
-            phoneNumber: this.editClientForm.get('phoneNumber')?.value,
-            vatNumber: this.editClientForm.get('vatNumber')?.value,
         }
 
-        this.clientService.patchClient(dto).subscribe((c: IClientWithoutPasswordDTO) => {
-            this.client = c
-        })
+        const name = this.editClientForm.value.name
+        if (name !== null && name !== '') dto.name = name
+
+        const phoneNumber = this.editClientForm.value.phoneNumber
+        if (phoneNumber !== null && phoneNumber !== '') dto.phoneNumber = phoneNumber
+
+        const vatNumber = this.editClientForm.value.vatNumber
+        if (vatNumber !== null && vatNumber !== '') dto.vatNumber = vatNumber
+
+        this.clientService.patchClient(dto).subscribe(
+            (c: IClientWithoutPasswordDTO) => {
+                let alertMessage = `Client ${this.email} edited successfully!`
+
+                alertMessage += `\nName: ${c.name}`
+                alertMessage += `\nPhone number: ${c.phoneNumber}`
+                alertMessage += `\nVAT number: ${c.vatNumber}`
+
+                alert(alertMessage)
+
+                this.client = c
+                this.editClientForm.reset()
+            },
+            (error) => {
+                alert(error.error)
+
+                this.editClientForm.reset()
+            },
+        )
     }
 }

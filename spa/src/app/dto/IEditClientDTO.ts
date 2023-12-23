@@ -1,6 +1,5 @@
-export interface IClientWithoutPasswordDTO {
+export interface IEditClientDTO {
     name?: string
-    email: string
     phoneNumber?: string
     vatNumber?: number
 }
