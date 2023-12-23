@@ -17,6 +17,7 @@ export type TaskErrorResult = {
 
 export default interface ITaskService {
     getByFilter(DTO: IFilterDTO): Promise<Either<TaskErrorResult, String>>
+    getByStatus(status: string): Promise<Either<TaskErrorResult, String>>
     createSurveillanceTask(
         dto: CreateSurveillanceTaskDTO,
     ): Promise<Either<TaskErrorResult, String>>

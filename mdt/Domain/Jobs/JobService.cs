@@ -110,6 +110,14 @@ namespace DDDSample1.Domain.Jobs
             return jobs;
         }
 
+        public async Task<List<Job>> GetByStatus(string state)
+        {
+            var jobs = await _repo.GetByState(JobState.FromString(state));
+            _ = await _unitOfWork.CommitAsync(); // ??
+
+            return jobs;
+        }
+
         public async Task<Job> UpdateJob(UpdatingJobDto dto)
         {
             var job = await _repo.GetByIdAsync(new JobId(dto.JobId));
@@ -118,17 +126,12 @@ namespace DDDSample1.Domain.Jobs
 
             Console.WriteLine(dto.JobStatus);
 
-
             if (job == null)
             {
-
                 throw new NotFoundException($"No job found: {dto.JobId}");
             }
 
-            var props = new JobUpdateProps
-            {
-                Status = JobState.FromString(dto.JobStatus)
-            };
+            var props = new JobUpdateProps { Status = JobState.FromString(dto.JobStatus) };
 
             _ = job.Update(props);
             var updatedJob = await _repo.Update(job);
@@ -138,5 +141,4 @@ namespace DDDSample1.Domain.Jobs
             return updatedJob;
         }
     }
-
 }

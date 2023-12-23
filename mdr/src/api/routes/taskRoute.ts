@@ -21,6 +21,19 @@ export default (app: Router) => {
     route.post('/delivery', (req, res, next) => ctrl.createDeliveryTask(req, res, next))
 
     route.get(
+        '',
+        celebrate({
+            query: {
+                status: Joi.string(),
+            },
+        }),
+
+        (req, res, next) => {
+            return ctrl.getByStatus(req, res, next)
+        },
+    )
+
+    route.get(
         '/filter',
         celebrate({
             query: {
@@ -30,8 +43,8 @@ export default (app: Router) => {
         }),
 
         (req, res, next) => {
-                return ctrl.getByFilter(req, res, next)
-        }
+            return ctrl.getByFilter(req, res, next)
+        },
     )
 
     route.patch(
@@ -41,6 +54,6 @@ export default (app: Router) => {
                 taskStatus: Joi.string(),
             }).unknown(true), // This allows additional properties in the body
         }),
-        (req, res, next) => ctrl.updateTask(req, res, next)
+        (req, res, next) => ctrl.updateTask(req, res, next),
     )
 }

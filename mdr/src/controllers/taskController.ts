@@ -13,8 +13,7 @@ import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
 
 @Service()
 export default class TaskController implements ITaskController {
-    constructor(@Inject(config.services.task.name) private service: ITaskService) { }
-
+    constructor(@Inject(config.services.task.name) private service: ITaskService) {}
 
     async getTypes(_: Request, res: Response, next: NextFunction) {
         try {
@@ -69,11 +68,12 @@ export default class TaskController implements ITaskController {
             return next(e)
         }
     }
+
     async getByFilter(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = {
                 criteria: req.query.criteria.toString(),
-                rule: req.query.rule.toString()
+                rule: req.query.rule.toString(),
             } as IFilterDTO
 
             const result = await this.service.getByFilter(dto)
@@ -91,11 +91,26 @@ export default class TaskController implements ITaskController {
         }
     }
 
+    async getByStatus(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.getByStatus(req.query.status.toString())
+            if (result.isLeft()) {
+                const err = result.value as TaskErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+            return res.json(result.value).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     async updateTask(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = {
                 id: req.params.id,
-                ...req.body
+                ...req.body,
             } as IUpdateTaskDTO
 
             const result = await this.service.updateTask(dto)

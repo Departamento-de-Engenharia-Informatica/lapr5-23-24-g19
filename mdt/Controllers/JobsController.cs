@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using DDDSample1.Domain.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -75,8 +73,7 @@ namespace DDDSample1.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex) when (
-                ex is ArgumentException or BusinessRuleValidationException)
+            catch (Exception ex) when (ex is ArgumentException or BusinessRuleValidationException)
             {
                 return BadRequest(ex.Message);
             }
@@ -106,6 +103,18 @@ namespace DDDSample1.Controllers
             {
                 return NotFound("Akshually not foound");
             }
+            return Ok(jobs);
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult<JobDto[]>> GetByStatus([FromQuery] string status)
+        {
+            var jobs = await _service.GetByStatus(status);
+            if (jobs == null)
+            {
+                return NotFound("Tasks not found");
+            }
+
             return Ok(jobs);
         }
 

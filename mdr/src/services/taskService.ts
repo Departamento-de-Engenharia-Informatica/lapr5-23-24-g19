@@ -27,19 +27,40 @@ export default class TaskService implements ITaskService {
         @Inject(config.storage.name) private storage: IStorageFs,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
-    ) { }
+    ) {}
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
             const saved = await this.repo.getByFilter(dto)
 
             if (saved === null) {
-                console.log("null")
+                console.log('null')
                 return left({
                     errorCode: TaskErrorCode.BussinessRuleViolation,
                     message: 'Error fetching tasks',
                 })
             }
+            return right(saved)
+        } catch (e) {
+            return left({
+                errorCode: TaskErrorCode.BussinessRuleViolation,
+                message: e.message ?? e.toString(),
+            })
+        }
+    }
+
+    async getByStatus(status: string): Promise<Either<TaskErrorResult, String>> {
+        try {
+            const saved = await this.repo.getByStatus(status)
+
+            if (saved === null) {
+                console.log('null')
+                return left({
+                    errorCode: TaskErrorCode.BussinessRuleViolation,
+                    message: 'Error fetching tasks',
+                })
+            }
+
             return right(saved)
         } catch (e) {
             return left({
@@ -177,18 +198,15 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async updateTask(
-        dto: IUpdateTaskDTO
-    ): Promise<Either<TaskErrorResult, string>> {
+    async updateTask(dto: IUpdateTaskDTO): Promise<Either<TaskErrorResult, string>> {
         try {
             const task = await this.repo.updateTask(dto)
             return right(task)
         } catch (e) {
             return left({
                 errorCode: TaskErrorCode.BussinessRuleViolation,
-                message: e.message ?? e
+                message: e.message ?? e,
             })
         }
     }
-
 }
