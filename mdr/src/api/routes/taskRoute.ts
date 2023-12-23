@@ -56,4 +56,14 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.updateTask(req, res, next),
     )
+
+    route.patch(
+        '/sequence',
+        celebrate({
+            body: Joi.object({
+                tasks: Joi.array().items(Joi.string()).required(),
+            })
+        }),
+        (req, res, next) => ctrl.taskSequence(req, res, next)
+    )
 }

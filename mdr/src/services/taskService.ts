@@ -19,6 +19,8 @@ import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapp
 import { IFilterDTO } from '../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
 import IMdtAdapter from './IRepos/IMdtRepo'
+import { ITaskIdsDTO } from '../dto/ITaskIdsDTO'
+import { IRobotDTO } from '../dto/IRobotDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -27,6 +29,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.storage.name) private storage: IStorageFs,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
+        @Inject(config.repos.robot.name) private robotRepo: IRobotDTO
     ) {}
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
@@ -208,5 +211,11 @@ export default class TaskService implements ITaskService {
                 message: e.message ?? e,
             })
         }
+    }
+
+    async taskSequence(dto: ITaskIdsDTO): Promise<Either<TaskErrorResult, String>> {
+
+
+        throw new Error('Method not implemented.')
     }
 }

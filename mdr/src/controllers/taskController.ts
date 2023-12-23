@@ -10,6 +10,7 @@ import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurvei
 import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
+import { ITaskIdsDTO } from '../dto/ITaskIdsDTO'
 
 @Service()
 export default class TaskController implements ITaskController {
@@ -127,6 +128,26 @@ export default class TaskController implements ITaskController {
             return next(e)
         }
     }
+
+    async taskSequence(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto = req.body as ITaskIdsDTO
+
+            const result = await this.service.taskSequence(dto)
+
+            if (result.isLeft()) {
+                const err = result.value as TaskErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            return res.json(result.value).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
 
     private resolveHttpCode(result: TaskErrorCode) {
         let ret: number

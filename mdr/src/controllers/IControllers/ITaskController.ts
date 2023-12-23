@@ -7,4 +7,6 @@ export default interface ITaskController {
     createDeliveryTask(req: Request, res: Response, next: NextFunction)
     getTypes(req: Request, res: Response, next: NextFunction)
     updateTask(req: Request, res: Response, next: NextFunction)
+
+    taskSequence(req: Request, res: Response, next: NextFunction)
 }
