@@ -50,14 +50,18 @@ else client found
     activate view
         view -> ctrl : onSubmit()
         activate ctrl
-            ctrl --> ctrl : patchClient()
-            ctrl --> ec_dto** : create()
-            activate ec_dto
-            ec_dto --> ctrl : dto
-            deactivate ec_dto
+            ctrl --> cp_dto** : create()
+            activate cp_dto
+                cp_dto --> ctrl : dto
+            deactivate cp_dto
 
             ctrl -> svc : patchClient(dto)
             activate svc
+                svc --> ec_dto** : create()
+                activate ec_dto
+                    ec_dto --> svc : dto
+                deactivate ec_dto
+
                 svc -> http : patchClient()
                 activate http
                     http ->] : PATCH /clients/{email}
@@ -73,10 +77,10 @@ else success
                     http --> svc : observable
                 deactivate http
 
-                svc --> ec_dto** : create()
-                activate ec_dto
-                    ec_dto --> svc : dto
-                deactivate ec_dto
+                svc --> cp_dto** : create()
+                activate cp_dto
+                    cp_dto --> svc : dto
+                deactivate cp_dto
 
                 svc --> ctrl : dto
             deactivate svc
