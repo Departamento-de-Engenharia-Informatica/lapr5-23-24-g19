@@ -8,7 +8,6 @@ import { FloorNumber } from '../domain/floor/floorNumber'
 import { TaskType } from '../domain/robotType/taskType'
 import { IFloorMapInitPositionDTO } from '../dto/IFloorMapInitPositionDTO'
 import { ITaskTypeDTO } from '../dto/ITaskTypeDTO'
-import HttpNodeMdtAdapter from '../repos/mdt/httpNodeMdtAdapter'
 import { IStorageFs } from './IFs/IStorageFs'
 import IFloorRepo from './IRepos/IFloorRepo'
 import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
@@ -18,15 +17,17 @@ import IRoomRepo from './IRepos/IRoomRepo'
 import { RoomName } from '../domain/room/roomName'
 import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
+import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
+import IMdtAdapter from './IRepos/IMdtRepo'
 
 @Service()
 export default class TaskService implements ITaskService {
     constructor(
-        @Inject(config.repos.mdt.name) private repo: HttpNodeMdtAdapter,
+        @Inject(config.repos.mdt.name) private repo: IMdtAdapter,
         @Inject(config.storage.name) private storage: IStorageFs,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
-    ) {}
+    ) { }
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -175,4 +176,19 @@ export default class TaskService implements ITaskService {
             })
         }
     }
+
+    async updateTask(
+        dto: IUpdateTaskDTO
+    ): Promise<Either<TaskErrorResult, string>> {
+        try {
+            const task = await this.repo.updateTask(dto)
+            return right(task)
+        } catch (e) {
+            return left({
+                errorCode: TaskErrorCode.BussinessRuleViolation,
+                message: e.message ?? e
+            })
+        }
+    }
+
 }

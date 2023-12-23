@@ -3,7 +3,6 @@ import { Container } from 'typedi'
 import config from '../../../config'
 
 import ITaskController from '../../controllers/IControllers/ITaskController'
-import { filter } from 'lodash'
 import { Joi, celebrate } from 'celebrate'
 
 const route = Router()
@@ -20,7 +19,7 @@ export default (app: Router) => {
     )
 
     route.post('/delivery', (req, res, next) => ctrl.createDeliveryTask(req, res, next))
-    
+
     route.get(
         '/filter',
         celebrate({
@@ -33,5 +32,15 @@ export default (app: Router) => {
         (req, res, next) => {
                 return ctrl.getByFilter(req, res, next)
         }
+    )
+
+    route.patch(
+        '/:id',
+        celebrate({
+            body: Joi.object({
+                taskStatus: Joi.string(),
+            }).unknown(true), // This allows additional properties in the body
+        }),
+        (req, res, next) => ctrl.updateTask(req, res, next)
     )
 }

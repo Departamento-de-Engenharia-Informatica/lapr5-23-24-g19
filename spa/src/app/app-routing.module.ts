@@ -38,6 +38,7 @@ import { CreateRobotComponent } from './components/robot/create-robot/create-rob
 import { CreateTaskSurveillanceComponent } from './components/task/create-task-surveillance/create-task-surveillance.component'
 import { CreateTaskDeliveryComponent } from './components/task/create-task-delivery/create-task-delivery.component'
 import { TasksFilterComponent } from './components/task/filter/filter.component'
+import { ApproveRejectTaskComponent } from './components/task/approve-reject-task/approve-reject-task.component'
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 
 export const routes: Routes = [
@@ -64,6 +65,11 @@ export const routes: Routes = [
                 path: 'create-task-delivery',
                 component: CreateTaskDeliveryComponent,
                 title: 'Create delivery task',
+            },
+            {
+                path: 'approve-reject',
+                component: ApproveRejectTaskComponent,
+                title: 'Approve/Reject task',
             },
             {
                 path: 'filter',

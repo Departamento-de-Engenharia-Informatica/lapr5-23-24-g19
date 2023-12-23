@@ -4,7 +4,8 @@ namespace DDDSample1.Domain.Jobs
 {
     public class UpdatingJobDto
     {
-        [JsonPropertyName("jobStatus")]
+        // FIXME: JsonPropertyName not working
+        [JsonPropertyName("taskStatus")]
         public string JobStatus { get; set; }
 
         public string JobId { get; set; }

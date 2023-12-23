@@ -1,0 +1,117 @@
+.building-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 100px;
+}
+
+.page-title {
+    @apply text-2xl font-bold text-white text-center my-16;
+}
+
+.building-card {
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* .building-card h2 { */
+/*     margin-bottom: 8px; */
+/*     color: var(--secondary-color); */
+/* } */
+
+.building-card h2 {
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    font-size: larger;
+    color: var(--secondary-color);
+}
+
+
+.building-card p {
+    color: var(--secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 3em;
+}
+
+.building-card p:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+.dimension-box {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: var(--third-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+}
+
+.dimension-label {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.invalid-input {
+    border: 2px solid rgb(218, 62, 62);
+}
+
+.approve-reject {
+    @apply px-3 py-2 rounded relative overflow-hidden;
+    @apply text-white;
+    @apply transition-colors duration-300 border;
+}
+
+/* button { */
+/*     padding: 10px 20px; */
+/*     background-color: var(--third-color); */
+/*     color: var(--secondary-color); */
+/*     height: 45px; */
+/*     border: none; */
+/*     border-radius: 4px; */
+/*     margin: 0 auto; */
+/*     margin-left: 20px; */
+/*     margin-top: 20px; */
+/*     display: block; */
+/* } */
+
+/* button:disabled { */
+/*     background-color: #ccc; */
+/*     color: #666; */
+/*     cursor: not-allowed; */
+/* } */
+
+.criteria {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex-direction: column;
+}
+
+.criteria label {
+    margin-bottom: 4px;
+    color: var(--secondary-color);
+}
+
+.criteria select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+}

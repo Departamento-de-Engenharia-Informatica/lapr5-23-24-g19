@@ -3,6 +3,7 @@ import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSur
 import { Either } from '../../core/logic/Result'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
+import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 
 export enum TaskErrorCode {
     NotFound,
@@ -22,5 +23,6 @@ export default interface ITaskService {
     createDeliveryTask(
         dto: CreateDeliveryTaskDTO,
     ): Promise<Either<TaskErrorResult, String>>
+    updateTask(DTO: IUpdateTaskDTO): Promise<Either<TaskErrorResult, String>>
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 }

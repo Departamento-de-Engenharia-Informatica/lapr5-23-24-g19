@@ -5,11 +5,12 @@ import fetch from 'node-fetch'
 import { ITaskDTO } from '../../dto/ITaskDTO'
 import IMdtAdapter from '../../services/IRepos/IMdtRepo'
 import { IFilterDTO } from '../../dto/IFilterDTO'
-import { Console } from 'console'
+import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
     private url = config.mdtURL
+
     async createSurveillanceTask(dto: ITaskDTO): Promise<String> {
         console.log('===============')
         console.log(dto)
@@ -51,6 +52,23 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
 
         if (!res.ok) {
             return Promise.reject()
+        }
+
+        return await res.json()
+    }
+
+    async updateTask(dto: IUpdateTaskDTO): Promise<string> {
+        const { id, ...body } = dto
+        const res = await fetch(`${this.url}/jobs/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify({
+                JobStatus: body.taskStatus
+            })
+        })
+
+        if (!res.ok) {
+            return Promise.reject(await res.text())
         }
 
         return await res.json()

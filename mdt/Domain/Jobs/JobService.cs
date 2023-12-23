@@ -113,6 +113,12 @@ namespace DDDSample1.Domain.Jobs
         public async Task<Job> UpdateJob(UpdatingJobDto dto)
         {
             var job = await _repo.GetByIdAsync(new JobId(dto.JobId));
+            Console.WriteLine("after GetByIdAsync");
+            Console.WriteLine(job.Id.Value);
+
+            Console.WriteLine(dto.JobStatus);
+
+
             if (job == null)
             {
 

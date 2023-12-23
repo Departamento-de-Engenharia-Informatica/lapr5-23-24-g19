@@ -57,6 +57,8 @@ namespace DDDSample1.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<JobDto>> Update(string id, UpdatingJobDto dto)
         {
+            Console.WriteLine("Hello");
+
             if (dto == null)
             {
                 return BadRequest();

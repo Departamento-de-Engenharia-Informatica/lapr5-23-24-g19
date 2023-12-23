@@ -31,3 +31,4 @@ coverage/
 # Other
 docs/**/*.png
 *.sln
+/mdt/mdt.sln

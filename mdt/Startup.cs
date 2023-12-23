@@ -35,11 +35,13 @@ namespace DDDSample1
             //     opt.UseInMemoryDatabase("RobDroneDBContext")
             //     .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => {
+                                                                 options.JsonSerializerOptions.PropertyNamingPolicy = null; // Do not apply naming policy
+                                                     });
             services.AddDbContext<RobDroneDBContext>(
                 options =>
                     options.UseMySql(
-                        "Server=localhost;Port=3306;database=RobDroneGO;user=root;password=Password1",
+                        "Server=localhost;Port=3306;database=RobDroneGO;user=robdronego;password=Password1",
                         new MariaDbServerVersion(new Version(11, 1, 3))
                     )
             ); // Specify your MariaDB version here

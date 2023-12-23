@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CreateDeliveryTaskDTO } from 'src/app/dto/CreateDeliveryTaskDTO';
 import { FilterDTO } from 'src/app/dto/FilterDTO';
-import { StateEnum, TaskService, TypeEnum } from 'src/app/services/task.service';
+import { TaskState, TaskType } from 'src/app/dto/TaskDTO';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-filter',
@@ -15,8 +16,8 @@ export class TasksFilterComponent {
   tasks: CreateDeliveryTaskDTO[] = []
 
   criterion: string[] = ["Client", "Type", "State"]
-  states = Object.values(StateEnum);
-  types = Object.values(TypeEnum);
+  states = Object.values(TaskState);
+  types = Object.values(TaskType);
 
   filterForm: FormGroup = null as unknown as FormGroup
   criteria!: string;
@@ -62,9 +63,9 @@ export class TasksFilterComponent {
     let ruleValue = this.filterForm.value.rule;
 
     if (this.filterForm.value.criteria === 'State') {
-      ruleValue = this.getEnumIndex(ruleValue, StateEnum);
-    } else if (this.filterForm.value.criteria === 'Device') { 
-      ruleValue = this.getEnumIndex(ruleValue, TypeEnum);
+      ruleValue = this.getEnumIndex(ruleValue, TaskState);
+    } else if (this.filterForm.value.criteria === 'Device') {
+      ruleValue = this.getEnumIndex(ruleValue, TaskType);
     }
 
     const dto: FilterDTO = {
