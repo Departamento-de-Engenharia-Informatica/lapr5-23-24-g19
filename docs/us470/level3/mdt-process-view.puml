@@ -33,7 +33,7 @@ activate ctrl
 
 alt job not found
         svc --> ctrl : not found error
-        [<-- ctrl : 404 Not Found
+        [<-- ctrl : 404: Not found
 else found
 
         svc --> props** : create()

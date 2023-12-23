@@ -9,7 +9,7 @@ activate usr
     usr -> sys : wants to approve or reject a task
     activate sys
         alt task(s) not found
-            sys --> usr: informs error
+            sys --> usr : inform no pending tasks available
         else task(s) found
         sys --> usr : shows tasks & requests one
     deactivate sys

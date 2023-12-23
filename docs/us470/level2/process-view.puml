@@ -17,21 +17,21 @@ activate usr
             activate mdt
 
 alt task(s) not found
-                mdt --> mdr : 404: error
-                mdr --> ui : 404: Not Found
-                ui --> usr: informs error
+                mdt --> mdr : 200: empty list
+                mdr --> ui : 200: empty list
+                ui --> usr : inform no pending tasks available
 
 else task(s) found
-                mdt --> mdr : tasks
+                mdt --> mdr : 200: tasks
             deactivate mdt
 
-            mdr --> ui : tasks
+            mdr --> ui : 200: tasks
         deactivate mdr
 
         ui --> usr : shows tasks & requests one
     deactivate ui
 
-    usr -> ui : provides task
+    usr -> ui : approves/rejects chosen task
     activate ui
         ui -> mdr : PATCH /tasks/{id}
         activate mdr

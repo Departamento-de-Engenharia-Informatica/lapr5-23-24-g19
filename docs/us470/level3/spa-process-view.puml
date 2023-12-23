@@ -1,0 +1,92 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant ":Controller" as ctrl
+
+participant "dto:UpdateTaskDTO" as u_dto
+
+participant ":TaskService" as svc
+
+participant "taskDTO:TaskDTO" as dto
+
+participant "HTTP Driver" as http
+
+
+activate usr
+    usr -> view : wants to approve or reject a task
+
+    activate view
+        view -> ctrl : ngOnInit()
+        activate ctrl
+            ctrl -> svc : pendingTasks()
+
+            activate svc
+                svc -> http : get({baseURL}/task?state=pending)
+
+                activate http
+                    http ->] : GET /task?state=pending
+
+                    http <--] : pendingTasks
+                    http --> svc : observable<pendingTasks>
+                deactivate http
+
+                loop for each task
+                    svc --> dto** : create()
+                end
+
+                svc --> ctrl : tasks
+            deactivate svc
+
+            ctrl --> view : tasks
+        deactivate ctrl
+
+        alt tasks is empty
+            view --> usr : inform no pending tasks available
+        else tasks not empty
+            view --> usr : shows tasks & requests one
+        end
+    deactivate view
+
+    usr -> view : approves/rejects chosen task
+    activate view
+
+        alt approves task
+            view -> ctrl : approveTask(task.id)
+        activate ctrl
+        else rejects task
+            view -> ctrl : rejectTask(task.id)
+        end
+
+            ctrl --> u_dto** : create()
+
+            ctrl -> svc : updateTask(dto)
+            activate svc
+                svc -> http : patch({baseURL}/task/{:id}, dto)
+
+                activate http
+                    http ->] : PATCH /task/{:id}
+
+                    http <--] : updatedTask
+
+                    http --> svc : updatedTask
+                deactivate http
+
+                svc --> dto** : create()
+
+                svc --> ctrl : taskDTO
+            deactivate svc
+
+            ctrl --> view : taskDTO
+        deactivate ctrl
+
+        view --> usr : shows updated task
+    deactivate view
+deactivate usr
+
+
+
+@enduml
+

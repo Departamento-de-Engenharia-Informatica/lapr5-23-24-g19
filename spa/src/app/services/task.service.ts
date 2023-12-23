@@ -122,7 +122,7 @@ export class TaskService {
             }
         ])
 
-        return this.http.get<TaskDTO[]>(`${Config.baseUrl}/tasks?state=pending`, {
+        return this.http.get<TaskDTO[]>(`${Config.baseUrl}/task?state=pending`, {
             observe: 'body',
             responseType: 'json'
         })
