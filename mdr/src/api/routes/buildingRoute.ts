@@ -9,6 +9,8 @@ import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 import IRoomController from '../../controllers/IControllers/IRoomController'
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import attachCurrentUser, { checkAdm} from '../middlewares/attachCurrentUser'
 
 const route = Router()
 
@@ -178,6 +180,10 @@ export default (app: Router) => {
     route.get('/:id/elevators', (req, res, next) =>
         elevatorCtrl.getElevators(req, res, next),
     )
+  
+    // const conf = {
+    //     decryptionKey: "LaWXgENPlVK0GcKLP2jv1HtL0iwXHZMSfcUNH8iD0LabOJkwgbpq8aI1CoBl-1ok"
+    // } as JWEDecryptionConfig
 
     route.get(
         '',
@@ -187,7 +193,9 @@ export default (app: Router) => {
                 maxFloors: Joi.number().integer(),
             },
         }),
-
+        customJwtMiddleware,
+        attachCurrentUser,
+        checkAdm,
         (req, res, next) => {
             if (
                 (req.query.minFloors && req.query.maxFloors) ||

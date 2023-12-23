@@ -273,5 +273,13 @@ export default {
         name: 'NodeDiskStorage',
         path: '../fs/nodeDiskStorage',
         prefix: './filesystem'
+    },
+
+    auth0: {
+        audience: `https://dev-wt48psyid1ra2e8l.us.auth0.com/api/v2/`,
+        issuer: `https://dev-wt48psyid1ra2e8l.us.auth0.com/`,
+        jwksUri: `https://dev-wt48psyid1ra2e8l.us.auth0.com/.well-known/jwks.json`,
+        clientId: 'VWCGyPRVo5EZ2vlA4T657WddIn0nLVwl',
+        clientSecret: 'BKSxLlyXyUdMaBJ7x5W4Xn7N6Cd30UhHBj6xp55f9GVyMOEzyCqfbPGlSIh1rVEf'
     }
 }
