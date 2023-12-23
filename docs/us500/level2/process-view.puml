@@ -1,0 +1,104 @@
+@startuml
+autonumber
+
+actor "Campus Manager" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+participant "MDT" as mdt
+participant "Planning" as plan
+
+activate usr
+    usr -> ui : wants to sequence approved tasks
+    activate ui
+        ui -> mdr : GET /tasks/?status=approved
+        activate mdr
+            mdr -> mdt : GET /jobs/?status=approved
+            activate mdt
+                mdt --> mdr : 200: tasks
+            deactivate mdt
+            mdr --> ui : 200: tasks
+        deactivate mdr
+        ui --> usr : presents approved tasks and asks \nto select those to sequence
+    deactivate ui
+
+    usr -> ui : provides selected tasks
+    activate ui
+        ui -> mdr : PATCH /tasks/sequence
+        activate mdr
+            mdr -> mdt : PATCH /jobs/sequence
+            activate mdt
+
+                mdt --> mdr : 200: tasks
+            deactivate mdt
+            mdr --> ui : 200: tasks
+        deactivate mdr
+        ui --> usr : presents task sequence and \nassociated robot
+    deactivate ui
+
+deactivate usr
+
+' activate usr
+' usr -> ui : wants to register a new task
+'     activate ui
+'         ui -> mdr : GET /buildings
+'     alt building(s) not found
+'             activate mdr
+'                 note right : see us170 documentation
+'                 mdr --> ui : 404: error
+'                 ui --> usr : informs error
+'
+'     else building(s) found
+'             mdr --> ui : 200: buildings
+'             deactivate mdr
+'
+'             ui --> usr : requests pickup and delivery buildings
+'             deactivate ui
+'
+'             usr -> ui : provides buildings
+'             activate ui
+'                 ui -> mdr : GET /floors
+'                 activate mdr
+'                 note right : see us210 documentation
+'                     mdr --> ui : 200: floors
+'                 deactivate mdr
+'
+'                 ui --> usr : requests pickup and delivery floors
+'             deactivate ui
+'
+'             usr -> ui : provides floors
+'             activate ui
+'                 ui -> mdr : GET /rooms
+'                 activate mdr
+'                     note right : see us320 documentation
+'                     mdr --> ui : 200: rooms
+'                 deactivate mdr
+'                 ui --> usr : requests pickup and delivery rooms
+'             deactivate ui
+'
+'             usr -> ui : provides rooms
+'             activate ui
+'                 ui --> usr : requests task details
+'             deactivate ui
+'
+'             usr -> ui : provides task details
+'         activate ui
+'             ui -> mdr : POST /task/delivery
+'             activate mdr
+'                 mdr -> mdt : POST /jobs
+'                 activate mdt
+'                     alt success
+'                         mdt --> mdr : 201: task
+'                         mdr --> ui : 201: task
+'                         ui --> usr : task
+'                     else task not created
+'                         mdt --> mdr : 404: error
+'                         mdr --> ui : 404: error
+'                         ui --> usr : informs error
+'                 deactivate mdt
+'             deactivate mdr
+'     deactivate ui
+' deactivate usr
+' end
+' end
+@enduml
