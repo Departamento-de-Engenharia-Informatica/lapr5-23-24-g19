@@ -9,7 +9,8 @@ import IClientService, {
 import IClientController from './IControllers/IClientController'
 import { IClientDTO } from '../dto/IClientDTO'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
-import {IDeletedClientDTO} from "../dto/IDeletedClientDTO";
+import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
+import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
 
 @Service()
 export default class ClientController implements IClientController {
@@ -45,6 +46,26 @@ export default class ClientController implements IClientController {
             }
 
             const message = result.value as IClientDTO
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
+    async patchClient(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto = req.body as IClientWithoutPasswordDTO
+            dto.email = req.params.email as string
+
+            const result = await this.service.patchClient(dto)
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            const message = result.value as ICreatedClientDTO
             return res.status(200).send(message)
         } catch (e) {
             return next(e)

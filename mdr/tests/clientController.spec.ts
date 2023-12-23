@@ -17,7 +17,7 @@ import ClientController from '../src/controllers/clientController'
 describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function () {
+    beforeEach(function() {
         Container.reset()
 
         const schema = require('../src/persistence/schemas/clientSchema').default
@@ -32,7 +32,7 @@ describe('Client controller:', () => {
         Container.set('ClientService', service)
     })
 
-    afterEach(function () {
+    afterEach(function() {
         sandbox.restore()
     })
 
@@ -198,6 +198,237 @@ describe('Client controller:', () => {
 
             const ctrl = new ClientController(service)
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                    name: req.body.name,
+                    phoneNumber: req.body.phoneNumber,
+                    vatNumber: req.body.vatNumber,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(422))
+        })
+    })
+
+    describe('getClient(): clientController + clientService integration test using spy on clientService', () => {
+        it('should work with correct values', async () => {
+            const params = {
+                email: Email.create('1211155@isep.ipp.pt').getValue().value,
+            }
+
+            const req: Partial<Request> = {}
+            req.params = params
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: req.params.email,
+                name: 'Diogo',
+                phoneNumber: '996123123',
+                vatNumber: 123456789,
+                status: 'Pending',
+            })
+
+            const repo = Container.get('ClientRepo') as IClientRepo
+            sandbox.stub(repo, 'find').resolves({
+                email: Email.create(params.email).getValue(),
+                name: Name.create('Diogo').getValue(),
+                phoneNumber: PhoneNumber.create(996123123).getValue(),
+                vatNumber: VatNumber.create(123456789).getValue(),
+            } as Client)
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'getClient')
+
+            const ctrl = new ClientController(service)
+            await ctrl.getClient(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match(req.params?.email as string),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))
+        })
+    })
+
+    describe('patchClient(): clientController + clientService integration test using spy on clientService', () => {
+        it('should work with correct values', async () => {
+            const email = Email.create('1211155@isep.ipp.pt').getValue()
+            const body = {
+                name: Name.create('Diogo').getValue().value,
+                phoneNumber: PhoneNumber.create(123456789).getValue().value,
+                vatNumber: VatNumber.create(123456789).getValue().value,
+            }
+
+            const req: Partial<Request> = {}
+            req.body = body
+            req.params = {
+                email: email.value,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: req.params.email,
+                name: req.body.name,
+                phoneNumber: req.body.phoneNumber,
+                vatNumber: req.body.vatNumber,
+                status: 'Pending',
+            })
+
+            const repo = Container.get('ClientRepo') as IClientRepo
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email,
+                name: Name.create('Marco').getValue(),
+                phoneNumber: PhoneNumber.create(999999999).getValue(),
+                vatNumber: VatNumber.create(123456123).getValue(),
+            } as Client)
+
+            sandbox.stub(repo, 'save').resolves({
+                email: email,
+                name: req.body.name,
+                phoneNumber: req.body.phoneNumber,
+                vatNumber: req.body.vatNumber,
+            } as Client)
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'patchClient')
+
+            const ctrl = new ClientController(service)
+            await ctrl.patchClient(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                    name: req.body.name,
+                    phoneNumber: req.body.phoneNumber,
+                    vatNumber: req.body.vatNumber,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))
+        })
+
+        it('should not work with invalid phone number', async () => {
+            const email = Email.create('1211155@isep.ipp.pt').getValue()
+            const body = {
+                name: Name.create('Diogo').getValue().value,
+                phoneNumber: undefined,
+                vatNumber: VatNumber.create(123456789).getValue().value,
+            }
+
+            const req: Partial<Request> = {}
+            req.body = body
+            req.params = {
+                email: email.value,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: req.params.email,
+                name: req.body.name,
+                phoneNumber: req.body.phoneNumber,
+                vatNumber: req.body.vatNumber,
+                status: 'Pending',
+            })
+
+            const repo = Container.get('ClientRepo') as IClientRepo
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email,
+                name: Name.create('Marco').getValue(),
+                phoneNumber: PhoneNumber.create(999999999).getValue(),
+                vatNumber: VatNumber.create(123456123).getValue(),
+            } as Client)
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'patchClient')
+
+            const ctrl = new ClientController(service)
+            await ctrl.patchClient(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                    name: req.body.name,
+                    phoneNumber: req.body.phoneNumber,
+                    vatNumber: req.body.vatNumber,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(422))
+        })
+
+        it('should not work with invalid vat number', async () => {
+            const email = Email.create('1211155@isep.ipp.pt').getValue()
+            const body = {
+                name: Name.create('Diogo').getValue().value,
+                phoneNumber: PhoneNumber.create(123456789).getValue().value,
+                vatNumber: undefined,
+            }
+
+            const req: Partial<Request> = {}
+            req.body = body
+            req.params = {
+                email: email.value,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: req.params.email,
+                name: req.body.name,
+                phoneNumber: req.body.phoneNumber,
+                vatNumber: req.body.vatNumber,
+                status: 'Pending',
+            })
+
+            const repo = Container.get('ClientRepo') as IClientRepo
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email,
+                name: Name.create('Marco').getValue(),
+                phoneNumber: PhoneNumber.create(999999999).getValue(),
+                vatNumber: VatNumber.create(123456123).getValue(),
+            } as Client)
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'patchClient')
+
+            const ctrl = new ClientController(service)
+            await ctrl.patchClient(<Request>req, <Response>res, <NextFunction>next)
 
             sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
             sandbox.assert.calledWith(

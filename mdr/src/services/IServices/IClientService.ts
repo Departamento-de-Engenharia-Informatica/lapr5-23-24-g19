@@ -2,7 +2,7 @@ import { Either } from '../../core/logic/Result'
 import { IClientDTO } from '../../dto/IClientDTO'
 import { IClientWithoutPasswordDTO } from '../../dto/IClientWithoutPasswordDTO'
 import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
-import {IDeletedClientDTO} from "../../dto/IDeletedClientDTO";
+import { IDeletedClientDTO } from '../../dto/IDeletedClientDTO'
 
 export enum ClientErrorCode {
     NotFound,
@@ -21,6 +21,9 @@ export default interface IClientService {
     ): Promise<Either<ClientErrorResult, ICreatedClientDTO>>
     getClient(
         email: string,
+    ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>>
+    patchClient(
+        clientDTO: IClientWithoutPasswordDTO,
     ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>>
     deleteClient(
         createdClientDTO: ICreatedClientDTO,

@@ -32,6 +32,18 @@ export default (app: Router) => {
 
     route.get('/:email', (req, res, next) => ctrl.getClient(req, res, next))
 
+    route.patch(
+        '/:email',
+        celebrate({
+            body: Joi.object({
+                name: Joi.string(),
+                phoneNumber: Joi.string().regex(/^[0-9]+$/),
+                vatNumber: Joi.number().integer(),
+            }),
+        }),
+        (req, res, next) => ctrl.patchClient(req, res, next),
+    )
+
     route.delete(
         '',
         celebrate({

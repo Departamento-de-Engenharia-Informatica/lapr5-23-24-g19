@@ -51,6 +51,10 @@ export default class Client extends AggregateRoot<Props> {
         return this.props.name
     }
 
+    set name(newName: Name) {
+        this.props.name = newName
+    }
+
     get email() {
         return this.props.email
     }
@@ -59,8 +63,16 @@ export default class Client extends AggregateRoot<Props> {
         return this.props.phoneNumber
     }
 
+    set phoneNumber(newPhoneNumber: PhoneNumber) {
+        this.props.phoneNumber = newPhoneNumber
+    }
+
     get vatNumber() {
         return this.props.vatNumber
+    }
+
+    set vatNumber(newVatNumber: VatNumber) {
+        this.props.vatNumber = newVatNumber
     }
 
     get status() {

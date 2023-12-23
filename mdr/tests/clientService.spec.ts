@@ -32,12 +32,10 @@ describe('Client Service: Integration tests', () => {
     afterEach(() => sinon.restore())
 
     describe('createClient(): service + domain tests', () => {
-
         it('should fail if client exists', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
             sinon.stub(clientRepo, 'existsWithEmail').resolves(true)
             sinon.stub(clientRepo, 'save').rejects()
-
 
             const dto: IClientDTO = {
                 email: 'mzc@isep.ipp.pt',
@@ -56,9 +54,9 @@ describe('Client Service: Integration tests', () => {
         it('should succeed with right parameters', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
             sinon.stub(clientRepo, 'existsWithEmail').resolves(false)
-            sinon.stub(clientRepo, 'save').resolves({} as unknown as Client)
+            sinon.stub(clientRepo, 'save').resolves(({} as unknown) as Client)
 
-            sinon.stub(ClientMap, 'toDTO').returns({} as unknown as ICreatedClientDTO)
+            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
 
             const dto: IClientDTO = {
                 email: 'mzc@isep.ipp.pt',
@@ -73,6 +71,18 @@ describe('Client Service: Integration tests', () => {
 
             expect(result.isRight()).to.be.true
         })
+    })
 
+    describe('getClient(): service + domain tests', () => {
+        it('should work with right parameters', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            sinon.stub(clientRepo, 'find').resolves(({} as unknown) as Client)
+            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+
+            const service = new ClientService(clientRepo)
+            const result = await service.getClient('1211155@isep.ipp.pt')
+
+            expect(result.isRight()).to.be.true
+        })
     })
 })

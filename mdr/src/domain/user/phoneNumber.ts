@@ -22,6 +22,7 @@ export class PhoneNumber extends ValueObject<Props> {
         const num = typeof phoneNumber === 'number' ? phoneNumber.toString() : phoneNumber
 
         if (num.length != allowedLength || !numericRe.test(num)) {
+            console.log('Invalid phone number')
             return Result.fail('Invalid phone number')
         }
 

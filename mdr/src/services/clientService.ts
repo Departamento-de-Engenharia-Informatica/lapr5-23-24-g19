@@ -1,7 +1,5 @@
-import { Service, Inject } from 'typedi'
+import { Inject, Service } from 'typedi'
 import config from '../../config'
-
-import jwt from 'jsonwebtoken'
 
 import argon2 from 'argon2'
 import { randomBytes } from 'crypto'
@@ -9,21 +7,21 @@ import { randomBytes } from 'crypto'
 import { UserPassword } from '../domain/user/userPassword'
 
 import { Either, left, right } from '../core/logic/Result'
+import Client from '../domain/user/client/Client'
+import { VatNumber } from '../domain/user/client/vatNumber'
+import { Email } from '../domain/user/email'
+import { Name } from '../domain/user/name'
+import { PhoneNumber } from '../domain/user/phoneNumber'
+import { IClientDTO } from '../dto/IClientDTO'
+import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
+import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
+import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
+import { ClientMap } from '../mappers/ClientMap'
+import IClientRepo from './IRepos/IClientRepo'
 import IClientService, {
     ClientErrorCode,
     ClientErrorResult,
 } from './IServices/IClientService'
-import IClientRepo from './IRepos/IClientRepo'
-import { IClientDTO } from '../dto/IClientDTO'
-import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
-import { Email } from '../domain/user/email'
-import Client from '../domain/user/client/Client'
-import { Name } from '../domain/user/name'
-import { PhoneNumber } from '../domain/user/phoneNumber'
-import { VatNumber } from '../domain/user/client/vatNumber'
-import { ClientMap } from '../mappers/ClientMap'
-import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
-import {IDeletedClientDTO} from "../dto/IDeletedClientDTO";
 
 @Service()
 export default class ClientService implements IClientService {
@@ -88,6 +86,51 @@ export default class ClientService implements IClientService {
                 email: client.email,
                 phoneNumber: client.phoneNumber,
                 vatNumber: client.vatNumber,
+            } as IClientWithoutPasswordDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async patchClient(
+        dto: IClientWithoutPasswordDTO,
+    ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>> {
+        try {
+            const email = Email.create(dto.email).getOrThrow()
+
+            if (!email) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const client = await this.repo.find(email)
+
+            if (dto.name) {
+                const name = Name.create(dto.name).getOrThrow()
+                client.name = name
+            }
+
+            if (dto.phoneNumber) {
+                const phoneNumber = PhoneNumber.create(dto.phoneNumber).getOrThrow()
+                client.phoneNumber = phoneNumber
+            }
+
+            if (dto.vatNumber) {
+                const vatNumber = VatNumber.create(dto.vatNumber).getOrThrow()
+                client.vatNumber = vatNumber
+            }
+
+            const res = ClientMap.toDTO(await this.repo.save(client))
+            return right({
+                name: res.name,
+                email: res.email,
+                phoneNumber: res.phoneNumber,
+                vatNumber: res.vatNumber,
             } as IClientWithoutPasswordDTO)
         } catch (e) {
             return left({
