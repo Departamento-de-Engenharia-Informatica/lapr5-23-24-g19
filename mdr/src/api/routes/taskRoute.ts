@@ -61,9 +61,16 @@ export default (app: Router) => {
         '/sequence',
         celebrate({
             body: Joi.object({
-                tasks: Joi.array().items(Joi.string()).required(),
-            })
+                tasks: Joi.array()
+                    .items(
+                        Joi.object({
+                            id: Joi.string().required(),
+                            type: Joi.string().required(),
+                        }),
+                    )
+                    .required(),
+            }),
         }),
-        (req, res, next) => ctrl.taskSequence(req, res, next)
+        (req, res, next) => ctrl.taskSequence(req, res, next),
     )
 }

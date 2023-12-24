@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Jobs.Filter;
+using DDDSample1.Domain.Jobs.Mapper;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Infrastructure.Jobs;
 using DDDSample1.Util.Coordinates;
 
 namespace DDDSample1.Domain.Jobs
@@ -14,11 +17,13 @@ namespace DDDSample1.Domain.Jobs
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJobRepository _repo;
+        private readonly PlanningAdapter _planning;
 
-        public JobService(IUnitOfWork unitOfWork, IJobRepository repo)
+        public JobService(IUnitOfWork unitOfWork, IJobRepository repo, PlanningAdapter planning)
         {
             this._unitOfWork = unitOfWork;
             this._repo = repo;
+            this._planning = planning;
         }
 
         public async Task<String> GetByIdAsync(String id)
@@ -121,10 +126,6 @@ namespace DDDSample1.Domain.Jobs
         public async Task<Job> UpdateJob(UpdatingJobDto dto)
         {
             var job = await _repo.GetByIdAsync(new JobId(dto.JobId));
-            Console.WriteLine("after GetByIdAsync");
-            Console.WriteLine(job.Id.Value);
-
-            Console.WriteLine(dto.JobStatus);
 
             if (job == null)
             {
@@ -139,6 +140,34 @@ namespace DDDSample1.Domain.Jobs
 
             // TODO: DTO
             return updatedJob;
+        }
+
+        public async Task<PlannedTasksDTO> JobSequence(RobotTasksDTO dto)
+        {
+            var keypairs = new List<KeyValuePair<string, TaskSequenceDto>>();
+            foreach ((var key, var tasks) in dto.RobotTasks)
+            {
+                var jobs = new List<Job>();
+                foreach (var t in tasks)
+                {
+                    var job = await _repo.GetByIdAsync(new JobId(t.id));
+                    jobs.Add(job);
+                }
+
+                var sequence = await _planning.ComputeSequence(ComputeSequenceMapper.toDTO(jobs));
+
+                // jobs.ForEach(
+                //     async j =>
+                //         await this.UpdateJob(
+                //             new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
+                //         )
+                // );
+
+                keypairs.Add(new KeyValuePair<string, TaskSequenceDto>(key, sequence));
+            }
+
+            var result = keypairs.ToDictionary(x => x.Key, x => x.Value);
+            return new PlannedTasksDTO { RobotTasks = result };
         }
     }
 }

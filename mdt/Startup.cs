@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using DDDSample1.Domain.Categories;
 using DDDSample1.Domain.Families;
 using DDDSample1.Domain.Jobs;
@@ -7,6 +8,7 @@ using DDDSample1.Domain.Shared;
 using DDDSample1.Infrastructure;
 using DDDSample1.Infrastructure.Categories;
 using DDDSample1.Infrastructure.Families;
+using DDDSample1.Infrastructure.Jobs;
 using DDDSample1.Infrastructure.Products;
 using DDDSample1.Infrastructure.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -35,9 +37,12 @@ namespace DDDSample1
             //     opt.UseInMemoryDatabase("RobDroneDBContext")
             //     .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
-            services.AddControllers().AddJsonOptions(options => {
-                                                                 options.JsonSerializerOptions.PropertyNamingPolicy = null; // Do not apply naming policy
-                                                     });
+            services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null; // Do not apply naming policy
+                });
             services.AddDbContext<RobDroneDBContext>(
                 options =>
                     options.UseMySql(
@@ -92,6 +97,8 @@ namespace DDDSample1
 
             services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<JobService>();
+            services.AddSingleton<HttpClient>();
+            services.AddTransient<PlanningAdapter>();
         }
     }
 }

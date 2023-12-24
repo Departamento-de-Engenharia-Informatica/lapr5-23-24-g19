@@ -30,7 +30,7 @@
 :- use_module('task-sequencer/sequencer', [ sequencer/3 ]).
 
 :- use_module('dto/path-segment', [ segments_to_dto/2 ]).
-:- use_module('dto/task-sequence', [ sequence_to_dto/2, dto_to_sequence/2,dto_to_robot/2 ]).
+:- use_module('dto/task-sequence', [ sequence_to_dto/3, dto_to_sequence/2,dto_to_robot/2 ]).
 
 %%%%%%
 
@@ -79,8 +79,6 @@ get_paths(Request) :-
 
 
 
-:- use_module('task-sequencer/permutation', [ perm/2 ]).
-
 :- http_handler('/api/task-sequence', get_sequence, [method(*)]).
 
 get_sequence(Request) :-
@@ -115,4 +113,3 @@ get_sequence(Request) :-
 %     % sequence_to_dto(Order, DTO),
 %     %
 %     % reply_json_dict(Robot).
-

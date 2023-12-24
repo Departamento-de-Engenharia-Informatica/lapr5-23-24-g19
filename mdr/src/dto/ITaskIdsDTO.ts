@@ -1,3 +1,4 @@
 export interface ITaskIdsDTO {
-    tasks: string[]
+    id: string
+    type: string
 }

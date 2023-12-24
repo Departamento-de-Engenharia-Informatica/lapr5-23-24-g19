@@ -1,5 +1,5 @@
 :- module(task_sequence_dto, [
-    sequence_to_dto/2,
+    sequence_to_dto/3,
     dto_to_sequence/2,
     dto_to_robot/2
 ]).

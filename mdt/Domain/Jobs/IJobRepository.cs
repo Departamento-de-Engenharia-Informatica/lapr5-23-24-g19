@@ -13,7 +13,6 @@ namespace DDDSample1.Domain.Products
         public Task<List<Job>> GetByTypes(JobTypeEnum[] types);
         public Task<List<Job>> GetByEmail(string email);
         public Task<List<Job>> GetByState(JobStateEnum state);
-
         public Task<List<Job>> Filter(IJobFilterStrategy strategy);
     }
 }

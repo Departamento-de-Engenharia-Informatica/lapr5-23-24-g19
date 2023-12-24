@@ -1,4 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
+using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -123,6 +126,13 @@ namespace DDDSample1.Controllers
         public async Task<ActionResult<JobDto[]>> GetApprovedJobsSequence()
         {
             throw new System.NotImplementedException();
+        }
+
+        [HttpPatch("sequence")]
+        public async Task<ActionResult<String>> JobSequence([FromBody] RobotTasksDTO dto)
+        {
+            var sequence = await _service.JobSequence(dto);
+            return Ok(sequence);
         }
     }
 }

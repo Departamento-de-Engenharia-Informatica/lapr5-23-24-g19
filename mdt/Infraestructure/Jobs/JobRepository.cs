@@ -32,6 +32,7 @@ namespace DDDSample1.Infrastructure.Families
         {
             return await _objs.Where(x => email.Equals(x.Email)).ToListAsync();
         }
+
         public async Task<List<Job>> GetByState(JobStateEnum state)
         {
             return await _objs.Where(x => state.Equals(x.Status)).ToListAsync();

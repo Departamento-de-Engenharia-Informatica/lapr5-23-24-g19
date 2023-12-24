@@ -28,5 +28,5 @@ export default interface ITaskService {
     updateTask(DTO: IUpdateTaskDTO): Promise<Either<TaskErrorResult, String>>
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 
-    taskSequence(dto: ITaskIdsDTO): Promise<Either<TaskErrorResult, String>>
+    taskSequence(dto: ITaskIdsDTO[]): Promise<Either<TaskErrorResult, String>>
 }

@@ -131,7 +131,7 @@ export default class TaskController implements ITaskController {
 
     async taskSequence(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = req.body as ITaskIdsDTO
+            const dto = req.body.tasks as ITaskIdsDTO[]
 
             const result = await this.service.taskSequence(dto)
 
@@ -147,7 +147,6 @@ export default class TaskController implements ITaskController {
             return next(e)
         }
     }
-
 
     private resolveHttpCode(result: TaskErrorCode) {
         let ret: number
