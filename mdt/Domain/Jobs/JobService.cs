@@ -154,7 +154,7 @@ namespace DDDSample1.Domain.Jobs
                     jobs.Add(job);
                 }
 
-                var sequence = await _planning.ComputeSequence(ComputeSequenceMapper.toDTO(jobs));
+                var sequence = await _planning.ComputeSequence(ComputeSequenceMapper.ToDTO(dto.Algorithm, jobs));
 
                 // jobs.ForEach(
                 //     async j =>

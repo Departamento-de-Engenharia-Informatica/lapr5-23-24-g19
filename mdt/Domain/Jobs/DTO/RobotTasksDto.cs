@@ -10,6 +10,7 @@ namespace DDDSample1.Domain.Jobs.DTO
 
     public class RobotTasksDTO
     {
+        public string Algorithm { get; set; }
         public Dictionary<string, List<TaskIdsDTO>> RobotTasks { get; set; }
     }
 }

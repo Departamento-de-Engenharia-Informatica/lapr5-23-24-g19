@@ -10,7 +10,7 @@ import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurvei
 import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
-import { ITaskIdsDTO } from '../dto/ITaskIdsDTO'
+import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 
 @Service()
 export default class TaskController implements ITaskController {
@@ -131,7 +131,8 @@ export default class TaskController implements ITaskController {
 
     async taskSequence(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = req.body.tasks as ITaskIdsDTO[]
+            console.log('oioioioioioio')
+            const dto = req.body as ITaskAlgorithmDTO
             const result = await this.service.taskSequence(dto)
 
             if (result.isLeft()) {

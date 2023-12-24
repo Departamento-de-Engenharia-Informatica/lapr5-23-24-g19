@@ -10,7 +10,7 @@
 :- use_module(library(http/http_client)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
-% :- use_module(library(http/http_unix_daemon)).
+:- use_module(library(http/http_unix_daemon)).
 
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json_convert)).
@@ -27,10 +27,17 @@
     compute_paths/4
 ]).
 
-:- use_module('task-sequencer/sequencer', [ sequencer/3 ]).
+:- use_module('task-sequencer/sequencer', [
+    sequencer/4,
+    sequence_algs/1
+]).
 
 :- use_module('dto/path-segment', [ segments_to_dto/2 ]).
-:- use_module('dto/task-sequence', [ sequence_to_dto/3, dto_to_sequence/2,dto_to_robot/2 ]).
+:- use_module('dto/task-sequence', [
+    sequence_to_dto/3,
+    dto_to_sequence/2,
+    dto_to_robot/2
+]).
 
 %%%%%%
 
@@ -78,6 +85,11 @@ get_paths(Request) :-
     reply_json_dict(PathsDTO).
 
 
+:- http_handler('/api/sequence-algs', get_sequence_algs, [method(get)]).
+
+get_sequence_algs(_Request) :-
+    sequence_algs(Algs),
+    reply_json(Algs).
 
 :- http_handler('/api/task-sequence', get_sequence, [method(*)]).
 
@@ -85,11 +97,13 @@ get_sequence(Request) :-
     http_read_json_dict(Request, Body),
 
     dto_to_sequence(Body.tasks, Tasks),
+    atom_string(Alg, Body.algorithm),
+
     % dto_to_robot(Body.robot, Robot),
     % write(Tasks),
     % write(Robot)
 
-    sequencer(Tasks, Order, Robot),
+    sequencer(Alg, Tasks, Order, Robot),
     % perm(Tasks, Order),
     % format(string(S), '~w~n~n~w', [Tasks,Robot]),
     % reply_json(S).

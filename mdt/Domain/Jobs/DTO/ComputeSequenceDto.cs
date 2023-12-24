@@ -19,6 +19,7 @@ namespace DDDSample1.Domain.Jobs.DTO
 
     public class ComputeSequenceDto
     {
+        public string algorithm { get; set; }
         public List<JobTaskUnit> tasks { get; set; }
     }
 }

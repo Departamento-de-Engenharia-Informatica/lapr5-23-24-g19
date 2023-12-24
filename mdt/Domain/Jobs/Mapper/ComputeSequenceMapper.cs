@@ -8,7 +8,7 @@ namespace DDDSample1.Domain.Jobs.Mapper
     {
         public ComputeSequenceMapper() { }
 
-        public static ComputeSequenceDto toDTO(List<Job> jobs)
+        public static ComputeSequenceDto ToDTO(string algorithm, List<Job> jobs)
         {
             var units = jobs.Select(j =>
                 {
@@ -17,8 +17,8 @@ namespace DDDSample1.Domain.Jobs.Mapper
                         building = j.Location.StartingPoint.BuildingCode,
                         floor = j.Location.StartingPoint.FloorNumber,
                         // This is not a bug. The x and y are inverted in the DTO.
-                        x = ((int)j.Location.StartingPoint.Y),
-                        y = ((int)j.Location.StartingPoint.X)
+                        x = (int)j.Location.StartingPoint.Y,
+                        y = (int)j.Location.StartingPoint.X
                     };
 
                     var end = new JobPosition
@@ -26,8 +26,8 @@ namespace DDDSample1.Domain.Jobs.Mapper
                         building = j.Location.EndingPoint.BuildingCode,
                         floor = j.Location.EndingPoint.FloorNumber,
                         // This is not a bug. The x and y are inverted in the DTO.
-                        x = ((int)j.Location.EndingPoint.Y),
-                        y = ((int)j.Location.EndingPoint.X)
+                        x = (int)j.Location.EndingPoint.Y,
+                        y = (int)j.Location.EndingPoint.X
                     };
 
                     return new JobTaskUnit
@@ -39,7 +39,7 @@ namespace DDDSample1.Domain.Jobs.Mapper
                 })
                 .ToList();
 
-            return new ComputeSequenceDto { tasks = units };
+            return new ComputeSequenceDto { algorithm = algorithm, tasks = units };
         }
     }
 }

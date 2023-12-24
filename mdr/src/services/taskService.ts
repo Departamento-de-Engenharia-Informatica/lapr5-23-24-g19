@@ -11,7 +11,6 @@ import { RoomName } from '../domain/room/roomName'
 import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
 import { IFloorMapInitPositionDTO } from '../dto/IFloorMapInitPositionDTO'
-import { ITaskIdsDTO } from '../dto/ITaskIdsDTO'
 import { ITaskTypeDTO } from '../dto/ITaskTypeDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
 import { TaskMap } from '../mappers/TaskMap'
@@ -21,9 +20,8 @@ import IMdtAdapter from './IRepos/IMdtRepo'
 import IRobotRepo from './IRepos/IRobotRepo'
 import IRoomRepo from './IRepos/IRoomRepo'
 import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
-import { ITaskDTO } from '../dto/ITaskDTO'
+import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
-import { forEach } from 'lodash'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -33,7 +31,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-    ) {}
+    ) { }
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -216,7 +214,7 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async taskSequence(dto: ITaskIdsDTO[]): Promise<Either<TaskErrorResult, String>> {
+    async taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, String>> {
         try {
             const robots = await this.robotRepo.findAll()
 
@@ -227,9 +225,13 @@ export default class TaskService implements ITaskService {
                 })
             }
 
-            const types = new Set(dto.map(t => TaskType.toType(t.type.toUpperCase())))
+            console.log(1)
+            const types = new Set(dto.tasks.map(t => TaskType.toType(t.type.toUpperCase())))
+            console.log(2)
             for (const t of types) {
+                console.log(3)
                 if (!robots.find(r => r.type.taskType.includes(t))) {
+                    console.log(4)
                     return left({
                         errorCode: TaskErrorCode.NotFound,
                         message: `No robot to fulfill task of type ${TaskType.toString(
@@ -239,27 +241,35 @@ export default class TaskService implements ITaskService {
                 }
             }
 
-            const tasks = [...dto]
+            console.log(5)
+
+            const tasks = [...dto.tasks]
             const result: IRobotTasksDTO = {
+                Algorithm: dto.algorithm,
                 RobotTasks: {},
             }
 
             while (tasks.length !== 0) {
                 robots.forEach(r => {
+                    console.log(JSON.stringify(r, null, 2))
                     if (
+                        tasks.length > 0 &&
                         r.type.taskType.includes(
                             TaskType.toType(tasks[0].type.toUpperCase()),
                         )
                     ) {
+                        console.log('7a')
                         if (!result.RobotTasks[r.nickname.value]) {
                             result.RobotTasks[r.nickname.value] = []
                         }
 
-                        console.log('shift')
                         result.RobotTasks[r.nickname.value].push(tasks.shift())
                     }
+                    console.log('7b')
                 })
             }
+
+            console.log(8)
 
             console.log(result)
 
