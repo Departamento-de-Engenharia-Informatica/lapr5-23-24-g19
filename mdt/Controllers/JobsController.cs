@@ -131,8 +131,15 @@ namespace DDDSample1.Controllers
         [HttpPatch("sequence")]
         public async Task<ActionResult<String>> JobSequence([FromBody] RobotTasksDTO dto)
         {
-            var sequence = await _service.JobSequence(dto);
-            return Ok(sequence);
+            try
+            {
+                var sequence = await _service.JobSequence(dto);
+                return Ok(sequence);
+            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
