@@ -16,10 +16,11 @@ sequencer(Tasks, Order, Robot) :-
     [(start(B, F, _, _), _, _)|_] = Tasks,
     getrobotpos(B, F, Robot),
 
-    % task_sequence_alg(Name),
     % format('Status: antes~n~n'),
-    perm(Robot, Tasks, Order).
+    % perm(Robot, Tasks, Order).
     % gera_prin(Robot, Tasks, Order).
     % format('Status: depois~n~n').
-    % impls(Name, Alg),
-    % call(Alg, Tasks, Order).
+
+    task_sequence_alg(Name),
+    impls(Name, Alg),
+    call(Alg, Robot, Tasks, Order).

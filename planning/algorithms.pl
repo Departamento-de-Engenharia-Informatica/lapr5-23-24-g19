@@ -96,6 +96,8 @@ compute_path(Orig, Dest, Path, Cost) :-
     (resolve_room(Orig, ActOrig), !; ActOrig = Orig),
     (resolve_room(Dest, ActDest), !; ActDest = Dest),
 
+    % write('orig: '), write(Orig), nl,
+    % write('origem: '), write(ActOrig), nl,
     % write('dest: '), write(Dest), nl,
     % write('destino: '), write(ActDest), nl,
 
@@ -196,8 +198,10 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     \+ visited_floors(B1, F1),
     loadmap(B1, F1),
     % format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
+    % write('random building passage'), nl,
 
     passage(B1, F1, Xf1, Yf1, B3, F3),
+    \+ visited_floors(B3, F3),
 
     edge_wrap(B1, F1, Wrapper),
     walk(cell(X1, Y1), cell(Xf1, Yf1), Wrapper, Comp, CostPath),
@@ -221,10 +225,12 @@ compute_path_aux((B1, F1, X1, Y1), (B2, F2, X2, Y2), [CompFull|Path], Acc, Cost)
     \+ visited_floors(B1, F1),
     loadmap(B1, F1),
     % format('~w~w (~w, ~w)', [B1, F1, X1, Y1]), nl,
+    % write('random building elevator'), nl,
 
     elevator(B1, F1, XElev, YElev, ElevFloors),
     member(Fconn, ElevFloors),
     Fconn \== F1,
+    \+ visited_floors(B1, Fconn),
     % write(Fconn), nl,
 
     edge_wrap(B1, F1, Wrapper),

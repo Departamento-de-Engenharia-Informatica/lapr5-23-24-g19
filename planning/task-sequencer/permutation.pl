@@ -38,7 +38,9 @@ path_cost_aux(_, [], Acc, Acc).
 path_cost_aux(Robot, [T], Acc, Cost) :-
     % EXTRA: walk from last task to initial position
     (_, end(B, F, X, Y), _) = T,
+    % write('Computing path from '), write((B, F, X, Y)), write(' to '), write(Robot), nl,
     compute_path((B, F, X, Y), Robot, _, CostPath), !,
+    % write('Cost: '), write(CostPath), nl,
 
     Cost is Acc + CostPath.
 
@@ -46,7 +48,9 @@ path_cost_aux(Robot, [T1, T2 | Tasks], Acc, Cost) :-
     (_, end(B1, F1, X1, Y1), _) = T1,
     (start(B2, F2, X2, Y2), _, _) = T2,
 
+    % write('Computing path from '), write((B1, F1, X1, Y1)), write(' to '), write((B2, F2, X2, Y2)), nl,
     compute_path((B1, F1, X1, Y1), (B2, F2, X2, Y2), _, CostPath), !,
+    % write('Cost: '), write(CostPath), nl,
     NewAcc is Acc + CostPath,
 
     path_cost_aux(Robot, [T2|Tasks], NewAcc, Cost).
