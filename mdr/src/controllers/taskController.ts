@@ -132,7 +132,6 @@ export default class TaskController implements ITaskController {
     async taskSequence(req: Request, res: Response, next: NextFunction) {
         try {
             const dto = req.body.tasks as ITaskIdsDTO[]
-
             const result = await this.service.taskSequence(dto)
 
             if (result.isLeft()) {

@@ -421,6 +421,7 @@ export default class Maze extends THREE.Group {
         })
 
         if (!!pas) {
+            console.log(pas)
             const b = {
                 building: pas.buildingB.building,
                 floor: pas.buildingB.floor,

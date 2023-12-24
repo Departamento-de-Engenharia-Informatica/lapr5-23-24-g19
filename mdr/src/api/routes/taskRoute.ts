@@ -48,16 +48,6 @@ export default (app: Router) => {
     )
 
     route.patch(
-        '/:id',
-        celebrate({
-            body: Joi.object({
-                taskStatus: Joi.string(),
-            }).unknown(true), // This allows additional properties in the body
-        }),
-        (req, res, next) => ctrl.updateTask(req, res, next),
-    )
-
-    route.patch(
         '/sequence',
         celebrate({
             body: Joi.object({
@@ -72,5 +62,15 @@ export default (app: Router) => {
             }),
         }),
         (req, res, next) => ctrl.taskSequence(req, res, next),
+    )
+
+    route.patch(
+        '/:id',
+        celebrate({
+            body: Joi.object({
+                taskStatus: Joi.string(),
+            }).unknown(true), // This allows additional properties in the body
+        }),
+        (req, res, next) => ctrl.updateTask(req, res, next),
     )
 }

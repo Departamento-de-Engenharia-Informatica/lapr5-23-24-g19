@@ -23,6 +23,7 @@ import IRoomRepo from './IRepos/IRoomRepo'
 import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
 import { ITaskDTO } from '../dto/ITaskDTO'
 import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
+import { forEach } from 'lodash'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -226,6 +227,18 @@ export default class TaskService implements ITaskService {
                 })
             }
 
+            const types = new Set(dto.map(t => TaskType.toType(t.type.toUpperCase())))
+            for (const t of types) {
+                if (!robots.find(r => r.type.taskType.includes(t))) {
+                    return left({
+                        errorCode: TaskErrorCode.NotFound,
+                        message: `No robot to fulfill task of type ${TaskType.toString(
+                            t,
+                        )}`,
+                    })
+                }
+            }
+
             const tasks = [...dto]
             const result: IRobotTasksDTO = {
                 RobotTasks: {},
@@ -242,10 +255,13 @@ export default class TaskService implements ITaskService {
                             result.RobotTasks[r.nickname.value] = []
                         }
 
+                        console.log('shift')
                         result.RobotTasks[r.nickname.value].push(tasks.shift())
                     }
                 })
             }
+
+            console.log(result)
 
             const sequence = await this.repo.taskSequence(result)
             return right(sequence)

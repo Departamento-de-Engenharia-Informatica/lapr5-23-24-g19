@@ -186,7 +186,7 @@
         "modelUri": "./models/gltf/door/door.glb"
     },
     "player": {
-        "initialPosition": [1, 3],
+        "initialPosition": [6, 20],
         "initialDirection": -90
     }
 }
