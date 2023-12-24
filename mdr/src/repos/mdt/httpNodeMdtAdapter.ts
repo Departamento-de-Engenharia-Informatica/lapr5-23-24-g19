@@ -12,8 +12,6 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
     private url = config.mdtURL
 
     async createSurveillanceTask(dto: ITaskDTO): Promise<String> {
-        console.log('===============')
-        console.log(dto)
         const res = await fetch(`${this.url}/jobs`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
@@ -30,8 +28,6 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
     }
 
     async createDeliveryTask(dto: ITaskDTO): Promise<String> {
-        console.log('===============')
-        console.log(dto)
         const res = await fetch(`${this.url}/jobs`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },

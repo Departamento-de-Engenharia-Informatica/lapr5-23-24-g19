@@ -1,7 +1,5 @@
-import { Service, Inject } from 'typedi'
+import { Inject, Service } from 'typedi'
 import config from '../../config'
-
-import jwt from 'jsonwebtoken'
 
 import argon2 from 'argon2'
 import { randomBytes } from 'crypto'
@@ -9,25 +7,28 @@ import { randomBytes } from 'crypto'
 import { UserPassword } from '../domain/user/userPassword'
 
 import { Either, left, right } from '../core/logic/Result'
+import BackofficeUser from '../domain/user/backofficeUser/backofficeUser'
 import { Email } from '../domain/user/email'
 import { Name } from '../domain/user/name'
 import { PhoneNumber } from '../domain/user/phoneNumber'
+import { IBackofficeUserDTO } from '../dto/IBackofficeUserDTO'
+import { ICreatedBackofficeUserDTO } from '../dto/ICreatedBackofficeUserDTO'
+import { BackofficeUserMap } from '../mappers/BackofficeUserMap'
+import IBackofficeUserRepo from './IRepos/IBackofficeUserRepo'
+import IRoleRepo from './IRepos/IRoleRepo'
 import IBackofficeUserService, {
     BackofficeUserErrorCode,
     BackofficeUserErrorResult,
 } from './IServices/IBackofficeUserService'
-import IBackofficeUserRepo from './IRepos/IBackofficeUserRepo'
-import { ICreatedBackofficeUserDTO } from '../dto/ICreatedBackofficeUserDTO'
-import { IBackofficeUserDTO } from '../dto/IBackofficeUserDTO'
-import BackofficeUser from '../domain/user/backofficeUser/backofficeUser'
-import { BackofficeUserMap } from '../mappers/BackofficeUserMap'
-import IRoleRepo from './IRepos/IRoleRepo'
+import IAuthRepo from './IRepos/IAuthRepo'
+import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 
 @Service()
 export default class BackofficeUserService implements IBackofficeUserService {
     constructor(
         @Inject(config.repos.backofficeUser.name) private repo: IBackofficeUserRepo,
-        @Inject(config.repos.role.name) private roleRepo: IRoleRepo
+        @Inject(config.repos.auth.name) private authRepo: IAuthRepo,
+        @Inject(config.repos.role.name) private roleRepo: IRoleRepo,
     ) {}
 
     async createBackofficeUser(
@@ -48,7 +49,7 @@ export default class BackofficeUserService implements IBackofficeUserService {
             if (!role) {
                 return left({
                     errorCode: BackofficeUserErrorCode.NotFound,
-                    message: `No such role: ${dto.role}`
+                    message: `No such role: ${dto.role}`,
                 })
             }
 
@@ -65,7 +66,14 @@ export default class BackofficeUserService implements IBackofficeUserService {
                 password,
             }).getOrThrow()
 
+            await this.authRepo.createUser({
+                email: dto.email,
+                password: dto.password,
+                connection: 'Username-Password-Authentication',
+            } as IAuthUserDTO)
+
             const saved = await this.repo.save(backofficeUser)
+
             // TODO: TOKEN
             const backofficeUserDTO = BackofficeUserMap.toDTO(saved)
 
