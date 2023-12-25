@@ -4,6 +4,7 @@ import { Container } from 'typedi'
 
 import config from '../../../config'
 import IPassageController from '../../controllers/IControllers/IPassageController'
+import { customJwtMiddleware } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -18,14 +19,19 @@ export default (app: Router) => {
             body: Joi.object({
                 floor1: Joi.object({
                     buildingCode: Joi.string().required(),
-                    floorNumber: Joi.number().integer().required(),
+                    floorNumber: Joi.number()
+                        .integer()
+                        .required(),
                 }),
                 floor2: Joi.object({
                     buildingCode: Joi.string().required(),
-                    floorNumber: Joi.number().integer().required(),
+                    floorNumber: Joi.number()
+                        .integer()
+                        .required(),
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.createPassage(req, res, next),
     )
 
@@ -37,6 +43,7 @@ export default (app: Router) => {
                 building2: Joi.string(),
             },
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.getPassages(req, res, next),
     )
 
@@ -47,25 +54,34 @@ export default (app: Router) => {
                 old: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                 }),
                 new: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.editPassage(req, res, next),
     )
 
@@ -76,25 +92,34 @@ export default (app: Router) => {
                 old: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }).required(),
                 }),
                 new: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number().integer().required(),
+                        floorNumber: Joi.number()
+                            .integer()
+                            .required(),
                     }),
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.editPassage(req, res, next),
     )
 }

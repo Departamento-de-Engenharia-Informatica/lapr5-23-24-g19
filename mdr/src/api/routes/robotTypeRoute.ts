@@ -5,6 +5,7 @@ import { Container } from 'typedi'
 import config from '../../../config'
 import IRobotTypeController from '../../controllers/IControllers/IRobotTypeController'
 import middlewares from '../middlewares'
+import { customJwtMiddleware } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -22,14 +23,20 @@ export default (app: Router) => {
                 code: Joi.string().required(),
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
-                taskTypes: Joi.array().items(Joi.string()).min(1).required(),
+                taskTypes: Joi.array()
+                    .items(Joi.string())
+                    .min(1)
+                    .required(),
             }),
         }),
+        customJwtMiddleware,
         // middlewares.isAuth,
         // middlewares.attachCurrentUser,
         // middlewares.checkFleetManager,
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )
 
-    route.get('', (req, res, next) => robotTypeController.getRobotTypes(req, res, next))
+    route.get('', customJwtMiddleware, (req, res, next) =>
+        robotTypeController.getRobotTypes(req, res, next),
+    )
 }

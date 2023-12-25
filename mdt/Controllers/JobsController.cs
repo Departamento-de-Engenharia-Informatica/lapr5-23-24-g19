@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using DDDSample1.Domain.Shared;
 using Microsoft.AspNetCore.Mvc;

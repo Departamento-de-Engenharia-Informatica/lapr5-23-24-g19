@@ -33,11 +33,9 @@ export class ListBuildingsMinmaxFloorsComponent {
             min: this.filterForm.value.min as unknown as number,
             max: this.filterForm.value.max as unknown as number,
         }
-        console.log('ola')
 
         this.service.getBuildingsByFloors(dto).subscribe(
             (list: BuildingByFloorsDTO[]) => {
-                console.log(list)
                 this.allBuildings = list
                 this.buildings = this.allBuildings
             },

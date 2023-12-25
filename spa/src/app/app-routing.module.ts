@@ -52,7 +52,12 @@ export const routes: Routes = [
     { path: 'backoffice', component: CreateBackofficeUserComponent },
     { path: 'client', component: CreateClientComponent, title: 'User' },
 
-    { path: 'modules', component: ModulesComponent, title: 'Modules page' },
+    {
+        path: 'modules',
+        component: ModulesComponent,
+        canActivate: [AuthGuard],
+        title: 'Modules page',
+    },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
     {
         path: 'task',

@@ -4,6 +4,7 @@ import config from '../../../config'
 
 import ITaskController from '../../controllers/IControllers/ITaskController'
 import { Joi, celebrate } from 'celebrate'
+import { customJwtMiddleware } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -12,13 +13,17 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.task.name) as ITaskController
 
-    route.get('/types', (req, res, next) => ctrl.getTypes(req, res, next))
+    route.get('/types', customJwtMiddleware, (req, res, next) =>
+        ctrl.getTypes(req, res, next),
+    )
 
-    route.post('/surveillance', (req, res, next) =>
+    route.post('/surveillance', customJwtMiddleware, (req, res, next) =>
         ctrl.createSurveillanceTask(req, res, next),
     )
 
-    route.post('/delivery', (req, res, next) => ctrl.createDeliveryTask(req, res, next))
+    route.post('/delivery', customJwtMiddleware, (req, res, next) =>
+        ctrl.createDeliveryTask(req, res, next),
+    )
 
     route.get(
         '',
@@ -27,7 +32,7 @@ export default (app: Router) => {
                 status: Joi.string(),
             },
         }),
-
+        customJwtMiddleware,
         (req, res, next) => {
             return ctrl.getByStatus(req, res, next)
         },
@@ -41,7 +46,7 @@ export default (app: Router) => {
                 rule: Joi.string(),
             },
         }),
-
+        customJwtMiddleware,
         (req, res, next) => {
             return ctrl.getByFilter(req, res, next)
         },
@@ -54,6 +59,7 @@ export default (app: Router) => {
                 taskStatus: Joi.string(),
             }).unknown(true), // This allows additional properties in the body
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.updateTask(req, res, next),
     )
 
@@ -61,9 +67,12 @@ export default (app: Router) => {
         '/sequence',
         celebrate({
             body: Joi.object({
-                tasks: Joi.array().items(Joi.string()).required(),
-            })
+                tasks: Joi.array()
+                    .items(Joi.string())
+                    .required(),
+            }),
         }),
-        (req, res, next) => ctrl.taskSequence(req, res, next)
+        customJwtMiddleware,
+        (req, res, next) => ctrl.taskSequence(req, res, next),
     )
 }
