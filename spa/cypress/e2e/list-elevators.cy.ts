@@ -1,6 +1,21 @@
+function loginViaAuth0Ui(username: string, password: string) {
+    cy.origin(
+        Cypress.env('auth_domain'),
+        { args: { username, password } },
+        ({ username, password }) => {
+            cy.get('input#1-email').type(username)
+            cy.get('input#1-password').type(password, { log: false })
+            cy.get('button[type="submit"]')
+                .should('be.visible')
+                .should('contain.text', 'Log In')
+                .should('not.be.disabled')
+                .should('not.be.hidden')
+                .click()
+        },
+    )
+}
 describe('List Elevators e2e tests', () => {
     beforeEach(() => {
-
         cy.intercept('GET', 'http://localhost:4000/api/buildings', {
             body: [
                 {
@@ -24,9 +39,21 @@ describe('List Elevators e2e tests', () => {
             ],
         }).as('getBuildings')
 
-        cy.visit('/campus/elevators/list');
-    });
+        cy.visit('/campus/elevators/list')
 
+        const log = Cypress.log({
+            displayName: 'AUTH0 LOGIN',
+            message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],
+            // @ts-ignore
+            autoEnd: false,
+        })
+        log.snapshot('before')
+
+        loginViaAuth0Ui(Cypress.env('auth_username'), Cypress.env('auth_password'))
+
+        log.snapshot('after')
+        log.end()
+    })
 
     it('has the correct title', () => {
         cy.title().should('equal', 'List Elevators')
@@ -97,7 +124,10 @@ describe('List Elevators e2e tests', () => {
         cy.get('.elevator-card').should('contain.text', 'Brand: Brand2')
         cy.get('.elevator-card').should('contain.text', 'Model: Model2')
         cy.get('.elevator-card').should('contain.text', 'Serial Number: SN2')
-        cy.get('.elevator-card').should('contain.text', 'Description: Chemistry Elevator 1')
+        cy.get('.elevator-card').should(
+            'contain.text',
+            'Description: Chemistry Elevator 1',
+        )
         cy.get('.elevator-card').should('contain.text', 'Identifier: E3')
         cy.get('.elevator-card').should('contain.text', 'Floors: 7')
         cy.get('.elevator-card').should('contain.text', 'Brand: Brand3')
@@ -105,6 +135,4 @@ describe('List Elevators e2e tests', () => {
         cy.get('.elevator-card').should('contain.text', 'Serial Number: SN3')
         cy.get('.elevator-card').should('contain.text', 'No description')
     })
-
-
-});
+})

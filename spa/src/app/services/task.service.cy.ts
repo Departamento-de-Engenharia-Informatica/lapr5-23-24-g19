@@ -4,7 +4,6 @@ import {
     HttpClientTestingModule,
     HttpTestingController,
 } from '@angular/common/http/testing'
-import { assert, expect } from 'chai'
 import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
 import { TaskDTO, TaskState } from '../dto/TaskDTO'
 import { Config } from '../config'

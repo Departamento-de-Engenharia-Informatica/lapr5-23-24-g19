@@ -1,3 +1,20 @@
+function loginViaAuth0Ui(username: string, password: string) {
+    cy.origin(
+        Cypress.env('auth_domain'),
+        { args: { username, password } },
+        ({ username, password }) => {
+            cy.get('input#1-email').type(username)
+            cy.get('input#1-password').type(password, { log: false })
+            cy.get('button[type="submit"]')
+                .should('be.visible')
+                .should('contain.text', 'Log In')
+                .should('not.be.disabled')
+                .should('not.be.hidden')
+                .click()
+        },
+    )
+}
+
 describe('Room Form e2e tests', () => {
     beforeEach(() => {
         cy.intercept('GET', 'http://localhost:4000/api/buildings', {
@@ -14,6 +31,19 @@ describe('Room Form e2e tests', () => {
         }).as('getBuildings')
 
         cy.visit('/campus/rooms/create')
+
+        const log = Cypress.log({
+            displayName: 'AUTH0 LOGIN',
+            message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],
+            // @ts-ignore
+            autoEnd: false,
+        })
+        log.snapshot('before')
+
+        loginViaAuth0Ui(Cypress.env('auth_username'), Cypress.env('auth_password'))
+
+        log.snapshot('after')
+        log.end()
     })
 
     it('has the correct title', () => {

@@ -39,13 +39,11 @@ describe('Floors e2e tests', () => {
                 },
             ],
         }).as('getBuildings')
-
-        cy.visit('campus/floors')
     })
 
     describe('List floors e2e tests', () => {
         beforeEach(() => {
-            cy.get('button').contains('List').click()
+            cy.visit('campus/floors/list')
             const log = Cypress.log({
                 displayName: 'AUTH0 LOGIN',
                 message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],
@@ -139,7 +137,7 @@ describe('Floors e2e tests', () => {
 
     describe('Create Floors e2e tests', () => {
         beforeEach(() => {
-            cy.get('button').contains('Create').click()
+            cy.visit('campus/floors/create')
             const log = Cypress.log({
                 displayName: 'AUTH0 LOGIN',
                 message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],
@@ -302,7 +300,7 @@ describe('Floors e2e tests', () => {
     })
     describe('Edit floors e2e tests', () => {
         beforeEach(() => {
-            cy.get('button').contains('Edit').click()
+            cy.visit('campus/floors/edit')
             const log = Cypress.log({
                 displayName: 'AUTH0 LOGIN',
                 message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],

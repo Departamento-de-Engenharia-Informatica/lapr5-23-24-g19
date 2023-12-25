@@ -57,31 +57,37 @@ export const routes: Routes = [
     {
         path: 'task',
         component: TaskMenuComponent,
+        canActivate: [AuthGuard],
         title: 'Tasks',
         children: [
             {
                 path: 'trace-route',
                 component: TraceRouteComponent,
+                canActivate: [AuthGuard],
                 title: 'Trace route',
             },
             {
                 path: 'create-task-surveillance',
                 component: CreateTaskSurveillanceComponent,
+                canActivate: [AuthGuard],
                 title: 'Create surveillance task',
             },
             {
                 path: 'create-task-delivery',
                 component: CreateTaskDeliveryComponent,
+                canActivate: [AuthGuard],
                 title: 'Create delivery task',
             },
             {
                 path: 'approve-reject',
                 component: ApproveRejectTaskComponent,
+                canActivate: [AuthGuard],
                 title: 'Approve/Reject task',
             },
             {
                 path: 'filter',
                 component: TasksFilterComponent,
+                canActivate: [AuthGuard],
                 title: 'Filter tasks',
             },
         ],
@@ -94,12 +100,14 @@ export const routes: Routes = [
     {
         path: 'fleet',
         component: FleetMenuComponent,
+        canActivate: [AuthGuard],
         title: 'Fleet',
         children: [],
     },
     {
         path: 'fleet/robot-types',
         component: RobotTypeComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'create',
@@ -111,19 +119,23 @@ export const routes: Routes = [
     {
         path: 'fleet/robots',
         component: RobotComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'inhibit',
                 component: InhibitRobotComponent,
+                canActivate: [AuthGuard],
                 title: 'Inhibt a robot',
             },
             {
                 path: 'create',
                 component: CreateRobotComponent,
+                canActivate: [AuthGuard],
                 title: 'Create Robot',
             },
             {
                 path: 'list',
+                canActivate: [AuthGuard],
                 component: ListRobotsComponent,
                 title: 'List all robots in the fleet',
             },
@@ -133,26 +145,31 @@ export const routes: Routes = [
     {
         path: 'campus/buildings',
         component: BuildingComponent,
+        canActivate: [AuthGuard],
         title: 'Buildings',
         children: [
             {
                 path: 'create',
                 component: CreateBuildingComponent,
+                canActivate: [AuthGuard],
                 title: 'CreateBuilding',
             },
             {
                 path: 'list',
                 component: GetBuildingsComponent,
+                canActivate: [AuthGuard],
                 title: 'List Buildings',
             },
             {
                 path: 'edit',
                 component: EditBuildingComponent,
+                canActivate: [AuthGuard],
                 title: 'Edit Building',
             },
             {
                 path: 'list-by-floors',
                 component: ListBuildingsMinmaxFloorsComponent,
+                canActivate: [AuthGuard],
                 title: 'List Buildings by Floors',
             },
         ],
@@ -161,6 +178,7 @@ export const routes: Routes = [
     {
         path: 'campus/floors',
         component: FloorComponent,
+        canActivate: [AuthGuard],
         title: 'Floors',
         children: [
             {
@@ -199,20 +217,24 @@ export const routes: Routes = [
     {
         path: 'campus/elevators',
         component: ElevatorComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'create',
                 component: CreateElevatorComponent,
+                canActivate: [AuthGuard],
                 title: 'Create Elevator',
             },
             {
                 path: 'edit',
                 component: EditElevatorComponent,
+                canActivate: [AuthGuard],
                 title: 'Edit Elevator',
             },
             {
                 path: 'list',
                 component: ListElevatorsComponent,
+                canActivate: [AuthGuard],
                 title: 'List Elevators',
             },
         ],
@@ -221,15 +243,18 @@ export const routes: Routes = [
     {
         path: 'campus/rooms',
         component: RoomComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'create',
                 component: CreateRoomComponent,
+                canActivate: [AuthGuard],
                 title: 'Create Room',
             },
             {
                 path: 'list',
                 component: ListRoomsComponent,
+                canActivate: [AuthGuard],
                 title: 'List Rooms',
             },
         ],
@@ -237,11 +262,13 @@ export const routes: Routes = [
     {
         path: 'campus/passages',
         component: PassageComponent,
+        canActivate: [AuthGuard],
         title: 'Passages',
         children: [
             {
                 path: 'edit',
                 component: EditPassageComponent,
+                canActivate: [AuthGuard],
                 title: 'Edit Passage',
             },
         ],
@@ -249,15 +276,18 @@ export const routes: Routes = [
     {
         path: 'campus/passages',
         component: PassageComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'list',
                 component: ListPassagesBetweenBuildingsComponent,
+                canActivate: [AuthGuard],
                 title: 'List passages between buildings',
             },
             {
                 path: 'create',
                 component: CreatePassageComponent,
+                canActivate: [AuthGuard],
                 title: 'Create Passage',
             },
         ],
