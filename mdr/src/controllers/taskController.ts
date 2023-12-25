@@ -34,7 +34,6 @@ export default class TaskController implements ITaskController {
 
     async createSurveillanceTask(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('oi')
             const result = await this.service.createSurveillanceTask(
                 req.body as CreateSurveillanceTaskDTO,
             )
@@ -132,7 +131,6 @@ export default class TaskController implements ITaskController {
 
     async taskSequence(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('oioioioioioio')
             const dto = req.body as ITaskAlgorithmDTO
             const result = await this.service.taskSequence(dto)
 

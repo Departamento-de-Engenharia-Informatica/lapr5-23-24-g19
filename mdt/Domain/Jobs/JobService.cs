@@ -171,12 +171,12 @@ namespace DDDSample1.Domain.Jobs
                     ComputeSequenceMapper.ToDTO(dto.Algorithm, jobs)
                 );
 
-                foreach (var j in jobs)
-                {
-                    _ = await UpdateJob(
-                        new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
-                    );
-                }
+                // foreach (var j in jobs)
+                // {
+                //     _ = await UpdateJob(
+                //         new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
+                //     );
+                // }
 
                 var jobSequence = new Sequence(
                     jobs,

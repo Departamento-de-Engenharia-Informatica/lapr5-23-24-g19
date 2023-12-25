@@ -32,7 +32,7 @@ export default (app: Router) => {
                 status: Joi.string(),
             },
         }),
-        customJwtMiddleware,
+        // customJwtMiddleware,
         (req, res, next) => {
             return ctrl.getByStatus(req, res, next)
         },

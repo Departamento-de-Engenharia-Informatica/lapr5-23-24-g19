@@ -100,7 +100,14 @@ namespace DDDSample1
             services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<JobService>();
             services.AddTransient<ISequenceRepository, SequenceRepository>();
-            services.AddSingleton<HttpClient>();
+            // services.AddSingleton<HttpClient>();
+            services.AddHttpClient(
+                "MyHttpClient",
+                client =>
+                {
+                    client.Timeout = TimeSpan.FromMinutes(5);
+                }
+            );
             services.AddTransient<PlanningAdapter>();
         }
     }

@@ -289,7 +289,8 @@ export default (app: Router) => {
         customJwtMiddleware,
         (req, res, next) => floorMapCtrl.updateMap(req, res, next),
     )
-    route.get('/:id/floors/:floorNumber/map', customJwtMiddleware, (req, res, next) =>
+
+    route.get('/:id/floors/:floorNumber/map', (req, res, next) =>
         floorMapCtrl.getMap(req, res, next),
     )
 

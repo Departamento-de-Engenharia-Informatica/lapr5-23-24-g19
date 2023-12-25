@@ -12,9 +12,9 @@ namespace DDDSample1.Infrastructure.Jobs
 
         private HttpClient _client;
 
-        public PlanningAdapter(HttpClient httpClient)
+        public PlanningAdapter(IHttpClientFactory httpClientFactory)
         {
-            _client = httpClient;
+            _client = httpClientFactory.CreateClient("MyHttpClient");
         }
 
         public async Task<TaskSequenceDto> ComputeSequence(ComputeSequenceDto dto)

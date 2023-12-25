@@ -66,7 +66,8 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { EditClientComponent } from './components/user/edit-client/edit-client.component'
 import { CommonModule } from '@angular/common'
 import { AuthComponent } from './components/auth/auth.component'
-import { AuthModule, User } from '@auth0/auth0-angular'
+import { AuthModule, User } from '@auth0/auth0-angular';
+import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 
 @NgModule({
     declarations: [
@@ -119,6 +120,7 @@ import { AuthModule, User } from '@auth0/auth0-angular'
         PrivacyPolicyComponent,
         EditClientComponent,
         AuthComponent,
+        SequenceTaskComponent,
     ],
     imports: [
         AuthModule.forRoot({

@@ -12,6 +12,7 @@ import { FilterDTO } from '../dto/FilterDTO'
 import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
 import { TaskDTO, TaskState, TaskType } from '../dto/TaskDTO'
 import { AuthService } from '@auth0/auth0-angular'
+import { ITaskAlgorithmDTO } from '../../../../mdr/src/dto/ITaskAlgorithmDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -26,6 +27,77 @@ export class TaskService {
         const tokenObservable = this.auth.getAccessTokenSilently()
         const token = await firstValueFrom(tokenObservable)
         return token
+    }
+
+    getApprovedTasks() {
+        return new Observable<TaskDTO[]>((observer) => {
+            // this.getToken()
+            // .then((token) => {
+            this.http
+                .get<any[]>(`${Config.baseUrl}/task?status=approved`, {
+                    headers: {
+                        // Authorization: `Bearer ${token}`,
+                        'Content-type': 'application/json',
+                    },
+                    observe: 'body',
+                    responseType: 'json',
+                })
+                .subscribe(
+                    (tasks) => {
+                        const taskDtos = tasks.map((task) => {
+                            return {
+                                id: task.id.value,
+                                requesterEmail: task.email,
+                                requesterName: 'Nativo',
+                                type: Object.values(TaskType)[task.jobType],
+                                state: Object.values(TaskState)[task.status],
+                            }
+                        })
+                        observer.next(taskDtos)
+                        observer.complete()
+                    },
+                    (error) => {
+                        observer.error(error)
+                    },
+                )
+        })
+        // .catch((error) => {
+        //     observer.error(error)
+        // })
+        // })
+    }
+
+    sequenceTasks(dto: ITaskAlgorithmDTO) {
+        return new Observable<TaskDTO[]>((observer) => {
+            // this.getToken()
+            //     .then((token) => {
+            this.http
+                .patch<TaskDTO[]>(
+                    `${Config.baseUrl}/task/sequence`,
+                    JSON.stringify(dto),
+                    {
+                        headers: {
+                            // Authorization: `Bearer ${token}`,
+                            'Content-type': 'application/json',
+                        },
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                )
+                .subscribe(
+                    (tasks) => {
+                        observer.next(tasks)
+                        observer.complete()
+                    },
+                    (error) => {
+                        observer.error(error)
+                    },
+                )
+        })
+        // .catch((error) => {
+        //     observer.error(error)
+        //         })
+        // })
     }
 
     getCriteria() {

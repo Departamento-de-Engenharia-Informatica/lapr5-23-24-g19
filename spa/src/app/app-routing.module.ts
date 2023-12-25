@@ -45,6 +45,7 @@ import { AuthComponent } from './components/auth/auth.component'
 import { CreateBackofficeUserComponent } from './components/user/create-backoffice-user/create-backoffice-user.component'
 import { CreateClientComponent } from './components/user/create-client/create-client.component'
 import { AuthGuard } from '@auth0/auth0-angular'
+import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -62,7 +63,7 @@ export const routes: Routes = [
     {
         path: 'task',
         component: TaskMenuComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         title: 'Tasks',
         children: [
             {
@@ -94,6 +95,11 @@ export const routes: Routes = [
                 component: TasksFilterComponent,
                 canActivate: [AuthGuard],
                 title: 'Filter tasks',
+            },
+            {
+                path: 'sequence',
+                component: SequenceTaskComponent,
+                title: 'Sequence task',
             },
         ],
     },
