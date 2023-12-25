@@ -53,26 +53,30 @@ export default (app: Router) => {
     )
 
     route.patch(
+        '/sequence',
+        celebrate({
+            body: Joi.object({
+                algorithm: Joi.string().required(),
+                tasks: Joi.array()
+                    .items(
+                        Joi.object({
+                            id: Joi.string().required(),
+                            type: Joi.string().required(),
+                        }),
+                    )
+                    .required(),
+            }),
+        }),
+        (req, res, next) => ctrl.taskSequence(req, res, next),
+    )
+
+    route.patch(
         '/:id',
         celebrate({
             body: Joi.object({
                 taskStatus: Joi.string(),
             }).unknown(true), // This allows additional properties in the body
         }),
-        customJwtMiddleware,
         (req, res, next) => ctrl.updateTask(req, res, next),
-    )
-
-    route.patch(
-        '/sequence',
-        celebrate({
-            body: Joi.object({
-                tasks: Joi.array()
-                    .items(Joi.string())
-                    .required(),
-            }),
-        }),
-        customJwtMiddleware,
-        (req, res, next) => ctrl.taskSequence(req, res, next),
     )
 }

@@ -26,14 +26,10 @@ activate usr
     activate ui
         ui -> mdr : PATCH /tasks/sequence
         activate mdr
-            mdr -> mdt : PATCH /jobs/sequence
-            activate mdt
                 mdt -> plan : POST /task-sequence
                 activate plan
                     plan --> mdt : 200: task sequence
                 deactivate plan
-                mdt --> mdr : 200: tasks
-            deactivate mdt
             mdr --> ui : 200: tasks
         deactivate mdr
         ui --> usr : presents task sequence and \nassociated robot

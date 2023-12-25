@@ -1,26 +1,27 @@
 import { Inject, Service } from 'typedi'
 import { Either, left, right } from '../core/logic/Result'
 
+import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
 import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
 import config from '../../config'
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { TaskType } from '../domain/robotType/taskType'
-import { IFloorMapInitPositionDTO } from '../dto/IFloorMapInitPositionDTO'
-import { ITaskTypeDTO } from '../dto/ITaskTypeDTO'
-import { IStorageFs } from './IFs/IStorageFs'
-import IFloorRepo from './IRepos/IFloorRepo'
-import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
-import { TaskMap } from '../mappers/TaskMap'
-import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
-import IRoomRepo from './IRepos/IRoomRepo'
 import { RoomName } from '../domain/room/roomName'
 import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
+import { IFloorMapInitPositionDTO } from '../dto/IFloorMapInitPositionDTO'
+import { ITaskTypeDTO } from '../dto/ITaskTypeDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
+import { TaskMap } from '../mappers/TaskMap'
+import { IStorageFs } from './IFs/IStorageFs'
+import IFloorRepo from './IRepos/IFloorRepo'
 import IMdtAdapter from './IRepos/IMdtRepo'
-import { ITaskIdsDTO } from '../dto/ITaskIdsDTO'
-import { IRobotDTO } from '../dto/IRobotDTO'
+import IRobotRepo from './IRepos/IRobotRepo'
+import IRoomRepo from './IRepos/IRoomRepo'
+import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
+import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
+import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -29,8 +30,8 @@ export default class TaskService implements ITaskService {
         @Inject(config.storage.name) private storage: IStorageFs,
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
-        @Inject(config.repos.robot.name) private robotRepo: IRobotDTO
-    ) {}
+        @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
+    ) { }
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -213,9 +214,72 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async taskSequence(dto: ITaskIdsDTO): Promise<Either<TaskErrorResult, String>> {
+    async taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, String>> {
+        try {
+            const robots = await this.robotRepo.findAll()
 
+            if (robots.length === 0) {
+                return left({
+                    errorCode: TaskErrorCode.NotFound,
+                    message: 'No robots found',
+                })
+            }
 
-        throw new Error('Method not implemented.')
+            console.log(1)
+            const types = new Set(dto.tasks.map(t => TaskType.toType(t.type.toUpperCase())))
+            console.log(2)
+            for (const t of types) {
+                console.log(3)
+                if (!robots.find(r => r.type.taskType.includes(t))) {
+                    console.log(4)
+                    return left({
+                        errorCode: TaskErrorCode.NotFound,
+                        message: `No robot to fulfill task of type ${TaskType.toString(
+                            t,
+                        )}`,
+                    })
+                }
+            }
+
+            console.log(5)
+
+            const tasks = [...dto.tasks]
+            const result: IRobotTasksDTO = {
+                Algorithm: dto.algorithm,
+                RobotTasks: {},
+            }
+
+            while (tasks.length !== 0) {
+                robots.forEach(r => {
+                    console.log(JSON.stringify(r, null, 2))
+                    if (
+                        tasks.length > 0 &&
+                        r.type.taskType.includes(
+                            TaskType.toType(tasks[0].type.toUpperCase()),
+                        )
+                    ) {
+                        console.log('7a')
+                        if (!result.RobotTasks[r.nickname.value]) {
+                            result.RobotTasks[r.nickname.value] = []
+                        }
+
+                        result.RobotTasks[r.nickname.value].push(tasks.shift())
+                    }
+                    console.log('7b')
+                })
+            }
+
+            console.log(8)
+
+            console.log(result)
+
+            const sequence = await this.repo.taskSequence(result)
+            return right(sequence)
+        } catch (e) {
+            return left({
+                errorCode: TaskErrorCode.BussinessRuleViolation,
+                message: e.message ?? e,
+            })
+        }
     }
 }

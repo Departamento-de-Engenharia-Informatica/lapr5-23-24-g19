@@ -31,7 +31,7 @@ elev_cost(Cost) :-
 
 task_sequence_alg(Alg) :-
     getenv('TASK_SEQ_ALGORITHM', Alg), !;
-    Alg = 'genetic'.
+    Alg = 'permutations'.
 
 time_limit(Time) :-
     getenv('TIME_LIMIT', Time), !;
@@ -39,7 +39,7 @@ time_limit(Time) :-
 
 num_gen(NG) :-
     NG = 6.
-    
+
 % tem de ser tanto maior quantas permutacoes possiveis entre os individuos
 dim_pop(DP) :-
     DP = 6.

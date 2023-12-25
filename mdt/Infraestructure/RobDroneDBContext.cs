@@ -1,7 +1,9 @@
 using System;
 using System.Linq.Expressions;
 using DDDSample1.Domain.Jobs;
+using DDDSample1.Domain.Sequences;
 using DDDSample1.Infrastructure.Jobs;
+using DDDSample1.Infrastructure.Sequences;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +12,7 @@ namespace DDDSample1.Infrastructure
     public class RobDroneDBContext : DbContext
     {
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Sequence> Sequences { get; set; }
 
         // public DbSet<JobSurveillance> surv { get; set; }
         // public DbSet<JobDelivery> delv { get; set; }
@@ -19,6 +22,11 @@ namespace DDDSample1.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new JobOrderEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SequenceEntityTypeConfiguration());
+
+            modelBuilder.Entity<Sequence>().OwnsOne(sequence => sequence.RobotPosition);
+
             modelBuilder.ApplyConfiguration(new JobEntityTypeConfiguration());
 
             modelBuilder
