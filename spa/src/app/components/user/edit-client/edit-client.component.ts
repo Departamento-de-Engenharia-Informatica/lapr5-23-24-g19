@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ClientService } from 'src/app/services/client.service'
 import { IClientWithoutPasswordDTO } from '../../../../../../mdr/src/dto/IClientWithoutPasswordDTO'
+import { AuthService } from '@auth0/auth0-angular'
 
 @Component({
     selector: 'app-edit-client',
@@ -17,17 +18,25 @@ export class EditClientComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private clientService: ClientService,
+        public auth: AuthService,
     ) {
         this.editClientForm = this.formBuilder.group({
-            name: [null],
-            phoneNumber: [null],
-            vatNumber: [null],
+            name: [''],
+            phoneNumber: [''],
+            vatNumber: [''],
         })
     }
 
     ngOnInit(): void {
-        this.email = 'joao.dias@isep.ipp.pt'
-        this.getClient()
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+                console.log('Authenticated')
+                this.auth.user$.subscribe((user) => {
+                    this.email = user?.email as string
+                    this.getClient()
+                })
+            }
+        })
     }
 
     getClient(): void {
@@ -36,10 +45,12 @@ export class EditClientComponent implements OnInit {
                 this.client = c
             },
             (error) => {
-                alert('User not found!')
-
                 this.email = ''
-                this.editClientForm.reset()
+                this.editClientForm.reset({
+                    name: '',
+                    phoneNumber: '',
+                    vatNumber: '',
+                })
             },
         )
     }
@@ -73,12 +84,20 @@ export class EditClientComponent implements OnInit {
                 alert(alertMessage)
 
                 this.client = c
-                this.editClientForm.reset()
+                this.editClientForm.reset({
+                    name: '',
+                    phoneNumber: '',
+                    vatNumber: '',
+                })
             },
             (error) => {
                 alert(error.error)
 
-                this.editClientForm.reset()
+                this.editClientForm.reset({
+                    name: '',
+                    phoneNumber: '',
+                    vatNumber: '',
+                })
             },
         )
     }

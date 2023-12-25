@@ -5,63 +5,52 @@
       <img class="brand-logo" src="/assets/logo.svg" alt="RobDroneGo" aria-hidden="true"> -->
         <!-- </a> -->
         <header class="text-gray-400 bg-gray-900 body-font">
-            <div
-                class="container mx-auto flex space-x-5 p-5 flex-col md:flex-row items-center"
-            >
+            <div class="container mx-auto flex space-x-5 p-5 flex-col md:flex-row items-center">
                 <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
                     <a [routerLink]="['campus']" class="mr-5 hover:text-white">Campus</a>
                     <a [routerLink]="['fleet']" class="mr-5 hover:text-white">Fleet</a>
                     <a [routerLink]="['task']" class="mr-5 hover:text-white">Task</a>
-                    <a [routerLink]="['visualization']" class="hover:text-white"
-                        >Visualization</a
-                    >
+                    <a [routerLink]="['visualization']" class="hover:text-white">Visualization</a>
                 </nav>
-                <a
-                    [routerLink]="['modules']"
-                    class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-white lg:items-center lg:justify-center mb-4 md:mb-0"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                        ></path>
+                <a [routerLink]="['modules']"
+                    class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-white lg:items-center lg:justify-center mb-4 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2"
+                        class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                     </svg>
                     <a class="ml-3 mr-3 text-xl xl:block lg:hidden">RobDroneGo</a>
                     <!-- <svg " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="green" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" class="w-4 h-4" viewBox="0 0 24 24"> -->
                     <!-- <svg *ngIf="isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em" -->
-                    <svg
-                        *ngIf="isBackendUp"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1.25em"
-                        viewBox="0 0 640 512"
-                    >
+                    <svg *ngIf="isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em" viewBox="0 0 640 512">
                         <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            fill="green"
-                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"
-                        />
+                        <path fill="green"
+                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z" />
                     </svg>
-                    <svg
-                        *ngIf="!isBackendUp"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1.25em"
-                        viewBox="0 0 640 512"
-                    >
-                        <path
-                            fill="red"
-                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"
-                        />
+                    <svg *ngIf="!isBackendUp" xmlns="http://www.w3.org/2000/svg" height="1.25em" viewBox="0 0 640 512">
+                        <path fill="red"
+                            d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z" />
                     </svg>
                 </a>
                 <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+
+                    <div class="dropdown">
+                        <button class="dropbtn mr-5 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14"
+                                viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                                <path
+                                    d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a [routerLink]="['auth']">LogIn</a>
+                            <a [routerLink]="['user']">Profile</a>
+                            <a [routerLink]="['edit-client']">Edit profile</a>
+                            <a *ngIf="auth.user$ | async as user" (click)="auth.logout()">Log out</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
                     <button
                         onclick="history.back()"
                         class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
@@ -79,7 +68,7 @@
                         </svg>
                         <a>Back</a>
                     </button>
-                </div>
+                </div> -->
             </div>
         </header>
     </div>

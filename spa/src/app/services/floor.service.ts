@@ -1,8 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable, catchError, throwError } from 'rxjs'
+import { Observable, catchError, firstValueFrom, throwError } from 'rxjs'
 import { FloorPassageDTO } from '../dto/FloorPassageDTO'
 import { Config } from '../config'
+import { AuthService } from '@auth0/auth0-angular'
 
 export interface FloorAndBuildingDTO {
     buildingCode: string
@@ -42,16 +43,46 @@ interface FloorDTO {
     providedIn: 'root',
 })
 export class FloorService {
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
+
+    async getToken(): Promise<string> {
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
+    }
 
     getFloors(buildingCode: string): Observable<FloorAndBuildingDTO[]> {
-        return this.http.get<FloorAndBuildingDTO[]>(
-            `${Config.baseUrl}/buildings/${buildingCode}/floors`,
-            {
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<FloorAndBuildingDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<FloorAndBuildingDTO[]>(
+                            `${Config.baseUrl}/buildings/${buildingCode}/floors`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (floors) => {
+                                observer.next(floors)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     createFloor(dto: FloorAndBuildingDTO): Observable<FloorAndBuildingDTO> {
@@ -60,15 +91,45 @@ export class FloorService {
             description: dto.description,
         }
 
-        return this.http.post<FloorAndBuildingDTO>(
-            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors`,
-            JSON.stringify(floor),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        // return this.http.post<FloorAndBuildingDTO>(
+        //     `${Config.baseUrl}/buildings/${dto.buildingCode}/floors`,
+        //     JSON.stringify(floor),
+        //     {
+        //         headers: { 'Content-type': 'application/json' },
+        //         observe: 'body',
+        //         responseType: 'json',
+        //     },
+        // )
+        return new Observable<FloorAndBuildingDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .post<FloorAndBuildingDTO>(
+                            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors`,
+                            JSON.stringify(floor),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (floor) => {
+                                observer.next(floor)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     patchFloor(dto: PatchFloorDTO): Observable<FloorAndBuildingDTO> {
@@ -77,15 +138,36 @@ export class FloorService {
             description: dto.newDescription,
         }
 
-        return this.http.patch<FloorAndBuildingDTO>(
-            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
-            JSON.stringify(edit),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<FloorAndBuildingDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .patch<FloorAndBuildingDTO>(
+                            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
+                            JSON.stringify(edit),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (floor) => {
+                                observer.next(floor)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     putFloor(dto: PutFloorDTO): Observable<FloorAndBuildingDTO> {
@@ -94,54 +176,104 @@ export class FloorService {
             description: dto.newDescription,
         }
 
-        return this.http.put<FloorAndBuildingDTO>(
-            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
-            JSON.stringify(edit),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<FloorAndBuildingDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .put<FloorAndBuildingDTO>(
+                            `${Config.baseUrl}/buildings/${dto.buildingCode}/floors/${dto.oldFloorNumber}`,
+                            JSON.stringify(edit),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (floor) => {
+                                observer.next(floor)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
+
     updateMap(
         dto: UpdateMapDTO,
         buildingCode: String,
         floorNumber: number,
     ): Observable<UpdateMapDTO> {
-        return this.http
-            .patch<UpdateMapDTO>(
-                `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
-                JSON.stringify(dto.map),
-                {
-                    headers: { 'Content-type': 'application/json' },
-                    observe: 'body',
-                    responseType: 'json',
-                },
-            )
-            .pipe(
-                catchError((response: HttpErrorResponse) => {
-                    let errorMessage: string
-
-                    if (response.error) {
-                        errorMessage = response.error
-                    } else {
-                        errorMessage = `An unexpected error occurred: ${response.message}`
-                    }
-
-                    return throwError(() => new Error(errorMessage))
-                }),
-            )
+        return new Observable<UpdateMapDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .put<UpdateMapDTO>(
+                            `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
+                            JSON.stringify(dto),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (dto) => {
+                                observer.next(dto)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     getFloorsWithPassage(buildingCode: string): Observable<FloorPassageDTO[]> {
-        return this.http.get<FloorPassageDTO[]>(
-            `${Config.baseUrl}/buildings/${buildingCode}/floors/passages`,
-            {
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<FloorPassageDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<FloorPassageDTO[]>(
+                            `${Config.baseUrl}/buildings/${buildingCode}/floors/passages`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (floors) => {
+                                observer.next(floors)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 }
 

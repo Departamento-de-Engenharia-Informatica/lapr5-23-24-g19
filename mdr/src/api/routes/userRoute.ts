@@ -7,13 +7,16 @@ import { IUserDTO } from '../../dto/IUserDTO'
 import middlewares from '../middlewares'
 import { celebrate, Joi } from 'celebrate'
 import winston = require('winston')
+import { checkJwt } from '../middlewares/isAuth'
 
 var user_controller = require('../../controllers/userController')
 
 const route = Router()
 
 export default (app: Router) => {
+
     app.use('/auth', route)
+
 
     route.post(
         '/signup',
@@ -27,6 +30,7 @@ export default (app: Router) => {
             }),
         }),
         async (req: Request, res: Response, next: NextFunction) => {
+            
             const logger = Container.get('logger') as winston.Logger
             logger.debug('Calling Sign-Up endpoint with body: %o', req.body)
 
@@ -62,6 +66,25 @@ export default (app: Router) => {
             logger.debug('Calling Sign-In endpoint with body: %o', req.body)
             try {
                 const { email, password } = req.body
+                // try {
+                //     const response = await axios.post(`https://dev-wt48psyid1ra2e8l.us.auth0.com/oauth/token`, {
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },                        
+                //         grant_type: 'password',
+                //         username: email,
+                //         password: password,
+                //         audience: config.auth0.audience,
+                //         scope: 'openid profile email',
+                //         client_id: config.auth0.clientId,
+                //         client_secret: config.auth0.clientSecret
+                //     });
+
+                //     res.json(response.data);
+                // } catch (error) {
+                //     console.error(error);
+                //     res.status(500).send('Authentication failed');
+                // }
                 const authServiceInstance = Container.get(AuthService)
                 const result = await authServiceInstance.SignIn(email, password)
 
@@ -87,7 +110,6 @@ export default (app: Router) => {
      */
     route.post(
         '/logout',
-        middlewares.isAuth,
         (req: Request, res: Response, next: NextFunction) => {
             const logger = Container.get('logger') as winston.Logger
             logger.debug('Calling Sign-Out endpoint with body: %o', req.body)
@@ -103,5 +125,5 @@ export default (app: Router) => {
 
     app.use('/users', route)
 
-    route.get('/me', middlewares.isAuth, user_controller.getMe)
+    route.get('/me', checkJwt, user_controller.getMe)
 }

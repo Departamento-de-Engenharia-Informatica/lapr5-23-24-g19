@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Observable, catchError, of, throwError } from 'rxjs'
+import { Observable, catchError, firstValueFrom, of, throwError } from 'rxjs'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { CriterionDTO } from '../dto/CriteriaDTO'
 import { TaskTypeDTO } from '../dto/CreateRobotTypeDTO'
@@ -11,74 +11,176 @@ import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
 import { FilterDTO } from '../dto/FilterDTO'
 import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
 import { TaskDTO, TaskState, TaskType } from '../dto/TaskDTO'
+import { AuthService } from '@auth0/auth0-angular'
 
 @Injectable({
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
+
+    async getToken(): Promise<string> {
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
+    }
 
     getCriteria() {
-        const url = `${Config.baseUrl}/paths/criteria`
-        return this.http.get<CriterionDTO[]>(url, {
-            observe: 'body',
-            responseType: 'json',
+        return new Observable<CriterionDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<CriterionDTO[]>(`${Config.baseUrl}/paths/criteria`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-type': 'application/json',
+                            },
+                            observe: 'body',
+                            responseType: 'json',
+                        })
+                        .subscribe(
+                            (criteria) => {
+                                observer.next(criteria)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
         })
     }
 
     findRoute(dto: GetPathsDTO) {
-        return this.http.post<PathDTO[]>(`${Config.baseUrl}/paths`, JSON.stringify(dto), {
-            headers: { 'Content-type': 'application/json' },
-            observe: 'body',
-            responseType: 'json',
+        return new Observable<PathDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .post<PathDTO[]>(`${Config.baseUrl}/paths`, JSON.stringify(dto), {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-type': 'application/json',
+                            },
+                            observe: 'body',
+                            responseType: 'json',
+                        })
+                        .subscribe(
+                            (paths) => {
+                                observer.next(paths)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
         })
     }
 
     tasksTypes(): Observable<TaskTypeDTO[]> {
-        return this.http
-            .get<TaskTypeDTO[]>(`${Config.baseUrl}/task/types`, {
-                observe: 'body',
-                responseType: 'json',
-            })
-            .pipe(
-                catchError((response: HttpErrorResponse) => {
-                    let errorMessage: string
-
-                    if (response.error) {
-                        errorMessage = response.error
-                    } else {
-                        errorMessage = `An unexpected error occurred: ${response.message}`
-                    }
-
-                    return throwError(() => new Error(errorMessage))
-                }),
-            )
+        return new Observable<TaskTypeDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<TaskTypeDTO[]>(`${Config.baseUrl}/task/types`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-type': 'application/json',
+                            },
+                            observe: 'body',
+                            responseType: 'json',
+                        })
+                        .subscribe(
+                            (tasks) => {
+                                observer.next(tasks)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     createSurveillanceTask(
         dto: CreateSurveillanceTaskDTO,
     ): Observable<CreateSurveillanceTaskDTO> {
-        return this.http.post<CreateSurveillanceTaskDTO>(
-            `${Config.baseUrl}/task/surveillance`,
-            JSON.stringify(dto),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<CreateSurveillanceTaskDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .post<CreateSurveillanceTaskDTO>(
+                            `${Config.baseUrl}/task/surveillance`,
+                            JSON.stringify(dto),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (createdSurveillanceTask) => {
+                                observer.next(createdSurveillanceTask)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     createDeliveryTask(dto: CreateDeliveryTaskDTO): Observable<CreateDeliveryTaskDTO> {
-        return this.http.post<CreateDeliveryTaskDTO>(
-            `${Config.baseUrl}/task/delivery`,
-            JSON.stringify(dto),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<CreateDeliveryTaskDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .post<CreateDeliveryTaskDTO>(
+                            `${Config.baseUrl}/task/delivery`,
+                            JSON.stringify(dto),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (createdDeliveryTask) => {
+                                observer.next(createdDeliveryTask)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     updateTask(dto: UpdateTaskDTO) {
@@ -89,15 +191,36 @@ export class TaskService {
 
         // return of({})
 
-        return this.http.patch<TaskDTO>(
-            `${Config.baseUrl}/task/${taskId}`,
-            JSON.stringify(body),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<TaskDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .patch<TaskDTO>(
+                            `${Config.baseUrl}/task/${taskId}`,
+                            JSON.stringify(body),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (task) => {
+                                observer.next(task)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     // TODO: napoles & jonas
@@ -125,37 +248,66 @@ export class TaskService {
                 state: TaskState.PENDING,
             },
         ])
-
-        return this.http.get<TaskDTO[]>(`${Config.baseUrl}/task?state=pending`, {
-            observe: 'body',
-            responseType: 'json',
-        })
+        //
+        // return this.http.get<TaskDTO[]>(`${Config.baseUrl}/task?state=pending`, {
+        //     observe: 'body',
+        //     responseType: 'json',
+        // })
     }
 
     getByCriteria(dto: FilterDTO): Observable<CreateDeliveryTaskDTO[]> {
-        console.log(
-            `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
-        )
-        return this.http
-            .get<CreateDeliveryTaskDTO[]>(
-                `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
-                {
-                    observe: 'body',
-                    responseType: 'json',
-                },
-            )
-            .pipe(
-                catchError((response: HttpErrorResponse) => {
-                    let errorMessage: string
-
-                    if (response.error) {
-                        errorMessage = response.error
-                    } else {
-                        errorMessage = `An unexpected error occurred: ${response.message}`
-                    }
-
-                    return throwError(() => new Error(errorMessage))
-                }),
-            )
+        // console.log(
+        //     `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
+        // )
+        // return this.http
+        //     .get<CreateDeliveryTaskDTO[]>(
+        //         `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
+        //         {
+        //             observe: 'body',
+        //             responseType: 'json',
+        //         },
+        //     )
+        //     .pipe(
+        //         catchError((response: HttpErrorResponse) => {
+        //             let errorMessage: string
+        //
+        //             if (response.error) {
+        //                 errorMessage = response.error
+        //             } else {
+        //                 errorMessage = `An unexpected error occurred: ${response.message}`
+        //             }
+        //
+        //             return throwError(() => new Error(errorMessage))
+        //         }),
+        //     )
+        return new Observable<CreateDeliveryTaskDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<CreateDeliveryTaskDTO[]>(
+                            `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (tasks) => {
+                                observer.next(tasks)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 }

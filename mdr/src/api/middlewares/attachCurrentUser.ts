@@ -20,15 +20,13 @@ const attachCurrentUser = async (req, res, next) => {
     const Logger = Container.get('logger') as winston.Logger
     try {
         const userRepo = Container.get(config.repos.user.name) as IUserRepo
+        const email = req.auth.email
+        if (!email) {
+            next(new Error('Email invalido'))
+        }
+        const user = await userRepo.findByEmail(email)
 
-        if (!req.token || req.token == undefined)
-            next(new Error('Token inexistente ou inválido '))
-
-        const jw = jwt.decode(req.token, { complete: true, json: true })
-        const user = jw.payload as User
-        const isFound = (await userRepo.findById(user.id.toString())) != null
-
-        if (isFound) {
+        if (user != null) {
             req.user = user
             next()
         } else next(new Error('Token não corresponde a qualquer utilizador do sistema'))
@@ -47,7 +45,7 @@ const checkRole = async (requiredRoles: string[], req, res, next) => {
     if (requiredRoles.includes(user.role)) {
         return next()
     } else {
-        return res.status(403).json({ error: 'Unauthorized' })
+        next(new Error('Unauthorized'))
     }
 }
 
@@ -55,8 +53,7 @@ enum Roles {
     FleetManager = 'Fleet Manager',
 }
 
-const checkFleetManager = (req, res, next) =>
-    checkRole([Roles.FleetManager], req, res, next)
+const checkAdm = (req, res, next) => checkRole([config.systemRoles[0]], req, res, next)
 
-export { checkFleetManager }
+export { checkAdm }
 export default attachCurrentUser

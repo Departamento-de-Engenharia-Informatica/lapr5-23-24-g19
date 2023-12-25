@@ -1,5 +1,5 @@
-import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
+import { Router } from 'express'
 import { Container } from 'typedi'
 
 import IBuildingController from '../../controllers/IControllers/IBuildingController'
@@ -7,8 +7,9 @@ import IFloorController from '../../controllers/IControllers/IFloorController'
 
 import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
-import IRoomController from '../../controllers/IControllers/IRoomController'
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController'
+import IRoomController from '../../controllers/IControllers/IRoomController'
+import { customJwtMiddleware } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -34,11 +35,16 @@ export default (app: Router) => {
                 name: Joi.string(),
                 description: Joi.string(),
                 maxFloorDimensions: Joi.object({
-                    length: Joi.number().integer().required(),
-                    width: Joi.number().integer().required(),
+                    length: Joi.number()
+                        .integer()
+                        .required(),
+                    width: Joi.number()
+                        .integer()
+                        .required(),
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => buildingController.createBuilding(req, res, next),
     )
 
@@ -46,14 +52,17 @@ export default (app: Router) => {
         '/:id/floors',
         celebrate({
             body: Joi.object({
-                floorNumber: Joi.number().integer().required(),
+                floorNumber: Joi.number()
+                    .integer()
+                    .required(),
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => floorController.createFloor(req, res, next),
     )
 
-    route.get('/:id/floors', (req, res, next) =>
+    route.get('/:id/floors', customJwtMiddleware, (req, res, next) =>
         floorController.getFloors(req, res, next),
     )
 
@@ -65,6 +74,7 @@ export default (app: Router) => {
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => floorController.patchFloor(req, res, next),
     )
 
@@ -72,10 +82,13 @@ export default (app: Router) => {
         '/:id/floors/:floor',
         celebrate({
             body: Joi.object({
-                floorNumber: Joi.number().integer().required(),
+                floorNumber: Joi.number()
+                    .integer()
+                    .required(),
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => floorController.putFloor(req, res, next),
     )
 
@@ -91,6 +104,7 @@ export default (app: Router) => {
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => buildingController.patchBuilding(req, res, next),
     )
 
@@ -101,11 +115,16 @@ export default (app: Router) => {
                 name: Joi.string(),
                 description: Joi.string(),
                 maxFloorDimensions: Joi.object({
-                    length: Joi.number().integer().required(),
-                    width: Joi.number().integer().required(),
+                    length: Joi.number()
+                        .integer()
+                        .required(),
+                    width: Joi.number()
+                        .integer()
+                        .required(),
                 }).required(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => buildingController.putBuilding(req, res, next),
     )
 
@@ -113,13 +132,20 @@ export default (app: Router) => {
         '/:id/elevators',
         celebrate({
             body: Joi.object({
-                floors: Joi.array().items(Joi.number().integer().required()).required(),
+                floors: Joi.array()
+                    .items(
+                        Joi.number()
+                            .integer()
+                            .required(),
+                    )
+                    .required(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => elevatorCtrl.createElevator(req, res, next),
     )
 
@@ -127,13 +153,20 @@ export default (app: Router) => {
         '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
-                floors: Joi.array().items(Joi.number().integer().required()).optional(),
+                floors: Joi.array()
+                    .items(
+                        Joi.number()
+                            .integer()
+                            .required(),
+                    )
+                    .optional(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => elevatorCtrl.patchElevator(req, res, next),
     )
 
@@ -141,13 +174,20 @@ export default (app: Router) => {
         '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
-                floors: Joi.array().items(Joi.number().integer().required()).required(),
+                floors: Joi.array()
+                    .items(
+                        Joi.number()
+                            .integer()
+                            .required(),
+                    )
+                    .required(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => elevatorCtrl.putElevator(req, res, next),
     )
 
@@ -168,16 +208,23 @@ export default (app: Router) => {
                 }),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => roomCtrl.createRoom(req, res, next),
     )
 
-    route.get('/:buildingId/floors/:floorNumber/rooms', (req, res, next) =>
-        roomCtrl.getRooms(req, res, next),
+    route.get(
+        '/:buildingId/floors/:floorNumber/rooms',
+        customJwtMiddleware,
+        (req, res, next) => roomCtrl.getRooms(req, res, next),
     )
 
-    route.get('/:id/elevators', (req, res, next) =>
+    route.get('/:id/elevators', customJwtMiddleware, (req, res, next) =>
         elevatorCtrl.getElevators(req, res, next),
     )
+
+    // const conf = {
+    //     decryptionKey: "LaWXgENPlVK0GcKLP2jv1HtL0iwXHZMSfcUNH8iD0LabOJkwgbpq8aI1CoBl-1ok"
+    // } as JWEDecryptionConfig
 
     route.get(
         '',
@@ -187,7 +234,9 @@ export default (app: Router) => {
                 maxFloors: Joi.number().integer(),
             },
         }),
-
+        customJwtMiddleware,
+        // attachCurrentUser,
+        // checkAdm,
         (req, res, next) => {
             if (
                 (req.query.minFloors && req.query.maxFloors) ||
@@ -237,13 +286,14 @@ export default (app: Router) => {
                 },
             }).unknown(true), // This allows additional properties in the body
         }),
+        customJwtMiddleware,
         (req, res, next) => floorMapCtrl.updateMap(req, res, next),
     )
-    route.get('/:id/floors/:floorNumber/map', (req, res, next) =>
+    route.get('/:id/floors/:floorNumber/map', customJwtMiddleware, (req, res, next) =>
         floorMapCtrl.getMap(req, res, next),
     )
 
-    route.get('/:id/floors/passages', (req, res, next) =>
+    route.get('/:id/floors/passages', customJwtMiddleware, (req, res, next) =>
         floorController.floorsWithPassage(req, res, next),
     )
 }

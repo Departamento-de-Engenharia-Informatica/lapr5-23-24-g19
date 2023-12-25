@@ -1,0 +1,46 @@
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: transparent; /* Adjust background color */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    margin-right: 100px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: white; /* Text color */
+    text-emphasis: 10;
+    padding: 12px 16px;
+    /* text-decoration: none; */
+    border-radius: 5px;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: var(--secondary-color);}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: var(--third-color);}
+
+.dropbtn {
+    background-color: var(--third-color); /* Match form button background */
+    color: var(--secondary-color); /* Match form button text color */
+    padding: 10px 20px; /* Match form button padding */
+    border: none;
+    border-radius: 4px; /* Match form button border-radius */
+    cursor: pointer;
+    display: block; /* Center the button */
+
+    text-align: center; /* Center text */
+}
+
+.dropbtn:hover {
+    background-color: #3e8e41; /* Hover effect */
+}

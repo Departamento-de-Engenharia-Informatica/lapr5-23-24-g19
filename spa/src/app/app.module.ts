@@ -64,6 +64,9 @@ import { BackofficeUserService } from './services/backofficeUser.service'
 import { ClientService } from './services/client.service'
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 import { EditClientComponent } from './components/user/edit-client/edit-client.component'
+import { CommonModule } from '@angular/common'
+import { AuthComponent } from './components/auth/auth.component'
+import { AuthModule, User } from '@auth0/auth0-angular'
 
 @NgModule({
     declarations: [
@@ -115,8 +118,17 @@ import { EditClientComponent } from './components/user/edit-client/edit-client.c
         ApproveRejectTaskComponent,
         PrivacyPolicyComponent,
         EditClientComponent,
+        AuthComponent,
     ],
     imports: [
+        AuthModule.forRoot({
+            domain: 'dev-wt48psyid1ra2e8l.us.auth0.com',
+            clientId: '1pjF5FvzVmlykC9ahPeuuL48iTNhFR4N',
+            authorizationParams: {
+                redirect_uri: window.location.origin,
+                audience: 'https://dev-wt48psyid1ra2e8l.us.auth0.com/api/v2/', // Set your API's unique identifier here
+            },
+        }),
         BrowserModule,
         FormsModule,
         AppRoutingModule,
@@ -124,8 +136,10 @@ import { EditClientComponent } from './components/user/edit-client/edit-client.c
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
+        CommonModule,
     ],
     providers: [
+        Document,
         BuildingService,
         ElevatorService,
         PassageService,
@@ -143,6 +157,8 @@ export class AppModule {
     public static baseUrl: string
     public static mdrUrl: string
     public static visualizationUrl: string
+    public static currentUser: User | null | undefined
+    public static authToken: string | null | undefined
     constructor() {
         if (isDevMode()) {
             AppModule.baseUrl = `${environment.mdrServerUrl}/api`

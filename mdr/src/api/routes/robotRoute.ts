@@ -5,6 +5,7 @@ import { celebrate, Joi } from 'celebrate'
 
 import IRobotController from '../../controllers/IControllers/IRobotController'
 import middlewares from '../middlewares'
+import { customJwtMiddleware } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -24,6 +25,7 @@ export default (app: Router) => {
                 description: Joi.string(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.createRobot(req, res, next),
     )
 
@@ -31,11 +33,14 @@ export default (app: Router) => {
         '/:id/inhibit',
         celebrate({
             body: Joi.object({
-                state: Joi.number().integer().required(),
+                state: Joi.number()
+                    .integer()
+                    .required(),
             }),
         }),
+        customJwtMiddleware,
         (req, res, next) => ctrl.inhibitRobot(req, res, next),
     )
 
-    route.get('', (req, res, next) => ctrl.getRobots(req, res, next))
+    route.get('', customJwtMiddleware, (req, res, next) => ctrl.getRobots(req, res, next))
 }

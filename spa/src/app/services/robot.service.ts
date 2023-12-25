@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, firstValueFrom } from 'rxjs'
 import { RobotDTO } from 'src/app/dto/RobotDTO'
 import { InhibitRobotDTO } from '../dto/InhibitRobotDTO'
 import { RobotTypeRepo } from '../repos/RobotTypeRepo'
@@ -8,6 +8,7 @@ import { RobotRepo } from '../repos/RobotRepo'
 import { RobotWithoutStateDTO } from '../dto/RobotWithoutStateDTO'
 import { CreateRobotTypeDTO } from '../dto/CreateRobotTypeDTO'
 import { Config } from '../config'
+import { AuthService } from '@auth0/auth0-angular'
 
 @Injectable({
     providedIn: 'root',
@@ -17,12 +18,41 @@ export class RobotService {
         private http: HttpClient,
         private robotRepo: RobotRepo,
         private robotTypeRepo: RobotTypeRepo,
+        private auth: AuthService,
     ) {}
 
+    async getToken(): Promise<string> {
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
+    }
+
     getRobots(): Observable<RobotDTO[]> {
-        return this.http.get<RobotDTO[]>(`${Config.baseUrl}/robots`, {
-            observe: 'body',
-            responseType: 'json',
+        return new Observable<RobotDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<RobotDTO[]>(`${Config.baseUrl}/robots`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-type': 'application/json',
+                            },
+                            observe: 'body',
+                            responseType: 'json',
+                        })
+                        .subscribe(
+                            (robots) => {
+                                observer.next(robots)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
         })
     }
 
@@ -42,14 +72,35 @@ export class RobotService {
         const code = dto.code
         const body = { state: dto.state }
 
-        return this.http.patch<RobotDTO>(
-            `${Config.baseUrl}/robots/${code}/inhibit`,
-            JSON.stringify(body),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
-        )
+        return new Observable<RobotDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .patch<RobotDTO>(
+                            `${Config.baseUrl}/robots/${code}/inhibit`,
+                            JSON.stringify(body),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (robot) => {
+                                observer.next(robot)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 }

@@ -1,7 +1,17 @@
 import { Component, isDevMode } from '@angular/core'
-import { EMPTY, catchError, delay, interval, retry, retryWhen, switchMap } from 'rxjs'
+import {
+    EMPTY,
+    Subscription,
+    catchError,
+    delay,
+    interval,
+    retry,
+    retryWhen,
+    switchMap,
+} from 'rxjs'
 import { AppModule } from './app.module'
 import { HttpClient } from '@angular/common/http'
+import { AuthService } from '@auth0/auth0-angular'
 
 @Component({
     selector: 'app-root',
@@ -12,7 +22,21 @@ export class AppComponent {
     title!: String
     isBackendUp!: boolean
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        public auth: AuthService,
+        private http: HttpClient,
+    ) {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+                this.auth.getAccessTokenSilently().subscribe((token) => {
+                    for (var i = 0; i < 10; i++) {
+                        AppModule.authToken = token
+                        console.log('Bearer ', token)
+                    }
+                })
+            }
+        })
+    }
 
     checkBackendStatus(): void {
         interval(3000)
@@ -38,5 +62,12 @@ export class AppComponent {
         this.title = 'RobDroneGo'
         this.isBackendUp = false
         this.checkBackendStatus()
+        // TODO: ATIVAR LOGIN
+        // this.auth.isAuthenticated$.subscribe((loggedIn: boolean) => {
+        //   if (!loggedIn) {
+        //     // Redirect to Auth0 login
+        //     this.auth.loginWithRedirect();
+        //   }
+        // });
     }
 }
