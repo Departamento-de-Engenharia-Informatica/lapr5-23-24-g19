@@ -1,11 +1,14 @@
 <h2 class="page-title">Edit Client Information</h2>
 <form
-    *ngIf="emailExists()"
+    *ngIf="(auth.isAuthenticated$ | async) && email.length != 0"
     [formGroup]="editClientForm"
     (ngSubmit)="onSubmit()"
     enctype="multipart/form-data"
 >
-    <label>Logged in as: {{ email }}</label>
+    <div class="dimension-box">
+        <span class="dimension-label">{{ email }}</span>
+    </div>
+
     <div>
         <label for="name">Name:</label>
         <input
@@ -26,17 +29,32 @@
         </div>
 
         <label for="vatNumber">VAT number:</label>
-        <textarea
+        <input
             id="vatNumber"
             formControlName="vatNumber"
             pattern="[0-9]{9}"
             placeholder="{{ client.vatNumber }}"
-        ></textarea>
+        />
 
-        <button type="submit" [disabled]="editClientForm.invalid">Submit</button>
+        <button
+            type="submit"
+            [disabled]="
+                editClientForm.invalid ||
+                (editClientForm.pristine && editClientForm.untouched) ||
+                (editClientForm.value.name.length == 0 &&
+                    editClientForm.value.phoneNumber.length == 0 &&
+                    editClientForm.value.vatNumber.length == 0)
+            "
+        >
+            Submit
+        </button>
     </div>
 </form>
 
-<div *ngIf="!emailExists()">
-    <h2 class="page-title">Client Not Found</h2>
+<div *ngIf="!(auth.isAuthenticated$ | async)">
+    <h2 class="page-title">Not logged in</h2>
+</div>
+
+<div *ngIf="(auth.isAuthenticated$ | async) && email.length == 0">
+    <h2 class="page-title">Not logged in as a Client</h2>
 </div>

@@ -47,11 +47,11 @@ import { CreateClientComponent } from './components/user/create-client/create-cl
 import { AuthGuard } from '@auth0/auth0-angular'
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'modules', pathMatch: 'full'},
+    { path: '', redirectTo: 'modules', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent, title: 'Auth' },
     { path: 'backoffice', component: CreateBackofficeUserComponent },
     { path: 'client', component: CreateClientComponent, title: 'User' },
-    
+
     { path: 'modules', component: ModulesComponent, title: 'Modules page' },
     { path: 'campus', component: CampusComponent, title: 'Campus' },
     {
@@ -166,26 +166,31 @@ export const routes: Routes = [
             {
                 path: 'list',
                 component: ListFloorsComponent,
+                canActivate: [AuthGuard],
                 title: 'List Floors',
             },
             {
                 path: 'create',
                 component: CreateFloorComponent,
+                canActivate: [AuthGuard],
                 title: 'Create Floor',
             },
             {
                 path: 'update-map',
                 component: UpdateMapComponent,
+                canActivate: [AuthGuard],
                 title: 'Update map',
             },
             {
                 path: 'edit',
                 component: EditFloorComponent,
+                canActivate: [AuthGuard],
                 title: 'Edit Floor',
             },
             {
                 path: 'list-floors-with-passage',
                 component: ListFloorsWithPassageComponent,
+                canActivate: [AuthGuard],
                 title: 'List Floors With Passage',
             },
         ],
@@ -265,6 +270,7 @@ export const routes: Routes = [
     {
         path: 'edit-client',
         component: EditClientComponent,
+        canActivate: [AuthGuard],
         title: 'Edit Client',
     },
 

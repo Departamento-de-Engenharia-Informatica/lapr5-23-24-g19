@@ -21,7 +21,7 @@ const attachCurrentUser = async (req, res, next) => {
     try {
         const userRepo = Container.get(config.repos.user.name) as IUserRepo
         const email = req.auth.email
-        if(!email){
+        if (!email) {
             next(new Error('Email invalido'))
         }
         const user = await userRepo.findByEmail(email)
@@ -29,8 +29,7 @@ const attachCurrentUser = async (req, res, next) => {
         if (user != null) {
             req.user = user
             next()
-        } else 
-            next(new Error('Token não corresponde a qualquer utilizador do sistema'))
+        } else next(new Error('Token não corresponde a qualquer utilizador do sistema'))
     } catch (e) {
         Logger.error('🔥 Error attaching user to req: %o', e)
         return next(e)
@@ -54,8 +53,7 @@ enum Roles {
     FleetManager = 'Fleet Manager',
 }
 
-const checkAdm = (req, res, next) =>
-    checkRole([config.systemRoles[0]], req, res, next)
+const checkAdm = (req, res, next) => checkRole([config.systemRoles[0]], req, res, next)
 
 export { checkAdm }
 export default attachCurrentUser

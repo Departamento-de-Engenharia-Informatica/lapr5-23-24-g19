@@ -126,9 +126,9 @@ import { AuthModule, User } from '@auth0/auth0-angular'
             clientId: '1pjF5FvzVmlykC9ahPeuuL48iTNhFR4N',
             authorizationParams: {
                 redirect_uri: window.location.origin,
-                audience: 'https://dev-wt48psyid1ra2e8l.us.auth0.com/api/v2/' // Set your API's unique identifier here
-              },
-          }),
+                audience: 'https://dev-wt48psyid1ra2e8l.us.auth0.com/api/v2/', // Set your API's unique identifier here
+            },
+        }),
         BrowserModule,
         FormsModule,
         AppRoutingModule,
@@ -158,6 +158,7 @@ export class AppModule {
     public static mdrUrl: string
     public static visualizationUrl: string
     public static currentUser: User | null | undefined
+    public static authToken: string | null | undefined
     constructor() {
         if (isDevMode()) {
             AppModule.baseUrl = `${environment.mdrServerUrl}/api`

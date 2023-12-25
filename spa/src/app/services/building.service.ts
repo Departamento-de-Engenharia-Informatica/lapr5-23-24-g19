@@ -5,8 +5,7 @@ import { Config } from '../config'
 import { BuildingDTO } from '../dto/BuildingDTO'
 import { CreateBuildingDTO } from '../dto/CreateBuildingDTO'
 import { AuthService } from '@auth0/auth0-angular'
-import { firstValueFrom } from 'rxjs';
-
+import { firstValueFrom } from 'rxjs'
 
 // interface BuildingProps{
 //   code:string
@@ -43,35 +42,42 @@ export interface MinMaxDTO {
 
 @Injectable()
 export class BuildingService {
-    constructor( private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
 
     async getToken(): Promise<string> {
-        // const tokenObservable = this.auth.getAccessTokenSilently();
-        // const token = await firstValueFrom(tokenObservable);
-        return "asda";
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
     }
 
     getBuildings(): Observable<BuildingDTO[]> {
         const url = `${Config.baseUrl}/buildings`
 
-        return from(this.getToken()).pipe(
-            switchMap(token => this.http.get<BuildingDTO[]>(url, {
-                observe: 'body',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                responseType: 'json',
-            })),
-            catchError((response: HttpErrorResponse) => {
-                let errorMessage: string
-                if (response.error) {
-                    errorMessage = response.error
-                } else {
-                    errorMessage = `An unexpected error occurred: ${response.message}`
-                }
-                return throwError(() => new Error(errorMessage))
-            })
-        );
+        return new Observable<BuildingDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<BuildingDTO[]>(url, {
+                            headers: { Authorization: `Bearer ${token}` },
+                        })
+                        .subscribe(
+                            (buildings) => observer.next(buildings),
+                            (error) => {
+                                const errorMessage =
+                                    error instanceof HttpErrorResponse
+                                        ? error.error ||
+                                          `An unexpected error occurred: ${error.message}`
+                                        : 'An unexpected error occurred'
+                                observer.error(new Error(errorMessage))
+                            },
+                            () => observer.complete(),
+                        )
+                })
+                .catch((error) => observer.error(error))
+        })
     }
 
     getBuildingsByFloors(dto: MinMaxDTO): Observable<BuildingByFloorsDTO[]> {

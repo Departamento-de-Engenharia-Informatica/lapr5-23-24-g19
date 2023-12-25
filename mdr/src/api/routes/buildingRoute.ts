@@ -180,7 +180,7 @@ export default (app: Router) => {
     route.get('/:id/elevators', (req, res, next) =>
         elevatorCtrl.getElevators(req, res, next),
     )
-  
+
     // const conf = {
     //     decryptionKey: "LaWXgENPlVK0GcKLP2jv1HtL0iwXHZMSfcUNH8iD0LabOJkwgbpq8aI1CoBl-1ok"
     // } as JWEDecryptionConfig
@@ -194,8 +194,8 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
-        attachCurrentUser,
-        checkAdm,
+        // attachCurrentUser,
+        // checkAdm,
         (req, res, next) => {
             if (
                 (req.query.minFloors && req.query.maxFloors) ||
