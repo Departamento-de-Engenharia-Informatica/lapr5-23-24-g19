@@ -22,6 +22,7 @@ import IBackofficeUserService, {
 } from './IServices/IBackofficeUserService'
 import IAuthRepo from './IRepos/IAuthRepo'
 import { IAuthUserDTO } from '../dto/IAuthUserDTO'
+import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
 
 @Service()
 export default class BackofficeUserService implements IBackofficeUserService {
@@ -71,6 +72,11 @@ export default class BackofficeUserService implements IBackofficeUserService {
                 password: dto.password,
                 connection: 'Username-Password-Authentication',
             } as IAuthUserDTO)
+
+            await this.authRepo.assignRoleToUser({
+                email: dto.email,
+                role: dto.role,
+            } as IAssingRoleDTO)
 
             const saved = await this.repo.save(backofficeUser)
 
