@@ -16,7 +16,10 @@ export class ListBuildingsMinmaxFloorsComponent {
     buildings: BuildingByFloorsDTO[] = []
     filterForm: FormGroup = null as unknown as FormGroup
 
-    constructor(private formBuilder: FormBuilder, private service: BuildingService) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private service: BuildingService,
+    ) {}
 
     ngOnInit() {
         this.filterForm = this.formBuilder.group({
@@ -30,9 +33,11 @@ export class ListBuildingsMinmaxFloorsComponent {
             min: this.filterForm.value.min as unknown as number,
             max: this.filterForm.value.max as unknown as number,
         }
+        console.log('ola')
 
         this.service.getBuildingsByFloors(dto).subscribe(
             (list: BuildingByFloorsDTO[]) => {
+                console.log(list)
                 this.allBuildings = list
                 this.buildings = this.allBuildings
             },
