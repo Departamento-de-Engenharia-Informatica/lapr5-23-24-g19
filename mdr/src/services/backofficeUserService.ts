@@ -67,6 +67,8 @@ export default class BackofficeUserService implements IBackofficeUserService {
                 password,
             }).getOrThrow()
 
+            const saved = await this.repo.save(backofficeUser)
+
             await this.authRepo.createUser({
                 email: dto.email,
                 password: dto.password,
@@ -77,8 +79,6 @@ export default class BackofficeUserService implements IBackofficeUserService {
                 email: dto.email,
                 role: dto.role,
             } as IAssingRoleDTO)
-
-            const saved = await this.repo.save(backofficeUser)
 
             // TODO: TOKEN
             const backofficeUserDTO = BackofficeUserMap.toDTO(saved)
