@@ -1,7 +1,8 @@
-import { Observable, catchError, throwError } from 'rxjs'
+import { Observable, catchError, firstValueFrom, throwError } from 'rxjs'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Config } from '../config'
+import { AuthService } from '@auth0/auth0-angular'
 
 interface CreateRobotTypeDTO {
     code: string
@@ -14,39 +15,75 @@ interface CreateRobotTypeDTO {
     providedIn: 'root',
 })
 export class RobotTypeRepo {
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
+
+    async getToken(): Promise<string> {
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
+    }
 
     createRobotType(dto: CreateRobotTypeDTO): Observable<CreateRobotTypeDTO> {
-        return this.http
-            .post<CreateRobotTypeDTO>(
-                `${Config.baseUrl}/robottypes`,
-                JSON.stringify(dto),
-                {
-                    headers: { 'Content-type': 'application/json' },
-                    observe: 'body',
-                    responseType: 'json',
-                },
-            )
-            .pipe(
-                catchError((response: HttpErrorResponse) => {
-                    let errorMessage: string
-
-                    if (response.error) {
-                        errorMessage = response.error
-                    } else {
-                        errorMessage = `An unexpected error occurred: ${response.message}`
-                    }
-
-                    return throwError(() => new Error(errorMessage))
-                }),
-            )
+        return new Observable<CreateRobotTypeDTO>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .post<CreateRobotTypeDTO>(
+                            `${Config.baseUrl}/robottypes`,
+                            JSON.stringify(dto),
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    'Content-type': 'application/json',
+                                },
+                                observe: 'body',
+                                responseType: 'json',
+                            },
+                        )
+                        .subscribe(
+                            (createdRobotType) => {
+                                observer.next(createdRobotType)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
+        })
     }
 
     getRobotTypes(): Observable<CreateRobotTypeDTO[]> {
-        return this.http.get<CreateRobotTypeDTO[]>(`${Config.baseUrl}/robottypes`, {
-            headers: { 'Content-type': 'application/json' },
-            observe: 'body',
-            responseType: 'json',
+        return new Observable<CreateRobotTypeDTO[]>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<CreateRobotTypeDTO[]>(`${Config.baseUrl}/robottypes`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                            observe: 'body',
+                            responseType: 'json',
+                        })
+                        .subscribe(
+                            (robotTypes) => {
+                                observer.next(robotTypes)
+                                observer.complete()
+                            },
+                            (error) => {
+                                observer.error(error)
+                            },
+                        )
+                })
+                .catch((error) => {
+                    observer.error(error)
+                })
         })
     }
 }
