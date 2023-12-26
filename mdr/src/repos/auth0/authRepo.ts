@@ -25,6 +25,42 @@ export default class AuthRepo implements IAuthRepo {
         return await res.json()
     }
 
+    async blockUser(email: string): Promise<void> {
+        const user = await this.getUserByEmail(email)
+        const res = await fetch(`${config.auth0.audience}/users/${user[0].user_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${config.auth0.bearer}`,
+            },
+            body: JSON.stringify({
+                blocked: true,
+            }),
+        })
+
+        if (res.status !== 200) {
+            return Promise.reject()
+        }
+    }
+
+    async unblockUser(email: string): Promise<void> {
+        const user = await this.getUserByEmail(email)
+        const res = await fetch(`${config.auth0.audience}/users/${user[0].user_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${config.auth0.bearer}`,
+            },
+            body: JSON.stringify({
+                blocked: false,
+            }),
+        })
+
+        if (res.status !== 200) {
+            return Promise.reject()
+        }
+    }
+
     async getUserByEmail(email: string): Promise<IAuthUserDTO> {
         const res = await fetch(
             `${config.auth0.audience}/users-by-email?email=${email}`,
@@ -45,6 +81,9 @@ export default class AuthRepo implements IAuthRepo {
     async assignRoleToUser(dto: IAssingRoleDTO): Promise<void> {
         let role: string
         switch (dto.role.toUpperCase()) {
+            case 'CLIENT':
+                role = 'rol_IEg5oxECoH0vC4YG'
+                break
             case 'CAMPUS MANAGER':
                 role = 'rol_ceCbrjtQ7xaoEvLO'
                 break

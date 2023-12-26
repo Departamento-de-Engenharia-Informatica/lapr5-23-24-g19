@@ -11,6 +11,7 @@ import { IClientDTO } from '../dto/IClientDTO'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
 import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
+import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
 
 @Service()
 export default class ClientController implements IClientController {
@@ -35,6 +36,30 @@ export default class ClientController implements IClientController {
         }
     }
 
+    async updateClientState(req: Request, res: Response, next: NextFunction) {
+        try {
+            const state = req.body.state as string
+            if (state !== 'rejected' && state !== 'approved') {
+                return res.status(400).send('Invalid state')
+            }
+
+            const dto = req.body as IUpdateClientStateDTO
+            const result = await this.service.updateClientState(dto)
+
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            const message = result.value as ICreatedClientDTO
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     async getClient(req: Request, res: Response, next: NextFunction) {
         try {
             const result = await this.service.getClient(req.params.email as string)
@@ -52,9 +77,29 @@ export default class ClientController implements IClientController {
         }
     }
 
+    async getClientsByState(req: Request, res: Response, next: NextFunction) {
+        try {
+            const state = req.query.state as string
+            if (state !== 'Rejected' && state !== 'Approved' && state !== 'Pending') {
+                return res.status(400).send('Invalid state')
+            }
+
+            const result = await this.service.getClientsByState(state)
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+            const message = result.value as ICreatedClientDTO[]
+            return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     async patchClient(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('oi')
             const dto = req.body as IClientWithoutPasswordDTO
             dto.email = req.params.email as string
             console.log(dto)

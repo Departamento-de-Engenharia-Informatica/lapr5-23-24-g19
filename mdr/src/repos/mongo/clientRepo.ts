@@ -50,6 +50,15 @@ export default class ClientRepo implements IClientRepo {
         return ClientMap.toDomain(doc)
     }
 
+    async findByState(state: string): Promise<Client[]> {
+        const docs = await this.schema.find({ status: state })
+        if (!docs || !docs.length) {
+            return null
+        }
+
+        return docs.map(doc => ClientMap.toDomain(doc))
+    }
+
     async delete(user: Client): Promise<boolean> {
         const doc = await this.schema.deleteOne({ email: user.email.value })
 

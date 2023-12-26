@@ -22,10 +22,18 @@ import IClientService, {
     ClientErrorCode,
     ClientErrorResult,
 } from './IServices/IClientService'
+import { ClientStatus } from '../domain/user/client/status'
+import IAuthRepo from './IRepos/IAuthRepo'
+import { IAuthUserDTO } from '../dto/IAuthUserDTO'
+import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
+import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
 
 @Service()
 export default class ClientService implements IClientService {
-    constructor(@Inject(config.repos.client.name) private repo: IClientRepo) {}
+    constructor(
+        @Inject(config.repos.client.name) private repo: IClientRepo,
+        @Inject(config.repos.auth.name) private authRepo: IAuthRepo,
+    ) {}
 
     async createClient(
         dto: IClientDTO,
@@ -55,10 +63,73 @@ export default class ClientService implements IClientService {
             }).getOrThrow()
 
             const saved = await this.repo.save(client)
+
+            await this.authRepo.createUser({
+                email: dto.email,
+                password: dto.password,
+                connection: 'Username-Password-Authentication',
+            } as IAuthUserDTO)
+
+            await this.authRepo.assignRoleToUser({
+                email: dto.email,
+                role: 'client',
+            } as IAssingRoleDTO)
+
+            await this.authRepo.blockUser(dto.email)
+
             // TODO: TOKEN
             const clientDTO = ClientMap.toDTO(saved)
 
             return right(clientDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async updateClientState(
+        dto: IUpdateClientStateDTO,
+    ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>> {
+        try {
+            const email = Email.create(dto.email).getOrThrow()
+            if (!email) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `Email is not valid: ${email.value}`,
+                })
+            }
+
+            const client = await this.repo.find(email)
+            switch (client.status) {
+                case ClientStatus.APPROVED:
+                    return left({
+                        errorCode: ClientErrorCode.BussinessRuleViolation,
+                        message: `User already approved: ${email.value}`,
+                    })
+                case ClientStatus.REJECTED:
+                    return left({
+                        errorCode: ClientErrorCode.BussinessRuleViolation,
+                        message: `User already rejected: ${email.value}`,
+                    })
+            }
+
+            if (dto.state === 'approved') {
+                client.status = ClientStatus.APPROVED
+                await this.authRepo.unblockUser(dto.email)
+            } else {
+                client.status = ClientStatus.REJECTED
+            }
+
+            const res = ClientMap.toDTO(await this.repo.save(client))
+
+            return right({
+                name: res.name,
+                email: res.email,
+                phoneNumber: res.phoneNumber,
+                vatNumber: res.vatNumber,
+            } as IClientWithoutPasswordDTO)
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,
@@ -87,6 +158,29 @@ export default class ClientService implements IClientService {
                 phoneNumber: client.phoneNumber,
                 vatNumber: client.vatNumber,
             } as IClientWithoutPasswordDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async getClientsByState(
+        state: string,
+    ): Promise<Either<ClientErrorResult, ICreatedClientDTO[]>> {
+        try {
+            const clients = await this.repo.findByState(state)
+
+            if (!clients) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `Clients not found`,
+                })
+            }
+
+            const res = clients.map((c: Client) => ClientMap.toDTO(c))
+            return right(res)
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,
