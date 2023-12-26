@@ -16,6 +16,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^21.0.0",
     "lil-gui": "^0.19.1",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",

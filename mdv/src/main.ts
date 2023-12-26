@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import Orientation from './orientation'
 import ThumbRaiser from './thumb_raiser'
 import { Loader, NodeLoader } from './loader'
+import * as TWEEN from 'three/examples/jsm/libs/tween.module.js'
 export const MDRUrl = 'http://localhost:4000/api/'
 
 export const loader: Loader = new NodeLoader()
@@ -347,6 +348,7 @@ function initialize() {
 function animate() {
     requestAnimationFrame(animate)
     // Update the game
+    TWEEN.update()
     thumbRaiser.update()
 }
 

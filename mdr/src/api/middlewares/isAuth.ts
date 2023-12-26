@@ -65,21 +65,17 @@ export const checkJwt = jwt({
 
 export function customJwtMiddleware(req, res, next) {
     checkJwt(req, res, err => {
-        // const jweToken = req.headers.authorization?.split(' ')[1]
-        // console.log(jweToken)
-        if (err) {
-            console.error('JWT validation error:', err)
-            return res.status(err.status || 500).json({ error: err.message })
+        const jweToken = req.headers.authorization?.split(' ')[1]
+
+        if(jweToken!=undefined && jweToken!=null && jweToken!='BACKEND'){
+            if (err) {
+                console.error('JWT validation error:', err)
+                return res.status(err.status || 500).json({ error: err.message })
+            }
+            req.auth.email =req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email']
+            req.auth.roles =req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles']
+            console.log('User Email:', req.auth)
         }
-        req.auth.email =
-            req.auth[
-                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
-            ]
-        req.auth.roles =
-            req.auth[
-                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
-            ]
-        console.log('User Email:', req.auth)
         next()
     })
 }

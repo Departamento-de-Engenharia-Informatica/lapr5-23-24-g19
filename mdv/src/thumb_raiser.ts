@@ -61,6 +61,7 @@ import Dispatcher from './dispatcher.js'
 import ElevatorMenu from './elevator-menu.js'
 import DoorSet from './door_set.js'
 import PassageMenu from './passage-menu.js'
+import * as TWEEN from 'three/examples/jsm/libs/tween.module.js'
 
 /*
  * generalParameters = {
@@ -401,6 +402,7 @@ export type Mouse = {
 }
 
 export default class ThumbRaiser {
+
     public audio: Audio
     public cubeTexture: CubeTexture
     public maze: Maze
@@ -412,7 +414,7 @@ export default class ThumbRaiser {
     public frame: THREE.Scene
     public camera2D: THREE.OrthographicCamera
     public scene: THREE.Scene
-
+    public inteiro: number = 0
     public ambientLight: AmbientLight
     public directionalLight: DirectionalLight
     public spotLight: SpotLight
@@ -1290,13 +1292,13 @@ export default class ThumbRaiser {
                                         this.miniMapCamera.viewport.width) *
                                         (this.miniMapCamera.orthographic.left -
                                             this.miniMapCamera.orthographic.right)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                     0.0,
                                     ((mouseIncrement.y /
                                         this.miniMapCamera.viewport.height) *
                                         (this.miniMapCamera.orthographic.top -
                                             this.miniMapCamera.orthographic.bottom)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                 )
                                 this.miniMapCamera.updateTarget(targetIncrement)
                             }
@@ -1428,7 +1430,7 @@ export default class ThumbRaiser {
                 this.activeViewCamera.activeProjection.remove(this.audio.listener)
                 this.activeViewCamera.setActiveProjection(
                     ['perspective', 'orthographic'][
-                        this.projection.options.selectedIndex
+                    this.projection.options.selectedIndex
                     ],
                 )
                 this.activeViewCamera.activeProjection.add(this.audio.listener)
@@ -1605,9 +1607,8 @@ export default class ThumbRaiser {
         const { building, floor } = params
 
         const mazeParams = {
-            url: `${
-                import.meta.env.VITE_MDR_URL
-            }/buildings/${building}/floors/${floor}/map`,
+            url: `${import.meta.env.VITE_MDR_URL
+                }/buildings/${building}/floors/${floor}/map`,
             startingPosition: params.position,
             startingDirection: params.direction,
             designCredits:
@@ -1642,6 +1643,7 @@ export default class ThumbRaiser {
     }
 
     update() {
+        // requestAnimationFrame(this.update);
         if (!this._gameRunning) {
             if (this.audio.loaded() && this.maze.loaded && this.player.loaded) {
                 // If all resources have been loaded
@@ -1736,6 +1738,8 @@ export default class ThumbRaiser {
                     this.scene.scale,
                 )
                 this.scene.add(this.doorSet)
+
+
 
                 // Set the spotlight target
                 this.spotLight.target = this.player
@@ -1842,9 +1846,23 @@ export default class ThumbRaiser {
             }
         } else {
             const initialPosition = this.player.position.clone()
-            // if (!this.maze?._lastPassage) {
-            //     this.maze._lastPassage = initialPosition
+            // // if (!this.maze?._lastPassage) {
+            //     //     this.maze._lastPassage = initialPosition
+            //     // }
+            //     if (this.inteiro == 1000) {
+            //         // console.log("100")
+            //         // const targetPosition = new THREE.Vector3(1, 0, 5); // Example target position
+            //         // this.movePlayerTo(targetPosition);
+            //         this.inteiro = 0
+            //         // const points: THREE.Vector3[]=[new THREE.Vector3(0, 0, 0),new THREE.Vector3(1, 0, 0),new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0)]
+            //         const points: number[][] = [[0, 1], [1, 0], [2, 3]];
+            //         this.animateThroughPoints(this.player, points);
+            //         // TWEEN.update()
+            // } else {
+            //     this.inteiro = this.inteiro + 1
+            //     // console.log("not yet")
             // }
+
 
             // Update the model animations
             const deltaT = this.clock.getDelta()
@@ -1952,21 +1970,21 @@ export default class ThumbRaiser {
                         !(
                             initPosCell[0] == playerPosCell[0] &&
                             initPosCell[1] == playerPosCell[1]
-                        )
-                    ) {
-                        this.maze._lastPassage = initialPosition.clone()
-                        console.log('ENTROU!!')
-                        console.log(
-                            'LP: ',
-                            this.maze.cartesianToCell(
-                                this.maze._lastPassage ?? new THREE.Vector3(),
-                            ),
-                        )
-                        console.log('IP: ', this.maze.cartesianToCell(initialPosition))
-                        console.log(
-                            'PP: ',
+                            )
+                            ) {
+                                this.maze._lastPassage = initialPosition.clone()
+                                console.log('ENTROU!!')
+                                console.log(
+                                    'LP: ',
+                                    this.maze.cartesianToCell(
+                                        this.maze._lastPassage ?? new THREE.Vector3(),
+                                        ),
+                                        )
+                                        console.log('IP: ', this.maze.cartesianToCell(initialPosition))
+                                        console.log(
+                                            'PP: ',
                             this.maze.cartesianToCell(this.player.position),
-                        )
+                            )
                         console.log('=====================')
                     }
 
@@ -1983,52 +2001,52 @@ export default class ThumbRaiser {
                 this.player.position.x,
                 this.player.position.y + this.player.face.worldPosition.y,
                 this.player.position.z,
-            )
-            this.topViewCamera.playerOrientation = orientation
-            this.topViewCamera.setTarget(target)
-            this.thirdPersonViewCamera.playerOrientation = orientation
-            this.thirdPersonViewCamera.setTarget(target)
-            const directionRad = THREE.MathUtils.degToRad(this.player.direction)
-            if (!this.realisticViewMode.checkBox.checked) {
-                this.firstPersonViewCamera.playerOrientation = orientation
-                this.firstPersonViewCamera.setTarget(target)
-                this.flashLight.playerOrientation = orientation
-                target = new THREE.Vector3(
-                    this.player.position.x + this.player.radius * Math.sin(directionRad),
-                    this.player.position.y + this.player.size.y,
-                    this.player.position.z + this.player.radius * Math.cos(directionRad),
                 )
-                this.flashLight.setTarget(target)
-            } else {
-                this.player.headEnd.getWorldQuaternion(orientation)
-                this.player.face.getWorldPosition(target)
-                this.firstPersonViewCamera.playerOrientation = orientation
-                this.firstPersonViewCamera.setTarget(target)
-                this.flashLight.playerOrientation = orientation
-                target.add(
-                    new THREE.Vector3(
-                        this.player.radius * Math.sin(directionRad),
-                        this.player.size.y - this.player.face.worldPosition.y,
-                        this.player.radius * Math.cos(directionRad),
-                    ),
-                )
-                this.flashLight.setTarget(target)
-            }
-
-            // Update statistics
-            this.statistics.update()
-
-            // Render primary viewports
-            this.enableShadows(this.shadowsParameters.enabled)
-            this.enableFog(this.fog.enabled)
-            this.renderer.clearColor()
-            for (let i = this.visibleViewportCameras.length - 1; i >= 0; i--) {
-                // Primary viewports must be rendered in reverse order: the topmost visible one will be rendered last
-                const camera = this.visibleViewportCameras[i]
-                if (this.fog.enabled) {
-                    this.fog.density = camera.fogDensity
-                }
-                this.player.visible = camera != this.firstPersonViewCamera
+                this.topViewCamera.playerOrientation = orientation
+                this.topViewCamera.setTarget(target)
+                this.thirdPersonViewCamera.playerOrientation = orientation
+                this.thirdPersonViewCamera.setTarget(target)
+                const directionRad = THREE.MathUtils.degToRad(this.player.direction)
+                if (!this.realisticViewMode.checkBox.checked) {
+                    this.firstPersonViewCamera.playerOrientation = orientation
+                    this.firstPersonViewCamera.setTarget(target)
+                    this.flashLight.playerOrientation = orientation
+                    target = new THREE.Vector3(
+                        this.player.position.x + this.player.radius * Math.sin(directionRad),
+                        this.player.position.y + this.player.size.y,
+                        this.player.position.z + this.player.radius * Math.cos(directionRad),
+                        )
+                        this.flashLight.setTarget(target)
+                    } else {
+                        this.player.headEnd.getWorldQuaternion(orientation)
+                        this.player.face.getWorldPosition(target)
+                        this.firstPersonViewCamera.playerOrientation = orientation
+                        this.firstPersonViewCamera.setTarget(target)
+                        this.flashLight.playerOrientation = orientation
+                        target.add(
+                            new THREE.Vector3(
+                                this.player.radius * Math.sin(directionRad),
+                                this.player.size.y - this.player.face.worldPosition.y,
+                                this.player.radius * Math.cos(directionRad),
+                                ),
+                                )
+                                this.flashLight.setTarget(target)
+                            }
+                            
+                            // Update statistics
+                            this.statistics.update()
+                            
+                            // Render primary viewports
+                            this.enableShadows(this.shadowsParameters.enabled)
+                            this.enableFog(this.fog.enabled)
+                            this.renderer.clearColor()
+                            for (let i = this.visibleViewportCameras.length - 1; i >= 0; i--) {
+                                // Primary viewports must be rendered in reverse order: the topmost visible one will be rendered last
+                                const camera = this.visibleViewportCameras[i]
+                                if (this.fog.enabled) {
+                                    this.fog.density = camera.fogDensity
+                                }
+                                this.player.visible = camera != this.firstPersonViewCamera
                 this.renderer.setViewport(
                     camera.viewport.x,
                     camera.viewport.y,
@@ -2068,6 +2086,49 @@ export default class ThumbRaiser {
                 this.frame.children[0].material.color.set(this.miniMapCamera.frameColor)
                 this.renderer.render(this.frame, this.camera2D) // Render the frame
             }
+            // console.log("animate")
+
         }
     }
+    
+    simulate(tasks:Task[]){
+        // const points = tasks.map(el => [el.x,el.y]);
+        const points: number[][] = [[0, 1], [1, 0], [2, 3]];
+        this.animateThroughPoints(this.player, points);
+    }
+
+    animateThroughPoints(player: Player, points: number[][], durationPerPoint: number = 1000): void {
+        let previousTween: TWEEN.Tween<THREE.Vector3> | null = null;
+        console.log("points")
+        console.log(points)
+        console.log(player.position)
+        const deltaT = this.clock.getDelta()
+        this.animations.update(deltaT)
+        this.animations.fadeToAction('Walking',1000)
+        
+        points.forEach((point) => {
+            const p = this.maze.cellToCartesian(point)
+            const tween = new TWEEN.Tween<THREE.Vector3>(player.position)
+                .to({ x:p.x, z: p.z }, durationPerPoint)
+                .easing(TWEEN.Easing.Quadratic.InOut);
+                // console.log("x:\t",player.position.x,"z:\t",player.position.z)
+                // console.log("x:\t",point.x,"z:\t",point.z)
+
+            if (previousTween) {
+                previousTween.chain(tween); // Chain the tweens
+            } else {
+                tween.start(); // Start the first tween immediately
+            }
+
+            previousTween = tween;
+        });
+        this.animations.actionFinished()
+    }
+    
+}
+export interface Task {
+    building: string;
+    floor: number;
+    x: number;
+    y: number;
 }

@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import Orientation from './orientation'
 import CubeTexture from './cubetexture'
 import { GUI } from 'lil-gui'
-import ThumbRaiser from './thumb_raiser'
+import ThumbRaiser, { Task } from './thumb_raiser'
 import { Loader } from './loader'
 
 export default class UserInterface extends GUI {
@@ -95,6 +95,47 @@ export default class UserInterface extends GUI {
             optionsBuildings.options(buildings)
         })
         travelFolder.close()
+
+        //AUTOMATIC
+        const autFolder = campusFolder.addFolder('Automatic')
+        autFolder.domElement.style.fontSize = fontSize
+        
+        let robots: string[] = []
+        let tasks: number[] = []
+        
+        const options2 = {
+            robots: [],
+            // floor: [],
+            Simulate: function () {
+                const robots = optionsRobots.getValue()
+                // const floor = optionsFloors.getValue()
+                const a: Task = {
+                    building: 's',
+                    floor: 3,
+                    x: 3,
+                    y: 2
+                };
+                if (robots && tasks) {
+                    thumbRaiser.simulate([a])
+                } else {
+                    alert('Both building and floor should be selected')
+                }
+            },
+        }
+        
+        const optionsRobots = autFolder.add(options2, 'robots', robots)
+        
+        autFolder.add(options2, 'Simulate')
+        
+        autFolder.onOpenClose(async () => {
+            const codes = await this.updateRobots()
+            robots = codes
+            optionsRobots.options(robots)
+        })
+        autFolder.close()
+
+        //SETTINGS
+        
 
         const settings = this.addFolder('Settings')
         settings.domElement.style.fontSize = fontSize
@@ -456,6 +497,22 @@ export default class UserInterface extends GUI {
         const url = `${import.meta.env.VITE_MDR_URL}/buildings`
         try {
             const data = await this.loader.load<Building[]>(url)
+
+            const codes = data.map((item) => {
+                return item.code
+            })
+
+            return codes
+        } catch (_) {
+            return []
+        }
+    }
+    async updateRobots(): Promise<string[]> {
+        type Robot = { code: string }
+
+        const url = `${import.meta.env.VITE_MDR_URL}/robots`
+        try {
+            const data = await this.loader.load<Robot[]>(url)
 
             const codes = data.map((item) => {
                 return item.code
