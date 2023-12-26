@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Player from './player'
+import ThumbRaiser from './thumb_raiser'
 
 export default class Animations {
     private readonly states: string[]
@@ -58,13 +59,33 @@ export default class Animations {
                 .fadeIn(duration)
                 .play()
             // Some actions must not be interrupted
-            if (
-                this._activeName != 'Idle' &&
-                this._activeName != 'Walking' &&
-                this._activeName != 'Running'
-            ) {
-                this.mixer.addEventListener('finished', () => this.actionFinished())
-                this._actionInProgress = true
+            //no simulation
+            // if (this._activeName != 'Walking') {
+            //     if (ThumbRaiser.simulation) {
+
+            //     } else {
+            //         this.mixer.addEventListener('finished', () => this.actionFinished())
+            //         this._actionInProgress = true
+            //     }
+            // }
+            if (ThumbRaiser.simulation) {
+                if (
+                    this._activeName != 'Idle' &&
+                    this._activeName != 'Running'
+                ) {
+                    this.mixer.addEventListener('finished', () => this.actionFinished())
+                    this._actionInProgress = true
+                }
+            } else {
+                if (
+                    this._activeName != 'Idle' &&
+                    this._activeName != 'Walking' &&
+                    this._activeName != 'Running'
+                ) {
+                    this.mixer.addEventListener('finished', () => this.actionFinished())
+                    this._actionInProgress = true
+                }
+                console.log(this.activeName)
             }
             if (this._activeName != 'Idle') {
                 this.resetIdleTime()

@@ -432,6 +432,7 @@ export default class ThumbRaiser {
     public renderer: THREE.WebGLRenderer
 
     private _gameRunning: boolean
+    static simulation: boolean = false
     get gameRunning() {
         return this._gameRunning
     }
@@ -1730,6 +1731,7 @@ export default class ThumbRaiser {
                     this.maze.initialPosition.y,
                     this.maze.initialPosition.z,
                 )
+
                 this.player.direction = this.maze.initialDirection
 
                 this.doorSet = new DoorSet(
@@ -1970,21 +1972,21 @@ export default class ThumbRaiser {
                         !(
                             initPosCell[0] == playerPosCell[0] &&
                             initPosCell[1] == playerPosCell[1]
-                            )
-                            ) {
-                                this.maze._lastPassage = initialPosition.clone()
-                                console.log('ENTROU!!')
-                                console.log(
-                                    'LP: ',
-                                    this.maze.cartesianToCell(
-                                        this.maze._lastPassage ?? new THREE.Vector3(),
-                                        ),
-                                        )
-                                        console.log('IP: ', this.maze.cartesianToCell(initialPosition))
-                                        console.log(
-                                            'PP: ',
+                        )
+                    ) {
+                        this.maze._lastPassage = initialPosition.clone()
+                        console.log('ENTROU!!')
+                        console.log(
+                            'LP: ',
+                            this.maze.cartesianToCell(
+                                this.maze._lastPassage ?? new THREE.Vector3(),
+                            ),
+                        )
+                        console.log('IP: ', this.maze.cartesianToCell(initialPosition))
+                        console.log(
+                            'PP: ',
                             this.maze.cartesianToCell(this.player.position),
-                            )
+                        )
                         console.log('=====================')
                     }
 
@@ -2001,52 +2003,52 @@ export default class ThumbRaiser {
                 this.player.position.x,
                 this.player.position.y + this.player.face.worldPosition.y,
                 this.player.position.z,
+            )
+            this.topViewCamera.playerOrientation = orientation
+            this.topViewCamera.setTarget(target)
+            this.thirdPersonViewCamera.playerOrientation = orientation
+            this.thirdPersonViewCamera.setTarget(target)
+            const directionRad = THREE.MathUtils.degToRad(this.player.direction)
+            if (!this.realisticViewMode.checkBox.checked) {
+                this.firstPersonViewCamera.playerOrientation = orientation
+                this.firstPersonViewCamera.setTarget(target)
+                this.flashLight.playerOrientation = orientation
+                target = new THREE.Vector3(
+                    this.player.position.x + this.player.radius * Math.sin(directionRad),
+                    this.player.position.y + this.player.size.y,
+                    this.player.position.z + this.player.radius * Math.cos(directionRad),
                 )
-                this.topViewCamera.playerOrientation = orientation
-                this.topViewCamera.setTarget(target)
-                this.thirdPersonViewCamera.playerOrientation = orientation
-                this.thirdPersonViewCamera.setTarget(target)
-                const directionRad = THREE.MathUtils.degToRad(this.player.direction)
-                if (!this.realisticViewMode.checkBox.checked) {
-                    this.firstPersonViewCamera.playerOrientation = orientation
-                    this.firstPersonViewCamera.setTarget(target)
-                    this.flashLight.playerOrientation = orientation
-                    target = new THREE.Vector3(
-                        this.player.position.x + this.player.radius * Math.sin(directionRad),
-                        this.player.position.y + this.player.size.y,
-                        this.player.position.z + this.player.radius * Math.cos(directionRad),
-                        )
-                        this.flashLight.setTarget(target)
-                    } else {
-                        this.player.headEnd.getWorldQuaternion(orientation)
-                        this.player.face.getWorldPosition(target)
-                        this.firstPersonViewCamera.playerOrientation = orientation
-                        this.firstPersonViewCamera.setTarget(target)
-                        this.flashLight.playerOrientation = orientation
-                        target.add(
-                            new THREE.Vector3(
-                                this.player.radius * Math.sin(directionRad),
-                                this.player.size.y - this.player.face.worldPosition.y,
-                                this.player.radius * Math.cos(directionRad),
-                                ),
-                                )
-                                this.flashLight.setTarget(target)
-                            }
-                            
-                            // Update statistics
-                            this.statistics.update()
-                            
-                            // Render primary viewports
-                            this.enableShadows(this.shadowsParameters.enabled)
-                            this.enableFog(this.fog.enabled)
-                            this.renderer.clearColor()
-                            for (let i = this.visibleViewportCameras.length - 1; i >= 0; i--) {
-                                // Primary viewports must be rendered in reverse order: the topmost visible one will be rendered last
-                                const camera = this.visibleViewportCameras[i]
-                                if (this.fog.enabled) {
-                                    this.fog.density = camera.fogDensity
-                                }
-                                this.player.visible = camera != this.firstPersonViewCamera
+                this.flashLight.setTarget(target)
+            } else {
+                this.player.headEnd.getWorldQuaternion(orientation)
+                this.player.face.getWorldPosition(target)
+                this.firstPersonViewCamera.playerOrientation = orientation
+                this.firstPersonViewCamera.setTarget(target)
+                this.flashLight.playerOrientation = orientation
+                target.add(
+                    new THREE.Vector3(
+                        this.player.radius * Math.sin(directionRad),
+                        this.player.size.y - this.player.face.worldPosition.y,
+                        this.player.radius * Math.cos(directionRad),
+                    ),
+                )
+                this.flashLight.setTarget(target)
+            }
+
+            // Update statistics
+            this.statistics.update()
+
+            // Render primary viewports
+            this.enableShadows(this.shadowsParameters.enabled)
+            this.enableFog(this.fog.enabled)
+            this.renderer.clearColor()
+            for (let i = this.visibleViewportCameras.length - 1; i >= 0; i--) {
+                // Primary viewports must be rendered in reverse order: the topmost visible one will be rendered last
+                const camera = this.visibleViewportCameras[i]
+                if (this.fog.enabled) {
+                    this.fog.density = camera.fogDensity
+                }
+                this.player.visible = camera != this.firstPersonViewCamera
                 this.renderer.setViewport(
                     camera.viewport.x,
                     camera.viewport.y,
@@ -2090,29 +2092,33 @@ export default class ThumbRaiser {
 
         }
     }
-    
-    simulate(tasks:Task[]){
+
+    simulate(tasks: Task[]) {
+        ThumbRaiser.simulation = true
         // const points = tasks.map(el => [el.x,el.y]);
-        const points: number[][] = [[0, 1], [1, 0], [2, 3]];
-        this.animateThroughPoints(this.player, points);
+        const points: number[][] = [[0, 1], [1, 0], [2, 3],[3,3],[1,1],[2,2]];
+        this.tweenPlayerMovementAndOrientation(this.player, points);
+        console.log("ended")
+        // ThumbRaiser.simulation=false
     }
 
     animateThroughPoints(player: Player, points: number[][], durationPerPoint: number = 1000): void {
         let previousTween: TWEEN.Tween<THREE.Vector3> | null = null;
-        console.log("points")
-        console.log(points)
-        console.log(player.position)
-        const deltaT = this.clock.getDelta()
-        this.animations.update(deltaT)
-        this.animations.fadeToAction('Walking',1000)
-        
+        // console.log("points")
+        // console.log(points)
+        // console.log(player.position)
+        // const deltaT = this.clock.getDelta()
+        // this.animations.update(deltaT)
+
+        this.animations.fadeToAction('Walking', 3)
+
         points.forEach((point) => {
             const p = this.maze.cellToCartesian(point)
             const tween = new TWEEN.Tween<THREE.Vector3>(player.position)
-                .to({ x:p.x, z: p.z }, durationPerPoint)
+                .to({ x: p.x, z: p.z }, durationPerPoint)
                 .easing(TWEEN.Easing.Quadratic.InOut);
-                // console.log("x:\t",player.position.x,"z:\t",player.position.z)
-                // console.log("x:\t",point.x,"z:\t",point.z)
+            // console.log("x:\t",player.position.x,"z:\t",player.position.z)
+            // console.log("x:\t",point.x,"z:\t",point.z)
 
             if (previousTween) {
                 previousTween.chain(tween); // Chain the tweens
@@ -2122,9 +2128,52 @@ export default class ThumbRaiser {
 
             previousTween = tween;
         });
-        this.animations.actionFinished()
+        // this.animations.actionFinished()
+
     }
-    
+    tweenPlayerMovementAndOrientation(player: Player, path: number[][], durationPerPoint: number = 2000): void {
+        let previousTween: TWEEN.Tween<any> | null = null;
+        this.animations.fadeToAction('Walking', 3)
+        for (let i = 0; i < path.length - 1; i++) {
+            console.log("w")
+            const startPosition = this.maze.cellToCartesian(path[i])
+            // const startPosition = new THREE.Vector3().copy(path[i]);
+            const endPosition = this.maze.cellToCartesian(path[i + 1])
+
+            const directionVector = new THREE.Vector3().subVectors(endPosition, startPosition);
+            const startOrientationY = player.rotation.y;
+            const endOrientationY = Math.atan2(directionVector.x, directionVector.z);
+            
+            // Create position tween
+            const positionTween = new TWEEN.Tween(startPosition)
+                .to({ x: endPosition.x, y: endPosition.y, z: endPosition.z }, durationPerPoint)
+                .onUpdate(() => {player.position.copy(startPosition)});
+
+            const orientationTween = new TWEEN.Tween({ y: startOrientationY })
+                .to({ y: endOrientationY }, 500)
+                .onUpdate((obj) => player.rotation.y=obj.y)
+            console.log("whatti")
+
+            // Chain tweens
+            if (previousTween) {
+                previousTween.chain(orientationTween,positionTween);
+            } else {
+                orientationTween.start();
+                positionTween.start();
+            }
+            if (i === path.length - 2) {
+                positionTween.onComplete(() => {
+                    // Transition to the final animation state (e.g., Idle)
+                    ThumbRaiser.simulation=false
+                    this.animations.actionFinished()
+                    this.animations.fadeToAction('Idle', 0.5);
+
+                });
+            }
+            previousTween = positionTween;
+        }
+    }
+
 }
 export interface Task {
     building: string;

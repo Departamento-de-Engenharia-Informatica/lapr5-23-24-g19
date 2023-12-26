@@ -349,6 +349,7 @@ function animate() {
     requestAnimationFrame(animate)
     // Update the game
     TWEEN.update()
+    
     thumbRaiser.update()
 }
 
