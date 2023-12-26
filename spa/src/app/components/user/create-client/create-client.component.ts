@@ -11,6 +11,7 @@ import { ClientService } from '../../../services/client.service'
 })
 export class CreateClientComponent {
     form: UntypedFormGroup
+    isPrivacyPolicyAgreed: boolean = false
 
     constructor(private fb: FormBuilder, private service: ClientService) {
         this.form = this.fb.group({
@@ -21,8 +22,12 @@ export class CreateClientComponent {
             password: [null, Validators.required],
         })
     }
+
+    onPrivacyPolicyChange(event: any): void {
+        this.isPrivacyPolicyAgreed = event.target.checked
+    }
     submit() {
-        if (this.form.valid) {
+        if (this.form.valid && this.isPrivacyPolicyAgreed ) {
             const dto: ClientDTO = {
                 name: this.form.value.name,
                 email: this.form.value.email,

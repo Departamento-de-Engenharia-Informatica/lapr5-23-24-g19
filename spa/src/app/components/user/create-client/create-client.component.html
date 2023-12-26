@@ -62,7 +62,18 @@
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="form.invalid">Submit</button>
+                <div class="row">
+                    <div class="privacy-policy-container">
+                        <label [routerLink]="['/privacy-policy']">Agree to our Privacy Policy</label>
+                        <input
+                            type="checkbox"
+                            id="privacyPolicy"
+                            (change)="onPrivacyPolicyChange($event)"
+                        />
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="form.invalid || !isPrivacyPolicyAgreed">Submit</button>
             </div>
         </form>
     </div>
