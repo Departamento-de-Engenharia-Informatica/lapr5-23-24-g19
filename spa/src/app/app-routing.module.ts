@@ -48,12 +48,17 @@ import { AuthGuard } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
+import {AdministratorComponent} from "./components/user/administrator-menu/administrator.component";
+import {DeleteClientComponent} from "./components/user/delete-client/delete-client.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent, title: 'Auth' },
-    { path: 'backoffice', component: CreateBackofficeUserComponent },
-    { path: 'client', component: CreateClientComponent, title: 'User' },
+
+
+
+   // { path: 'backoffice', component: CreateBackofficeUserComponent },
+    //{ path: 'client', component: CreateClientComponent, title: 'User' },
 
     {
         path: 'modules',
@@ -311,6 +316,28 @@ export const routes: Routes = [
             },
         ],
     },
+
+    {
+        path: 'users',
+        component: AdministratorComponent,
+        canActivate: [AuthGuard],
+        //title: 'Users'},
+        children: [
+            {
+                path: 'create',
+                component: CreateBackofficeUserComponent,
+                canActivate: [AuthGuard],
+                title: 'Create backoffice user',
+            },
+            {
+                path: 'approve-reject-client',
+                component: ApproveRejectClientComponent,
+                canActivate: [AuthGuard],
+                title: 'Approve or reject client',
+            },
+        ],
+    },
+
     {
         path: 'privacy-policy',
         component: PrivacyPolicyComponent,
@@ -323,9 +350,21 @@ export const routes: Routes = [
         title: 'Edit Client',
     },
     {
+        path: 'delete-client',
+        component: DeleteClientComponent,
+        canActivate: [AuthGuard],
+        title: 'Delete Client',
+    },
+    {
         path: 'approve-reject-client',
         component: ApproveRejectClientComponent,
         title: 'Approve/Reject Client',
+    },
+
+    {
+        path: 'create-client',
+        component: CreateClientComponent,
+        title: 'create Client',
     },
 
     { path: '**', component: PageNotFoundComponent },

@@ -70,6 +70,8 @@ import { AuthModule, User } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
+import {AdministratorComponent} from "./components/user/administrator-menu/administrator.component";
+import {DeleteClientComponent} from "./components/user/delete-client/delete-client.component";
 
 @NgModule({
     declarations: [
@@ -125,6 +127,8 @@ import { ListPendingTasksComponent } from './components/task/list-pending-tasks/
         SequenceTaskComponent,
         ApproveRejectClientComponent,
         ListPendingTasksComponent,
+        AdministratorComponent,
+        DeleteClientComponent,
     ],
     imports: [
         AuthModule.forRoot({
