@@ -67,8 +67,9 @@ import { EditClientComponent } from './components/user/edit-client/edit-client.c
 import { CommonModule } from '@angular/common'
 import { AuthComponent } from './components/auth/auth.component'
 import { AuthModule, User } from '@auth0/auth0-angular'
-import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component';
+import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
+import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
 
 @NgModule({
     declarations: [
@@ -123,6 +124,7 @@ import { ApproveRejectClientComponent } from './components/user/approve-reject-c
         AuthComponent,
         SequenceTaskComponent,
         ApproveRejectClientComponent,
+        ListPendingTasksComponent,
     ],
     imports: [
         AuthModule.forRoot({

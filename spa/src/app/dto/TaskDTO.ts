@@ -20,8 +20,8 @@ export enum TaskState {
 }
 
 export enum TaskType {
-    DELIVERY = 'Delivery',
     SURVEILLANCE = 'Surveillance',
+    DELIVERY = 'Delivery',
 }
 
 export interface TaskDTO {

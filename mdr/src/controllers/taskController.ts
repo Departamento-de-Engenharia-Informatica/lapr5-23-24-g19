@@ -95,12 +95,14 @@ export default class TaskController implements ITaskController {
     async getByStatus(req: Request, res: Response, next: NextFunction) {
         try {
             const result = await this.service.getByStatus(req.query.status.toString())
+
             if (result.isLeft()) {
                 const err = result.value as TaskErrorResult
                 return res
                     .status(this.resolveHttpCode(err.errorCode))
                     .send(JSON.stringify(err.message))
             }
+
             return res.json(result.value).status(200)
         } catch (e) {
             return next(e)

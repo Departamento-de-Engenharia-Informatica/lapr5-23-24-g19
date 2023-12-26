@@ -2,6 +2,7 @@ import { CreateDeliveryTaskDTO } from '../../../../spa/src/app/dto/CreateDeliver
 import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
 import { Either } from '../../core/logic/Result'
 import { IFilterDTO } from '../../dto/IFilterDTO'
+import { IGeneralTaskDTO } from '../../dto/IGeneralTaskDTO'
 import { ITaskAlgorithmDTO } from '../../dto/ITaskAlgorithmDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
@@ -18,7 +19,7 @@ export type TaskErrorResult = {
 
 export default interface ITaskService {
     getByFilter(DTO: IFilterDTO): Promise<Either<TaskErrorResult, String>>
-    getByStatus(status: string): Promise<Either<TaskErrorResult, String>>
+    getByStatus(status: string): Promise<Either<TaskErrorResult, IGeneralTaskDTO[]>>
     createSurveillanceTask(
         dto: CreateSurveillanceTaskDTO,
     ): Promise<Either<TaskErrorResult, String>>

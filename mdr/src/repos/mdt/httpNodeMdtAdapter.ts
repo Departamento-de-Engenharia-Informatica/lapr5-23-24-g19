@@ -54,7 +54,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         return await res.json()
     }
 
-    async getByStatus(status: string): Promise<String> {
+    async getByStatus(status: string): Promise<String[]> {
         const res = await fetch(`${this.url}/jobs?status=${status}`)
 
         if (!res.ok) {

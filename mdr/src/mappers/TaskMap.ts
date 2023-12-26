@@ -5,10 +5,16 @@ import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { RoomName } from '../domain/room/roomName'
 import { ICreateDeliveryTaskToMapperDTO } from '../dto/ICreateDeliveryTaskToMapperDTO'
+import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
 import { ITaskDTO } from '../dto/ITaskDTO'
 import RoomRepo from '../repos/mongo/roomRepo'
 
 export class TaskMap {
+    public static toGeneralTaskDto(task: string): IGeneralTaskDTO {
+        const dto = JSON.parse(JSON.stringify(task)) as IGeneralTaskDTO
+        return dto
+    }
+
     public static surveillanceDtoToTaskDto(
         dto: CreateSurveillanceTaskDTO,
         x: number,

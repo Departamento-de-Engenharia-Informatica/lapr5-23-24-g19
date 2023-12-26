@@ -22,6 +22,7 @@ import IRoomRepo from './IRepos/IRoomRepo'
 import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
 import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
+import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -31,7 +32,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-    ) { }
+    ) {}
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -53,19 +54,20 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async getByStatus(status: string): Promise<Either<TaskErrorResult, String>> {
+    async getByStatus(
+        status: string,
+    ): Promise<Either<TaskErrorResult, IGeneralTaskDTO[]>> {
         try {
-            const saved = await this.repo.getByStatus(status)
+            const tasks = await this.repo.getByStatus(status)
 
-            if (saved === null) {
-                console.log('null')
+            if (tasks === null) {
                 return left({
                     errorCode: TaskErrorCode.BussinessRuleViolation,
                     message: 'Error fetching tasks',
                 })
             }
 
-            return right(saved)
+            return right(tasks.map(t => TaskMap.toGeneralTaskDto(t)))
         } catch (e) {
             return left({
                 errorCode: TaskErrorCode.BussinessRuleViolation,
@@ -226,7 +228,9 @@ export default class TaskService implements ITaskService {
             }
 
             console.log(1)
-            const types = new Set(dto.tasks.map(t => TaskType.toType(t.type.toUpperCase())))
+            const types = new Set(
+                dto.tasks.map(t => TaskType.toType(t.type.toUpperCase())),
+            )
             console.log(2)
             for (const t of types) {
                 console.log(3)

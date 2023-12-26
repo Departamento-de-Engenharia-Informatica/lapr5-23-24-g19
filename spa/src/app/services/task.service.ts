@@ -13,6 +13,7 @@ import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
 import { TaskDTO, TaskState, TaskType } from '../dto/TaskDTO'
 import { AuthService } from '@auth0/auth0-angular'
 import { ITaskAlgorithmDTO } from '../../../../mdr/src/dto/ITaskAlgorithmDTO'
+import { IGeneralTaskDTO } from '../../../../mdr/src/dto/IGeneralTaskDTO'
 
 @Injectable({
     providedIn: 'root',
@@ -325,6 +326,13 @@ export class TaskService {
         //     observe: 'body',
         //     responseType: 'json',
         // })
+    }
+
+    getPendingTasks(): Observable<IGeneralTaskDTO[]> {
+        return this.http.get<[]>(`${Config.baseUrl}/task?status=Pending`, {
+            observe: 'body',
+            responseType: 'json',
+        })
     }
 
     getByCriteria(dto: FilterDTO): Observable<CreateDeliveryTaskDTO[]> {
