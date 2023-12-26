@@ -5,6 +5,8 @@ import { Config } from '../config'
 import { ClientDTO } from '../dto/ClientDTO'
 import { CreatedClientDTO } from '../dto/CreatedClientDTO'
 import { IClientWithoutPasswordDTO } from '../../../../mdr/src/dto/IClientWithoutPasswordDTO'
+import { ICreatedClientDTO } from '../../../../mdr/src/dto/ICreatedClientDTO'
+import IUpdateClientStateDTO from '../../../../mdr/src/dto/IUpdateClientStateDTO'
 import { IEditClientDTO } from '../dto/IEditClientDTO'
 
 @Injectable({
@@ -27,6 +29,25 @@ export class ClientService {
 
     getClient(email: string): Observable<IClientWithoutPasswordDTO> {
         return this.http.get<ClientDTO>(`${Config.baseUrl}/clients/${email}`)
+    }
+
+    getPendingClients(): Observable<ICreatedClientDTO[]> {
+        return this.http.get<ICreatedClientDTO[]>(
+            `${Config.baseUrl}/clients?state=Pending`,
+        )
+    }
+
+    updateClientState(dto: IUpdateClientStateDTO): Observable<IClientWithoutPasswordDTO> {
+        console.log(dto)
+        return this.http.patch<IClientWithoutPasswordDTO>(
+            `${Config.baseUrl}/clients`,
+            JSON.stringify(dto),
+            {
+                headers: { 'Content-type': 'application/json' },
+                observe: 'body',
+                responseType: 'json',
+            },
+        )
     }
 
     patchClient(dto: IClientWithoutPasswordDTO): Observable<IClientWithoutPasswordDTO> {

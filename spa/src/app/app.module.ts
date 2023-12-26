@@ -66,8 +66,9 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { EditClientComponent } from './components/user/edit-client/edit-client.component'
 import { CommonModule } from '@angular/common'
 import { AuthComponent } from './components/auth/auth.component'
-import { AuthModule, User } from '@auth0/auth0-angular';
-import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
+import { AuthModule, User } from '@auth0/auth0-angular'
+import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component';
+import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 
 @NgModule({
     declarations: [
@@ -121,6 +122,7 @@ import { SequenceTaskComponent } from './components/task/sequence-task/sequence-
         EditClientComponent,
         AuthComponent,
         SequenceTaskComponent,
+        ApproveRejectClientComponent,
     ],
     imports: [
         AuthModule.forRoot({

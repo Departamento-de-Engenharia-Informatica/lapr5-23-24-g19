@@ -46,6 +46,7 @@ import { CreateBackofficeUserComponent } from './components/user/create-backoffi
 import { CreateClientComponent } from './components/user/create-client/create-client.component'
 import { AuthGuard } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
+import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -313,6 +314,11 @@ export const routes: Routes = [
         component: EditClientComponent,
         canActivate: [AuthGuard],
         title: 'Edit Client',
+    },
+    {
+        path: 'approve-reject-client',
+        component: ApproveRejectClientComponent,
+        title: 'Approve/Reject Client',
     },
 
     { path: '**', component: PageNotFoundComponent },
