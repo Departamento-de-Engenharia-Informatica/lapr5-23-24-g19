@@ -4,6 +4,7 @@ import { IClientWithoutPasswordDTO } from '../../dto/IClientWithoutPasswordDTO'
 import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../../dto/IDeletedClientDTO'
 import IUpdateClientStateDTO from '../../dto/IUpdateClientStateDTO'
+import {IClientEmailDTO} from "../../dto/IClientEmailDTO";
 
 export enum ClientErrorCode {
     NotFound,
@@ -33,6 +34,6 @@ export default interface IClientService {
         clientDTO: IClientWithoutPasswordDTO,
     ): Promise<Either<ClientErrorResult, IClientWithoutPasswordDTO>>
     deleteClient(
-        createdClientDTO: ICreatedClientDTO,
+        clientDTO: IClientEmailDTO,
     ): Promise<Either<ClientErrorResult, IDeletedClientDTO>>
 }

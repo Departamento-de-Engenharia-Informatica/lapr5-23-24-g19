@@ -122,3 +122,19 @@ button {
     margin: 0 auto;
     display: block;
 }
+
+.page-title {
+    @apply text-2xl font-bold text-white text-center my-16;
+}
+
+.dimension-box {
+    margin-bottom: 20px;
+    padding: 8px;
+    background-color: var(--third-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+}
+
+.dimension-label {
+    color: white;
+}

@@ -1,3 +1,3 @@
 export interface IDeletedClientDTO {
-    message: string
+    email: string
 }

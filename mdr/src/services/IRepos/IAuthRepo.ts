@@ -6,5 +6,6 @@ export default interface IAuthRepo {
     getUserByEmail(email: string): Promise<IAuthUserDTO>
     blockUser(email: string): Promise<void>
     unblockUser(email: string): Promise<void>
+    deleteUser(email: string): Promise<void>
     assignRoleToUser(dto: IAssingRoleDTO): Promise<void>
 }

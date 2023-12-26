@@ -2,8 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core'
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
 import { ClientService } from '../../../services/client.service'
-import {ClientEmailPasswordDTO} from "../../../dto/ClientEmailPasswordDTO";
+
+import { IClientWithoutPasswordDTO } from '../../../../../../mdr/src/dto/IClientWithoutPasswordDTO'
 import {AuthService} from "@auth0/auth0-angular";
+import {ClientEmailDTO} from "../../../dto/ClientEmailDTO";
 
 @Component({
     selector: 'app-delete-client',
@@ -11,18 +13,16 @@ import {AuthService} from "@auth0/auth0-angular";
     styleUrls: ['./delete-client.component.css'],
 })
 export class DeleteClientComponent {
-    /*form: UntypedFormGroup
+
+    email: string = ''
+    client!: IClientWithoutPasswordDTO
 
     constructor(
-        private fb: FormBuilder,
-        private service: ClientService,
+        private clientService: ClientService,
         public auth: AuthService
 
     ) {
-        this.form = this.fb.group({
-            email: [null, Validators.required],
-            password: [null, Validators.required],
-        })
+
     }
 
     ngOnInit(): void {
@@ -42,32 +42,24 @@ export class DeleteClientComponent {
             (c: IClientWithoutPasswordDTO) => {
                 this.client = c
             },
-            (error) => {
-                this.email = ''
-                this.editClientForm.reset({
-                    name: '',
-                    phoneNumber: '',
-                    vatNumber: '',
-                })
-            },
+            (error) => alert(JSON.stringify(error.error)),
         )
     }
-    submit() {
-        if (this.form.valid) {
-            const dto: ClientEmailPasswordDTO = {
-                email: this.form.value.email,
-                password: this.form.value.password,
-            }
+    onSubmit() {
 
-            this.service.deleteClient(dto).subscribe({
-                next: (client) => {
-                    alert(
-                        `Deleted Account`,
+       const dto: ClientEmailDTO = {
+            email: this.email,
+       }
+
+       this.clientService.deleteClient(dto).subscribe({
+           next: (client) => {
+              alert(
+                        `Deleted Account \nEmail: ${client.email}`,
                     )
-                    this.form.reset()
+                    this.auth.logout()
                 },
                 error: (error) => alert(JSON.stringify(error.error)),
             })
-        }
-    }*/
+
+    }
 }

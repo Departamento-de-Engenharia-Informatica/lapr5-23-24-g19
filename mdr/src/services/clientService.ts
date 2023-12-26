@@ -27,6 +27,7 @@ import IAuthRepo from './IRepos/IAuthRepo'
 import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
+import { IClientEmailDTO } from '../dto/IClientEmailDTO'
 
 @Service()
 export default class ClientService implements IClientService {
@@ -235,20 +236,25 @@ export default class ClientService implements IClientService {
     }
 
     async deleteClient(
-        dto: ICreatedClientDTO,
+        dto: IClientEmailDTO,
     ): Promise<Either<ClientErrorResult, IDeletedClientDTO>> {
         try {
             const email = Email.create(dto.email).getOrThrow()
 
-            //TODO: existe o user
-
             const client = await this.repo.find(email)
 
-            //TODO : VERIFICAR TOKEN PASSWORD ANTES DE DAR DELETE AO CLIENT
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            await this.authRepo.deleteUser(dto.email)
+
             if (await this.repo.delete(client)) {
-                //TODO : LOGOUT BEFORE RETURN
                 return right({
-                    message: 'Account deleted',
+                    email: dto.email,
                 } as IDeletedClientDTO)
             }
         } catch (e) {

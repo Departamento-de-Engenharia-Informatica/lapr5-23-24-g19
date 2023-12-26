@@ -8,7 +8,7 @@ import { IClientWithoutPasswordDTO } from '../../../../mdr/src/dto/IClientWithou
 import { ICreatedClientDTO } from '../../../../mdr/src/dto/ICreatedClientDTO'
 import IUpdateClientStateDTO from '../../../../mdr/src/dto/IUpdateClientStateDTO'
 import { IEditClientDTO } from '../dto/IEditClientDTO'
-import {ClientEmailPasswordDTO} from "../dto/ClientEmailPasswordDTO";
+import {ClientEmailDTO} from "../dto/ClientEmailDTO";
 
 @Injectable({
     providedIn: 'root',
@@ -69,10 +69,11 @@ export class ClientService {
         )
     }
 
-    deleteClient(dto: ClientEmailPasswordDTO): Observable<ClientEmailPasswordDTO> {
+    deleteClient(dto: ClientEmailDTO): Observable<ClientEmailDTO> {
 
-        return this.http.delete<ClientEmailPasswordDTO>(
-            `${Config.baseUrl}/clients/${dto.email}`
+        return this.http.delete<ClientEmailDTO>(
+            `${Config.baseUrl}/clients/${dto.email}`,
+
         )
     }
 }

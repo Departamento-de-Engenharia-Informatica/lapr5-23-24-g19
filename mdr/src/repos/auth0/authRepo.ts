@@ -7,7 +7,7 @@ import { IAssingRoleDTO } from '../../dto/IAssignRoleDTO'
 
 @Service()
 export default class AuthRepo implements IAuthRepo {
-    async createUser(dto: IAuthUserDTO): Promise<String> {
+    async createUser(dto: IAuthUserDTO): Promise<string> {
         console.log(dto)
         const res = await fetch(`${config.auth0.audience}/users`, {
             method: 'POST',
@@ -17,7 +17,7 @@ export default class AuthRepo implements IAuthRepo {
             },
             body: JSON.stringify(dto),
         })
-
+        console.log(res)
         if (!res.ok) {
             return Promise.reject()
         }
@@ -61,6 +61,21 @@ export default class AuthRepo implements IAuthRepo {
         }
     }
 
+    async deleteUser(email: string): Promise<void> {
+        const user = await this.getUserByEmail(email)
+        const res = await fetch(`${config.auth0.audience}/users/${user[0].user_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${config.auth0.bearer}`,
+            },
+        })
+
+        if (res.status !== 204) {
+            return Promise.reject()
+        }
+    }
+
     async getUserByEmail(email: string): Promise<IAuthUserDTO> {
         const res = await fetch(
             `${config.auth0.audience}/users-by-email?email=${email}`,
@@ -77,6 +92,8 @@ export default class AuthRepo implements IAuthRepo {
         }
         return await res.json()
     }
+
+
 
     async assignRoleToUser(dto: IAssingRoleDTO): Promise<void> {
         let role: string

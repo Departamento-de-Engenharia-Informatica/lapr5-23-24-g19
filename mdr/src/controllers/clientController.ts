@@ -12,6 +12,7 @@ import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
 import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
+import {IClientEmailDTO} from "../dto/IClientEmailDTO";
 
 @Service()
 export default class ClientController implements IClientController {
@@ -121,7 +122,9 @@ export default class ClientController implements IClientController {
 
     async deleteClient(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto = req.body as ICreatedClientDTO
+            const dto = req.body as IClientEmailDTO
+            dto.email = req.params.email as string
+            console.log(JSON.stringify(dto))
             const result = await this.service.deleteClient(dto)
 
             if (result.isLeft()) {
