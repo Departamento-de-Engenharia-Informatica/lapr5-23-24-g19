@@ -1,5 +1,4 @@
 import { IFilterDTO } from '../../dto/IFilterDTO'
-import { IGeneralTaskDTO } from '../../dto/IGeneralTaskDTO'
 import { IRobotTasksDTO } from '../../dto/IRobotTasksDTO'
 import { ITaskDTO } from '../../dto/ITaskDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
