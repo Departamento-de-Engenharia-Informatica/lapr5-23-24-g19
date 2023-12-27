@@ -10,7 +10,6 @@ import { IRolePersistence } from '../../dataschema/mongo/IRolePersistence'
 
 @Service()
 export default class RoleRepo implements IRoleRepo {
-
     constructor(
         @Inject('roleSchema') private roleSchema: Model<IRolePersistence & Document>,
     ) {}
@@ -76,7 +75,6 @@ export default class RoleRepo implements IRoleRepo {
             return []
         }
 
-        return doc.map(r => RoleMap.toDomain(r))
+        return doc.map((r) => RoleMap.toDomain(r))
     }
-
 }

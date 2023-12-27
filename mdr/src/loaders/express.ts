@@ -36,7 +36,7 @@ export default ({ app }: { app: express.Application }) => {
 
     // Middleware that transforms the raw string of req.body into json
     app.use(bodyParser.json())
-    
+
     // const authconf = {
     //     authRequired: false,
     //     auth0Logout: true,
@@ -81,7 +81,4 @@ export default ({ app }: { app: express.Application }) => {
             },
         })
     })
-
-
-
 }

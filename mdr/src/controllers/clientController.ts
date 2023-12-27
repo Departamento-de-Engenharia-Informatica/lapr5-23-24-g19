@@ -12,7 +12,7 @@ import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
 import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
-import {IClientEmailDTO} from "../dto/IClientEmailDTO";
+import { IClientEmailDTO } from '../dto/IClientEmailDTO'
 
 @Service()
 export default class ClientController implements IClientController {

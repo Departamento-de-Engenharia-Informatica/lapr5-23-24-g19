@@ -17,7 +17,7 @@ export class ClientMap extends Mapper<Client> {
             email: client.email.value,
             phoneNumber: client.phoneNumber.value,
             vatNumber: client.vatNumber.value,
-            status: client.status
+            status: client.status,
         }
     }
 

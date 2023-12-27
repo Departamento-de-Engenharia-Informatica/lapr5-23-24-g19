@@ -33,7 +33,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-    ) { }
+    ) {}
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -68,7 +68,7 @@ export default class TaskService implements ITaskService {
                 })
             }
 
-            return right(tasks.map(t => TaskMap.toGeneralTaskDto(t)))
+            return right(tasks.map((t) => TaskMap.toGeneralTaskDto(t)))
         } catch (e) {
             return left({
                 errorCode: TaskErrorCode.BussinessRuleViolation,
@@ -80,7 +80,7 @@ export default class TaskService implements ITaskService {
     async getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>> {
         try {
             const values = Object.values(TaskType).filter(
-                value => typeof value === 'string',
+                (value) => typeof value === 'string',
             )
 
             const res = values.map((type: TaskType) => ({
@@ -230,12 +230,12 @@ export default class TaskService implements ITaskService {
 
             console.log(1)
             const types = new Set(
-                dto.tasks.map(t => TaskType.toType(t.type.toUpperCase())),
+                dto.tasks.map((t) => TaskType.toType(t.type.toUpperCase())),
             )
             console.log(2)
             for (const t of types) {
                 console.log(3)
-                if (!robots.find(r => r.type.taskType.includes(t))) {
+                if (!robots.find((r) => r.type.taskType.includes(t))) {
                     console.log(4)
                     return left({
                         errorCode: TaskErrorCode.NotFound,
@@ -255,7 +255,7 @@ export default class TaskService implements ITaskService {
             }
 
             while (tasks.length !== 0) {
-                robots.forEach(r => {
+                robots.forEach((r) => {
                     console.log(JSON.stringify(r, null, 2))
                     if (
                         tasks.length > 0 &&
@@ -288,7 +288,9 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async taskSequenceAlgorithms(): Promise<Either<TaskErrorResult, ISequenceAlgorithmDTO[]>> {
+    async taskSequenceAlgorithms(): Promise<
+        Either<TaskErrorResult, ISequenceAlgorithmDTO[]>
+    > {
         try {
             const algorithms = await this.repo.getTaskSequenceAlgorithms()
 

@@ -11,7 +11,7 @@ import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 export enum TaskErrorCode {
     NotFound,
     BussinessRuleViolation,
-    AdapterFailure
+    AdapterFailure,
 }
 
 export type TaskErrorResult = {

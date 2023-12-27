@@ -4,7 +4,7 @@ import { IClientWithoutPasswordDTO } from '../../dto/IClientWithoutPasswordDTO'
 import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../../dto/IDeletedClientDTO'
 import IUpdateClientStateDTO from '../../dto/IUpdateClientStateDTO'
-import {IClientEmailDTO} from "../../dto/IClientEmailDTO";
+import { IClientEmailDTO } from '../../dto/IClientEmailDTO'
 
 export enum ClientErrorCode {
     NotFound,

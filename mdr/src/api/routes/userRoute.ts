@@ -14,9 +14,7 @@ var user_controller = require('../../controllers/userController')
 const route = Router()
 
 export default (app: Router) => {
-
     app.use('/auth', route)
-
 
     route.post(
         '/signup',
@@ -30,7 +28,6 @@ export default (app: Router) => {
             }),
         }),
         async (req: Request, res: Response, next: NextFunction) => {
-            
             const logger = Container.get('logger') as winston.Logger
             logger.debug('Calling Sign-Up endpoint with body: %o', req.body)
 
@@ -70,7 +67,7 @@ export default (app: Router) => {
                 //     const response = await axios.post(`https://dev-wt48psyid1ra2e8l.us.auth0.com/oauth/token`, {
                 //         headers: {
                 //             'Content-Type': 'application/json'
-                //         },                        
+                //         },
                 //         grant_type: 'password',
                 //         username: email,
                 //         password: password,
@@ -108,20 +105,17 @@ export default (app: Router) => {
      * emitted for the session and add it to a black list.
      * It's really annoying to develop that but if you had to, please use Redis as your data store
      */
-    route.post(
-        '/logout',
-        (req: Request, res: Response, next: NextFunction) => {
-            const logger = Container.get('logger') as winston.Logger
-            logger.debug('Calling Sign-Out endpoint with body: %o', req.body)
-            try {
-                //@TODO AuthService.Logout(req.user) do some clever stuff
-                return res.status(200).end()
-            } catch (e) {
-                logger.error('🔥 error %o', e)
-                return next(e)
-            }
-        },
-    )
+    route.post('/logout', (req: Request, res: Response, next: NextFunction) => {
+        const logger = Container.get('logger') as winston.Logger
+        logger.debug('Calling Sign-Out endpoint with body: %o', req.body)
+        try {
+            //@TODO AuthService.Logout(req.user) do some clever stuff
+            return res.status(200).end()
+        } catch (e) {
+            logger.error('🔥 error %o', e)
+            return next(e)
+        }
+    })
 
     app.use('/users', route)
 

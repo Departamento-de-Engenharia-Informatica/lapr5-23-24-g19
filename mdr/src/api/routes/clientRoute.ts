@@ -21,9 +21,7 @@ export default (app: Router) => {
                 phoneNumber: Joi.string()
                     .regex(/^[0-9]+$/)
                     .required(),
-                vatNumber: Joi.number()
-                    .integer()
-                    .required(),
+                vatNumber: Joi.number().integer().required(),
                 password: Joi.string().required(),
             }),
         }),

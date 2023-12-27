@@ -11,7 +11,6 @@ import robotType from './routes/robotTypeRoute'
 import task from './routes/taskRoute'
 import path from './routes/pathRoute'
 
-
 export default () => {
     const app = Router()
 

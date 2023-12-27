@@ -30,5 +30,4 @@ export default async ({ expressApp }) => {
 
     expressLoader({ app: expressApp })
     Logger.info('✌️ Express loaded')
-
 }

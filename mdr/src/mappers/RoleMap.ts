@@ -17,10 +17,13 @@ export class RoleMap extends Mapper<Role> {
     }
 
     public static toDomain(role: IRolePersistence): Role {
-        const roleOrError = Role.create({
-            name: role.name,
-            active: role.active
-        }, new UniqueEntityID(role.domainId))
+        const roleOrError = Role.create(
+            {
+                name: role.name,
+                active: role.active,
+            },
+            new UniqueEntityID(role.domainId),
+        )
 
         roleOrError.isFailure ? console.log(roleOrError.error) : ''
 

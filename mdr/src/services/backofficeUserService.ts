@@ -23,6 +23,7 @@ import IBackofficeUserService, {
 import IAuthRepo from './IRepos/IAuthRepo'
 import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
+import { IBackofficeUserWithoutPasswordDTO } from '../dto/IBackofficeUserWithoutPasswordDTO'
 
 @Service()
 export default class BackofficeUserService implements IBackofficeUserService {
@@ -84,6 +85,37 @@ export default class BackofficeUserService implements IBackofficeUserService {
             const backofficeUserDTO = BackofficeUserMap.toDTO(saved)
 
             return right(backofficeUserDTO)
+        } catch (e) {
+            return left({
+                errorCode: BackofficeUserErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async getUser(dto: {
+        email: string
+    }): Promise<Either<BackofficeUserErrorResult, ICreatedBackofficeUserDTO>> {
+        try {
+            const email = Email.create(dto.email).getOrThrow()
+
+            if (!email) {
+                return left({
+                    errorCode: BackofficeUserErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const user = await this.repo.find(email)
+            if (!user) {
+                return left({
+                    errorCode: BackofficeUserErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const userDTO = BackofficeUserMap.toDTO(user)
+            return right(userDTO)
         } catch (e) {
             return left({
                 errorCode: BackofficeUserErrorCode.BussinessRuleViolation,

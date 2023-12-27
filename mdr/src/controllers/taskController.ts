@@ -14,7 +14,7 @@ import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 
 @Service()
 export default class TaskController implements ITaskController {
-    constructor(@Inject(config.services.task.name) private service: ITaskService) { }
+    constructor(@Inject(config.services.task.name) private service: ITaskService) {}
 
     async getTypes(_: Request, res: Response, next: NextFunction) {
         try {

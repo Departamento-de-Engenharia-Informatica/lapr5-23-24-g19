@@ -35,12 +35,8 @@ export default (app: Router) => {
                 name: Joi.string(),
                 description: Joi.string(),
                 maxFloorDimensions: Joi.object({
-                    length: Joi.number()
-                        .integer()
-                        .required(),
-                    width: Joi.number()
-                        .integer()
-                        .required(),
+                    length: Joi.number().integer().required(),
+                    width: Joi.number().integer().required(),
                 }),
             }),
         }),
@@ -52,9 +48,7 @@ export default (app: Router) => {
         '/:id/floors',
         celebrate({
             body: Joi.object({
-                floorNumber: Joi.number()
-                    .integer()
-                    .required(),
+                floorNumber: Joi.number().integer().required(),
                 description: Joi.string(),
             }),
         }),
@@ -82,9 +76,7 @@ export default (app: Router) => {
         '/:id/floors/:floor',
         celebrate({
             body: Joi.object({
-                floorNumber: Joi.number()
-                    .integer()
-                    .required(),
+                floorNumber: Joi.number().integer().required(),
                 description: Joi.string(),
             }),
         }),
@@ -115,12 +107,8 @@ export default (app: Router) => {
                 name: Joi.string(),
                 description: Joi.string(),
                 maxFloorDimensions: Joi.object({
-                    length: Joi.number()
-                        .integer()
-                        .required(),
-                    width: Joi.number()
-                        .integer()
-                        .required(),
+                    length: Joi.number().integer().required(),
+                    width: Joi.number().integer().required(),
                 }).required(),
             }),
         }),
@@ -132,13 +120,7 @@ export default (app: Router) => {
         '/:id/elevators',
         celebrate({
             body: Joi.object({
-                floors: Joi.array()
-                    .items(
-                        Joi.number()
-                            .integer()
-                            .required(),
-                    )
-                    .required(),
+                floors: Joi.array().items(Joi.number().integer().required()).required(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
@@ -153,13 +135,7 @@ export default (app: Router) => {
         '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
-                floors: Joi.array()
-                    .items(
-                        Joi.number()
-                            .integer()
-                            .required(),
-                    )
-                    .optional(),
+                floors: Joi.array().items(Joi.number().integer().required()).optional(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),
@@ -174,13 +150,7 @@ export default (app: Router) => {
         '/:idb/elevators/:ide',
         celebrate({
             body: Joi.object({
-                floors: Joi.array()
-                    .items(
-                        Joi.number()
-                            .integer()
-                            .required(),
-                    )
-                    .required(),
+                floors: Joi.array().items(Joi.number().integer().required()).required(),
                 brand: Joi.string(),
                 model: Joi.string(),
                 serialNumber: Joi.string(),

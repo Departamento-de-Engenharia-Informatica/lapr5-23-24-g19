@@ -19,15 +19,11 @@ export default (app: Router) => {
             body: Joi.object({
                 floor1: Joi.object({
                     buildingCode: Joi.string().required(),
-                    floorNumber: Joi.number()
-                        .integer()
-                        .required(),
+                    floorNumber: Joi.number().integer().required(),
                 }),
                 floor2: Joi.object({
                     buildingCode: Joi.string().required(),
-                    floorNumber: Joi.number()
-                        .integer()
-                        .required(),
+                    floorNumber: Joi.number().integer().required(),
                 }),
             }),
         }),
@@ -54,29 +50,21 @@ export default (app: Router) => {
                 old: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                 }),
                 new: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                 }),
             }),
@@ -92,29 +80,21 @@ export default (app: Router) => {
                 old: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }).required(),
                 }),
                 new: Joi.object({
                     floor1: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }),
                     floor2: Joi.object({
                         buildingCode: Joi.string().required(),
-                        floorNumber: Joi.number()
-                            .integer()
-                            .required(),
+                        floorNumber: Joi.number().integer().required(),
                     }),
                 }),
             }),

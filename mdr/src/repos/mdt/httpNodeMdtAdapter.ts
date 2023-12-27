@@ -11,7 +11,6 @@ import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
-
     private url = config.mdtURL
 
     async createSurveillanceTask(dto: ITaskDTO): Promise<String> {

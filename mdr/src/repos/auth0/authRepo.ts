@@ -93,8 +93,6 @@ export default class AuthRepo implements IAuthRepo {
         return await res.json()
     }
 
-
-
     async assignRoleToUser(dto: IAssingRoleDTO): Promise<void> {
         let role: string
         switch (dto.role.toUpperCase()) {

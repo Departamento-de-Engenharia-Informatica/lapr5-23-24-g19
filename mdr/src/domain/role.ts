@@ -4,7 +4,6 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID'
 import { Result } from '../core/logic/Result'
 import { RoleId } from './roleId'
 
-
 interface RoleProps {
     name: string
     active: boolean

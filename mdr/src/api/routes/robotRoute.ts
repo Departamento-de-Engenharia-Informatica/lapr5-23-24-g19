@@ -33,9 +33,7 @@ export default (app: Router) => {
         '/:id/inhibit',
         celebrate({
             body: Joi.object({
-                state: Joi.number()
-                    .integer()
-                    .required(),
+                state: Joi.number().integer().required(),
             }),
         }),
         customJwtMiddleware,

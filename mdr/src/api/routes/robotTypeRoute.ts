@@ -23,10 +23,7 @@ export default (app: Router) => {
                 code: Joi.string().required(),
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
-                taskTypes: Joi.array()
-                    .items(Joi.string())
-                    .min(1)
-                    .required(),
+                taskTypes: Joi.array().items(Joi.string()).min(1).required(),
             }),
         }),
         customJwtMiddleware,
