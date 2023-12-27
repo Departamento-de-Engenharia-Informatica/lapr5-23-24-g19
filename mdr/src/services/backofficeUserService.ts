@@ -23,7 +23,6 @@ import IBackofficeUserService, {
 import IAuthRepo from './IRepos/IAuthRepo'
 import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
-import { IBackofficeUserWithoutPasswordDTO } from '../dto/IBackofficeUserWithoutPasswordDTO'
 
 @Service()
 export default class BackofficeUserService implements IBackofficeUserService {
