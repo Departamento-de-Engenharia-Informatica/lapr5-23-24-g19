@@ -4,7 +4,7 @@ import { Container } from 'typedi'
 
 import config from '../../../config'
 import IPassageController from '../../controllers/IControllers/IPassageController'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import {customJwtMiddleware, isBackoffice, RolesEnum} from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -28,6 +28,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => ctrl.createPassage(req, res, next),
     )
 
@@ -40,6 +41,7 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => ctrl.getPassages(req, res, next),
     )
 
@@ -70,6 +72,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => ctrl.editPassage(req, res, next),
     )
 
@@ -100,6 +103,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => ctrl.editPassage(req, res, next),
     )
 }

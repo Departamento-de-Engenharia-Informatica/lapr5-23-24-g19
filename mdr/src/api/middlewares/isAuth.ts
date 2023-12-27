@@ -1,5 +1,5 @@
 // remove by JRT : import jwt from 'express-jwt';
-var { expressjwt: jwt } = require('express-jwt')
+const { expressjwt: jwt } = require('express-jwt')
 import jwksRsa from 'jwks-rsa'
 import config from '../../../config'
 import { GetVerificationKey } from 'express-jwt'
@@ -20,7 +20,7 @@ import IBackofficeUserService from '../../services/IServices/IBackofficeUserServ
  * GET https://my-bulletproof-api.com/stats?apiKey=${JWT}
  * Luckily this API follow _common sense_ ergo a _good design_ and don't allow that ugly stuff
  */
-const getTokenFromHeader = (req) => {
+const getTokenFromHeader = req => {
     /**
      * @TODO Edge and Internet Explorer do some weird things with the headers
      * So I believe that this should handle more 'edge' cases ;)
@@ -67,7 +67,7 @@ export const checkJwt = jwt({
 })
 
 export function customJwtMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
-    checkJwt(req, res, (err) => {
+    checkJwt(req, res, err => {
         // const jweToken = req.headers.authorization?.split(' ')[1]
         // console.log(jweToken)
         if (err) {
@@ -76,11 +76,11 @@ export function customJwtMiddleware(req: AuthRequest, res: Response, next: NextF
         }
         req.auth.email =
             req.auth[
-            'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
+                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
             ]
         req.auth.roles =
             req.auth[
-            'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
+                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
             ]
         console.log('User Email:', req.auth)
         next()
@@ -100,7 +100,10 @@ export function isClient() {
 
         const svc = Container.get(config.services.client.name) as IClientService
 
-        if (!auth.roles.includes(RolesEnum.CLIENT) || !(await svc.getClient(auth.email))) {
+        if (
+            !auth.roles.includes(RolesEnum.CLIENT) ||
+            !(await svc.getClient(auth.email))
+        ) {
             return res.status(403).json({ message: 'Forbidden' })
         }
 
@@ -112,7 +115,7 @@ export function isBackoffice(anyOfRoles: RolesEnum[]) {
     return async (req: AuthRequest, res: Response, next: NextFunction) => {
         const auth: { email: string; roles: string[] } = req.auth
 
-        if (!auth.roles.includes(RolesEnum.CLIENT)) {
+        if (auth.roles.includes(RolesEnum.CLIENT)) {
             return res.status(403).json({ message: 'Forbidden' })
         }
 
@@ -121,7 +124,7 @@ export function isBackoffice(anyOfRoles: RolesEnum[]) {
         ) as IBackofficeUserService
 
         if (
-            !auth.roles.find((r) => anyOfRoles.includes(r as RolesEnum)) ||
+            !auth.roles.find(r => anyOfRoles.includes(r as RolesEnum)) ||
             !(await svc.getUser({ email: auth.email }))
         ) {
             return res.status(403).json({ message: 'Forbidden' })

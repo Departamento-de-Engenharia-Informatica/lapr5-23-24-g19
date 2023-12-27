@@ -1,10 +1,10 @@
-import { Router } from 'express'
-import { Container } from 'typedi'
+import {Router} from 'express'
+import {Container} from 'typedi'
 import config from '../../../config'
 
 import ITaskController from '../../controllers/IControllers/ITaskController'
-import { Joi, celebrate } from 'celebrate'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import {celebrate, Joi} from 'celebrate'
+import {customJwtMiddleware, isBackoffice, isClient, RolesEnum} from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -17,12 +17,18 @@ export default (app: Router) => {
         ctrl.getTypes(req, res, next),
     )
 
-    route.post('/surveillance', customJwtMiddleware, (req, res, next) =>
-        ctrl.createSurveillanceTask(req, res, next),
+    route.post(
+        '/surveillance',
+        customJwtMiddleware,
+        isClient(),
+        (req, res, next) => ctrl.createSurveillanceTask(req, res, next),
     )
 
-    route.post('/delivery', customJwtMiddleware, (req, res, next) =>
-        ctrl.createDeliveryTask(req, res, next),
+    route.post(
+        '/delivery',
+        customJwtMiddleware,
+        isClient(),
+        (req, res, next) => ctrl.createDeliveryTask(req, res, next),
     )
 
     route.get(
@@ -33,6 +39,7 @@ export default (app: Router) => {
             },
         }),
         // customJwtMiddleware,
+        //isBackoffice([RolesEnum.TASK_MNG]),
         (req, res, next) => {
             return ctrl.getByStatus(req, res, next)
         },
@@ -47,6 +54,7 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.TASK_MNG]),
         (req, res, next) => {
             return ctrl.getByFilter(req, res, next)
         },
@@ -67,11 +75,16 @@ export default (app: Router) => {
                     .required(),
             }),
         }),
+        //customJwtMiddleware,
+        //isBackoffice([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.taskSequence(req, res, next),
     )
 
-    route.get('/sequence/algorithms', (req, res, next) =>
-        ctrl.taskSequenceAlgorithms(req, res, next),
+    route.get(
+        '/sequence/algorithms',
+        //customJwtMiddleware,
+        //isBackoffice([RolesEnum.TASK_MNG]),
+        (req, res, next) => ctrl.taskSequenceAlgorithms(req, res, next),
     )
 
     route.patch(
@@ -81,6 +94,8 @@ export default (app: Router) => {
                 taskStatus: Joi.string(),
             }).unknown(true), // This allows additional properties in the body
         }),
+        //customJwtMiddleware,
+        //isBackoffice([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.updateTask(req, res, next),
     )
 }

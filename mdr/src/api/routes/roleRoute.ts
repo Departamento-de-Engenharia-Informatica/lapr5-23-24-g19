@@ -9,7 +9,7 @@ import config from '../../../config'
 const route = Router()
 
 export default (app: Router) => {
-    app.use('/roles', route)
+    /*app.use('/roles', route)
 
     const ctrl = Container.get(config.controllers.role.name) as IRoleController
 
@@ -32,5 +32,5 @@ export default (app: Router) => {
             }),
         }),
         (req, res, next) => ctrl.updateRole(req, res, next),
-    )
+    )*/
 }

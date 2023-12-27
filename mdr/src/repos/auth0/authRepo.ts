@@ -8,7 +8,6 @@ import { IAssingRoleDTO } from '../../dto/IAssignRoleDTO'
 @Service()
 export default class AuthRepo implements IAuthRepo {
     async createUser(dto: IAuthUserDTO): Promise<string> {
-        console.log(dto)
         const res = await fetch(`${config.auth0.audience}/users`, {
             method: 'POST',
             headers: {
@@ -17,9 +16,8 @@ export default class AuthRepo implements IAuthRepo {
             },
             body: JSON.stringify(dto),
         })
-        console.log(res)
         if (!res.ok) {
-            return Promise.reject()
+            return Promise.reject(await res.text())
         }
 
         return await res.json()

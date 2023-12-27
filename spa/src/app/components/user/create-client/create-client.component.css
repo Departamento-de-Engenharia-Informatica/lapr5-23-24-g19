@@ -126,7 +126,7 @@ button {
 .privacy-policy-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start !important;
     width: 100%;
     margin-bottom: 16px;
 }

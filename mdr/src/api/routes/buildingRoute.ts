@@ -41,7 +41,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.ADMIN]),
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.createBuilding(req, res, next),
     )
 
@@ -54,6 +54,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.createFloor(req, res, next),
     )
 
@@ -70,6 +71,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.patchFloor(req, res, next),
     )
 
@@ -82,6 +84,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.putFloor(req, res, next),
     )
 
@@ -98,6 +101,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.patchBuilding(req, res, next),
     )
 
@@ -114,6 +118,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.putBuilding(req, res, next),
     )
 
@@ -129,6 +134,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.createElevator(req, res, next),
     )
 
@@ -144,6 +150,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.patchElevator(req, res, next),
     )
 
@@ -159,6 +166,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.putElevator(req, res, next),
     )
 
@@ -180,17 +188,22 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => roomCtrl.createRoom(req, res, next),
     )
 
     route.get(
         '/:buildingId/floors/:floorNumber/rooms',
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => roomCtrl.getRooms(req, res, next),
     )
 
-    route.get('/:id/elevators', customJwtMiddleware, (req, res, next) =>
-        elevatorCtrl.getElevators(req, res, next),
+    route.get(
+        '/:id/elevators',
+        customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        (req, res, next) => elevatorCtrl.getElevators(req, res, next),
     )
 
     // const conf = {
@@ -206,8 +219,7 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
-        // attachCurrentUser,
-        // checkAdm,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => {
             if (
                 (req.query.minFloors && req.query.maxFloors) ||
@@ -258,6 +270,7 @@ export default (app: Router) => {
             }).unknown(true), // This allows additional properties in the body
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorMapCtrl.updateMap(req, res, next),
     )
 
@@ -265,7 +278,10 @@ export default (app: Router) => {
         floorMapCtrl.getMap(req, res, next),
     )
 
-    route.get('/:id/floors/passages', customJwtMiddleware, (req, res, next) =>
-        floorController.floorsWithPassage(req, res, next),
+    route.get(
+        '/:id/floors/passages',
+        customJwtMiddleware,
+        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        (req, res, next) => floorController.floorsWithPassage(req, res, next),
     )
 }

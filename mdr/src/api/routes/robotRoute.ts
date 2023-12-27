@@ -5,7 +5,7 @@ import { celebrate, Joi } from 'celebrate'
 
 import IRobotController from '../../controllers/IControllers/IRobotController'
 import middlewares from '../middlewares'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import {customJwtMiddleware, isBackoffice, RolesEnum} from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -26,6 +26,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.FLEET_MNG]),
         (req, res, next) => ctrl.createRobot(req, res, next),
     )
 
@@ -37,8 +38,14 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.FLEET_MNG]),
         (req, res, next) => ctrl.inhibitRobot(req, res, next),
     )
 
-    route.get('', customJwtMiddleware, (req, res, next) => ctrl.getRobots(req, res, next))
+    route.get(
+        '',
+        customJwtMiddleware,
+        isBackoffice([RolesEnum.FLEET_MNG]),
+        (req, res, next) => ctrl.getRobots(req, res, next),
+    )
 }

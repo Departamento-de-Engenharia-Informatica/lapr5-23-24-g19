@@ -64,12 +64,13 @@
 
                 <div class="row">
                     <div class="privacy-policy-container">
-                        <label [routerLink]="['/privacy-policy']">Agree to our Privacy Policy</label>
                         <input
                             type="checkbox"
                             id="privacyPolicy"
+                            class="form-checkbox h-5 w-5"
                             (change)="onPrivacyPolicyChange($event)"
                         />
+                        <label>Agree to our <a [routerLink]="['/privacy-policy']" class="text-blue-500" >Privacy Policy</a></label>
                     </div>
                 </div>
 
