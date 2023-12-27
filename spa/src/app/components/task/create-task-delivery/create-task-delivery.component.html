@@ -1,17 +1,17 @@
-<form [formGroup]="createDeliveryForm" (ngSubmit)="onSubmit()">
+<form
+    *ngIf="
+        (authService.isAuthenticated$ | async) &&
+        createDeliveryForm.value.email.length != 0
+    "
+    [formGroup]="createDeliveryForm"
+    (ngSubmit)="onSubmit()"
+>
+    <div class="dimension-box">
+        <span class="dimension-label">{{ createDeliveryForm.value.email }}</span>
+    </div>
+
     <div class="introduce">
         <div class="box">
-            <div>
-                <label for="email">Email:</label>
-                <input
-                    type="text"
-                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-                    id="email"
-                    formControlName="email"
-                    required
-                />
-            </div>
-
             <div>
                 <label for="description">Description:</label>
                 <textarea id="description" formControlName="description"></textarea>
@@ -174,3 +174,7 @@
 
     <button type="submit" [disabled]="createDeliveryForm.invalid">Submit</button>
 </form>
+
+<div *ngIf="!(authService.isAuthenticated$ | async)">
+    <h2 class="page-title">Not logged in</h2>
+</div>

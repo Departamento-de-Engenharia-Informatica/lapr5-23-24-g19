@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AuthService } from '@auth0/auth0-angular'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { CreateSurveillanceTaskDTO } from 'src/app/dto/CreateSurveillanceTaskDTO'
 import { BuildingService } from 'src/app/services/building.service'
@@ -24,10 +25,11 @@ export class CreateTaskSurveillanceComponent {
         private formBuilder: FormBuilder,
         private buildingService: BuildingService,
         private floorService: FloorService,
-        private TaskService: TaskService,
+        private taskService: TaskService,
+        public authService: AuthService,
     ) {
         this.createSurveillanceForm = this.formBuilder.group({
-            email: [null, [Validators.required]],
+            email: ['', [Validators.required]],
 
             buildingCode: [null, [Validators.required]],
             floorNumber: [null, [Validators.required]],
@@ -38,8 +40,17 @@ export class CreateTaskSurveillanceComponent {
     }
 
     ngOnInit(): void {
-        this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
-            this.buildings = list
+        this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+                console.log('Authenticated')
+                this.authService.user$.subscribe((user) => {
+                    this.createSurveillanceForm.controls['email'].setValue(user?.email)
+                })
+
+                this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
+                    this.buildings = list
+                })
+            }
         })
     }
 
@@ -63,23 +74,25 @@ export class CreateTaskSurveillanceComponent {
         }
 
         console.log(dto)
-        this.TaskService.createSurveillanceTask(dto).subscribe(
+        this.taskService.createSurveillanceTask(dto).subscribe(
             (task: CreateSurveillanceTaskDTO) => {
                 let alertMessage = `Task created successfully!`
+                alertMessage += `\nBuilding: ${dto.buildingCode}`
+                alertMessage += `\nFloor: ${dto.floorNumber}`
+                alertMessage += `\nContact Name: ${dto.contactName}`
+                alertMessage += `\nContact Phone: ${dto.contactPhone}`
 
                 alert(alertMessage)
 
-                // this.createSurveillanceForm.reset({
-                //     buildingCode: this.selectedBuilding,
-                //     description: '',
-                // })
+                this.createSurveillanceForm.reset({
+                    email: this.createSurveillanceForm.value.email,
+                })
             },
             (error) => {
                 alert(error.error)
-                // this.createFloorForm.reset({
-                //     buildingCode: this.selectedBuilding,
-                //     description: '',
-                // })
+                this.createSurveillanceForm.reset({
+                    email: this.createSurveillanceForm.value.email,
+                })
             },
         )
     }
