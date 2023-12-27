@@ -17,4 +17,7 @@ export default interface IBackofficeUserService {
     createBackofficeUser(
         backofficeUserDTO: IBackofficeUserDTO,
     ): Promise<Either<BackofficeUserErrorResult, ICreatedBackofficeUserDTO>>
+    getUser(dto: {
+        email: string
+    }): Promise<Either<BackofficeUserErrorResult, ICreatedBackofficeUserDTO>>
 }

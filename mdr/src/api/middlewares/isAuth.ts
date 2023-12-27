@@ -4,9 +4,12 @@ import jwksRsa from 'jwks-rsa'
 import config from '../../../config'
 import { GetVerificationKey } from 'express-jwt'
 import { expressJwtSecret } from 'jwks-rsa'
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import * as jose from 'node-jose'
 import attachCurrentUser from './attachCurrentUser'
+import Container from 'typedi'
+import IClientService from '../../services/IServices/IClientService'
+import IBackofficeUserService from '../../services/IServices/IBackofficeUserService'
 
 /**
  * We are assuming that the JWT will come in a header with the form
@@ -17,7 +20,7 @@ import attachCurrentUser from './attachCurrentUser'
  * GET https://my-bulletproof-api.com/stats?apiKey=${JWT}
  * Luckily this API follow _common sense_ ergo a _good design_ and don't allow that ugly stuff
  */
-const getTokenFromHeader = req => {
+const getTokenFromHeader = (req) => {
     /**
      * @TODO Edge and Internet Explorer do some weird things with the headers
      * So I believe that this should handle more 'edge' cases ;)
@@ -50,6 +53,8 @@ export enum RolesEnum {
     TKM = 'TKM',
 }
 
+const backofficeRoles = [RolesEnum.ADM, RolesEnum.CMP, RolesEnum.FLM, RolesEnum.TKM]
+
 export const checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
         cache: true,
@@ -64,7 +69,7 @@ export const checkJwt = jwt({
 })
 
 export function customJwtMiddleware(req, res, next) {
-    checkJwt(req, res, err => {
+    checkJwt(req, res, (err) => {
         // const jweToken = req.headers.authorization?.split(' ')[1]
         // console.log(jweToken)
         if (err) {
@@ -82,6 +87,46 @@ export function customJwtMiddleware(req, res, next) {
         console.log('User Email:', req.auth)
         next()
     })
+}
+
+type AuthRequest = Request & {
+    auth: {
+        email: string
+        roles: string[]
+    }
+}
+
+export function isClient() {
+    return async (req: AuthRequest, res: Response, next: NextFunction) => {
+        const auth: { email: string; roles: string[] } = req.auth
+
+        const svc = Container.get(config.services.client.name) as IClientService
+
+        if (!auth.roles.includes(RolesEnum.CLT) || !(await svc.getClient(auth.email))) {
+            return res.status(403).json({ message: 'Forbidden' })
+        }
+
+        return next()
+    }
+}
+
+export function isBackoffice(anyOfRoles: RolesEnum[]) {
+    return async (req: AuthRequest, res: Response, next: NextFunction) => {
+        const auth: { email: string; roles: string[] } = req.auth
+
+        const svc = Container.get(
+            config.services.backofficeUser.name,
+        ) as IBackofficeUserService
+
+        if (
+            !auth.roles.find((r) => anyOfRoles.includes(r as RolesEnum)) ||
+            !(await svc.getUser({ email: auth.email }))
+        ) {
+            return res.status(403).json({ message: 'Forbidden' })
+        }
+
+        return next()
+    }
 }
 
 // export function hasRole(rolesToCheck) {
