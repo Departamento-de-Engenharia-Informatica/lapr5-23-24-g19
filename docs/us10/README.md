@@ -1,115 +1,90 @@
-# US 1050
+# US10
 
 ## 1. User Story Description
 
-
-O ADMINISTRADOR CRIA AS CONTAS
-o administrador atribui o papel na criação de utilizadores.
-BackOfficeUser:
-
-fleet manager
-campus manager
-task manager
-
-atributos:
-
-nome, email e telefone.
-
-password criada pelo administrador
-* minimo 10 caracteres
-* pelo menos 1 letra maiuscula
-* pelo menos 1 letra minuscula
-* pelo menos 1 digito
-* pelo menos 1 simbolo
-
-
-
-OS UTENTES CRIAM A CONTA
-os utilizadores que utilizem a funcionalidade de registo serão sempre do tipo "utente"
-
-client:
-
-atributos:
-
-nome, email, telefone, n de contribuinte
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-> As a campus manager, I intend to create a building.
-
-The building creation and persistence processes were already
-documented and implemented as per [us150](../us150/README.md).
-
-Thus, this specific use case is solely concerned with the
-development of a user interface (UI) that the campus
-manager can utilize.
+As an administrator, I want to create a system user and specify their permissions.
 
 ## 2. Customer Specifications and Clarifications
 
+The client has outlined that the Administrator Role should possess the functionality to create backoffice(or system) users.
+
+The administrator assigns the role during the creation of backoffice users:
+
+- Fleet manager
+- Campus manager
+- Task manager
+- Administrator
+
+Attributes are :
+
+- Name
+- Email(with @isep.ipp.pt)
+- Phone number (with 9 digits)
+- Password
+
+Password created by the administrator with minimum of 10 characters:
+
+- At least 1 uppercase letter
+- At least 1 lowercase letter
+- At least 1 digit
+- At least 1 symbol
 
 ## 3. Diagrams
 
 ### Level 1
 
-- [Logical View](../general-purpose/level1/logical-view.svg)
-- [Process View](./level1/process-view.svg)
+-   [Logical View](../general-purpose/level1/logical-view.svg)
+-   [Process View](./level1/process-view.svg)
 
 ### Level 2
-- [Logical View](../general-purpose/level2/logical-view.svg)
-- [Process View](./level2/process-view.svg)
-- [Implementation](../general-purpose/level2/implementation-view.svg)
+
+-   [Logical View](../general-purpose/level2/logical-view.svg)
+-   [Process View ](./level2/process-view.svg)
 
 ### Level 3
-- [Logical View](../general-purpose/level3/ui-logical-view.svg)
-- [Process View](./level3/process-view.svg)
-- [Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 
-## 4. Acceptance Criteria
+#### Logical Views
+
+-   [MDR Logical View](../general-purpose/level3/mdr-logical-view.svg)
+-   [UI Logical View](../general-purpose/level3/ui-logical-view.svg)
+
+#### Implementation Views
+
+-   [MDR Implementation View](../general-purpose/level3/mdr-implementation-view.svg)
+-   [UI Implementation View](../general-purpose/level3/ui-implementation-view.svg)
+
+#### Process Views
+
+-   [MDR Process View](./level3/be-process-view.svg)
+-   [SPA Process View](./level3/fe-process-view.svg)
+-   [Class Diagram View](./level3/be-class-diagram.svg)
+
+## 4. Acceptance Criteria and Tests
 
 To successfully complete this user story, the following criteria must be met:
 
-<!-- - The interface should be able to display/communicate to the -->
-<!-- user what buildings already exist in the system. -->
-<!--     + This list should be updated after a successful creation -->
-- When the user provides valid data, the building should
-be successfully created (assuming no internal errors in the application backend)
-    + Similarly, if invalid data is provided, the user should
-    be informed of what went wrong
+-   The admin interface should be presented only when the admin is logged in. Conversely, if the admin is not logged in, the UI should communicate this information.
+-   The creation of a backoffice user should require the specifications mentioned above.
+-   The submit button should be disabled if one of the parameters is not accordingly with the specifications mentioned above.
+-   Placeholders containing the actual data should be populated in each textbox.
 
 ## 5. Dependencies
 
-This user story depends upon the following use cases:
+This user story relies on three distinct API functionalities:
 
-1. US 150, building creation via the campus API.
+-   To create backoffice user
+    ```
+    POST /users-backoffice
+    ```
 
 ## 6. Design Patterns
-- Dependency inversion: Classes of one layer don't use specific implementations of a class from another layer (aside from domain); instead an interface defines a contract for how communications are made.
 
-- Dependency injection: Since no explicit implementations are used, an injection mechanism takes care of deciding, at runtime, which implementation to use based on a configuration file.
+-   **Dependency Inversion:** Classes of one layer abstain from using specific implementations of a class from another layer, except for the domain. Instead, an interface defines a contract for communication.
 
-- Single Responsibility (partially) - for each domain entity, there is a dedicated controller, service, repository (interface) definition that deals with/processes/handles operations related to that domain entity, and no other.
-    + The reason it is a partial use lies in the fact that each controller/service could be broken down by use case rather than by entity
+-   **Dependency Injection:** Given the absence of explicit implementations, an injection mechanism dynamically determines which implementation to use based on a configuration file.
 
-- DTO: DTO's are used to transfer information between the different layers
+-   **Single Responsibility (Partially):** Each domain entity has a dedicated controller, service, and repository (interface) definition handling operations exclusively related to that entity. The partial application is due to the possibility of breaking down controllers/services by use case rather than by entity.
+
+-   **DTO (Data Transfer Object):** DTOs are employed to transfer information seamlessly between different layers.
+
+
