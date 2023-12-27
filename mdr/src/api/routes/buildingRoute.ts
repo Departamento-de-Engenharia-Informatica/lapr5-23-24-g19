@@ -9,7 +9,7 @@ import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController'
 import IRoomController from '../../controllers/IControllers/IRoomController'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import { customJwtMiddleware, isBackoffice, RolesEnum } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -41,6 +41,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        isBackoffice([RolesEnum.ADMIN]),
         (req, res, next) => buildingController.createBuilding(req, res, next),
     )
 

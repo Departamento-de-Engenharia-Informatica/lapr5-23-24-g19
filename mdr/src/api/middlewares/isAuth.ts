@@ -45,15 +45,13 @@ export const isAuth = jwt({
 })
 
 export enum RolesEnum {
-    ADM = 'ADM',
-    CLT = 'CLT',
-    CMP = 'CMP',
-    FLM = 'FLM',
-    SYSADM = 'SYSADM',
-    TKM = 'TKM',
+    ADMIN = 'ADM',
+    CLIENT = 'CLT',
+    CAMPUS_MNG = 'CMP',
+    FLEET_MNG = 'FLM',
+    SYS_ADMIN = 'SYSADM',
+    TASK_MNG = 'TKM',
 }
-
-const backofficeRoles = [RolesEnum.ADM, RolesEnum.CMP, RolesEnum.FLM, RolesEnum.TKM]
 
 export const checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -68,7 +66,7 @@ export const checkJwt = jwt({
     algorithms: ['RS256'],
 })
 
-export function customJwtMiddleware(req, res, next) {
+export function customJwtMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
     checkJwt(req, res, (err) => {
         // const jweToken = req.headers.authorization?.split(' ')[1]
         // console.log(jweToken)
@@ -78,11 +76,11 @@ export function customJwtMiddleware(req, res, next) {
         }
         req.auth.email =
             req.auth[
-                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
+            'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
             ]
         req.auth.roles =
             req.auth[
-                'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
+            'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
             ]
         console.log('User Email:', req.auth)
         next()
@@ -102,7 +100,7 @@ export function isClient() {
 
         const svc = Container.get(config.services.client.name) as IClientService
 
-        if (!auth.roles.includes(RolesEnum.CLT) || !(await svc.getClient(auth.email))) {
+        if (!auth.roles.includes(RolesEnum.CLIENT) || !(await svc.getClient(auth.email))) {
             return res.status(403).json({ message: 'Forbidden' })
         }
 
@@ -113,6 +111,10 @@ export function isClient() {
 export function isBackoffice(anyOfRoles: RolesEnum[]) {
     return async (req: AuthRequest, res: Response, next: NextFunction) => {
         const auth: { email: string; roles: string[] } = req.auth
+
+        if (!auth.roles.includes(RolesEnum.CLIENT)) {
+            return res.status(403).json({ message: 'Forbidden' })
+        }
 
         const svc = Container.get(
             config.services.backofficeUser.name,
@@ -142,13 +144,13 @@ export function isBackoffice(anyOfRoles: RolesEnum[]) {
 //     };
 // }
 
-export const isAdmin = (req, res, next) => {
-    const user = req.user
-    console.log(JSON.stringify(req))
+// export const isAdmin = (req, res, next) => {
+//     const user = req.user
+//     console.log(JSON.stringify(req))
 
-    if (user && user.roles && user.roles.include('admin')) {
-        return next()
-    } else {
-        return res.stats(403).json({ message: 'Forbidden' })
-    }
-}
+//     if (user && user.roles && user.roles.include('admin')) {
+//         return next()
+//     } else {
+//         return res.stats(403).json({ message: 'Forbidden' })
+//     }
+// }
