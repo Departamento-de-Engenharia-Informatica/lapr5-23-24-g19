@@ -6,7 +6,14 @@ participant "Controller" as ctrl
 participant "dto:\nBackofficeUserDTO" as xdto
 participant "Service" as svc
 participant "user:\nBackofficeUser" as b
-participant "Repository" as repo
+
+participant "RoleRepository" as r_repo
+participant "BackofficeUserRepository" as repo
+participant "i_dto:\nIAuthUserDTO" as i_dto
+participant "ar_dto:\nIAssingRoleDTO" as ar_dto
+participant "AuthRepository" as a_repo
+
+
 participant "DBDriver" as db
 
 
@@ -41,14 +48,30 @@ activate r
             else user not created
                 svc --> ctrl : error
                 ctrl --> r : error (422)
-                [<-- r : 422: Unprocessable Content
+                [<-- r : 422: Unprocessable\n Content
+
             else user created successfully
+
+                svc -> r_repo: find(role)
+                activate r_repo
+                deactivate r_repo
+
                 svc -> repo : save(user)
                 activate repo
                     repo -> db : save
                     activate db
                     deactivate db
                 deactivate repo
+
+                svc --> i_dto ** : create()
+                svc -> a_repo : createUser(i_dto)
+                activate a_repo
+                deactivate a_repo
+
+                svc --> ar_dto ** : create()
+                svc -> a_repo : assignRoleToUser(ar_dto)
+                activate a_repo
+                deactivate a_repo
 
                 svc -> map : toDTO(user)
                 activate map
