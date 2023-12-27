@@ -1,10 +1,10 @@
-import { TitleCasePipe } from '@angular/common'
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { TaskDTO, TaskState } from 'src/app/dto/TaskDTO'
-import { UpdateTaskDTO } from 'src/app/dto/UpdateTaskDTO'
+import { TaskDTO, TaskType } from 'src/app/dto/TaskDTO'
 import { TaskService } from 'src/app/services/task.service'
 import { ITaskAlgorithmDTO } from '../../../../../../mdr/src/dto/ITaskAlgorithmDTO'
+import { RobotSequenceDTO } from 'src/app/dto/RobotSequenceDTO'
+import { finalize } from 'rxjs'
 
 type TaskId = string
 type Algorithm = string
@@ -15,24 +15,25 @@ type Algorithm = string
     styleUrls: ['./sequence-task.component.css'],
 })
 export class SequenceTaskComponent {
+    TaskType = TaskType // Expose the enum to the template
+
     tasks: TaskDTO[]
     form: FormGroup
 
+    // cardStates: { [taskId: string]: boolean } = {};
+
     algorithms: Algorithm[]
     selectedTasks: TaskId[]
-    sequences: any[]
+    sequences: RobotSequenceDTO[][]
 
-    constructor(
-        private service: TaskService,
-        private fb: FormBuilder,
-    ) {
+    constructor(private service: TaskService, private fb: FormBuilder) {
         this.tasks = []
         this.algorithms = []
         this.selectedTasks = []
         this.sequences = []
 
         this.form = this.fb.group({
-            algorithm: ['', [Validators.required]],
+            algorithm: this.fb.control('', [Validators.required]),
         })
     }
 
@@ -43,9 +44,11 @@ export class SequenceTaskComponent {
 
     private getApprovedTasks() {
         this.service.getApprovedTasks().subscribe({
-            next: (tasks) => {
-                console.log(tasks)
-                this.tasks = tasks
+            next: (newTasks) => {
+                this.selectedTasks = newTasks
+                    .filter(t => this.tasks.includes(t))
+                    .map(t => t.id)
+                this.tasks = newTasks
             },
             error: (err) => {
                 console.error(err)
@@ -55,7 +58,13 @@ export class SequenceTaskComponent {
     }
 
     private getSequenceAlgorithms() {
-        this.algorithms = ['genetic', 'permutations']
+        this.service.taskSequenceAlgorithms().subscribe({
+            next: (algorithms) => (this.algorithms = algorithms.sort()),
+            error: (err) => {
+                console.log(err)
+                this.algorithms = []
+            },
+        })
     }
 
     getObjectKeys(obj: { [key: string]: any }): { key: string; value: any }[] {
@@ -68,6 +77,8 @@ export class SequenceTaskComponent {
         } else {
             this.selectedTasks.push(taskId)
         }
+        // this.cardStates[taskId] = !this.cardStates[taskId];
+
         console.log(this.selectedTasks)
     }
 
@@ -75,19 +86,51 @@ export class SequenceTaskComponent {
         const dto: ITaskAlgorithmDTO = {
             algorithm: this.form.get('algorithm')?.value,
             tasks: this.selectedTasks.map((id) => {
-                const task = this.tasks.find((t) => t.id === id)
-                return { id: task!.id, type: task!.type }
+                const task = this.tasks.find((t) => t.id === id)!
+                return { id: task.id, type: task.type }
             }),
         }
 
-        this.service.sequenceTasks(dto).subscribe({
-            next: (tasks: any) => {
-                this.sequences.push(tasks)
-                console.log(this.sequences)
-            },
-            error: (err) => {
-                alert(err)
-            },
-        })
+        console.log(dto)
+
+        this.service
+            .sequenceTasks(dto)
+            .pipe(finalize(() => this.getApprovedTasks()))
+            .subscribe({
+                next: (tasks) => {
+                    this.sequences.push(tasks)
+                    this._planned = [...dto.tasks] as TaskDTO[]
+                },
+                error: (err) => {
+                    console.error(err)
+                    alert('An error occured while planning the tasks!')
+                },
+            })
+    }
+
+    isCardOn(taskId: string): boolean {
+        return !!this.selectedTasks.find((tId) => tId === taskId)
+    }
+
+    selectAllTasks() {
+        const allTaskIds = this.tasks.map((task) => task.id)
+        this.selectedTasks = [...allTaskIds]
+        // allTaskIds.forEach((taskId) => (this.cardStates[taskId] = true));
+    }
+
+    deselectAllTasks() {
+        this.selectedTasks = []
+        // this.cardStates = {};
+    }
+
+    _planned: TaskDTO[] = []
+    taskTypeFromId(taskId: TaskId): TaskType {
+        return this.tasks.find((t) => t.id === taskId)?.type
+            ?? this._planned.find((t) => t.id === taskId)!.type
+    }
+
+    collapsedCards: boolean[] = []
+    toggleCard(index: number): void {
+        this.collapsedCards[index] = !this.collapsedCards[index]
     }
 }

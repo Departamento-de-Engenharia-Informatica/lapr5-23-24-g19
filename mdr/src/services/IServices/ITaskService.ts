@@ -3,6 +3,7 @@ import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSur
 import { Either } from '../../core/logic/Result'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IGeneralTaskDTO } from '../../dto/IGeneralTaskDTO'
+import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 import { ITaskAlgorithmDTO } from '../../dto/ITaskAlgorithmDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
@@ -10,6 +11,7 @@ import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 export enum TaskErrorCode {
     NotFound,
     BussinessRuleViolation,
+    AdapterFailure
 }
 
 export type TaskErrorResult = {
@@ -30,4 +32,5 @@ export default interface ITaskService {
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 
     taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, String>>
+    taskSequenceAlgorithms(): Promise<Either<TaskErrorResult, ISequenceAlgorithmDTO[]>>
 }

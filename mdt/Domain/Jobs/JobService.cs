@@ -150,10 +150,12 @@ namespace DDDSample1.Domain.Jobs
             return updatedJob;
         }
 
-        public async Task<PlannedTasksDTO> JobSequence(RobotTasksDTO dto)
+        public async Task<List<PlannedRobotTasksDTO>> JobSequence(RobotTasksDTO dto)
         {
-            var keypairs = new List<KeyValuePair<string, TaskSequenceDto>>();
-            foreach ((var key, var tasks) in dto.RobotTasks)
+
+            var robotTasks = new List<PlannedRobotTasksDTO>();
+
+            foreach ((var robotName, var tasks) in dto.RobotTasks)
             {
                 var jobs = new List<Job>();
                 foreach (var t in tasks)
@@ -171,17 +173,18 @@ namespace DDDSample1.Domain.Jobs
                     ComputeSequenceMapper.ToDTO(dto.Algorithm, jobs)
                 );
 
-                // foreach (var j in jobs)
-                // {
-                //     _ = await UpdateJob(
-                //         new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
-                //     );
-                // }
+                foreach (var j in jobs)
+                {
+                    _ = await UpdateJob(
+                        new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
+                    );
+                    Console.WriteLine($"Updated job requested by {j.Email}");
+                }
 
                 var jobSequence = new Sequence(
                     jobs,
                     sequence.cost,
-                    key,
+                    robotName,
                     new Coordinates(
                         sequence.initialPosition.building,
                         sequence.initialPosition.floor,
@@ -190,14 +193,18 @@ namespace DDDSample1.Domain.Jobs
                     )
                 );
 
-                await this._sequenceRepo.AddAsync(jobSequence);
-                await this._unitOfWork.CommitAsync();
+                _ = await _sequenceRepo.AddAsync(jobSequence);
+                _ = await _unitOfWork.CommitAsync();
 
-                keypairs.Add(new KeyValuePair<string, TaskSequenceDto>(key, sequence));
+                robotTasks.Add(new PlannedRobotTasksDTO { RobotName = robotName, Tasks = sequence });
             }
 
-            var result = keypairs.ToDictionary(x => x.Key, x => x.Value);
-            return new PlannedTasksDTO { RobotTasks = result };
+            return robotTasks;
+        }
+
+        public async Task<string[]> JobSequenceAlgorithms()
+        {
+            return await _planning.GetSequenceAlgorithms();
         }
     }
 }

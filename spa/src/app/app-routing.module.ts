@@ -100,7 +100,7 @@ export const routes: Routes = [
             {
                 path: 'approve-reject',
                 component: ApproveRejectTaskComponent,
-                canActivate: [AuthGuard],
+                // canActivate: [AuthGuard],
                 title: 'Approve/Reject task',
             },
             {

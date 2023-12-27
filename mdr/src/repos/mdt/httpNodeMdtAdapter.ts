@@ -7,9 +7,11 @@ import IMdtAdapter from '../../services/IRepos/IMdtRepo'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 import { IRobotTasksDTO } from '../../dto/IRobotTasksDTO'
+import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
+
     private url = config.mdtURL
 
     async createSurveillanceTask(dto: ITaskDTO): Promise<String> {
@@ -89,6 +91,16 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(dto),
         })
+
+        if (!res.ok) {
+            return Promise.reject(await res.text())
+        }
+
+        return await res.json()
+    }
+
+    async getTaskSequenceAlgorithms(): Promise<ISequenceAlgorithmDTO[]> {
+        const res = await fetch(`${this.url}/jobs/sequence/algorithms`)
 
         if (!res.ok) {
             return Promise.reject(await res.text())

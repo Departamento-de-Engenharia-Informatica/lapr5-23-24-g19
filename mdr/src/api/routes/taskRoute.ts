@@ -70,6 +70,11 @@ export default (app: Router) => {
         (req, res, next) => ctrl.taskSequence(req, res, next),
     )
 
+    route.get(
+        '/sequence/algorithms',
+        (req, res, next) => ctrl.taskSequenceAlgorithms(req, res, next)
+    )
+
     route.patch(
         '/:id',
         celebrate({

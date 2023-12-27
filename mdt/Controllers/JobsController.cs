@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
@@ -128,8 +129,26 @@ namespace DDDSample1.Controllers
             throw new System.NotImplementedException();
         }
 
+        [HttpGet("sequence/algorithms")]
+        public async Task<ActionResult<string[]>> GetJobSequenceAlgorithms()
+        {
+            try
+            {
+                var algorithms = await _service.JobSequenceAlgorithms();
+                return Ok(algorithms);
+            }
+            catch (Exception e)
+            {
+                return new ObjectResult(e.Message)
+                {
+                    StatusCode = 502,
+                };
+            }
+        }
+
+
         [HttpPatch("sequence")]
-        public async Task<ActionResult<String>> JobSequence([FromBody] RobotTasksDTO dto)
+        public async Task<ActionResult<List<PlannedRobotTasksDTO>>> JobSequence([FromBody] RobotTasksDTO dto)
         {
             try
             {

@@ -23,6 +23,7 @@ import ITaskService, { TaskErrorCode, TaskErrorResult } from './IServices/ITaskS
 import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
 import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
+import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -32,7 +33,7 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-    ) {}
+    ) { }
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -282,6 +283,19 @@ export default class TaskService implements ITaskService {
         } catch (e) {
             return left({
                 errorCode: TaskErrorCode.BussinessRuleViolation,
+                message: e.message ?? e,
+            })
+        }
+    }
+
+    async taskSequenceAlgorithms(): Promise<Either<TaskErrorResult, ISequenceAlgorithmDTO[]>> {
+        try {
+            const algorithms = await this.repo.getTaskSequenceAlgorithms()
+
+            return right(algorithms)
+        } catch (e) {
+            return left({
+                errorCode: TaskErrorCode.AdapterFailure,
                 message: e.message ?? e,
             })
         }

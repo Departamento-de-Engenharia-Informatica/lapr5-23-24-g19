@@ -2,15 +2,21 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    gap: 100px;
+    /* gap: 100px; */
 }
 
 .page-title {
     @apply text-2xl font-bold text-white text-center my-16;
 }
 
+/* Add styles for the "on" state */
+.on {
+    border-color: var(--secondary-color) !important;
+}
+
 .building-card {
-    border: 1px solid var(--third-color);
+    border: 1px solid;
+    border-color:  var(--third-color);
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
@@ -72,24 +78,51 @@
     @apply transition-colors duration-300 border;
 }
 
-/* button { */
-/*     padding: 10px 20px; */
-/*     background-color: var(--third-color); */
-/*     color: var(--secondary-color); */
-/*     height: 45px; */
-/*     border: none; */
-/*     border-radius: 4px; */
-/*     margin: 0 auto; */
-/*     margin-left: 20px; */
-/*     margin-top: 20px; */
-/*     display: block; */
-/* } */
+.props-container button {
+    /* padding: 10px 20px; */
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    @apply ml-4 px-4 py-2 rounded;
+    /* height: 45px; */
+    /* border: none; */
+    /* border-radius: 4px; */
+    /* margin: 0 auto; */
+    /* margin-left: 20px; */
+    /* margin-top: 20px; */
+    /* display: block; */
+}
 
-/* button:disabled { */
-/*     background-color: #ccc; */
-/*     color: #666; */
-/*     cursor: not-allowed; */
-/* } */
+.props-container button:not(:disabled):hover {
+    border: 1px solid;
+    border-color: var(--secondary-color);
+}
+
+.props-container button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.props-container select {
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    height: 45px; /* Set the same height as the button */
+    padding: 10px 20px; /* Set the same padding as the button */
+    border: none;
+    border-radius: 4px;
+    margin-left: 20px;
+    display: block;
+}
+
+.props-container select:focus {
+    outline: none;
+    /* Optional: Remove the focus outline if it's not needed */
+}
+
+.props-container select:not(:disabled):hover {
+    border: 1px solid;
+    border-color: var(--secondary-color);
+}
 
 .criteria {
     width: 50%;
@@ -113,4 +146,41 @@
     border-radius: 4px;
     background-color: var(--primary-color);
     color: white;
+}
+
+
+
+
+.slider {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  border-radius: 20px;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+
+.plan-card {
+    color: #9ca3af !important;
 }
