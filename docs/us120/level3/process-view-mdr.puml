@@ -7,9 +7,13 @@ participant "Controller" as ctrl
 participant "Service" as svc
 
 participant "Mapper" as map
-participant "dto:\nICreatedClientDTO" as cp_dto
+participant "dto:\nIClientWithoutPasswordDTO" as cp_dto
+participant "dto:\nIClientEmailDTO" as dto
+participant "dto:\nIDeletedClientDTO" as d_dto
 
-participant "Repository" as repo
+participant "AuthRepository" as a_repo
+participant "ClientRepository" as repo
+
 database "Database" as db
 
 [-> r: GET (/clients/{email})
@@ -46,11 +50,15 @@ else client found
 deactivate r
 end
 
-[-> r: DELETE (/clients/{token})
+[-> r: DELETE (/clients/{email})
 activate r
     r -> ctrl : deleteClient(req,res,...)
     activate ctrl
-        ctrl -> cp_dto** : create(req.body)
+        ctrl --> dto** : create()
+
+        activate dto
+        dto --> ctrl : dto
+        deactivate dto
 
         ctrl -> svc : deleteClient(dto)
         activate svc
@@ -62,25 +70,34 @@ activate r
                 deactivate db
                 repo --> svc : client
             deactivate repo
-alt wrong client password
+alt client not found
                 svc --> ctrl : error
-                ctrl --> r : response 422
-                [<--r : 422: Unprocessable Content
+                ctrl --> r : response 404
+                [<--r : 404: Not found
 else success
+
+            svc -> a_repo: deleteUser(email)
+            activate a_repo
+            deactivate a_repo
+
             svc -> repo : delete(client)
             activate repo
                 repo -> db : delete()
                 activate db
-                deactivate db
 
+                deactivate db
                 repo --> svc : true
 
-                svc -> svc : logout(client)
-                note right : DEPOIS DE APAGAR A CONTA \nDEVE AUTOMATICAMENTE DAR LOGOUT !!!!!!!!!!!!!!!\nIMPLEMENTAR AINDA
-                deactivate repo
+            deactivate repo
+
+            svc --> d_dto** : create()
+
+            activate d_dto
+                d_dto --> svc : dto
+            deactivate d_dto
 
 
-            svc --> ctrl : true
+            svc --> ctrl : dto
         deactivate svc
         ctrl --> r : response 200
     deactivate ctrl
