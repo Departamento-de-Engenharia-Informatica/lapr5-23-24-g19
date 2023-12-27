@@ -25,6 +25,8 @@ import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
 import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
 import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
+import { shuffle } from 'lodash'
+
 @Service()
 export default class TaskService implements ITaskService {
     constructor(
@@ -228,15 +230,11 @@ export default class TaskService implements ITaskService {
                 })
             }
 
-            console.log(1)
             const types = new Set(
                 dto.tasks.map((t) => TaskType.toType(t.type.toUpperCase())),
             )
-            console.log(2)
             for (const t of types) {
-                console.log(3)
                 if (!robots.find((r) => r.type.taskType.includes(t))) {
-                    console.log(4)
                     return left({
                         errorCode: TaskErrorCode.NotFound,
                         message: `No robot to fulfill task of type ${TaskType.toString(
@@ -246,37 +244,29 @@ export default class TaskService implements ITaskService {
                 }
             }
 
-            console.log(5)
-
             const tasks = [...dto.tasks]
             const result: IRobotTasksDTO = {
                 Algorithm: dto.algorithm,
                 RobotTasks: {},
             }
 
+            const shuffledRobots = shuffle(robots)
             while (tasks.length !== 0) {
-                robots.forEach((r) => {
-                    console.log(JSON.stringify(r, null, 2))
+                shuffledRobots.forEach((r) => {
                     if (
                         tasks.length > 0 &&
                         r.type.taskType.includes(
                             TaskType.toType(tasks[0].type.toUpperCase()),
                         )
                     ) {
-                        console.log('7a')
                         if (!result.RobotTasks[r.nickname.value]) {
                             result.RobotTasks[r.nickname.value] = []
                         }
 
                         result.RobotTasks[r.nickname.value].push(tasks.shift())
                     }
-                    console.log('7b')
                 })
             }
-
-            console.log(8)
-
-            console.log(result)
 
             const sequence = await this.repo.taskSequence(result)
             return right(sequence)
