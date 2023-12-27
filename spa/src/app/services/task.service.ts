@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core'
-import { Observable, catchError, firstValueFrom, of, throwError } from 'rxjs'
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import {
+    Observable,
+    catchError,
+    first,
+    firstValueFrom,
+    map,
+    of,
+    switchMap,
+    throwError,
+} from 'rxjs'
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { CriterionDTO } from '../dto/CriteriaDTO'
 import { TaskTypeDTO } from '../dto/CreateRobotTypeDTO'
 import { Config } from '../config'
@@ -19,10 +28,7 @@ import { IGeneralTaskDTO } from '../../../../mdr/src/dto/IGeneralTaskDTO'
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) { }
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()
@@ -30,16 +36,63 @@ export class TaskService {
         return token
     }
 
-    getApprovedTasks() {
-        return new Observable<TaskDTO[]>((observer) => {
-            // this.getToken()
-            // .then((token) => {
-            this.http
-                .get<any[]>(`${Config.baseUrl}/task?status=approved`, {
-                    headers: {
-                        // Authorization: `Bearer ${token}`,
-                        'Content-type': 'application/json',
+    private getTokenObservable(): Observable<string> {
+        return this.auth.getAccessTokenSilently().pipe(
+            first(), // Take the first emitted value and complete the observable
+            catchError((error) => {
+                console.error('Error getting token:', error)
+                return throwError(() => new Error('Unable to get authentication token.'))
+            }),
+        )
+    }
+
+    // TODO: change usages of _fakeToken() to getTokenObservable()
+    private _fakeToken() {
+        return of('aa')
+    }
+
+    private authHeaders(token: string): HttpHeaders {
+        return new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        })
+    }
+
+    tasksOfState(state: TaskState): Observable<TaskDTO[]> {
+        return this._fakeToken().pipe(
+            switchMap((token) =>
+                this.http.get<IGeneralTaskDTO[]>(
+                    `${Config.baseUrl}/task?status=${state}`,
+                    {
+                        headers: this.authHeaders(token),
+                        observe: 'body',
+                        responseType: 'json',
                     },
+                ),
+            ),
+            map((tasks) =>
+                tasks.map(
+                    (t): TaskDTO => ({
+                        ...t,
+                        id: t.id.value,
+                        type: Object.values(TaskType)[t.jobType],
+                        state: Object.values(TaskState)[t.status],
+
+                        requesterEmail: t.email,
+                        requesterName:
+                            t.surveillanceContact?.name ??
+                            t.pickupContact?.name ??
+                            'Unknown',
+                    }),
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
+        )
+    }
+
+    getApprovedTasks() {
+        return this.tasksOfState(TaskState.APPROVED)
+    }
+
                     observe: 'body',
                     responseType: 'json',
                 })
