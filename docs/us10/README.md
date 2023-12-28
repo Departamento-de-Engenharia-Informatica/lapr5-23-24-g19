@@ -124,7 +124,7 @@ Implementation and Logical Views offering insights into the technical underpinni
 This documentation ensures transparency and facilitates future understanding and maintenance of
 the implemented features.
 
-## 6. Design Patterns
+## 8. Design Patterns
 
 -   **Dependency Inversion:** Classes of one layer abstain from using specific implementations of a class from another layer, except for the domain. Instead, an interface defines a contract for communication.
 
