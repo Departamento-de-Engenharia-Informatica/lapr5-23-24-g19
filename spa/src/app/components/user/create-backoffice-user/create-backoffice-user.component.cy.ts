@@ -45,7 +45,7 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
     })
 
     it('should create a backoffice user on form submission', () => {
-        const createBuildingSpy = cy.spy(component['service'], 'createBackofficeUser')
+        const createBackofficeUserSpy = cy.spy(component['service'], 'createBackofficeUser')
         const alertSpy = cy.spy(window, 'alert')
         const resetSpy = cy.spy(component.form, 'reset')
 
@@ -59,7 +59,7 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
 
         component.submit()
 
-        expect(createBuildingSpy).calledOnce
+        expect(createBackofficeUserSpy).calledOnce
         expect(alertSpy).calledWith(
             `Created Backoffice User: \nName: ${backofficeUser1.name}\nRole: ${backofficeUser1.role}\nEmail: ${backofficeUser1.email}\nPhoneNumber: ${backofficeUser1.phoneNumber}`,
         )
