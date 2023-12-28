@@ -9,8 +9,7 @@ enum RoleType {
     CAMPUS_MANAGER = 'Campus Manager',
     FLEET_MANAGER = 'Fleet Manager',
     TASK_MANAGER = 'Task Manager',
-    ADMINISTRATOR = 'Administrator',
-    SYSTEMS_ADMINISTRATOR = 'Systems Administrator'
+    ADMINISTRATOR = 'Administrator'
 }
 @Component({
     selector: 'app-create-backoffice-user',
