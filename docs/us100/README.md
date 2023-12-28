@@ -24,18 +24,18 @@ The client has outlined that the Client Role should possess the functionality to
 
 #### Logical Views
 
+-   [SPA Logical View](../general-purpose/level3/ui-logical-view.svg)
 -   [MDR Logical View](../general-purpose/level3/mdr-logical-view.svg)
--   [UI Logical View](../general-purpose/level3/ui-logical-view.svg)
 
 #### Implementation Views
 
+-   [SPA Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 -   [MDR Implementation View](../general-purpose/level3/mdr-implementation-view.svg)
--   [UI Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 
 #### Process Views
 
--   [MDR Process View](./level3/process-view-mdr.svg)
 -   [SPA Process View](./level3/process-view-spa.svg)
+-   [MDR Process View](./level3/process-view-mdr.svg)
 
 ## 4. Acceptance Criteria and Tests
 

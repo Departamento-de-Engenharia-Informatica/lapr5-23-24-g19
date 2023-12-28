@@ -2,10 +2,8 @@
 
 autonumber
 
-actor "User" as usr
-
+actor "Client" as usr
 participant "SPA" as ui
-
 participant "MDR" as md
 
 activate usr
