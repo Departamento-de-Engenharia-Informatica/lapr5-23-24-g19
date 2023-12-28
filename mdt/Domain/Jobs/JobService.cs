@@ -51,64 +51,7 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
-            Job job = dto.JobType switch
-            {
-                0
-                    => new JobSurveillance(
-                        dto.Email,
-                        new JobLocation(
-                            new Coordinates(
-                                dto.Location.StartingPoint.BuildingCode,
-                                dto.Location.StartingPoint.FloorNumber,
-                                dto.Location.StartingPoint.X,
-                                dto.Location.StartingPoint.Y
-                            ),
-                            new Coordinates(
-                                dto.Location.EndingPoint.BuildingCode,
-                                dto.Location.EndingPoint.FloorNumber,
-                                dto.Location.EndingPoint.X,
-                                dto.Location.EndingPoint.Y
-                            )
-                        ),
-                        new JobContact(
-                            dto.Surveillance.Contact.Name,
-                            dto.Surveillance.Contact.Phone
-                        )
-                    ),
-
-                1
-                    => new JobDelivery(
-                        dto.Email,
-                        new JobLocation(
-                            new Coordinates(
-                                dto.Location.StartingPoint.BuildingCode,
-                                dto.Location.StartingPoint.FloorNumber,
-                                dto.Location.StartingPoint.X,
-                                dto.Location.StartingPoint.Y
-                            ),
-                            new Coordinates(
-                                dto.Location.EndingPoint.BuildingCode,
-                                dto.Location.EndingPoint.FloorNumber,
-                                dto.Location.EndingPoint.X,
-                                dto.Location.EndingPoint.Y
-                            )
-                        ),
-                        new JobContact(
-                            dto.Delivery.PickupContact.Name,
-                            dto.Delivery.PickupContact.Phone
-                        ),
-                        new JobContact(
-                            dto.Delivery.DeliveryContact.Name,
-                            dto.Delivery.DeliveryContact.Phone
-                        ),
-                        new JobConfirmationCode(dto.Delivery.ConfirmationCode),
-                        dto.Delivery.Description
-                    ),
-
-                _ => throw new ArgumentException("Invalid job type")
-            };
-
-            await this._repo.AddAsync(job);
+            await this._repo.AddAsync(JobMapper.ToDomain(dto));
             await this._unitOfWork.CommitAsync();
 
             return dto;
@@ -152,7 +95,6 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<List<PlannedRobotTasksDTO>> JobSequence(RobotTasksDTO dto)
         {
-
             var robotTasks = new List<PlannedRobotTasksDTO>();
 
             foreach ((var robotName, var tasks) in dto.RobotTasks)
@@ -196,7 +138,9 @@ namespace DDDSample1.Domain.Jobs
                 _ = await _sequenceRepo.AddAsync(jobSequence);
                 _ = await _unitOfWork.CommitAsync();
 
-                robotTasks.Add(new PlannedRobotTasksDTO { RobotName = robotName, Tasks = sequence });
+                robotTasks.Add(
+                    new PlannedRobotTasksDTO { RobotName = robotName, Tasks = sequence }
+                );
             }
 
             return robotTasks;
