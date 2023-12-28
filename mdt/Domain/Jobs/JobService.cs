@@ -59,9 +59,11 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<List<Job>> GetByFilter(FilterDTO dto)
         {
+            Console.WriteLine(dto.Filter);
+            Console.WriteLine(dto.State);
             var strategy = JobFilterContext.FilterStrategy(dto);
             var jobs = await _repo.Filter(strategy);
-            _ = await _unitOfWork.CommitAsync(); // ??
+            _ = await _unitOfWork.CommitAsync();
 
             return jobs;
         }
@@ -100,7 +102,7 @@ namespace DDDSample1.Domain.Jobs
             foreach ((var robotName, var tasks) in dto.RobotTasks)
             {
                 var jobs = new List<Job>();
-                foreach (var t in tasks)
+                foreach (var t in tasks)//for each task associated check if it is approved
                 {
                     var job = await _repo.GetByIdAsync(new JobId(t.id));
                     if (job.Status != JobStateEnum.APPROVED)
@@ -111,10 +113,14 @@ namespace DDDSample1.Domain.Jobs
                     jobs.Add(job);
                 }
 
+                //Compute sequence for a given list of tasks
                 var sequence = await _planning.ComputeSequence(
                     ComputeSequenceMapper.ToDTO(dto.Algorithm, jobs)
                 );
 
+                var orderJobs= new List<JobOrder>();
+
+                // set each task as planned
                 foreach (var j in jobs)
                 {
                     _ = await UpdateJob(
@@ -123,8 +129,23 @@ namespace DDDSample1.Domain.Jobs
                     Console.WriteLine($"Updated job requested by {j.Email}");
                 }
 
+                var i = 0;
+                //Create the corresponding JobOrder on the sequence
+                foreach(var j in sequence.order){
+                    var jobOrder = new JobOrder
+                    {
+                        JobId = new Guid(j.taskId),
+                        Order = i
+                        // Sequence = sequence // This line is optional due to EF's change tracking
+                    };
+
+                    orderJobs.Add(jobOrder);
+                    i++;
+                }
+
+                //create the sequence, with the orders
                 var jobSequence = new Sequence(
-                    jobs,
+                    orderJobs,
                     sequence.cost,
                     robotName,
                     new Coordinates(

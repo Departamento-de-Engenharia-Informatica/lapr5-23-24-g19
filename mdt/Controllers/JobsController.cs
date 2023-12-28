@@ -13,10 +13,12 @@ namespace DDDSample1.Controllers
     public class JobsController : ControllerBase
     {
         private readonly JobService _service;
+        private readonly SequenceService _serviceSeq;
 
-        public JobsController(JobService service)
+        public JobsController(JobService service, SequenceService seqSrv)
         {
             _service = service;
+            _serviceSeq = seqSrv;
         }
 
         [HttpGet("status")]
@@ -59,8 +61,6 @@ namespace DDDSample1.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<JobDto>> Update(string id, UpdatingJobDto dto)
         {
-            Console.WriteLine("Hello");
-
             if (dto == null)
             {
                 return BadRequest();
@@ -94,20 +94,32 @@ namespace DDDSample1.Controllers
         [HttpGet("filter")]
         // GET: api/jobs?filter=filter&rule=someRule
         // [HttpGet], com parametros para filter e rule
-        public async Task<ActionResult<String>> GetByFilter(string filter, string rule)
+        public async Task<ActionResult<Job>> GetByFilter(string filter, string rule)
         {
+
+            Console.WriteLine(filter);
+            Console.WriteLine(rule);
+            Console.WriteLine("ssss");
+
             var dto = FilterMapper.ToDto(filter, rule);
-            if (dto == null)
+
+            try
             {
-                //TODO: better error message
-                return NotFound("Dto asdnull");
+                var jobs = await _service.GetByFilter(dto);
+                if (jobs == null)
+                {
+                    return NotFound("No tasks found");
+                }
+                return Ok(jobs);
             }
-            var jobs = await _service.GetByFilter(dto);
-            if (jobs == null)
+            catch (NotFoundException ex)
             {
-                return NotFound("Akshually not foound");
+                return NotFound(ex.Message);
             }
-            return Ok(jobs);
+            catch (Exception ex) when (ex is ArgumentException or BusinessRuleValidationException)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("")]
@@ -153,6 +165,21 @@ namespace DDDSample1.Controllers
             try
             {
                 var sequence = await _service.JobSequence(dto);
+                return Ok(sequence);
+            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+         [HttpGet("robots/{name}")]
+        public async Task<ActionResult<List<string>>> RobotSequence(string name)
+        {
+            Console.WriteLine("hello");
+            try
+            {
+                var sequence = await _serviceSeq.RobotSequence(name);
                 return Ok(sequence);
             }
             catch (BusinessRuleValidationException ex)

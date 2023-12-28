@@ -25,7 +25,14 @@ namespace DDDSample1.Infrastructure
             modelBuilder.ApplyConfiguration(new JobOrderEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SequenceEntityTypeConfiguration());
 
-            modelBuilder.Entity<Sequence>().OwnsOne(sequence => sequence.RobotPosition);
+            // modelBuilder.Entity<Sequence>()
+            //        .HasMany(sequence => sequence.Jobs) // Assuming 'Jobs' is a collection of 'JobOrder' in 'Sequence'
+            //        .WithOne(job => job.Sequence) // Assuming 'Sequence' is a navigation property in 'JobOrder'
+            //        .HasForeignKey(job => job.SequenceId); // Assuming 'SequenceId' is the foreign key in 'JobOrder'
+
+            // modelBuilder.Entity<Sequence>().HasMany(seq => seq.Jobs).WithOne(t => t.Sequence).HasForeignKey(t => t.SequenceId);
+            // modelBuilder.Entity<Job>().HasMany(job => job.).WithOne(t => t.Sequence).HasForeignKey(t => t.SequenceId);
+
 
             modelBuilder.ApplyConfiguration(new JobEntityTypeConfiguration());
 

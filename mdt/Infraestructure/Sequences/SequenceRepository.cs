@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Sequences;
 using DDDSample1.Infrastructure.Shared;
@@ -32,7 +34,14 @@ namespace DDDSample1.Infrastructure.Sequences
         public async Task<List<Sequence>> GetByRobotName(string robotName)
         {
             var sequences = await _objs.Where(x => robotName.Equals(x.RobotName)).ToListAsync();
+            // Console.WriteLine("Seqs");
+            // var options = new JsonSerializerOptions
+            // {
+            //     WriteIndented = true // This sets the indentation
+            // };
+            // Console.WriteLine(JsonSerializer.Serialize(sequences,options));
 
+            
             foreach (var s in sequences)
             {
                 s.Jobs = SortJobs(s.Jobs);

@@ -99,6 +99,7 @@ namespace DDDSample1
 
             services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<JobService>();
+            services.AddTransient<SequenceService>();
             services.AddTransient<ISequenceRepository, SequenceRepository>();
             // services.AddSingleton<HttpClient>();
             services.AddHttpClient(

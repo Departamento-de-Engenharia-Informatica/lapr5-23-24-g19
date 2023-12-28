@@ -9,11 +9,13 @@ namespace DDDSample1.Domain.Sequences
 {
     public class JobOrder : Entity<JobOrderId>, IAggregateRoot
     {
-        public Job Job { get; private set; }
-        public int Order { get; private set; }
+        public Job Job { get; private set; } // Navigation property
+        public Guid JobId{get; set;}
+        public Guid SequenceId{get; private set;}
+        public Sequence Sequence { get; set; } // Navigation property
+        public int Order { get; set; }
 
-        public JobOrder() { }
-
+        public JobOrder() {}
         public JobOrder(Job job, int order)
         {
             Id = new JobOrderId(Guid.NewGuid());
@@ -31,10 +33,11 @@ namespace DDDSample1.Domain.Sequences
 
         public Sequence() { }
 
-        public Sequence(List<Job> jobs, double cost, string robotName, Coordinates robotPosition)
+        public Sequence(List<JobOrder> jobs, double cost, string robotName, Coordinates robotPosition)
         {
             Id = new SequenceId(Guid.NewGuid());
-            Jobs = jobs.Select((job, index) => new JobOrder(job, index)).ToList();
+            // Jobs = jobs.Select((job, index) => new JobOrder(job, index)).ToList();
+            Jobs = jobs;
             Cost = cost;
             RobotName = robotName;
             RobotPosition = robotPosition;
