@@ -40,6 +40,7 @@ describe('Elevator Form e2e tests', () => {
             ],
         }).as('getBuildings')
 
+        window.localStorage.setItem('USER_ROLES', 'ADM')
         cy.visit('/campus/elevators/create')
 
         const log = Cypress.log({

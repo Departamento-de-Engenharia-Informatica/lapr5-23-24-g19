@@ -39,10 +39,13 @@ describe('Floors e2e tests', () => {
                 },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
+
     })
 
     describe('List floors e2e tests', () => {
         beforeEach(() => {
+
             cy.visit('campus/floors/list')
             const log = Cypress.log({
                 displayName: 'AUTH0 LOGIN',

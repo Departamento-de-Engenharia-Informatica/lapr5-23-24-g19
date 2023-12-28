@@ -7,7 +7,7 @@ import { IUserDTO } from '../../dto/IUserDTO'
 import middlewares from '../middlewares'
 import { celebrate, Joi } from 'celebrate'
 import winston = require('winston')
-import { checkJwt } from '../middlewares/isAuth'
+import { checkJwt, customJwtMiddleware } from '../middlewares/isAuth'
 
 var user_controller = require('../../controllers/userController')
 
@@ -119,5 +119,5 @@ export default (app: Router) => {
 
     app.use('/users', route)
 
-    route.get('/me', checkJwt, user_controller.getMe)
+    route.get('/me', customJwtMiddleware, user_controller.getMe)
 }

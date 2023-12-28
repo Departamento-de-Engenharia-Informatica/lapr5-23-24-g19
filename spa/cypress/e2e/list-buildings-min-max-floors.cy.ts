@@ -17,6 +17,8 @@ function loginViaAuth0Ui(username: string, password: string) {
 
 describe('List Buildings with a min and max floors e2e tests', () => {
     beforeEach(() => {
+        window.localStorage.setItem('USER_ROLES', 'ADM')
+
         cy.visit('/campus/buildings/list-by-floors')
         const log = Cypress.log({
             displayName: 'AUTH0 LOGIN',

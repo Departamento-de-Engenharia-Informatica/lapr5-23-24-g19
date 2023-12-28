@@ -128,19 +128,23 @@
 
     <div class="building-list">
         <div *ngFor="let task of tasks" class="building-card">
-            <h2>{{ task.email }}</h2>
-            <p>{{ task.confirmationCode }}</p>
-            <div class="dimension-box">
-                <span class="dimension-label">Length:</span>
-                {{ task.email }}
-            </div>
-            <div class="dimension-box">
-                <span class="dimension-label">Width:</span>
-                {{ task.email }}
-            </div>
-            <div class="dimension-box">
-                <span class="dimension-label">Floors:</span>
-                {{ task.email }}
+            <!-- <p>{{ task.confirmationCode }}</p> -->
+            <div>
+                <h2>{{ task.id.value }}</h2>
+                <h2>{{ task.email }}</h2>
+                <!-- <h2 [title]="task.id">Task</h2> -->
+                <div class="dimension-box">
+                    <span class="dimension-label">Status</span>
+                    {{ states[task.status]}}
+                </div>
+                <!-- <div class="dimension-box">
+                    <span class="dimension-label">Requested by</span>
+                    {{ task.requesterEmail }}
+                </div> -->
+                <div class="dimension-box">
+                    <span class="dimension-label">Task type</span>
+                    {{ types[task.jobType] }}
+                </div>
             </div>
         </div>
     </div>

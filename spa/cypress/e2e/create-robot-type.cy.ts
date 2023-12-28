@@ -20,6 +20,7 @@ describe('CreateRobotTypeComponent e2e tests', () => {
         cy.intercept('GET', 'http://localhost:4000/api/task/types', {
             body: [{ description: 'Task 1' }, { description: 'Task 2' }],
         }).as('getTaskTypes')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('/fleet/robot-types/create')
         const log = Cypress.log({

@@ -49,6 +49,7 @@ describe('List Robots e2e tests', () => {
                 },
             ],
         }).as('getRobots')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('/fleet' + '/robots/list')
         const log = Cypress.log({

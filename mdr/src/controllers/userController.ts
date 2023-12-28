@@ -1,27 +1,32 @@
 import { Response, Request } from 'express'
 
-import { Container } from 'typedi'
-
-import config from '../../config'
-
-import IUserRepo from '../services/IRepos/IUserRepo'
-
-import { UserMap } from '../mappers/UserMap'
-import { IUserDTO } from '../dto/IUserDTO'
-
 exports.getMe = async function (req, res: Response) {
     // NB: a arquitetura ONION não está a ser seguida aqui
 
-    const userRepo = Container.get(config.repos.user.name) as IUserRepo
+    // const userRepo = Container.get(config.repos.user.name) as IUserRepo
 
-    if (!req.token || req.token == undefined)
-        return res.status(401).send('Token inexistente ou inválido')
+    // if (!req.token || req.oken == undefined)
+        // return res.status(401).send('Token inexistente ou inválido')
 
-    const user = await userRepo.findById(req.user.id)
-    if (!user) {
-        return res.status(401).send('Utilizador não registado')
+    // const user = await userRepo.findById(req.user.id)
+    console.log("Logging")
+    
+    if (req.auth) {
+        const me:UserDTO = {
+            email: req.auth.email,
+            roles: req.auth.roles
+        }
+        console.log(JSON.stringify(me))
+
+        return res.json(me).status(200)
     }
+    console.log("whatttt")
+    
+    return res.status(401).send('Auth token not found')
+}
 
-    const userDTO = UserMap.toDTO(user) as IUserDTO
-    return res.json(userDTO).status(200)
+interface UserDTO{
+    email: string,
+    roles: string[]
+
 }

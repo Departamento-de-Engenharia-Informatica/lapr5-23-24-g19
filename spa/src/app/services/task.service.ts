@@ -337,7 +337,7 @@ export class TaskService {
         })
     }
 
-    getByCriteria(dto: FilterDTO): Observable<CreateDeliveryTaskDTO[]> {
+    getByCriteria(dto: FilterDTO): Observable<IGeneralTaskDTO[]> {
         // console.log(
         //     `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
         // )
@@ -362,11 +362,11 @@ export class TaskService {
         //             return throwError(() => new Error(errorMessage))
         //         }),
         //     )
-        return new Observable<CreateDeliveryTaskDTO[]>((observer) => {
+        return new Observable<IGeneralTaskDTO[]>((observer) => {
             this.getToken()
                 .then((token) => {
                     this.http
-                        .get<CreateDeliveryTaskDTO[]>(
+                        .get<IGeneralTaskDTO[]>(
                             `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
                             {
                                 headers: {

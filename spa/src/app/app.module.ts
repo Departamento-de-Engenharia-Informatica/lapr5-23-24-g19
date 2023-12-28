@@ -72,6 +72,7 @@ import { ApproveRejectClientComponent } from './components/user/approve-reject-c
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
 import {AdministratorComponent} from "./components/user/administrator-menu/administrator.component";
 import {DeleteClientComponent} from "./components/user/delete-client/delete-client.component";
+import { UserService } from './services/user.service'
 
 @NgModule({
     declarations: [
@@ -160,6 +161,7 @@ import {DeleteClientComponent} from "./components/user/delete-client/delete-clie
         RobotRepo,
         BackofficeUserService,
         ClientService,
+        UserService
     ],
     bootstrap: [AppComponent],
 })

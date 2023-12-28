@@ -18,11 +18,36 @@
     color: white;
 }
 
+/* .building-card h2 { */
+/*     margin-bottom: 8px; */
+/*     color: var(--secondary-color); */
+/* } */
+
+/* .building-card h2 {
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    font-size: larger;
+    color: var(--secondary-color);
+} */
 .building-card h2 {
     margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
     color: var(--secondary-color);
+    cursor: pointer; 
+    transition: all 0.3s ease;
 }
 
+
+.building-card h2:hover {
+    overflow: visible;
+    white-space: normal;
+    cursor: default;
+    max-height: none;
+}
 .building-card p {
     color: var(--secondary-color);
     overflow: hidden;
@@ -35,6 +60,14 @@
     white-space: normal;
     overflow: visible;
     text-overflow: inherit;
+}
+
+.dimension-box {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: var(--third-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
 }
 
 .dimension-box {
