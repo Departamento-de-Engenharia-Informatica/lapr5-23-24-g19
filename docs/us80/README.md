@@ -27,19 +27,19 @@ sign-up information before making a decision.
 
 #### Logical Views
 
+-   [SPA Logical View](../general-purpose/level3/ui-logical-view.svg)
 -   [MDR Logical View](../general-purpose/level3/mdr-logical-view.svg)
--   [UI Logical View](../general-purpose/level3/ui-logical-view.svg)
 
 #### Implementation Views
 
+-   [SPA Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 -   [MDR Implementation View](../general-purpose/level3/mdr-implementation-view.svg)
--   [UI Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 
 #### Process Views
 
+-   [SPA Process View](./level3/process-view-spa.svg)
 -   [MDR Process View (GET)](./level3/process-view-mdr-get.svg)
 -   [MDR Process View (PATCH)](./level3/process-view-mdr-patch.svg)
--   [SPA Process View](./level3/process-view-spa.svg)
 
 ## 4. Acceptance Criteria and Tests
 
