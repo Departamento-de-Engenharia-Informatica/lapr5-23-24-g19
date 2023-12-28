@@ -15,7 +15,7 @@ function loginViaAuth0Ui(username: string, password: string) {
     )
 }
 
-describe('Client Form e2e tests', () => {
+describe('Backoffice user Form e2e tests', () => {
     beforeEach(() => {
 
         window.localStorage.setItem('USER_ROLES', 'ADM')
@@ -49,7 +49,7 @@ describe('Client Form e2e tests', () => {
     })
 
 
-    it('should submit the form successfully and display created client', () => {
+    it('should submit the form successfully and display created Backoffice user', () => {
 
 
         const name = 'quim'
