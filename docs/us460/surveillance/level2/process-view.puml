@@ -11,13 +11,8 @@ activate usr
 usr -> ui : wants to register a new surveillance task
     activate ui
         ui -> mdr : GET /buildings
-    alt building(s) not found
             activate mdr
                 note right : see us170 documentation
-                mdr --> ui : 404: error
-                ui --> usr : informs error
-
-    else building(s) found
             mdr --> ui : 200: buildings
             deactivate mdr
 
@@ -26,7 +21,7 @@ usr -> ui : wants to register a new surveillance task
 
             usr -> ui : provides buildings
             activate ui
-                ui -> mdr : GET /floors
+        ui -> mdr : GET /buildings/{id}/floors
                 activate mdr
                 note right : see us210 documentation
                     mdr --> ui : 200: floors
@@ -46,18 +41,11 @@ usr -> ui : wants to register a new surveillance task
             activate mdr
                 mdr -> mdt : POST /jobs
                 activate mdt
-                    alt success
-                        mdt --> mdr : 201: task
-                        mdr --> ui : 201: task
-                        ui --> usr : task
-                    else task not created
-                        mdt --> mdr : 404: error
-                        mdr --> ui : 404: error
-                        ui --> usr : informs error
+                    mdt --> mdr : 201: task
                 deactivate mdt
+                mdr --> ui : 201: task
             deactivate mdr
+            ui --> usr : previews newly created task
     deactivate ui
 deactivate usr
-end
-end
 @enduml
