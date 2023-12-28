@@ -1,7 +1,7 @@
 @startuml
 autonumber
 
-actor "Campus Manager" as usr
+actor "Client" as usr
 
 participant "SPA" as ui
 participant "MDR" as mdr
