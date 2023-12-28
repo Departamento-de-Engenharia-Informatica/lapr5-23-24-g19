@@ -3,6 +3,7 @@ import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSur
 import { Either } from '../../core/logic/Result'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IGeneralTaskDTO } from '../../dto/IGeneralTaskDTO'
+import { IRobotTaskSequenceDTO } from '../../dto/IRobotTaskSequenceDTO'
 import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 import { ITaskAlgorithmDTO } from '../../dto/ITaskAlgorithmDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
@@ -31,6 +32,6 @@ export default interface ITaskService {
     updateTask(DTO: IUpdateTaskDTO): Promise<Either<TaskErrorResult, String>>
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 
-    taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, String>>
+    taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, IRobotTaskSequenceDTO>>
     taskSequenceAlgorithms(): Promise<Either<TaskErrorResult, ISequenceAlgorithmDTO[]>>
 }

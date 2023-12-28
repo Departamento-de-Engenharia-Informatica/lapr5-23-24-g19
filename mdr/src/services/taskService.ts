@@ -26,6 +26,7 @@ import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
 import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
 import { shuffle } from 'lodash'
+import { IRobotTaskSequenceDTO } from '../dto/IRobotTaskSequenceDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -219,7 +220,7 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, String>> {
+    async taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, IRobotTaskSequenceDTO>> {
         try {
             const robots = await this.robotRepo.findAll()
 

@@ -8,6 +8,7 @@ import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 import { IRobotTasksDTO } from '../../dto/IRobotTasksDTO'
 import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
+import { IRobotTaskSequenceDTO } from '../../dto/IRobotTaskSequenceDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
@@ -44,6 +45,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
 
         return paths
     }
+
     async getByFilter(dto: IFilterDTO): Promise<String> {
         var a = dto.criteria.toUpperCase()
         const res = await fetch(`${this.url}/jobs/filter?filter=${a}&rule=${dto.rule}`)
@@ -82,7 +84,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         return await res.json()
     }
 
-    async taskSequence(dto: IRobotTasksDTO): Promise<String> {
+    async taskSequence(dto: IRobotTasksDTO): Promise<IRobotTaskSequenceDTO> {
         console.log('===============')
         console.log(dto)
         const res = await fetch(`${this.url}/jobs/sequence`, {
@@ -95,7 +97,8 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
             return Promise.reject(await res.text())
         }
 
-        return await res.json()
+        const sequence = await res.json() as IRobotTaskSequenceDTO
+        return sequence
     }
 
     async getTaskSequenceAlgorithms(): Promise<ISequenceAlgorithmDTO[]> {
