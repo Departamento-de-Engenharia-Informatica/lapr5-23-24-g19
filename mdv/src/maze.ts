@@ -14,7 +14,7 @@ import ThumbRaiser from './thumb_raiser'
 import Dispatcher from './dispatcher'
 import Passage from './passage'
 import DoorSet, { DoorSetParameters } from './door_set'
-import { lobbyURI } from './main'
+import { GlobalEventDispatcher, lobbyURI } from './main'
 
 type AABB = THREE.Box3[][][]
 type position = { x: number; z: number }
@@ -209,7 +209,10 @@ export default class Maze extends THREE.Group {
         } else {
             this.fetchMap(parameters.url)
         }
+        Object.assign(this, new THREE.EventDispatcher());
+
     }
+    
 
     private async loadLobby() {
         const description = await new ThreeLoader().load<MapFile>(lobbyURI)
@@ -218,7 +221,7 @@ export default class Maze extends THREE.Group {
         this.onLoad(description)
     }
 
-    private async fetchMap(url: string) {
+    async fetchMap(url: string) {
         const description = await this.loader.load<MapFile>(url)
 
         console.log(JSON.stringify(description, null, 2))
@@ -248,6 +251,7 @@ export default class Maze extends THREE.Group {
 
     // Convert cartesian (x, y, z) coordinates to cell [row, column] coordinates
     cartesianToCell(position: THREE.Vector3) {
+        // console.log(this.scale.z,this.scale.x,this.halfSize.length,this.halfSize.width)
         return [
             Math.floor(position.z / this.scale.z + this.halfSize.length),
             Math.floor(position.x / this.scale.x + this.halfSize.width),
@@ -1003,6 +1007,7 @@ export default class Maze extends THREE.Group {
         }
 
         this._loaded = true
+        this.dispatchEvent({type:'loaded'}as any);
     }
 
     private loadElevator(

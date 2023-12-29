@@ -85,7 +85,6 @@ export default class Animations {
                     this.mixer.addEventListener('finished', () => this.actionFinished())
                     this._actionInProgress = true
                 }
-                console.log(this.activeName)
             }
             if (this._activeName != 'Idle') {
                 this.resetIdleTime()

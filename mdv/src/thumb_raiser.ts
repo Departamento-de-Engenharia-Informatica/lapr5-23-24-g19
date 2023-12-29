@@ -14,7 +14,7 @@
 // User interaction
 
 import * as THREE from 'three'
-import { loader } from './main.js'
+import { GlobalEventDispatcher, loader } from './main.js'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import Orientation from './orientation'
 import {
@@ -52,7 +52,7 @@ import {
 } from './lights'
 import Fog, { FogParameters } from './fog'
 import Camera, { CameraParameters } from './camera'
-import UserInterface from './user_interface'
+import UserInterface, { CellSegmentDTO, ElevatorSegmentDTO, IPathDTO, PassageSegmentDTO, PathSegmentDTO } from './user_interface'
 import Elevator, { ElevatorParams } from './elevator.js'
 import { normalView } from 'three/examples/jsm/nodes/Nodes.js'
 import { ToonShaderHatching } from 'three/examples/jsm/Addons.js'
@@ -62,6 +62,7 @@ import ElevatorMenu from './elevator-menu.js'
 import DoorSet from './door_set.js'
 import PassageMenu from './passage-menu.js'
 import * as TWEEN from 'three/examples/jsm/libs/tween.module.js'
+import { once } from 'lodash'
 
 /*
  * generalParameters = {
@@ -1641,6 +1642,7 @@ export default class ThumbRaiser {
         this.maze = new Maze(mazeParams, loader)
 
         this.update()
+        return this.maze;
     }
 
     update() {
@@ -1848,23 +1850,9 @@ export default class ThumbRaiser {
             }
         } else {
             const initialPosition = this.player.position.clone()
-            // // if (!this.maze?._lastPassage) {
-            //     //     this.maze._lastPassage = initialPosition
-            //     // }
-            //     if (this.inteiro == 1000) {
-            //         // console.log("100")
-            //         // const targetPosition = new THREE.Vector3(1, 0, 5); // Example target position
-            //         // this.movePlayerTo(targetPosition);
-            //         this.inteiro = 0
-            //         // const points: THREE.Vector3[]=[new THREE.Vector3(0, 0, 0),new THREE.Vector3(1, 0, 0),new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0)]
-            //         const points: number[][] = [[0, 1], [1, 0], [2, 3]];
-            //         this.animateThroughPoints(this.player, points);
-            //         // TWEEN.update()
-            // } else {
-            //     this.inteiro = this.inteiro + 1
-            //     // console.log("not yet")
-            // }
-
+            if (!this.maze?._lastPassage) {
+                    this.maze._lastPassage = initialPosition
+                }
 
             // Update the model animations
             const deltaT = this.clock.getDelta()
@@ -2088,90 +2076,103 @@ export default class ThumbRaiser {
                 this.frame.children[0].material.color.set(this.miniMapCamera.frameColor)
                 this.renderer.render(this.frame, this.camera2D) // Render the frame
             }
-            // console.log("animate")
 
         }
     }
 
-    simulate(tasks: Task[]) {
+    simulate(tasks: PathSegmentDTO[]) {
         ThumbRaiser.simulation = true
-        // const points = tasks.map(el => [el.x,el.y]);
-        const points: number[][] = [[0, 1], [1, 0], [2, 3],[3,3],[1,1],[2,2]];
-        this.tweenPlayerMovementAndOrientation(this.player, points);
-        console.log("ended")
-        // ThumbRaiser.simulation=false
+        this.tweenPlayerMovementAndOrientation(this.player, tasks);
     }
 
-    animateThroughPoints(player: Player, points: number[][], durationPerPoint: number = 1000): void {
-        let previousTween: TWEEN.Tween<THREE.Vector3> | null = null;
-        // console.log("points")
-        // console.log(points)
-        // console.log(player.position)
-        // const deltaT = this.clock.getDelta()
-        // this.animations.update(deltaT)
-
-        this.animations.fadeToAction('Walking', 3)
-
-        points.forEach((point) => {
-            const p = this.maze.cellToCartesian(point)
-            const tween = new TWEEN.Tween<THREE.Vector3>(player.position)
-                .to({ x: p.x, z: p.z }, durationPerPoint)
-                .easing(TWEEN.Easing.Quadratic.InOut);
-            // console.log("x:\t",player.position.x,"z:\t",player.position.z)
-            // console.log("x:\t",point.x,"z:\t",point.z)
-
-            if (previousTween) {
-                previousTween.chain(tween); // Chain the tweens
-            } else {
-                tween.start(); // Start the first tween immediately
-            }
-
-            previousTween = tween;
-        });
-        // this.animations.actionFinished()
-
-    }
-    tweenPlayerMovementAndOrientation(player: Player, path: number[][], durationPerPoint: number = 2000): void {
+    tweenPlayerMovementAndOrientation(player: Player, path: PathSegmentDTO[], durationPerPoint: number = 2000): void {
         let previousTween: TWEEN.Tween<any> | null = null;
-        this.animations.fadeToAction('Walking', 3)
-        for (let i = 0; i < path.length - 1; i++) {
-            console.log("w")
-            const startPosition = this.maze.cellToCartesian(path[i])
-            // const startPosition = new THREE.Vector3().copy(path[i]);
-            const endPosition = this.maze.cellToCartesian(path[i + 1])
+        const dto = path[0] as CellSegmentDTO
 
-            const directionVector = new THREE.Vector3().subVectors(endPosition, startPosition);
-            const startOrientationY = player.rotation.y;
-            const endOrientationY = Math.atan2(directionVector.x, directionVector.z);
-            
-            // Create position tween
-            const positionTween = new TWEEN.Tween(startPosition)
-                .to({ x: endPosition.x, y: endPosition.y, z: endPosition.z }, durationPerPoint)
-                .onUpdate(() => {player.position.copy(startPosition)});
+        //TODO: preciso de garantir que so continuo depois do mapa ser carregado?
+        var lastPos: number[] = [dto.x, dto.y]
+        var startOrientationY = player.rotation.y;
+        const maze = this.changeMap({
+            building: dto.building,
+            floor: dto.floor,
+            position: lastPos
+        })
+        maze.addEventListener('loaded', (event) => {
+            console.log("Loaded", path)
+            this.animations.fadeToAction('Walking', 1)
 
-            const orientationTween = new TWEEN.Tween({ y: startOrientationY })
-                .to({ y: endOrientationY }, 500)
-                .onUpdate((obj) => player.rotation.y=obj.y)
-            console.log("whatti")
+            for (let i = 0; i < path.length; i++) {
+                //cell to cell
+                if (path[i].type === 'cell') {
+                    //set positions
+                    const dto = path[i] as CellSegmentDTO
+                    const currentPos: number[] = [dto.x, dto.y]
 
-            // Chain tweens
-            if (previousTween) {
-                previousTween.chain(orientationTween,positionTween);
-            } else {
-                orientationTween.start();
-                positionTween.start();
+                    const startPosition = this.maze.cellToCartesian(lastPos)
+                    const endPosition = this.maze.cellToCartesian(currentPos)
+
+                    const positionTween = new TWEEN.Tween(startPosition)
+                        .to({ x: endPosition.x, y: endPosition.y, z: endPosition.z }, durationPerPoint)
+                        .onUpdate(() => {
+                            player.position.copy(startPosition),
+                            this.animations.fadeToAction('Walking', 1)
+                        })
+                        .onComplete(() => {
+                            console.log(this.maze.cartesianToCell(this.player.position),
+                            )
+                        })
+
+                    const directionVector = new THREE.Vector3().subVectors(endPosition, startPosition);
+                    const endOrientationY = Math.atan2(directionVector.x, directionVector.z);
+
+                    const twoPi = Math.PI * 2;
+                    if (endOrientationY - startOrientationY > Math.PI) {
+                        startOrientationY += twoPi;
+                    } else if (startOrientationY - endOrientationY > Math.PI) {
+                        startOrientationY -= twoPi;
+                    }
+
+                    const orientationTween = new TWEEN.Tween({ y: startOrientationY })
+                        .to({ y: endOrientationY }, 500)
+                        .onUpdate((obj) => {
+                            player.rotation.y = obj.y;
+                        })
+
+                    // Chain tweens
+                    if (previousTween) {
+                        previousTween.chain(orientationTween, positionTween);
+                    } else {
+                        orientationTween.start();
+                        positionTween.start();
+                    }
+                    if (i === path.length - 1) {
+                        positionTween.onComplete(() => {
+                            // Transition to the final animation state (e.g., Idle)
+                            ThumbRaiser.simulation = false
+                            this.animations.actionFinished()
+                            this.animations.fadeToAction('Idle', 0.5);
+
+                        });
+                    }
+                    previousTween = positionTween
+                    startOrientationY = endOrientationY
+                    lastPos = currentPos
+                } else if (path[i].type === 'passage' || path[i].type === 'elevator') {
+                    const remainderPath = path.slice(i + 1);
+
+                    previousTween?.onComplete(() => {
+                        if (path[i].type === 'passage') {
+                            this.tweenPlayerMovementAndOrientation(player, remainderPath, durationPerPoint);
+                        } else if (path[i].type === 'elevator') {
+                            this.tweenPlayerMovementAndOrientation(player, remainderPath, durationPerPoint);
+                        }
+                    });
+                    break;
+                }
+
             }
-            if (i === path.length - 2) {
-                positionTween.onComplete(() => {
-                    // Transition to the final animation state (e.g., Idle)
-                    ThumbRaiser.simulation=false
-                    this.animations.actionFinished()
-                    this.animations.fadeToAction('Idle', 0.5);
+        });
 
-                });
-            }
-            previousTween = positionTween;
-        }
     }
 
 }

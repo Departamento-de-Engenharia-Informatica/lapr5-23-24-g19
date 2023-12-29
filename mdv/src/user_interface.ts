@@ -99,34 +99,166 @@ export default class UserInterface extends GUI {
         //AUTOMATIC
         const autFolder = campusFolder.addFolder('Automatic')
         autFolder.domElement.style.fontSize = fontSize
-        
+
         let robots: string[] = []
         let tasks: number[] = []
-        
+
         const options2 = {
             robots: [],
             // floor: [],
             Simulate: function () {
                 const robots = optionsRobots.getValue()
                 // const floor = optionsFloors.getValue()
-                const a: Task = {
-                    building: 's',
-                    floor: 3,
-                    x: 3,
-                    y: 2
-                };
+
+                const examplePath: PathSegmentDTO[] = [
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 12
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 13
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 14
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 15
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 16
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 17
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 18
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 2,
+                        y: 21
+                    },
+                    {
+                        type: 'elevator',
+                        frombuilding: 'A',
+                        fromfloor: 1,
+                        tobuilding: 'B',
+                        tofloor: 1,
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 6,
+                        y: 19
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 5,
+                        y: 18
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 5,
+                        y: 17
+                    },
+
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 5,
+                        y: 16
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 16
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 15
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 14
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 13
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 12
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 1,
+                        x: 4,
+                        y: 11
+                    },
+                ];
+
                 if (robots && tasks) {
-                    thumbRaiser.simulate([a])
+                    thumbRaiser.simulate(examplePath)
                 } else {
                     alert('Both building and floor should be selected')
                 }
             },
         }
-        
+
         const optionsRobots = autFolder.add(options2, 'robots', robots)
-        
+
         autFolder.add(options2, 'Simulate')
-        
+
         autFolder.onOpenClose(async () => {
             const codes = await this.updateRobots()
             robots = codes
@@ -135,7 +267,7 @@ export default class UserInterface extends GUI {
         autFolder.close()
 
         //SETTINGS
-        
+
 
         const settings = this.addFolder('Settings')
         settings.domElement.style.fontSize = fontSize
@@ -561,4 +693,32 @@ export default class UserInterface extends GUI {
             }
         }
     }
+}
+
+export type IPathDTO = PathSegmentDTO[]
+
+export type PathSegmentDTO = CellSegmentDTO | ElevatorSegmentDTO | PassageSegmentDTO
+
+interface Segment {
+    type: 'cell' | 'elevator' | 'passage'
+}
+
+export type CellSegmentDTO = Segment & {
+    building: string
+    floor: number
+    x: number
+    y: number
+}
+
+export type ElevatorSegmentDTO = Segment & {
+    building: string
+    fromFloor: number
+    toFloor: number
+}
+
+export type PassageSegmentDTO = Segment & {
+    frombuilding: string
+    fromfloor: number
+    tobuilding: string
+    tofloor: number
 }

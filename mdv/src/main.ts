@@ -344,11 +344,17 @@ function initialize() {
     console.log(`MDR url in use: {${import.meta.env.VITE_MDR_URL}}`)
     console.log(`App: {${import.meta.env.VITE_APP_TITLE}}`)
 }
-
+// Global event dispatcher
+export const GlobalEventDispatcher = new THREE.EventDispatcher<Event>();
+export interface Event {
+    type: string;
+    // You can add additional properties here if needed
+}
 function animate() {
     requestAnimationFrame(animate)
     // Update the game
     TWEEN.update()
+    
     
     thumbRaiser.update()
 }
