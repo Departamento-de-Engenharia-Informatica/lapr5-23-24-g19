@@ -12,6 +12,7 @@ import ClientService from '../src/services/clientService'
 import IClientRepo from '../src/services/IRepos/IClientRepo'
 import IAuthRepo from '../src/services/IRepos/IAuthRepo'
 import IMdtAdapter from '../src/services/IRepos/IMdtRepo'
+import {IClientEmailDTO} from "../src/dto/IClientEmailDTO";
 
 describe('Client Service: Integration tests', () => {
     const sinon = createSandbox()
@@ -137,10 +138,12 @@ describe('Client Service: Integration tests', () => {
         })
     })
 
-    /*describe('deleteClient(): service + domain tests', () => {
+   /* describe('getClientsByState(): service + domain tests', () => {
         it('should work with right parameters', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
-            sinon.stub(clientRepo, 'find').resolves(({} as unknown) as Client)
+            sinon.stub(clientRepo, 'findByState').resolves(({} as unknown) as Client[])
+            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+
 
 
             const authRepo = Container.get('AuthRepo') as IAuthRepo
@@ -149,9 +152,38 @@ describe('Client Service: Integration tests', () => {
             const service = new ClientService(clientRepo, authRepo, mdtAdapter)
 
 
-            const result = await service.getClient('1211155@isep.ipp.pt')
+            const result = await service.getClientsByState('Pending')
+
 
             expect(result.isRight()).to.be.true
         })
     })*/
+
+    describe('deleteClient(): service + domain tests', () => {
+        it('should work with right parameters', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            sinon.stub(clientRepo, 'find').resolves(({} as unknown) as Client)
+
+
+            const dto: IClientEmailDTO = {
+                email: 'mzc@isep.ipp.pt',
+            }
+
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            sinon.stub(authRepo, 'deleteUser').resolves()
+
+
+            sinon.stub(clientRepo, 'delete').resolves(true)
+
+            const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
+
+            const service = new ClientService(clientRepo, authRepo, mdtAdapter)
+
+
+            const result = await service.deleteClient(dto)
+
+
+            expect(result.isRight()).to.be.true
+        })
+    })
 })
