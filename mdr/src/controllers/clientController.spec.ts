@@ -30,8 +30,8 @@ describe('Client controller Unit', () => {
     describe('createClient()', () => {
         it('should fail to create with bad parameters', async () => {
             const body = {
-                email: 'mzc@isep.ipp.pt',
                 name: 'Maria',
+                email: 'mzc@isep.ipp.pt',
                 phoneNumber: '91229',
                 vatNumber: 1102,
                 password: 'Password1$',
@@ -61,13 +61,13 @@ describe('Client controller Unit', () => {
             )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            // expect(res.status).to.have.been.calledOnceWith(422)
+             expect(res.status).to.have.been.calledOnceWith(422)
         })
 
         it('should succeed to create with correct parameters', async () => {
             const body = {
-                email: 'mzc@isep.ipp.pt',
                 name: 'Maria',
+                email: 'mzc@isep.ipp.pt',
                 phoneNumber: '912119482',
                 vatNumber: 110212558,
                 password: 'Password1$',
@@ -90,6 +90,7 @@ describe('Client controller Unit', () => {
                         name: 'Maria',
                         phoneNumber: '912119482',
                         vatNumber: 110212558,
+                        status: 'Pending',
                     })
                 },
             } as IClientService
@@ -100,7 +101,7 @@ describe('Client controller Unit', () => {
             )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            // expect(res.status).to.have.been.calledOnceWith(201)
+             expect(res.status).to.have.been.calledOnceWith(201)
         })
     })
 })
