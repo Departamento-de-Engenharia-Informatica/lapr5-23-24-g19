@@ -3,6 +3,8 @@ import { Router } from 'express'
 import Container from 'typedi'
 import config from '../../../config'
 import IPathController from '../../controllers/IControllers/IPathController'
+import { withAnyRole } from '../middlewares/authorization'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -28,6 +30,8 @@ export default (app: Router) => {
                 }).required(),
             }),
         }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.pathsBetweenBuildings(req, res, next),
     )
 

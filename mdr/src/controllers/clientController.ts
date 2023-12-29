@@ -23,8 +23,8 @@ import * as fs from 'fs/promises'
 export default class ClientController implements IClientController {
     constructor(
         @Inject(config.services.client.name) private service: IClientService,
-        @Inject(config.services.archive.name) private archiveSvc: IArchiveService
-    ) { }
+        @Inject(config.services.archive.name) private archiveSvc: IArchiveService,
+    ) {}
 
     async createClient(req: Request, res: Response, next: NextFunction) {
         try {
@@ -164,9 +164,11 @@ export default class ClientController implements IClientController {
 
             const data = result.value as IClientDataDTO
 
-            const archivePath = await this.archiveSvc.createArchive(data, { workdirBase: dto.email })
+            const archivePath = await this.archiveSvc.createArchive(data, {
+                workdirBase: dto.email,
+            })
 
-            return res.sendFile(archivePath, { root: './' }, async err => {
+            return res.sendFile(archivePath, { root: './' }, async (err) => {
                 if (err) {
                     console.error('Error sending ZIP file:', err)
                     res.status(500).send('Internal Server Error')

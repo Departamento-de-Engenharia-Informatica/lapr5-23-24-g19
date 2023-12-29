@@ -6,7 +6,7 @@ type Position = {
 }
 
 type TaskPoints = {
-    start: Position,
+    start: Position
     end: Position
     taskId: string
 }
@@ -14,8 +14,8 @@ type TaskPoints = {
 export interface IRobotSequenceDTO {
     robotName: string
     tasks: {
-        cost: number,
-        initialPosition: Position,
+        cost: number
+        initialPosition: Position
         order: TaskPoints[]
     }
 }

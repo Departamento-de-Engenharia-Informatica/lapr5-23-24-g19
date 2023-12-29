@@ -220,7 +220,9 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async taskSequence(dto: ITaskAlgorithmDTO): Promise<Either<TaskErrorResult, IRobotTaskSequenceDTO>> {
+    async taskSequence(
+        dto: ITaskAlgorithmDTO,
+    ): Promise<Either<TaskErrorResult, IRobotTaskSequenceDTO>> {
         try {
             const robots = await this.robotRepo.findAll()
 

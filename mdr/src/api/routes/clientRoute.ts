@@ -4,7 +4,8 @@ import { Container } from 'typedi'
 import config from '../../../config'
 
 import IClientController from '../../controllers/IControllers/IClientController'
-import {customJwtMiddleware, isBackoffice, isClient, requireReAuth, RolesEnum} from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
+import { customJwtMiddleware, requireReAuth, RolesEnum } from '../middlewares/isAuth'
 
 const route = Router()
 
@@ -22,12 +23,12 @@ export default (app: Router) => {
                 phoneNumber: Joi.string()
                     .regex(/^[0-9]+$/)
                     .required(),
-                vatNumber: Joi.number()
-                    .integer()
-                    .required(),
+                vatNumber: Joi.number().integer().required(),
                 password: Joi.string().required(),
             }),
         }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.ADMIN]),
         (req, res, next) => ctrl.createClient(req, res, next),
     )
 
@@ -37,23 +38,30 @@ export default (app: Router) => {
             body: Joi.object({
                 email: Joi.string().required(),
                 password: Joi.string().required(),
-            })
+            }),
         }),
-        // customJwtMiddleware,
-        // isClient(),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.CLIENT]),
         // requireReAuth(),
         (req, res, next) => ctrl.exportClientData(req, res, next),
     )
 
-    route.get('/:email',
+    route.get(
+        '/:email',
         customJwtMiddleware,
-        (req, res, next) => ctrl.getClient(req, res, next))
+        withAnyRole([RolesEnum.CLIENT]),
+        (req, res, next) => ctrl.getClient(req, res, next),
+    )
 
     route.get(
         '',
-        celebrate({ query: Joi.object({ state: Joi.string() }) }),
-        // customJwtMiddleware,
-        // isBackoffice([RolesEnum.ADMIN]),
+        celebrate({
+            query: Joi.object({
+                state: Joi.string(),
+            }),
+        }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.ADMIN]),
         (req, res, next) => ctrl.getClientsByState(req, res, next),
     )
 
@@ -65,8 +73,8 @@ export default (app: Router) => {
                 email: Joi.string().required(),
             }),
         }),
-        // customJwtMiddleware,
-        // isBackoffice([RolesEnum.ADMIN]),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.ADMIN]),
         (req, res, next) => ctrl.updateClientState(req, res, next),
     )
 
@@ -80,11 +88,14 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isClient(),
+        withAnyRole([RolesEnum.CLIENT]),
         (req, res, next) => ctrl.patchClient(req, res, next),
     )
 
-    route.delete('/:email', customJwtMiddleware, isClient(), (req, res, next) =>
-        ctrl.deleteClient(req, res, next),
+    route.delete(
+        '/:email',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.CLIENT]),
+        (req, res, next) => ctrl.deleteClient(req, res, next),
     )
 }

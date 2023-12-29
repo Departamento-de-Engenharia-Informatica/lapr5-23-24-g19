@@ -4,8 +4,8 @@ import { Container } from 'typedi'
 
 import config from '../../../config'
 import IRobotTypeController from '../../controllers/IControllers/IRobotTypeController'
-import middlewares from '../middlewares'
-import {customJwtMiddleware, isBackoffice, RolesEnum} from '../middlewares/isAuth'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
 
 const route = Router()
 
@@ -27,14 +27,14 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.FLEET_MNG]),
+        withAnyRole([RolesEnum.FLEET_MNG]),
         (req, res, next) => robotTypeController.createRobotType(req, res, next),
     )
 
     route.get(
         '',
         customJwtMiddleware,
-        isBackoffice([RolesEnum.FLEET_MNG]),
+        withAnyRole([RolesEnum.FLEET_MNG]),
         (req, res, next) => robotTypeController.getRobotTypes(req, res, next),
     )
 }

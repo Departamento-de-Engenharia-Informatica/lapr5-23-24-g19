@@ -78,8 +78,8 @@ export class ClientMap extends Mapper<Client> {
                 status: client.status,
             },
             requestedTasks: {
-                tasks: [...tasks]
-            }
+                tasks: [...tasks],
+            },
         }
     }
 }

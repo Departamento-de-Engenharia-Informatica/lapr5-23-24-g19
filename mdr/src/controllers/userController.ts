@@ -6,27 +6,26 @@ exports.getMe = async function (req, res: Response) {
     // const userRepo = Container.get(config.repos.user.name) as IUserRepo
 
     // if (!req.token || req.oken == undefined)
-        // return res.status(401).send('Token inexistente ou inválido')
+    // return res.status(401).send('Token inexistente ou inválido')
 
     // const user = await userRepo.findById(req.user.id)
-    console.log("Logging")
-    
+    console.log('Logging')
+
     if (req.auth) {
-        const me:UserDTO = {
+        const me: UserDTO = {
             email: req.auth.email,
-            roles: req.auth.roles
+            roles: req.auth.roles,
         }
         console.log(JSON.stringify(me))
 
         return res.json(me).status(200)
     }
-    console.log("whatttt")
-    
+    console.log('whatttt')
+
     return res.status(401).send('Auth token not found')
 }
 
-interface UserDTO{
-    email: string,
+interface UserDTO {
+    email: string
     roles: string[]
-
 }

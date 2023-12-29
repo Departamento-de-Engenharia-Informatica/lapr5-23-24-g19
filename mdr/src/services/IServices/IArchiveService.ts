@@ -7,5 +7,8 @@ interface _CreateOptions {
 export type CreateOptions = Partial<_CreateOptions>
 
 export default interface IArchiveService {
-    createArchive(content: { [file: string]: any }, options?: CreateOptions): Promise<FilePath>
+    createArchive(
+        content: { [file: string]: any },
+        options?: CreateOptions,
+    ): Promise<FilePath>
 }

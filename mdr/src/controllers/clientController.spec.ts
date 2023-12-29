@@ -55,7 +55,10 @@ describe('Client controller Unit', () => {
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service, {} as IArchiveService)
+            const ctrl = new ClientController(
+                <IClientService>service,
+                {} as IArchiveService,
+            )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
             // expect(res.status).to.have.been.calledOnceWith(422)
@@ -91,7 +94,10 @@ describe('Client controller Unit', () => {
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service, {} as IArchiveService)
+            const ctrl = new ClientController(
+                <IClientService>service,
+                {} as IArchiveService,
+            )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
             // expect(res.status).to.have.been.calledOnceWith(201)

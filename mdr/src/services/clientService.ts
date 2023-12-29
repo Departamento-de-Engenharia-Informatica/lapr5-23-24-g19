@@ -37,8 +37,8 @@ export default class ClientService implements IClientService {
     constructor(
         @Inject(config.repos.client.name) private repo: IClientRepo,
         @Inject(config.repos.auth.name) private authRepo: IAuthRepo,
-        @Inject(config.repos.mdt.name) private mdtAdapter: IMdtAdapter
-    ) { }
+        @Inject(config.repos.mdt.name) private mdtAdapter: IMdtAdapter,
+    ) {}
 
     async createClient(
         dto: IClientDTO,
@@ -269,7 +269,9 @@ export default class ClientService implements IClientService {
         }
     }
 
-    async getClientData(dto: IClientDataRequestDTO): Promise<Either<ClientErrorResult, IClientDataDTO>> {
+    async getClientData(
+        dto: IClientDataRequestDTO,
+    ): Promise<Either<ClientErrorResult, IClientDataDTO>> {
         try {
             const client = await this.repo.find(Email.create(dto.email).getOrThrow())
             if (!client) {
@@ -280,7 +282,7 @@ export default class ClientService implements IClientService {
             }
 
             const tasks = []
-                //await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
+            //await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
 
             return right(ClientMap.toClientData(client, tasks))
         } catch (e) {

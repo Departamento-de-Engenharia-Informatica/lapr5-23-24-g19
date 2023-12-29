@@ -32,3 +32,5 @@ coverage/
 docs/**/*.png
 *.sln
 /mdt/mdt.sln
+
+/mdr/build/

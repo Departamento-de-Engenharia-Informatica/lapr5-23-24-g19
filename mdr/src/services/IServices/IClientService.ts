@@ -38,5 +38,7 @@ export default interface IClientService {
     deleteClient(
         clientDTO: IClientEmailDTO,
     ): Promise<Either<ClientErrorResult, IDeletedClientDTO>>
-    getClientData(dto: IClientDataRequestDTO): Promise<Either<ClientErrorResult, IClientDataDTO>>
+    getClientData(
+        dto: IClientDataRequestDTO,
+    ): Promise<Either<ClientErrorResult, IClientDataDTO>>
 }

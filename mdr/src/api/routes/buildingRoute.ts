@@ -9,7 +9,8 @@ import config from '../../../config'
 import IElevatorController from '../../controllers/IControllers/IElevatorController'
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController'
 import IRoomController from '../../controllers/IControllers/IRoomController'
-import { customJwtMiddleware, isBackoffice, RolesEnum } from '../middlewares/isAuth'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
 
 const route = Router()
 
@@ -41,7 +42,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.createBuilding(req, res, next),
     )
 
@@ -54,12 +55,15 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.createFloor(req, res, next),
     )
 
-    route.get('/:id/floors', customJwtMiddleware, (req, res, next) =>
-        floorController.getFloors(req, res, next),
+    route.get(
+        '/:id/floors',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.CAMPUS_MNG, RolesEnum.TASK_MNG, RolesEnum.CLIENT]),
+        (req, res, next) => floorController.getFloors(req, res, next),
     )
 
     route.patch(
@@ -71,7 +75,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.patchFloor(req, res, next),
     )
 
@@ -84,7 +88,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.putFloor(req, res, next),
     )
 
@@ -101,7 +105,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.patchBuilding(req, res, next),
     )
 
@@ -118,7 +122,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => buildingController.putBuilding(req, res, next),
     )
 
@@ -134,7 +138,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.createElevator(req, res, next),
     )
 
@@ -150,7 +154,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.patchElevator(req, res, next),
     )
 
@@ -166,7 +170,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.putElevator(req, res, next),
     )
 
@@ -188,21 +192,21 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => roomCtrl.createRoom(req, res, next),
     )
 
     route.get(
         '/:buildingId/floors/:floorNumber/rooms',
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG, RolesEnum.TASK_MNG, RolesEnum.CLIENT]),
         (req, res, next) => roomCtrl.getRooms(req, res, next),
     )
 
     route.get(
         '/:id/elevators',
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => elevatorCtrl.getElevators(req, res, next),
     )
 
@@ -219,7 +223,7 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG, RolesEnum.TASK_MNG, RolesEnum.CLIENT]),
         (req, res, next) => {
             if (
                 (req.query.minFloors && req.query.maxFloors) ||
@@ -270,7 +274,7 @@ export default (app: Router) => {
             }).unknown(true), // This allows additional properties in the body
         }),
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorMapCtrl.updateMap(req, res, next),
     )
 
@@ -281,7 +285,7 @@ export default (app: Router) => {
     route.get(
         '/:id/floors/passages',
         customJwtMiddleware,
-        isBackoffice([RolesEnum.CAMPUS_MNG]),
+        withAnyRole([RolesEnum.CAMPUS_MNG]),
         (req, res, next) => floorController.floorsWithPassage(req, res, next),
     )
 }
