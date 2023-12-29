@@ -30,8 +30,8 @@ export default (app: Router) => {
                 }).required(),
             }),
         }),
-        customJwtMiddleware,
-        withAnyRole([RolesEnum.TASK_MNG]),
+        // customJwtMiddleware,
+        // withAnyRole([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.pathsBetweenBuildings(req, res, next),
     )
 
