@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-// import auth from './routes/userRoute'
+import auth from './routes/authRoute'
 // import user from './routes/userRoute'
 // import role from './routes/roleRoute'
 
@@ -16,7 +16,7 @@ import path from './routes/pathRoute'
 export default () => {
     const app = Router()
 
-    // auth(app)
+    auth(app)
     // role(app)
     // user(app)
 

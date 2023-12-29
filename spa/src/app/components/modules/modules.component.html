@@ -31,7 +31,7 @@
                     </div>
                 </a>
             </div>
-            <div *ngIf="usr.hasRole([rolesEnum.TKM,rolesEnum.ADM])" class="feature-div">
+            <div *ngIf="usr.hasRole([rolesEnum.TKM,rolesEnum.ADM,rolesEnum.CLT])" class="feature-div">
                 <a [routerLink]="['../task']">
                     <div class="module-border">
                         <div class="module">

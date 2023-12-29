@@ -4,12 +4,8 @@ import { Container } from 'typedi'
 import AuthService from '../../services/userService'
 import { IUserDTO } from '../../dto/IUserDTO'
 
-import middlewares from '../middlewares'
 import { celebrate, Joi } from 'celebrate'
 import winston = require('winston')
-import { checkJwt, customJwtMiddleware } from '../middlewares/isAuth'
-
-var user_controller = require('../../controllers/userController')
 
 const route = Router()
 
@@ -116,8 +112,4 @@ export default (app: Router) => {
             return next(e)
         }
     })
-
-    app.use('/users', route)
-
-    route.get('/me', customJwtMiddleware, user_controller.getMe)
 }

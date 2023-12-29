@@ -1,6 +1,7 @@
-import { Response, Request } from 'express'
+import { Response, NextFunction } from 'express'
+import { AuthRequest } from '../api/middlewares/isAuth'
 
-exports.getMe = async function (req, res: Response) {
+export async function getMe(req: AuthRequest, res: Response, _next: NextFunction) {
     // NB: a arquitetura ONION não está a ser seguida aqui
 
     // const userRepo = Container.get(config.repos.user.name) as IUserRepo

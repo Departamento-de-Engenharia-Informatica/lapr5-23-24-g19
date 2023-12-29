@@ -99,14 +99,14 @@ export const routes: Routes = [
                 path: 'create-task-surveillance',
                 component: CreateTaskSurveillanceComponent,
                 canActivate: [AuthGuard, RoleAuthGuard],
-                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
                 title: 'Create surveillance task',
             },
             {
                 path: 'create-task-delivery',
                 component: CreateTaskDeliveryComponent,
                 canActivate: [AuthGuard, RoleAuthGuard],
-                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
                 title: 'Create delivery task',
             },
             {
