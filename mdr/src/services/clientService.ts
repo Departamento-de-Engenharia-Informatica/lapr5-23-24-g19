@@ -208,6 +208,12 @@ export default class ClientService implements IClientService {
             }
 
             const client = await this.repo.find(email)
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
 
             if (dto.name) {
                 const name = Name.create(dto.name).getOrThrow()
@@ -261,7 +267,6 @@ export default class ClientService implements IClientService {
             return right({
                 email: dto.email,
             } as IDeletedClientDTO)
-
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,

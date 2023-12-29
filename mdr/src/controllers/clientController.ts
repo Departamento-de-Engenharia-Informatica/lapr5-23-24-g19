@@ -111,7 +111,6 @@ export default class ClientController implements IClientController {
         try {
             const dto = req.body as IClientWithoutPasswordDTO
             dto.email = req.params.email as string
-            console.log(dto)
 
             const result = await this.service.patchClient(dto)
             if (result.isLeft()) {
@@ -167,7 +166,7 @@ export default class ClientController implements IClientController {
                 workdirBase: dto.email,
             })
 
-            return res.sendFile(archivePath, { root: './' }, async (err) => {
+            return res.sendFile(archivePath, { root: './' }, async err => {
                 if (err) {
                     console.error('Error sending ZIP file:', err)
                     res.status(500).send('Internal Server Error')
