@@ -16,6 +16,7 @@ import { ClientMap } from '../src/mappers/ClientMap'
 import IClientService from '../src/services/IServices/IClientService'
 import ClientController from '../src/controllers/clientController'
 import IArchiveService from '../src/services/IServices/IArchiveService'
+import {IClientEmailDTO} from "../src/dto/IClientEmailDTO";
 
 describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
@@ -139,24 +140,34 @@ describe('Client controller:', () => {
 
     describe('deleteClient(): clientController + clientService integration test using spy on clientService', () => {
         it('should work with correct values', async () => {
-            const body = {
-                email: '1181478@isep.ipp.pt',
+            const email = '1155@isep.ipp.pt'
+            const name = 'jonas'
+            const phoneNumber = '910001029'
+            const vatNumber = 110000499
+
+            const params = {
+                email: email,
             }
 
             const req: Partial<Request> = {}
-            req.body = body
+            req.params = params
 
             const res: Partial<Response> = {
                 status: sandbox.spy(),
-                send: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = sandbox.spy()
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
 
             const repo = Container.get('ClientRepo') as IClientRepo
-            sandbox.stub(repo, 'find').resolves(({} as unknown) as Client)
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email as any,
+                name: name as any,
+                phoneNumber: phoneNumber as any,
+                vatNumber: vatNumber as any,
+            } as Client)
 
             const authRepo = Container.get('AuthRepo') as IAuthRepo
             sandbox.stub(authRepo, 'deleteUser').resolves()
@@ -172,12 +183,7 @@ describe('Client controller:', () => {
             await ctrl.deleteClient(<Request>req, <Response>res, <NextFunction>next)
 
             /*sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
-            sandbox.assert.calledWith(
-                serviceSpy,
-                sandbox.match({
-                    email: req.body.email,
-                }),
-            )
+            sandbox.assert.calledWith(serviceSpy, sandbox.match(req.params.email))
 
             sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
             sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))*/
