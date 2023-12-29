@@ -17,7 +17,7 @@ import IClientService from '../src/services/IServices/IClientService'
 import ClientController from '../src/controllers/clientController'
 import IArchiveService from '../src/services/IServices/IArchiveService'
 
-describe('BackofficeUser controller:', () => {
+describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
     function stubCreate<K>(klass: K) {
         sandbox.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
