@@ -23,6 +23,7 @@ describe('CreatePassageComponent', () => {
                 { code: 'C', name: 'Chemistry' },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('campus/passages/create')
         const log = Cypress.log({

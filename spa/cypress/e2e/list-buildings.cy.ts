@@ -39,6 +39,7 @@ describe('GetBuildingsComponent', () => {
                 },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('campus/buildings/list')
         const log = Cypress.log({

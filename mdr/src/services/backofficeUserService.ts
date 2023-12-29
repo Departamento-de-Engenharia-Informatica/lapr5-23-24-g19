@@ -92,6 +92,37 @@ export default class BackofficeUserService implements IBackofficeUserService {
         }
     }
 
+    async getUser(dto: {
+        email: string
+    }): Promise<Either<BackofficeUserErrorResult, ICreatedBackofficeUserDTO>> {
+        try {
+            const email = Email.create(dto.email).getOrThrow()
+
+            if (!email) {
+                return left({
+                    errorCode: BackofficeUserErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const user = await this.repo.find(email)
+            if (!user) {
+                return left({
+                    errorCode: BackofficeUserErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
+            const userDTO = BackofficeUserMap.toDTO(user)
+            return right(userDTO)
+        } catch (e) {
+            return left({
+                errorCode: BackofficeUserErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
     // TODO: refactor outside
     private async hashPassword(password: string): Promise<UserPassword> {
         const salt = randomBytes(32)

@@ -1,12 +1,8 @@
 // remove by JRT : import jwt from 'express-jwt';
-var { expressjwt: jwt } = require('express-jwt')
+const { expressjwt: jwt } = require('express-jwt')
 import jwksRsa from 'jwks-rsa'
 import config from '../../../config'
-import { GetVerificationKey } from 'express-jwt'
-import { expressJwtSecret } from 'jwks-rsa'
-import express from 'express'
-import * as jose from 'node-jose'
-import attachCurrentUser from './attachCurrentUser'
+import { Request, Response, NextFunction } from 'express'
 
 /**
  * We are assuming that the JWT will come in a header with the form
@@ -17,7 +13,7 @@ import attachCurrentUser from './attachCurrentUser'
  * GET https://my-bulletproof-api.com/stats?apiKey=${JWT}
  * Luckily this API follow _common sense_ ergo a _good design_ and don't allow that ugly stuff
  */
-const getTokenFromHeader = req => {
+const getTokenFromHeader = (req) => {
     /**
      * @TODO Edge and Internet Explorer do some weird things with the headers
      * So I believe that this should handle more 'edge' cases ;)
@@ -42,12 +38,12 @@ export const isAuth = jwt({
 })
 
 export enum RolesEnum {
-    ADM = 'ADM',
-    CLT = 'CLT',
-    CMP = 'CMP',
-    FLM = 'FLM',
-    SYSADM = 'SYSADM',
-    TKM = 'TKM',
+    ADMIN = 'ADM',
+    CLIENT = 'CLT',
+    CAMPUS_MNG = 'CMP',
+    FLEET_MNG = 'FLM',
+    SYS_ADMIN = 'SYSADM',
+    TASK_MNG = 'TKM',
 }
 
 export const checkJwt = jwt({
@@ -63,21 +59,35 @@ export const checkJwt = jwt({
     algorithms: ['RS256'],
 })
 
-export function customJwtMiddleware(req, res, next) {
+export function customJwtMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
     checkJwt(req, res, err => {
         const jweToken = req.headers.authorization?.split(' ')[1]
 
-        if(jweToken!=undefined && jweToken!=null && jweToken!='BACKEND'){
+        if (jweToken != undefined && jweToken != null && jweToken != config.specialAccessTok) {
             if (err) {
                 console.error('JWT validation error:', err)
                 return res.status(err.status || 500).json({ error: err.message })
             }
-            req.auth.email =req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email']
-            req.auth.roles =req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles']
+            req.auth.email = req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email']
+            req.auth.roles = req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles']
             console.log('User Email:', req.auth)
         }
         next()
     })
+}
+
+export type AuthRequest = Request & {
+    auth: {
+        email: string
+        roles: string[]
+    }
+}
+
+export function requireReAuth() {
+    return async (req: AuthRequest, res: Response, next: NextFunction) => {
+        // TODO: re-auth
+        return next()
+    }
 }
 
 // export function hasRole(rolesToCheck) {
@@ -93,13 +103,13 @@ export function customJwtMiddleware(req, res, next) {
 //     };
 // }
 
-export const isAdmin = (req, res, next) => {
-    const user = req.user
-    console.log(JSON.stringify(req))
+// export const isAdmin = (req, res, next) => {
+//     const user = req.user
+//     console.log(JSON.stringify(req))
 
-    if (user && user.roles && user.roles.include('admin')) {
-        return next()
-    } else {
-        return res.stats(403).json({ message: 'Forbidden' })
-    }
-}
+//     if (user && user.roles && user.roles.include('admin')) {
+//         return next()
+//     } else {
+//         return res.stats(403).json({ message: 'Forbidden' })
+//     }
+// }

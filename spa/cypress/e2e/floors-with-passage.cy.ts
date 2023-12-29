@@ -39,6 +39,7 @@ describe('List Floors with Passage e2e tests', () => {
                 },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('/campus/floors/list-floors-with-passage')
 

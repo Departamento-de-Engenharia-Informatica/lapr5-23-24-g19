@@ -18,11 +18,11 @@ const { expect } = chai
 describe('BackofficeUser controller Unit', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 
@@ -30,13 +30,14 @@ describe('BackofficeUser controller Unit', () => {
         it('should fail to create with bad parameters', async () => {
             const body = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Fleet Manager',
                 name: 'Maria',
-                phoneNumber: '91229',
+                phoneNumber: '9165874',
                 password: 'Password1$',
             }
 
             const req: Partial<Request> = {}
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -60,12 +61,13 @@ describe('BackofficeUser controller Unit', () => {
                 <NextFunction>next,
             )
 
-            // expect(res.status).to.have.been.calledOnceWith(422)
+             expect(res.status).to.have.been.calledOnceWith(422)
         })
 
         it('should succeed to create with correct parameters', async () => {
             const body = {
                 email: 'mzc@isep.ipp.pt',
+                role: 'Fleet Manager',
                 name: 'Maria',
                 phoneNumber: '912119482',
                 password: 'Password1$',
@@ -73,7 +75,7 @@ describe('BackofficeUser controller Unit', () => {
 
             const req: Partial<Request> = {}
 
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -85,6 +87,7 @@ describe('BackofficeUser controller Unit', () => {
                 async createBackofficeUser(_dto) {
                     return right({
                         email: 'mzc@isep.ipp.pt',
+                        role: 'Fleet Manager',
                         name: 'Maria',
                         phoneNumber: '912119482',
                     })
@@ -98,7 +101,7 @@ describe('BackofficeUser controller Unit', () => {
                 <NextFunction>next,
             )
 
-            // expect(res.status).to.have.been.calledOnceWith(201)
+            expect(res.status).to.have.been.calledOnceWith(201)
         })
     })
 })

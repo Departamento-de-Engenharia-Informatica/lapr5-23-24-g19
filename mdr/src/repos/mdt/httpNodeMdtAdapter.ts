@@ -7,6 +7,10 @@ import IMdtAdapter from '../../services/IRepos/IMdtRepo'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
 import { IRobotTasksDTO } from '../../dto/IRobotTasksDTO'
+import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
+import { IRobotTaskSequenceDTO } from '../../dto/IRobotTaskSequenceDTO'
+import { IClientTasksRequestDTO } from '../../dto/IClientTasksRequestDTO'
+import { IClientTaskDTO } from '../../dto/IClientTaskDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
@@ -43,6 +47,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
 
         return paths
     }
+
     async getByFilter(dto: IFilterDTO): Promise<String> {
         var a = dto.criteria.toUpperCase()
         const res = await fetch(`${this.url}/jobs/filter?filter=${a}&rule=${dto.rule}`)
@@ -81,7 +86,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         return await res.json()
     }
 
-    async taskSequence(dto: IRobotTasksDTO): Promise<String> {
+    async taskSequence(dto: IRobotTasksDTO): Promise<IRobotTaskSequenceDTO> {
         console.log('===============')
         console.log(dto)
         const res = await fetch(`${this.url}/jobs/sequence`, {
@@ -94,6 +99,36 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
             return Promise.reject(await res.text())
         }
 
+        const sequence = (await res.json()) as IRobotTaskSequenceDTO
+        return sequence
+    }
+
+    async getTaskSequenceAlgorithms(): Promise<ISequenceAlgorithmDTO[]> {
+        const res = await fetch(`${this.url}/jobs/sequence/algorithms`)
+
+        if (!res.ok) {
+            return Promise.reject(await res.text())
+        }
+
         return await res.json()
+    }
+
+    async getClientRequestedTasks(
+        dto: IClientTasksRequestDTO,
+    ): Promise<IClientTaskDTO[]> {
+        const res = await fetch(`${this.url}/jobs?client=${dto.email}`)
+
+        if (!res.ok) {
+            return Promise.reject(await res.text())
+        }
+
+        const tasks = (await res.json()) as any[]
+
+        const taskDtos = tasks.map((t) => {
+            const { JobId: _1, Email: _2, ...task } = t
+            return task as IClientTaskDTO
+        })
+
+        return taskDtos
     }
 }

@@ -21,8 +21,12 @@ package system {
 
         package "FileSystem Driver" {
         }
-        
+
         package "Planning Driver" {
+        }
+        package "MDT Driver" {
+        }
+        package "Auth Driver" {
         }
     }
 
@@ -43,6 +47,8 @@ package system {
 
         package "PlanningAdapter" {
         }
+        package "MdtAdapter"{
+        }
     }
 
     package "Application Services" {
@@ -60,8 +66,11 @@ package system {
             }
             package "IPlanningAdapter" {
             }
+            package "IMdtAdapter" {
+            }
         }
     }
+
     package "DTO" {
         package "IDTO" as dto{
         }
@@ -77,6 +86,7 @@ package system {
         package "Services" {
         }
     }
+
     "Routes" .down.> "IControllers"
     "ImplControllers" .up.|> "IControllers"
     "ImplControllers" .down.> "IAppServices"
@@ -84,12 +94,14 @@ package system {
     "ImplAppServices" .left.> "IRepositories"
     "ImplAppServices" .right.> "IFileSystemStorage"
     "ImplAppServices" .right.> "PlanningAdapter"
+    "ImplAppServices" .right.> "MdtAdapter"
     "ImplAppServices" .down.> "Aggregates"
     "ImplAppServices" .down.> "Value Objects"
     "ImplAppServices" .down.> "Services"
     "ImplAppServices" .up.> dto
     "ImplControllers" .up.> dto
     "Repositories" .up.> "Persistence"
+    "Repositories" .up.> "Auth Driver"
     "Repositories" .down.|> "IRepositories"
 
     "FileSystemStorage" .up.> "FileSystem Driver"
@@ -97,7 +109,9 @@ package system {
 
     "PlanningAdapter" .up.> "Planning Driver"
     "PlanningAdapter" .down.|> "IPlanningAdapter"
+
+    "MdtAdapter" .up.> "MDT Driver"
+    "MdtAdapter" .down.|> "IMdtAdapter"
 }
 
 @enduml
-

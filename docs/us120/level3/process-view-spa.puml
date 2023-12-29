@@ -8,8 +8,8 @@ participant "Controller" as ctrl
 
 participant "Service" as svc
 
-participant "dto:\nICreatedClientDTO" as cp_dto
-participant "dto:\nIEditClientDTO" as ec_dto
+participant "dto:\nIClientWithoutPasswordDTO" as cp_dto
+participant "dto:\nClientEmailDTO" as ec_dto
 
 participant "HTTP Driver" as http
 
@@ -43,21 +43,25 @@ else client found
             deactivate svc
             ctrl --> view : dto
         deactivate ctrl
-        view --> usr : requests password
+        view --> usr : requests client to\n delete the account
     deactivate view
 
-    usr -> view : provides password
+    usr -> view : press button to \ndelete the account
     activate view
         view -> ctrl : onSubmit()
         activate ctrl
 
+        ctrl --> ec_dto ** : create()
+        activate ec_dto
+            ec_dto --> ctrl : dto
+        deactivate ec_dto
 
             ctrl -> svc : deleteClient(dto)
             activate svc
                 svc -> http : deleteClient()
                 activate http
                     http ->] : DELETE /clients/{email}
-alt wrong client password
+alt client not found
                     http <--] : 422: error
                     http --> svc : observable
                     svc --> ctrl : error
@@ -65,18 +69,26 @@ alt wrong client password
                     ctrl --> view : alert
                     view --> usr : informs error
 else success and  client logged out
-                    http <--] : 200: OK
+                    http <--] : 200: email
                     http --> svc : observable
-                deactivate http
+               deactivate http
 
-                svc --> ctrl : OK
+                    svc --> ec_dto ** : create()
+                    activate ec_dto
+                        ec_dto --> svc : dto
+                    deactivate ec_dto
+
+
+                svc --> ctrl : dto
             deactivate svc
-            note left : creates alert with the success operation
+            note left : creates alert with the dto information
             ctrl --> view : alert
+
 
         deactivate ctrl
 
-        view --> usr : success message \nand  logout message
+        view --> usr : previews success message
+        note right : client account logged out automatically
     deactivate view
 
 

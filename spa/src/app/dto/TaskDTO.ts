@@ -33,4 +33,37 @@ export interface TaskDTO {
 
     requesterEmail: string
     requesterName: string
+
+    location: {
+        startingPoint: {
+            buildingCode: string
+            floorNumber: number
+            x: number
+            y: number
+        }
+        endingPoint: {
+            buildingCode: string
+            floorNumber: number
+            x: number
+            y: number
+        }
+    }
+
+    surveillanceContact?: {
+        name: string
+        phoneNumber: string
+    }
+
+    pickupContact?: {
+        name: string
+        phoneNumber: string
+    }
+    deliveryContact?: {
+        name: string
+        phoneNumber: string
+    }
+    confirmationCode?: {
+        code: number
+    }
+    description?: string
 }

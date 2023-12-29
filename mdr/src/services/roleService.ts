@@ -30,12 +30,12 @@ export default class RoleService implements IRoleService {
     async getRoles(): Promise<Result<ICreateRoleDTO[]>> {
         const roles = await this.roleRepo.activeRoles()
 
-        return Result.ok(roles.map(r => RoleMap.toDTO(r)))
+        return Result.ok(roles.map((r) => RoleMap.toDTO(r)))
     }
 
     public async createRole(roleDTO: ICreateRoleDTO): Promise<Result<ICreateRoleDTO>> {
         try {
-            if (!! await this.roleRepo.find(roleDTO.name)) {
+            if (!!(await this.roleRepo.find(roleDTO.name))) {
                 return Result.fail({ message: 'Role already exists' })
             }
 

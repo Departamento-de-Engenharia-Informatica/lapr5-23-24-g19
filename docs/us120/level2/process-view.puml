@@ -19,18 +19,18 @@ alt client not found
 else client found
             md --> ui : 200 : client
         deactivate md
-        ui --> usr : requests password
+        ui --> usr : requests client to\n delete the account
     deactivate ui
 
-    usr -> ui : provides password
+    usr -> ui : press button to \ndelete the account
     activate ui
-    ui -> md : DELETE /clients/{token}
+    ui -> md : DELETE /clients/{email}
         activate md
-alt wrong client password
+alt client not found
             md --> ui : 422: error
             ui --> usr : informs error
-else success
-            md --> ui : 200: message
+else success and client logged out
+            md --> ui : 200: email
             ui --> usr : success message
         deactivate md
     deactivate ui

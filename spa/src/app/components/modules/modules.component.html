@@ -6,7 +6,7 @@
             </p>
         </div>
         <div class="flex flex-wrap -m-4">
-            <div class="feature-div">
+            <div *ngIf="usr.hasRole([rolesEnum.CMP,rolesEnum.ADM])" class="feature-div">
                 <a [routerLink]="['../campus']">
                     <div class="module-border">
                         <div class="module">
@@ -31,7 +31,7 @@
                     </div>
                 </a>
             </div>
-            <div class="feature-div">
+            <div *ngIf="usr.hasRole([rolesEnum.TKM,rolesEnum.ADM,rolesEnum.CLT])" class="feature-div">
                 <a [routerLink]="['../task']">
                     <div class="module-border">
                         <div class="module">
@@ -56,7 +56,7 @@
                     </div>
                 </a>
             </div>
-            <div class="feature-div">
+            <div *ngIf="usr.hasRole([rolesEnum.FLM,rolesEnum.CMP,rolesEnum.TKM,rolesEnum.ADM])" class="feature-div">
                 <a [routerLink]="['../visualization']">
                     <div class="module-border">
                         <div class="module">
@@ -81,7 +81,7 @@
                     </div>
                 </a>
             </div>
-            <div class="feature-div">
+            <div *ngIf="usr.hasRole([rolesEnum.FLM,rolesEnum.ADM])" class="feature-div">
                 <a [routerLink]="['../fleet']">
                     <div class="module-border">
                         <div class="module">

@@ -1,0 +1,49 @@
+@startuml
+autonumber
+
+participant "Route" as r
+
+participant "Controller" as ctrl
+participant "dto:ITaskAlgorithmDTO" as dto_in
+
+participant "Service" as svc
+participant "mdtDto:IRobotTasksDTO" as mdt_dto
+
+participant "MdtAdapter" as repo
+participant "seqDto:IRobotTaskSequenceDTO" as dto_out
+
+participant "MdtDriver" as http
+
+[-> r : PATCH /tasks/sequence
+activate r
+    r -> ctrl : taskSequence()
+    activate ctrl
+        ctrl --> dto_in** : create()
+
+        ctrl -> svc : taskSequence(dto)
+        activate svc
+            svc --> mdt_dto** : create()
+
+            svc -> repo : taskSequence(mdtDto)
+            activate repo
+                repo -> http : fetch(MDT_URL/jobs/sequence, mdtDto)
+                activate http
+                    http ->] : PATCH /MDT_URL/jobs/sequence
+                    http <--] : sequence
+
+                    http -> repo : sequence
+                deactivate http
+
+                repo --> dto_out ** : create()
+                repo --> svc : seqDto
+            deactivate repo
+
+            svc --> ctrl : seqDto
+        deactivate svc
+
+        ctrl -> r : seqDto (200)
+    deactivate ctrl
+    [<-- r : 200: Ok
+deactivate r
+
+@enduml

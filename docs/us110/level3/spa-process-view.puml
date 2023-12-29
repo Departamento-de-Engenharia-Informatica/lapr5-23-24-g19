@@ -1,0 +1,50 @@
+@startuml
+autonumber
+
+actor "Client" as usr
+
+participant "HTML + CSS + JS" as view
+participant ":Controller" as ctrl
+participant ":ClientService" as svc
+
+participant "dto:ClientDataDTO" as dto
+
+participant "HTTP Driver" as http
+
+activate usr
+    usr -> view : wants to obtain a copy\nof their personal data
+
+    activate view
+        view --> usr : request password
+    deactivate view
+
+    usr -> view : re-enters password
+    activate view
+        view -> ctrl : getClientData()
+
+        activate ctrl
+            ctrl -> svc : getClientData(clientEmail, password)
+
+            activate svc
+                svc -> http : get({baseUrl}/clients/data)
+
+                activate http
+                    http ->] : GET /clients/data
+
+                    http <--] : client data
+                    http --> svc : client data
+                deactivate http
+
+                svc --> dto** : create()
+
+                svc --> ctrl : clientDataDto
+            deactivate svc
+
+            ctrl --> view : clientDataDto
+        deactivate ctrl
+
+        view --> usr : prompt download of client data
+    deactivate view
+deactivate usr
+
+@enduml

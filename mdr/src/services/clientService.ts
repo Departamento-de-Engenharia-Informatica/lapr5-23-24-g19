@@ -27,12 +27,17 @@ import IAuthRepo from './IRepos/IAuthRepo'
 import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
+import { IClientEmailDTO } from '../dto/IClientEmailDTO'
+import { IClientDataDTO } from '../dto/IClientDataDTO'
+import { IClientDataRequestDTO } from '../dto/IClientDataRequestDTO'
+import IMdtAdapter from './IRepos/IMdtRepo'
 
 @Service()
 export default class ClientService implements IClientService {
     constructor(
         @Inject(config.repos.client.name) private repo: IClientRepo,
         @Inject(config.repos.auth.name) private authRepo: IAuthRepo,
+        @Inject(config.repos.mdt.name) private mdtAdapter: IMdtAdapter,
     ) {}
 
     async createClient(
@@ -203,6 +208,12 @@ export default class ClientService implements IClientService {
             }
 
             const client = await this.repo.find(email)
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
 
             if (dto.name) {
                 const name = Name.create(dto.name).getOrThrow()
@@ -235,22 +246,51 @@ export default class ClientService implements IClientService {
     }
 
     async deleteClient(
-        dto: ICreatedClientDTO,
+        dto: IClientEmailDTO,
     ): Promise<Either<ClientErrorResult, IDeletedClientDTO>> {
         try {
             const email = Email.create(dto.email).getOrThrow()
 
-            //TODO: existe o user
-
             const client = await this.repo.find(email)
 
-            //TODO : VERIFICAR TOKEN PASSWORD ANTES DE DAR DELETE AO CLIENT
-            if (await this.repo.delete(client)) {
-                //TODO : LOGOUT BEFORE RETURN
-                return right({
-                    message: 'Account deleted',
-                } as IDeletedClientDTO)
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
             }
+
+            await this.authRepo.deleteUser(dto.email)
+
+            await this.repo.delete(client)
+
+            return right({
+                email: dto.email,
+            } as IDeletedClientDTO)
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async getClientData(
+        dto: IClientDataRequestDTO,
+    ): Promise<Either<ClientErrorResult, IClientDataDTO>> {
+        try {
+            const client = await this.repo.find(Email.create(dto.email).getOrThrow())
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${dto.email}`,
+                })
+            }
+
+            const tasks = []
+            //await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
+
+            return right(ClientMap.toClientData(client, tasks))
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,

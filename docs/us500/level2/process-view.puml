@@ -11,9 +11,9 @@ participant "Planning" as plan
 activate usr
     usr -> ui : wants to sequence approved tasks
     activate ui
-        ui -> mdr : GET /tasks/?status=approved
+        ui -> mdr : GET /tasks?status=approved
         activate mdr
-            mdr -> mdt : GET /jobs/?status=approved
+            mdr -> mdt : GET /jobs?status=approved
             activate mdt
                 mdt --> mdr : 200: tasks
             deactivate mdt

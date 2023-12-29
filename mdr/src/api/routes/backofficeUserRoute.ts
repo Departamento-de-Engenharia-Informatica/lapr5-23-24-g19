@@ -4,6 +4,8 @@ import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
 
 import IBackofficeUserController from '../../controllers/IControllers/IBackofficeUserController'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
 
 const route = Router()
 
@@ -27,6 +29,8 @@ export default (app: Router) => {
                 password: Joi.string().required(),
             }),
         }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.ADMIN]),
         (req, res, next) => ctrl.createBackofficeUser(req, res, next),
     )
 }

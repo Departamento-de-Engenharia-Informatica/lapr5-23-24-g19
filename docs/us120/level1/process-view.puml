@@ -11,14 +11,14 @@ activate usr
 alt client not found
         sys --> usr : informs error
 else client found
-        sys --> usr : requests password
+        sys --> usr : requests client to\n delete the account
     deactivate sys
 
-    usr -> sys : provides password
+    usr -> sys : press button to \ndelete the account
     activate sys
-alt wrong client password
+alt client not found
         sys --> usr : informs error
-else success
+else success and client logged out
         sys --> usr : success message
     deactivate sys
 deactivate usr

@@ -1,16 +1,18 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
 using Newtonsoft.Json;
 
 namespace DDDSample1.Infrastructure.Jobs
 {
-    public class PlanningAdapter
+    public class PlanningAdapter : IPlanningAdapter
     {
-        private string _url = "http://localhost:8090/api/";
+        // TODO: environment variable
+        private readonly string _url = "http://localhost:8090/api";
 
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public PlanningAdapter(IHttpClientFactory httpClientFactory)
         {
@@ -19,7 +21,7 @@ namespace DDDSample1.Infrastructure.Jobs
 
         public async Task<TaskSequenceDto> ComputeSequence(ComputeSequenceDto dto)
         {
-            string url = _url + "task-sequence";
+            string url = _url + "/task-sequence";
 
             string content = JsonConvert.SerializeObject(dto);
             Console.WriteLine(content);
@@ -39,6 +41,22 @@ namespace DDDSample1.Infrastructure.Jobs
             }
 
             throw new HttpRequestException("Error in the request to the planning service.");
+        }
+
+        public async Task<string[]> GetSequenceAlgorithms()
+        {
+
+            var url = _url + "/sequence-algs";
+            Console.WriteLine(url);
+            var response = await _client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<string[]>(content);
+            }
+
+            throw new HttpRequestException("Error requesting sequence algorithms");
         }
     }
 }

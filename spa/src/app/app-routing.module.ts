@@ -48,12 +48,19 @@ import { AuthGuard } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
+import { AdministratorComponent } from "./components/user/administrator-menu/administrator.component";
+import { DeleteClientComponent } from "./components/user/delete-client/delete-client.component";
+import { RoleAuthGuard } from './services/roleAuthGuard'
+import { RolesEnum } from './services/user.service'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent, title: 'Auth' },
-    { path: 'backoffice', component: CreateBackofficeUserComponent },
-    { path: 'client', component: CreateClientComponent, title: 'User' },
+
+
+
+    // { path: 'backoffice', component: CreateBackofficeUserComponent },
+    //{ path: 'client', component: CreateClientComponent, title: 'User' },
 
     {
         path: 'modules',
@@ -61,52 +68,66 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         title: 'Modules page',
     },
-    { path: 'campus', component: CampusComponent, title: 'Campus' },
+    {
+        path: 'campus', component: CampusComponent, title: 'Campus',
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
+
+    },
     {
         path: 'task',
         component: TaskMenuComponent,
-        // canActivate: [AuthGuard],
         title: 'Tasks',
+        // canActivate: [AuthGuard, RoleAuthGuard],
+        // data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
         children: [
             {
                 path: 'trace-route',
                 component: TraceRouteComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
                 title: 'Trace route',
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
             },
             {
                 path: 'list-pending',
                 component: ListPendingTasksComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
                 title: 'List pending tasks',
             },
             {
                 path: 'create-task-surveillance',
                 component: CreateTaskSurveillanceComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
                 title: 'Create surveillance task',
             },
             {
                 path: 'create-task-delivery',
                 component: CreateTaskDeliveryComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
                 title: 'Create delivery task',
             },
             {
                 path: 'approve-reject',
                 component: ApproveRejectTaskComponent,
-                canActivate: [AuthGuard],
+                // canActivate: [AuthGuard, RoleAuthGuard],
+                // data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
                 title: 'Approve/Reject task',
             },
             {
                 path: 'filter',
                 component: TasksFilterComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
                 title: 'Filter tasks',
             },
             {
                 path: 'sequence',
                 component: SequenceTaskComponent,
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
                 title: 'Sequence task',
             },
         ],
@@ -119,18 +140,22 @@ export const routes: Routes = [
     {
         path: 'fleet',
         component: FleetMenuComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
         title: 'Fleet',
         children: [],
     },
     {
         path: 'fleet/robot-types',
         component: RobotTypeComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
         children: [
             {
                 path: 'create',
                 component: CreateRobotTypeComponent,
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
                 title: 'Create robot type',
             },
         ],
@@ -138,24 +163,28 @@ export const routes: Routes = [
     {
         path: 'fleet/robots',
         component: RobotComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
         children: [
             {
                 path: 'inhibit',
                 component: InhibitRobotComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
                 title: 'Inhibt a robot',
             },
             {
                 path: 'create',
                 component: CreateRobotComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
                 title: 'Create Robot',
             },
             {
                 path: 'list',
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
                 component: ListRobotsComponent,
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.FLM] },
                 title: 'List all robots in the fleet',
             },
         ],
@@ -164,31 +193,36 @@ export const routes: Routes = [
     {
         path: 'campus/buildings',
         component: BuildingComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         title: 'Buildings',
         children: [
             {
                 path: 'create',
                 component: CreateBuildingComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'CreateBuilding',
             },
             {
                 path: 'list',
                 component: GetBuildingsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Buildings',
             },
             {
                 path: 'edit',
                 component: EditBuildingComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Edit Building',
             },
             {
                 path: 'list-by-floors',
                 component: ListBuildingsMinmaxFloorsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Buildings by Floors',
             },
         ],
@@ -197,37 +231,43 @@ export const routes: Routes = [
     {
         path: 'campus/floors',
         component: FloorComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         title: 'Floors',
         children: [
             {
                 path: 'list',
                 component: ListFloorsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Floors',
             },
             {
                 path: 'create',
                 component: CreateFloorComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Create Floor',
             },
             {
                 path: 'update-map',
                 component: UpdateMapComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Update map',
             },
             {
                 path: 'edit',
                 component: EditFloorComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Edit Floor',
             },
             {
                 path: 'list-floors-with-passage',
                 component: ListFloorsWithPassageComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Floors With Passage',
             },
         ],
@@ -236,24 +276,28 @@ export const routes: Routes = [
     {
         path: 'campus/elevators',
         component: ElevatorComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         children: [
             {
                 path: 'create',
                 component: CreateElevatorComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Create Elevator',
             },
             {
                 path: 'edit',
                 component: EditElevatorComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Edit Elevator',
             },
             {
                 path: 'list',
                 component: ListElevatorsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Elevators',
             },
         ],
@@ -262,18 +306,21 @@ export const routes: Routes = [
     {
         path: 'campus/rooms',
         component: RoomComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         children: [
             {
                 path: 'create',
                 component: CreateRoomComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Create Room',
             },
             {
                 path: 'list',
                 component: ListRoomsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List Rooms',
             },
         ],
@@ -281,13 +328,15 @@ export const routes: Routes = [
     {
         path: 'campus/passages',
         component: PassageComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         title: 'Passages',
         children: [
             {
                 path: 'edit',
                 component: EditPassageComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Edit Passage',
             },
         ],
@@ -295,22 +344,47 @@ export const routes: Routes = [
     {
         path: 'campus/passages',
         component: PassageComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
         children: [
             {
                 path: 'list',
                 component: ListPassagesBetweenBuildingsComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'List passages between buildings',
             },
             {
                 path: 'create',
                 component: CreatePassageComponent,
-                canActivate: [AuthGuard],
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
                 title: 'Create Passage',
             },
         ],
     },
+
+    {
+        path: 'users',
+        component: AdministratorComponent,
+        canActivate: [AuthGuard],
+        //title: 'Users'},
+        children: [
+            {
+                path: 'create',
+                component: CreateBackofficeUserComponent,
+                canActivate: [AuthGuard],
+                title: 'Create backoffice user',
+            },
+            {
+                path: 'approve-reject-client',
+                component: ApproveRejectClientComponent,
+                canActivate: [AuthGuard],
+                title: 'Approve or reject client',
+            },
+        ],
+    },
+
     {
         path: 'privacy-policy',
         component: PrivacyPolicyComponent,
@@ -323,9 +397,21 @@ export const routes: Routes = [
         title: 'Edit Client',
     },
     {
+        path: 'delete-client',
+        component: DeleteClientComponent,
+        canActivate: [AuthGuard],
+        title: 'Delete Client',
+    },
+    {
         path: 'approve-reject-client',
         component: ApproveRejectClientComponent,
         title: 'Approve/Reject Client',
+    },
+
+    {
+        path: 'create-client',
+        component: CreateClientComponent,
+        title: 'create Client',
     },
 
     { path: '**', component: PageNotFoundComponent },
@@ -334,4 +420,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

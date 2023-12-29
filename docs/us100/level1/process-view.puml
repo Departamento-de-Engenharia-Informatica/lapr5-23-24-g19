@@ -1,7 +1,7 @@
 @startuml
 autonumber
 
-actor "User" as usr
+actor "Client" as usr
 
 participant "<<system>>\n System RobDroneGo" as sys
 

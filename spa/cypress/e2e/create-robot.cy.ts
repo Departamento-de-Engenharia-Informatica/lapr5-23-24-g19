@@ -54,6 +54,7 @@ describe('Robot: createRobot() e2e tests', () => {
                 },
             ],
         }).as('getRobots')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('fleet/robots/create')
         const log = Cypress.log({

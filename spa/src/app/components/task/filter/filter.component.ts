@@ -2,8 +2,9 @@ import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { CreateDeliveryTaskDTO } from 'src/app/dto/CreateDeliveryTaskDTO'
 import { FilterDTO } from 'src/app/dto/FilterDTO'
-import { TaskState, TaskType } from 'src/app/dto/TaskDTO'
+import { TaskDTO, TaskState, TaskType } from 'src/app/dto/TaskDTO'
 import { TaskService } from 'src/app/services/task.service'
+import { IGeneralTaskDTO } from '../../../../../../mdr/src/dto/IGeneralTaskDTO'
 
 @Component({
     selector: 'app-filter',
@@ -11,8 +12,12 @@ import { TaskService } from 'src/app/services/task.service'
     styleUrls: ['./filter.component.css'],
 })
 export class TasksFilterComponent {
-    private allTasks: CreateDeliveryTaskDTO[] = []
-    tasks: CreateDeliveryTaskDTO[] = []
+
+    private allTasks: IGeneralTaskDTO[] = []
+    tasks: IGeneralTaskDTO[] = []
+    TaskState = TaskState;
+    TaskType = TaskType;
+
 
     criterion: string[] = ['Client', 'Type', 'State']
     states = Object.values(TaskState)
@@ -21,7 +26,7 @@ export class TasksFilterComponent {
     filterForm: FormGroup = null as unknown as FormGroup
     criteria!: string
 
-    constructor(private formBuilder: FormBuilder, private service: TaskService) {}
+    constructor(private formBuilder: FormBuilder, private service: TaskService) { }
 
     ngOnInit() {
         this.filterForm = this.formBuilder.group({
@@ -69,13 +74,14 @@ export class TasksFilterComponent {
         }
 
         this.service.getByCriteria(dto).subscribe(
-            (list: CreateDeliveryTaskDTO[]) => {
-                alert('tasks')
+            (list: IGeneralTaskDTO[]) => {
+                console.log(JSON.stringify(list))
+                // alert('tasks')
                 this.allTasks = list
                 this.tasks = this.allTasks
             },
             (error) => {
-                alert(error.error)
+                alert("Tasks not found")
                 this.allTasks = []
                 this.tasks = this.allTasks
             },

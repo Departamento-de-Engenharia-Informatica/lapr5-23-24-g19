@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { TaskDTO, TaskState } from 'src/app/dto/TaskDTO'
+import { TaskDTO, TaskState, TaskType } from 'src/app/dto/TaskDTO'
 import { UpdateTaskDTO } from 'src/app/dto/UpdateTaskDTO'
 import { TaskService } from 'src/app/services/task.service'
 
@@ -10,6 +10,7 @@ import { TaskService } from 'src/app/services/task.service'
 })
 export class ApproveRejectTaskComponent {
     tasks: TaskDTO[]
+    TaskType = TaskType; // Expose the enum to the template
 
     constructor(private service: TaskService) {
         this.tasks = []
@@ -20,7 +21,7 @@ export class ApproveRejectTaskComponent {
     }
 
     private getPendingTasks() {
-        this.service.pendingTasks().subscribe({
+        this.service.tasksOfState(TaskState.PENDING).subscribe({
             next: (tasks) => {
                 this.tasks = tasks
             },
@@ -48,9 +49,7 @@ export class ApproveRejectTaskComponent {
     private update(dto: UpdateTaskDTO) {
         this.service.updateTask(dto).subscribe({
             next: (_task) => {
-                // TODO: display message
-                alert('Updated task!')
-
+                alert('Task updated with success!')
                 this.tasks = this.tasks.filter((t) => t.id !== dto.id)
             },
             error: (err) => {

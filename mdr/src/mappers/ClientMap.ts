@@ -8,6 +8,8 @@ import { Email } from '../domain/user/email'
 import { Name } from '../domain/user/name'
 import { PhoneNumber } from '../domain/user/phoneNumber'
 import { UserPassword } from '../domain/user/userPassword'
+import { IClientDataDTO } from '../dto/IClientDataDTO'
+import { IClientTaskDTO } from '../dto/IClientTaskDTO'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 
 export class ClientMap extends Mapper<Client> {
@@ -17,7 +19,7 @@ export class ClientMap extends Mapper<Client> {
             email: client.email.value,
             phoneNumber: client.phoneNumber.value,
             vatNumber: client.vatNumber.value,
-            status: client.status
+            status: client.status,
         }
     }
 
@@ -64,5 +66,20 @@ export class ClientMap extends Mapper<Client> {
         cl.status = raw.status as ClientStatus
 
         return cl
+    }
+
+    static toClientData(client: Client, tasks: IClientTaskDTO[]): IClientDataDTO {
+        return {
+            accountData: {
+                name: client.name.value,
+                email: client.email.value,
+                phoneNumber: client.phoneNumber.value,
+                vatNumber: client.vatNumber.value.toString(),
+                status: client.status,
+            },
+            requestedTasks: {
+                tasks: [...tasks],
+            },
+        }
     }
 }

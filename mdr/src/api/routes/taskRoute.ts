@@ -3,8 +3,9 @@ import { Container } from 'typedi'
 import config from '../../../config'
 
 import ITaskController from '../../controllers/IControllers/ITaskController'
-import { Joi, celebrate } from 'celebrate'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import { celebrate, Joi } from 'celebrate'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
 
 const route = Router()
 
@@ -13,16 +14,25 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.task.name) as ITaskController
 
-    route.get('/types', customJwtMiddleware, (req, res, next) =>
-        ctrl.getTypes(req, res, next),
+    route.get(
+        '/types',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.FLEET_MNG, RolesEnum.TASK_MNG]),
+        (req, res, next) => ctrl.getTypes(req, res, next),
     )
 
-    route.post('/surveillance', customJwtMiddleware, (req, res, next) =>
-        ctrl.createSurveillanceTask(req, res, next),
+    route.post(
+        '/surveillance',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.CLIENT]),
+        (req, res, next) => ctrl.createSurveillanceTask(req, res, next),
     )
 
-    route.post('/delivery', customJwtMiddleware, (req, res, next) =>
-        ctrl.createDeliveryTask(req, res, next),
+    route.post(
+        '/delivery',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.CLIENT]),
+        (req, res, next) => ctrl.createDeliveryTask(req, res, next),
     )
 
     route.get(
@@ -32,10 +42,9 @@ export default (app: Router) => {
                 status: Joi.string(),
             },
         }),
-        // customJwtMiddleware,
-        (req, res, next) => {
-            return ctrl.getByStatus(req, res, next)
-        },
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.TASK_MNG]),
+        (req, res, next) => ctrl.getByStatus(req, res, next),
     )
 
     route.get(
@@ -47,9 +56,8 @@ export default (app: Router) => {
             },
         }),
         customJwtMiddleware,
-        (req, res, next) => {
-            return ctrl.getByFilter(req, res, next)
-        },
+        withAnyRole([RolesEnum.TASK_MNG]),
+        (req, res, next) => ctrl.getByFilter(req, res, next),
     )
 
     route.patch(
@@ -67,7 +75,16 @@ export default (app: Router) => {
                     .required(),
             }),
         }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.taskSequence(req, res, next),
+    )
+
+    route.get(
+        '/sequence/algorithms',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.TASK_MNG]),
+        (req, res, next) => ctrl.taskSequenceAlgorithms(req, res, next),
     )
 
     route.patch(
@@ -77,6 +94,8 @@ export default (app: Router) => {
                 taskStatus: Joi.string(),
             }).unknown(true), // This allows additional properties in the body
         }),
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.TASK_MNG]),
         (req, res, next) => ctrl.updateTask(req, res, next),
     )
 }

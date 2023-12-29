@@ -1,17 +1,21 @@
 import { Component, isDevMode } from '@angular/core'
 import {
     EMPTY,
+    Observable,
     Subscription,
     catchError,
     delay,
+    firstValueFrom,
     interval,
     retry,
     retryWhen,
     switchMap,
 } from 'rxjs'
 import { AppModule } from './app.module'
-import { HttpClient } from '@angular/common/http'
-import { AuthService } from '@auth0/auth0-angular'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { AuthService, User } from '@auth0/auth0-angular'
+import { UserDTO } from './dto/UserDTO'
+import { Config } from './config'
 
 @Component({
     selector: 'app-root',
@@ -19,6 +23,7 @@ import { AuthService } from '@auth0/auth0-angular'
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+
     title!: String
     isBackendUp!: boolean
 
@@ -33,6 +38,7 @@ export class AppComponent {
                         AppModule.authToken = token
                         console.log('Bearer ', token)
                     }
+                    this.getMe().subscribe()
                 })
             }
         })
@@ -69,5 +75,48 @@ export class AppComponent {
         //     this.auth.loginWithRedirect();
         //   }
         // });
+    }
+
+    private getMe(): Observable<string> {
+        const url = `${Config.baseUrl}/auth/me`
+
+        return new Observable<string>((observer) => {
+            this.getToken()
+                .then((token) => {
+                    this.http
+                        .get<string>(url, {
+                            headers: { Authorization: `Bearer ${token}` },
+                        })
+                        .subscribe(
+                            (user) => {
+                                // console.log("sub")
+                                // console.log(JSON.stringify(user))
+                                const u = user as unknown as UserDTO
+                                localStorage.setItem("USER_ROLES", u.roles[0])
+                                // alert(localStorage.getItem("USER_ROLES"))
+                            },
+                            (error) => {
+                                const errorMessage =
+                                    error instanceof HttpErrorResponse
+                                        ? error.error ||
+                                        `An unexpected error occurred: ${error.message}`
+                                        : 'An unexpected error occurred'
+                                observer.error(new Error(errorMessage))
+                            },
+                            () => observer.complete(),
+                        )
+                })
+                .catch((error) => observer.error(error))
+        })
+    }
+
+    async getToken(): Promise<string> {
+        const tokenObservable = this.auth.getAccessTokenSilently()
+        const token = await firstValueFrom(tokenObservable)
+        return token
+    }
+    logout() {
+        this.auth.logout()
+        localStorage.removeItem("USER_ROLES")
     }
 }

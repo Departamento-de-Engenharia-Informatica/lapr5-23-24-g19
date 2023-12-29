@@ -122,3 +122,25 @@ button {
     margin: 0 auto;
     display: block;
 }
+
+.privacy-policy-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.privacy-policy-container label {
+    margin-left: 8px;
+    width: 200%;
+    color: var(--secondary-color);
+}
+
+.privacy-policy-container input[type='checkbox'] {
+}
+
+.page-title {
+    @apply text-2xl font-bold text-white text-center my-16;
+}
+

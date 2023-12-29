@@ -56,7 +56,7 @@ export default class ClientRepo implements IClientRepo {
             return null
         }
 
-        return docs.map(doc => ClientMap.toDomain(doc))
+        return docs.map((doc) => ClientMap.toDomain(doc))
     }
 
     async delete(user: Client): Promise<boolean> {

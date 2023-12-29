@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Jobs.Filter;
 using DDDSample1.Domain.Jobs.Mapper;
@@ -18,13 +19,13 @@ namespace DDDSample1.Domain.Jobs
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJobRepository _repo;
-        private readonly PlanningAdapter _planning;
+        private readonly IPlanningAdapter _planning;
         private readonly ISequenceRepository _sequenceRepo;
 
         public JobService(
             IUnitOfWork unitOfWork,
             IJobRepository repo,
-            PlanningAdapter planning,
+            IPlanningAdapter planning,
             ISequenceRepository sequenceRepo
         )
         {
@@ -51,64 +52,7 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
-            Job job = dto.JobType switch
-            {
-                0
-                    => new JobSurveillance(
-                        dto.Email,
-                        new JobLocation(
-                            new Coordinates(
-                                dto.Location.StartingPoint.BuildingCode,
-                                dto.Location.StartingPoint.FloorNumber,
-                                dto.Location.StartingPoint.X,
-                                dto.Location.StartingPoint.Y
-                            ),
-                            new Coordinates(
-                                dto.Location.EndingPoint.BuildingCode,
-                                dto.Location.EndingPoint.FloorNumber,
-                                dto.Location.EndingPoint.X,
-                                dto.Location.EndingPoint.Y
-                            )
-                        ),
-                        new JobContact(
-                            dto.Surveillance.Contact.Name,
-                            dto.Surveillance.Contact.Phone
-                        )
-                    ),
-
-                1
-                    => new JobDelivery(
-                        dto.Email,
-                        new JobLocation(
-                            new Coordinates(
-                                dto.Location.StartingPoint.BuildingCode,
-                                dto.Location.StartingPoint.FloorNumber,
-                                dto.Location.StartingPoint.X,
-                                dto.Location.StartingPoint.Y
-                            ),
-                            new Coordinates(
-                                dto.Location.EndingPoint.BuildingCode,
-                                dto.Location.EndingPoint.FloorNumber,
-                                dto.Location.EndingPoint.X,
-                                dto.Location.EndingPoint.Y
-                            )
-                        ),
-                        new JobContact(
-                            dto.Delivery.PickupContact.Name,
-                            dto.Delivery.PickupContact.Phone
-                        ),
-                        new JobContact(
-                            dto.Delivery.DeliveryContact.Name,
-                            dto.Delivery.DeliveryContact.Phone
-                        ),
-                        new JobConfirmationCode(dto.Delivery.ConfirmationCode),
-                        dto.Delivery.Description
-                    ),
-
-                _ => throw new ArgumentException("Invalid job type")
-            };
-
-            await this._repo.AddAsync(job);
+            await this._repo.AddAsync(JobMapper.ToDomain(dto));
             await this._unitOfWork.CommitAsync();
 
             return dto;
@@ -150,10 +94,11 @@ namespace DDDSample1.Domain.Jobs
             return updatedJob;
         }
 
-        public async Task<PlannedTasksDTO> JobSequence(RobotTasksDTO dto)
+        public async Task<List<PlannedRobotTasksDTO>> JobSequence(RobotTasksDTO dto)
         {
-            var keypairs = new List<KeyValuePair<string, TaskSequenceDto>>();
-            foreach ((var key, var tasks) in dto.RobotTasks)
+            var robotTasks = new List<PlannedRobotTasksDTO>();
+
+            foreach ((var robotName, var tasks) in dto.RobotTasks)
             {
                 var jobs = new List<Job>();
                 foreach (var t in tasks)
@@ -171,17 +116,18 @@ namespace DDDSample1.Domain.Jobs
                     ComputeSequenceMapper.ToDTO(dto.Algorithm, jobs)
                 );
 
-                // foreach (var j in jobs)
-                // {
-                //     _ = await UpdateJob(
-                //         new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
-                //     );
-                // }
+                foreach (var j in jobs)
+                {
+                    _ = await UpdateJob(
+                        new UpdatingJobDto { JobId = j.Id.Value, JobStatus = "Planned" }
+                    );
+                    Console.WriteLine($"Updated job requested by {j.Email}");
+                }
 
                 var jobSequence = new Sequence(
                     jobs,
                     sequence.cost,
-                    key,
+                    robotName,
                     new Coordinates(
                         sequence.initialPosition.building,
                         sequence.initialPosition.floor,
@@ -190,14 +136,20 @@ namespace DDDSample1.Domain.Jobs
                     )
                 );
 
-                await this._sequenceRepo.AddAsync(jobSequence);
-                await this._unitOfWork.CommitAsync();
+                _ = await _sequenceRepo.AddAsync(jobSequence);
+                _ = await _unitOfWork.CommitAsync();
 
-                keypairs.Add(new KeyValuePair<string, TaskSequenceDto>(key, sequence));
+                robotTasks.Add(
+                    new PlannedRobotTasksDTO { RobotName = robotName, Tasks = sequence }
+                );
             }
 
-            var result = keypairs.ToDictionary(x => x.Key, x => x.Value);
-            return new PlannedTasksDTO { RobotTasks = result };
+            return robotTasks;
+        }
+
+        public async Task<string[]> JobSequenceAlgorithms()
+        {
+            return await _planning.GetSequenceAlgorithms();
         }
     }
 }

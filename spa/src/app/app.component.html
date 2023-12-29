@@ -10,7 +10,8 @@
                     <a [routerLink]="['campus']" class="mr-5 hover:text-white">Campus</a>
                     <a [routerLink]="['fleet']" class="mr-5 hover:text-white">Fleet</a>
                     <a [routerLink]="['task']" class="mr-5 hover:text-white">Task</a>
-                    <a [routerLink]="['visualization']" class="hover:text-white">Visualization</a>
+                    <a [routerLink]="['visualization']" class="mr-5 hover:text-white">Visualization</a>
+                    <a [routerLink]="['users']" class="mr-5 hover:text-white">Users</a>
                 </nav>
                 <a [routerLink]="['modules']"
                     class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-white lg:items-center lg:justify-center mb-4 md:mb-0">
@@ -46,7 +47,8 @@
                             <a [routerLink]="['auth']">LogIn</a>
                             <a [routerLink]="['user']">Profile</a>
                             <a [routerLink]="['edit-client']">Edit profile</a>
-                            <a *ngIf="auth.user$ | async as user" (click)="auth.logout()">Log out</a>
+                            <a [routerLink]="['delete-client']">Delete account</a>
+                            <a *ngIf="auth.user$ | async as user" (click)="logout()">Log out</a>
                         </div>
                     </div>
                 </div>

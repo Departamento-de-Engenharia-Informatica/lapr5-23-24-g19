@@ -10,6 +10,7 @@ import ClientController from './clientController'
 import sinon from 'sinon'
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
+import IArchiveService from '../services/IServices/IArchiveService'
 
 chai.use(sinonChai.default)
 
@@ -18,26 +19,26 @@ const { expect } = chai
 describe('Client controller Unit', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 
     describe('createClient()', () => {
         it('should fail to create with bad parameters', async () => {
             const body = {
-                email: 'mzc@isep.ipp.pt',
                 name: 'Maria',
+                email: 'mzc@isep.ipp.pt',
                 phoneNumber: '91229',
                 vatNumber: 1102,
                 password: 'Password1$',
             }
 
             const req: Partial<Request> = {}
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -54,16 +55,19 @@ describe('Client controller Unit', () => {
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service)
+            const ctrl = new ClientController(
+                <IClientService>service,
+                {} as IArchiveService,
+            )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            // expect(res.status).to.have.been.calledOnceWith(422)
+             expect(res.status).to.have.been.calledOnceWith(422)
         })
 
         it('should succeed to create with correct parameters', async () => {
             const body = {
-                email: 'mzc@isep.ipp.pt',
                 name: 'Maria',
+                email: 'mzc@isep.ipp.pt',
                 phoneNumber: '912119482',
                 vatNumber: 110212558,
                 password: 'Password1$',
@@ -71,7 +75,7 @@ describe('Client controller Unit', () => {
 
             const req: Partial<Request> = {}
 
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -86,14 +90,18 @@ describe('Client controller Unit', () => {
                         name: 'Maria',
                         phoneNumber: '912119482',
                         vatNumber: 110212558,
+                        status: 'Pending',
                     })
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service)
+            const ctrl = new ClientController(
+                <IClientService>service,
+                {} as IArchiveService,
+            )
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
-            // expect(res.status).to.have.been.calledOnceWith(201)
+             expect(res.status).to.have.been.calledOnceWith(201)
         })
     })
 })

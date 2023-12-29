@@ -1,15 +1,15 @@
 import { Router } from 'express'
-import { celebrate, Joi } from 'celebrate'
+// import { celebrate, Joi } from 'celebrate'
 
-import { Container } from 'typedi'
-import IRoleController from '../../controllers/IControllers/IRoleController'
+// import { Container } from 'typedi'
+// import IRoleController from '../../controllers/IControllers/IRoleController'
 
-import config from '../../../config'
+// import config from '../../../config'
 
-const route = Router()
+// const route = Router()
 
-export default (app: Router) => {
-    app.use('/roles', route)
+export default (_app: Router) => {
+    /*app.use('/roles', route)
 
     const ctrl = Container.get(config.controllers.role.name) as IRoleController
 
@@ -32,5 +32,5 @@ export default (app: Router) => {
             }),
         }),
         (req, res, next) => ctrl.updateRole(req, res, next),
-    )
+    )*/
 }

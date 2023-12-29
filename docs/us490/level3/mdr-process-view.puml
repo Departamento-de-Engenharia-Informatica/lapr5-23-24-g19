@@ -1,0 +1,49 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "TaskController" as ctrl
+participant "dto:\nFilterDTO" as dto
+participant "TaskService" as svc
+
+participant "Mapper" as map
+participant "taskDto:\nTaskDto" as tDto
+participant "TaskRepo" as repo
+
+[-> r:  GET {baseURL}/task?criteria={criteria}&filter={filter}
+    activate r
+        r -> ctrl : tasksByFilter(req,res,next)
+            activate ctrl
+                    ctrl -> dto ** : create(criteria,filter)
+                    activate dto
+                    dto --> ctrl : dto
+                    deactivate dto
+                ctrl -> svc : getByFilter(dto)
+                activate svc
+                    svc -> repo : getByFilter(dto)
+                    activate repo
+                    repo ->] : GET /jobs/filter?criteria={criteria}&filter={filter}
+                    repo <--] : tasks
+                    repo --> svc : tasks
+                    deactivate repo
+                    loop task in tasks
+                    svc -> map: toDto(task)
+                    activate map
+                        map -> tDto** : create()
+                        activate tDto
+                            tDto --> map :dto
+                        deactivate tDto
+                        map --> svc : taskDto
+                    deactivate map
+                    end
+
+
+                    svc --> ctrl : dto
+                deactivate svc
+
+                ctrl --> r : 200
+            deactivate ctrl
+    [<--r: 200 OK
+deactivate r
+
+@enduml

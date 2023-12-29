@@ -4,8 +4,8 @@ import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
 
 import IRobotController from '../../controllers/IControllers/IRobotController'
-import middlewares from '../middlewares'
-import { customJwtMiddleware } from '../middlewares/isAuth'
+import { customJwtMiddleware, RolesEnum } from '../middlewares/isAuth'
+import { withAnyRole } from '../middlewares/authorization'
 
 const route = Router()
 
@@ -26,6 +26,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
+        withAnyRole([RolesEnum.FLEET_MNG]),
         (req, res, next) => ctrl.createRobot(req, res, next),
     )
 
@@ -33,14 +34,18 @@ export default (app: Router) => {
         '/:id/inhibit',
         celebrate({
             body: Joi.object({
-                state: Joi.number()
-                    .integer()
-                    .required(),
+                state: Joi.number().integer().required(),
             }),
         }),
         customJwtMiddleware,
+        withAnyRole([RolesEnum.FLEET_MNG]),
         (req, res, next) => ctrl.inhibitRobot(req, res, next),
     )
 
-    route.get('', customJwtMiddleware, (req, res, next) => ctrl.getRobots(req, res, next))
+    route.get(
+        '',
+        customJwtMiddleware,
+        withAnyRole([RolesEnum.FLEET_MNG]),
+        (req, res, next) => ctrl.getRobots(req, res, next),
+    )
 }

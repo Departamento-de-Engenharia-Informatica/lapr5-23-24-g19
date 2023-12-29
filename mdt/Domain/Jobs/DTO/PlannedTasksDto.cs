@@ -1,9 +1,15 @@
-using System.Collections.Generic;
+// using System.Collections.Generic;
 
 namespace DDDSample1.Domain.Jobs.DTO
 {
-    public class PlannedTasksDTO
+    public class PlannedRobotTasksDTO
     {
-        public Dictionary<string, TaskSequenceDto> RobotTasks { get; set; }
+        public string RobotName { get; set; }
+        public TaskSequenceDto Tasks { get; set; }
     }
+
+    // public class PlannedTasksDTO
+    // {
+    //     public Dictionary<string, TaskSequenceDto> RobotTasks { get; set; }
+    // }
 }

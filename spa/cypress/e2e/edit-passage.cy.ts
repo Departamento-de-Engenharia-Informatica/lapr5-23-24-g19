@@ -23,6 +23,7 @@ describe('Edit passage e2e tests', () => {
                 { code: 'C', name: 'Chemistry' },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
 
         cy.visit('campus/passages/edit')
 

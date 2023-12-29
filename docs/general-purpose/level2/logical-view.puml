@@ -16,15 +16,19 @@ component "<<system>>\nRobDroneGo" {
     port " " as p_campus_ui
     port " " as p_fleet_ui
     port " " as p_task_ui
+    port " " as p_user_ui
     port " " as p_campus_api
     port " " as p_fleet_api
     port " " as p_task_api
+    port " " as p_user_api
 
     component "Campus Management" as campus{
     }
     component "Fleet Management" as fleet {
     }
     component "Task Management" as task {
+    }
+    component "User Management" as user {
     }
 
     ' interior
@@ -34,6 +38,10 @@ component "<<system>>\nRobDroneGo" {
     fleet -- "Fleet API"
     task --( "Fleet API"
     fleet --( "Task API"
+    user --( "User API"
+    campus -- "User API"
+    fleet -- "User API"
+    task -- "User API"
 }
 
 ' exterior
@@ -51,5 +59,10 @@ task -- p_task_ui
 task -- p_task_api
 p_task_api -up- "Task Management API"
 p_task_ui -up- "Task Management UI"
+
+user -- p_user_ui
+user -- p_user_api
+p_user_api -up- "User Management API"
+p_user_ui -up- "User Management UI"
 
 @enduml

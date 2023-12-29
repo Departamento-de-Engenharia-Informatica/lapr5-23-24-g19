@@ -1,0 +1,28 @@
+<h2 class="page-title">Delete Client Account</h2>
+<form
+    *ngIf="(auth.isAuthenticated$ | async) && email.length != 0"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data"
+>
+
+            <div class="dimension-box">
+                <span class="dimension-label">{{ email }}</span>
+            </div>
+
+            <div>
+                <button type="submit"
+                >
+                    Delete Account
+                </button>
+            </div>
+</form>
+
+
+<div *ngIf="!(auth.isAuthenticated$ | async)">
+    <h2 class="page-title">Not logged in</h2>
+</div>
+
+
+<div *ngIf="(auth.isAuthenticated$ | async) && email.length == 0">
+    <h2 class="page-title">Not logged in as a Client</h2>
+</div>

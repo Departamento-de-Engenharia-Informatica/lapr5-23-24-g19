@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express-serve-static-core'
+import { Request, Response, NextFunction } from 'express'
 
 export default interface ITaskController {
     getByStatus(req: Request, res: Response, next: NextFunction): void
@@ -9,4 +9,5 @@ export default interface ITaskController {
     updateTask(req: Request, res: Response, next: NextFunction)
 
     taskSequence(req: Request, res: Response, next: NextFunction)
+    taskSequenceAlgorithms(req: Request, res: Response, next: NextFunction)
 }

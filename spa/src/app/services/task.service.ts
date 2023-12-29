@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core'
-import { Observable, catchError, firstValueFrom, of, throwError } from 'rxjs'
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import {
+    Observable,
+    catchError,
+    first,
+    firstValueFrom,
+    map,
+    of,
+    switchMap,
+    throwError,
+} from 'rxjs'
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { CriterionDTO } from '../dto/CriteriaDTO'
 import { TaskTypeDTO } from '../dto/CreateRobotTypeDTO'
 import { Config } from '../config'
@@ -14,15 +23,14 @@ import { TaskDTO, TaskState, TaskType } from '../dto/TaskDTO'
 import { AuthService } from '@auth0/auth0-angular'
 import { ITaskAlgorithmDTO } from '../../../../mdr/src/dto/ITaskAlgorithmDTO'
 import { IGeneralTaskDTO } from '../../../../mdr/src/dto/IGeneralTaskDTO'
+import { SequenceAlgorithmDTO } from '../dto/SequenceAlgorithmDTO'
+import { RobotSequenceDTO } from '../dto/RobotSequenceDTO'
 
 @Injectable({
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) { }
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()
@@ -30,75 +38,122 @@ export class TaskService {
         return token
     }
 
-    getApprovedTasks() {
-        return new Observable<TaskDTO[]>((observer) => {
-            // this.getToken()
-            // .then((token) => {
-            this.http
-                .get<any[]>(`${Config.baseUrl}/task?status=approved`, {
-                    headers: {
-                        // Authorization: `Bearer ${token}`,
-                        'Content-type': 'application/json',
+    private getTokenObservable(): Observable<string> {
+        return this.auth.getAccessTokenSilently().pipe(
+            first(), // Take the first emitted value and complete the observable
+            catchError((error) => {
+                console.error('Error getting token:', error)
+                return throwError(() => new Error('Unable to get authentication token.'))
+            }),
+        )
+    }
+
+    // TODO: change usages of _fakeToken() to getTokenObservable()
+    private _fakeToken() {
+        return of('aa')
+    }
+
+    private authHeaders(token: string): HttpHeaders {
+        return new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        })
+    }
+
+    tasksOfState(state: TaskState): Observable<TaskDTO[]> {
+        return this._fakeToken().pipe(
+            switchMap((token) =>
+                this.http.get<IGeneralTaskDTO[]>(
+                    `${Config.baseUrl}/task?status=${state}`,
+                    {
+                        headers: this.authHeaders(token),
+                        observe: 'body',
+                        responseType: 'json',
                     },
+                ),
+            ),
+            map((tasks) =>
+                tasks.map(
+                    (t): TaskDTO => ({
+                        ...t,
+                        id: t.id.value,
+                        type: Object.values(TaskType)[t.jobType],
+                        state: Object.values(TaskState)[t.status],
+
+                        requesterEmail: t.email,
+                        requesterName:
+                            t.surveillanceContact?.name ??
+                            t.pickupContact?.name ??
+                            'Unknown',
+                    }),
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
+        )
+    }
+
+    getApprovedTasks() {
+        return this.tasksOfState(TaskState.APPROVED)
+    }
+
+    taskSequenceAlgorithms(): Observable<SequenceAlgorithmDTO[]> {
+        return this._fakeToken().pipe(
+            switchMap(token =>
+                this.http.get<SequenceAlgorithmDTO[]>(`${Config.baseUrl}/task/sequence/algorithms`, {
+                    headers: this.authHeaders(token),
                     observe: 'body',
                     responseType: 'json',
                 })
-                .subscribe(
-                    (tasks) => {
-                        const taskDtos = tasks.map((task) => {
-                            return {
-                                id: task.id.value,
-                                requesterEmail: task.email,
-                                requesterName: 'Nativo',
-                                type: Object.values(TaskType)[task.jobType],
-                                state: Object.values(TaskState)[task.status],
-                            }
-                        })
-                        observer.next(taskDtos)
-                        observer.complete()
-                    },
-                    (error) => {
-                        observer.error(error)
-                    },
-                )
-        })
-        // .catch((error) => {
-        //     observer.error(error)
-        // })
-        // })
+            ),
+            catchError((err) => throwError(() => err))
+        )
     }
 
     sequenceTasks(dto: ITaskAlgorithmDTO) {
-        return new Observable<TaskDTO[]>((observer) => {
-            // this.getToken()
-            //     .then((token) => {
-            this.http
-                .patch<TaskDTO[]>(
+        return this._fakeToken().pipe(
+            switchMap((token) => {
+                return this.http.patch<RobotSequenceDTO[]>(
                     `${Config.baseUrl}/task/sequence`,
                     JSON.stringify(dto),
                     {
-                        headers: {
-                            // Authorization: `Bearer ${token}`,
-                            'Content-type': 'application/json',
-                        },
+                        headers: this.authHeaders(token)
+                            .set('Content-Type', 'application/json'),
                         observe: 'body',
                         responseType: 'json',
                     },
                 )
-                .subscribe(
-                    (tasks) => {
-                        observer.next(tasks)
-                        observer.complete()
-                    },
-                    (error) => {
-                        observer.error(error)
-                    },
-                )
-        })
-        // .catch((error) => {
-        //     observer.error(error)
-        //         })
+            }),
+            catchError((error) => throwError(() => error))
+        );
+        // return new Observable<TaskDTO[]>((observer) => {
+        //     // this.getToken()
+        //     //     .then((token) => {
+        //     this.http
+        //         .patch<TaskDTO[]>(
+        //             `${Config.baseUrl}/task/sequence`,
+        //             JSON.stringify(dto),
+        //             {
+        //                 headers: {
+        //                     // Authorization: `Bearer ${token}`,
+        //                     'Content-type': 'application/json',
+        //                 },
+        //                 observe: 'body',
+        //                 responseType: 'json',
+        //             },
+        //         )
+        //         .subscribe(
+        //             (tasks) => {
+        //                 observer.next(tasks)
+        //                 observer.complete()
+        //             },
+        //             (error) => {
+        //                 observer.error(error)
+        //             },
+        //         )
         // })
+        // // .catch((error) => {
+        // //     observer.error(error)
+        // //         })
+        // // })
     }
 
     getCriteria() {
@@ -259,73 +314,20 @@ export class TaskService {
     updateTask(dto: UpdateTaskDTO) {
         const { id: taskId, ...body } = dto
 
-        console.log(taskId)
-        console.log(body)
+        return this._fakeToken().pipe(
+            switchMap((token) => {
+                const headers = this.authHeaders(token).set(
+                    'Content-type',
+                    'application/json',
+                )
 
-        // return of({})
-
-        return new Observable<TaskDTO>((observer) => {
-            this.getToken()
-                .then((token) => {
-                    this.http
-                        .patch<TaskDTO>(
-                            `${Config.baseUrl}/task/${taskId}`,
-                            JSON.stringify(body),
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    'Content-type': 'application/json',
-                                },
-                                observe: 'body',
-                                responseType: 'json',
-                            },
-                        )
-                        .subscribe(
-                            (task) => {
-                                observer.next(task)
-                                observer.complete()
-                            },
-                            (error) => {
-                                observer.error(error)
-                            },
-                        )
-                })
-                .catch((error) => {
-                    observer.error(error)
-                })
-        })
-    }
-
-    // TODO: napoles & jonas
-    pendingTasks() {
-        return of<TaskDTO[]>([
-            {
-                id: 'ce7a98c5-683a-4c10-9f63-92eebbafc5cb',
-                requesterEmail: '1210951@isep.ipp.pt',
-                requesterName: 'Marco Maia',
-                type: TaskType.SURVEILLANCE,
-                state: TaskState.PENDING,
-            },
-            {
-                id: 'e7a98c5-683a-4c10-9f63-92eebbafc5cb',
-                requesterEmail: '1181478@isep.ipp.pt',
-                requesterName: 'Jonas Antunes',
-                type: TaskType.DELIVERY,
-                state: TaskState.PENDING,
-            },
-            {
-                id: 'db716712-e88f-49b1-8596-c7cfe7cd3d2a',
-                requesterEmail: '1211155@isep.ipp.pt',
-                requesterName: 'Jose Rente',
-                type: TaskType.DELIVERY,
-                state: TaskState.PENDING,
-            },
-        ])
-        //
-        // return this.http.get<TaskDTO[]>(`${Config.baseUrl}/task?state=pending`, {
-        //     observe: 'body',
-        //     responseType: 'json',
-        // })
+                return this.http.patch<TaskDTO>(
+                    `${Config.baseUrl}/task/${taskId}`,
+                    JSON.stringify(body),
+                    { headers, observe: 'body', responseType: 'json' },
+                )
+            }),
+        )
     }
 
     getPendingTasks(): Observable<IGeneralTaskDTO[]> {
@@ -335,7 +337,7 @@ export class TaskService {
         })
     }
 
-    getByCriteria(dto: FilterDTO): Observable<CreateDeliveryTaskDTO[]> {
+    getByCriteria(dto: FilterDTO): Observable<IGeneralTaskDTO[]> {
         // console.log(
         //     `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
         // )
@@ -360,11 +362,11 @@ export class TaskService {
         //             return throwError(() => new Error(errorMessage))
         //         }),
         //     )
-        return new Observable<CreateDeliveryTaskDTO[]>((observer) => {
+        return new Observable<IGeneralTaskDTO[]>((observer) => {
             this.getToken()
                 .then((token) => {
                     this.http
-                        .get<CreateDeliveryTaskDTO[]>(
+                        .get<IGeneralTaskDTO[]>(
                             `${Config.baseUrl}/task/filter?criteria=${dto.criteria}&rule=${dto.rule}`,
                             {
                                 headers: {

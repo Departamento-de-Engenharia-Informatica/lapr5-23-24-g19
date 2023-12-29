@@ -1,4 +1,15 @@
-<form [formGroup]="createSurveillanceForm" (ngSubmit)="onSubmit()">
+<form
+    *ngIf="
+        (authService.isAuthenticated$ | async) &&
+        createSurveillanceForm.value.email.length != 0
+    "
+    [formGroup]="createSurveillanceForm"
+    (ngSubmit)="onSubmit()"
+>
+    <div class="dimension-box">
+        <span class="dimension-label">{{ createSurveillanceForm.value.email }}</span>
+    </div>
+
     <div class="introduce">
         <div class="box">
             <div>
@@ -62,3 +73,7 @@
 
     <button type="submit" [disabled]="createSurveillanceForm.invalid">Submit</button>
 </form>
+
+<div *ngIf="!(authService.isAuthenticated$ | async)">
+    <h2 class="page-title">Not logged in</h2>
+</div>

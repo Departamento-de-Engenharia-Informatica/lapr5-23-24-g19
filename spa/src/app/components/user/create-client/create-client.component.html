@@ -1,12 +1,18 @@
+<h2 class="page-title">Create Client</h2>
 <div>
     <div class="form-popup" id="myForm">
-        <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+
+        <form
+            [formGroup]="form"
+            (ngSubmit)="submit()"
+            enctype="multipart/form-data"
+        >
+
             <div class="form-container">
                 <div class="row">
                     <div>
                         <label for="name">Name:</label>
                         <input
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="name"
                             type="text"
                             formControlName="name"
@@ -18,8 +24,8 @@
                     <div>
                         <label for="email">Email:</label>
                         <input
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="email"
+                            pattern=".+@isep\.ipp\.pt$"
                             type="text"
                             formControlName="email"
                         />
@@ -28,10 +34,10 @@
 
                 <div class="row">
                     <div>
-                        <label for="phoneNumber">PhoneNumber:</label>
+                        <label for="phoneNumber">Phone Number:</label>
                         <input
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="phoneNumber"
+                            pattern="[0-9]{9}"
                             type="text"
                             formControlName="phoneNumber"
                         />
@@ -40,10 +46,10 @@
 
                 <div class="row">
                     <div>
-                        <label for="vatNumber">VatNumber:</label>
+                        <label for="vatNumber">VAT Number:</label>
                         <input
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="vatNumber"
+                            pattern="[0-9]{9}"
                             type="text"
                             formControlName="vatNumber"
                         />
@@ -54,15 +60,27 @@
                     <div>
                         <label for="password">Password:</label>
                         <input
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="password"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$"
                             type="password"
                             formControlName="password"
                         />
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="form.invalid">Submit</button>
+                <div class="row">
+                    <div class="privacy-policy-container">
+                        <input
+                            type="checkbox"
+                            id="privacyPolicy"
+                            class="form-checkbox h-5 w-5"
+                            (change)="onPrivacyPolicyChange($event)"
+                        />
+                        <label>Agree to our <a [routerLink]="['/privacy-policy']" class="text-blue-500" >Privacy Policy</a></label>
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="form.invalid || !isPrivacyPolicyAgreed">Submit</button>
             </div>
         </form>
     </div>

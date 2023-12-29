@@ -34,6 +34,8 @@ context('Edit Building Component', () => {
                 },
             ],
         }).as('getBuildings')
+        window.localStorage.setItem('USER_ROLES', 'ADM')
+
         cy.visit('/campus/buildings/edit')
 
         const log = Cypress.log({

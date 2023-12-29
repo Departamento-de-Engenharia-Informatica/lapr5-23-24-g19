@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AuthService } from '@auth0/auth0-angular'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
 import { CreateDeliveryTaskDTO } from 'src/app/dto/CreateDeliveryTaskDTO'
 import { RoomDTO } from 'src/app/dto/RoomDTO'
@@ -38,9 +39,10 @@ export class CreateTaskDeliveryComponent {
         private floorService: FloorService,
         private roomService: RoomService,
         private taskService: TaskService,
+        public authService: AuthService,
     ) {
         this.createDeliveryForm = this.formBuilder.group({
-            email: [null, [Validators.required]],
+            email: ['', [Validators.required]],
 
             startBuildingCode: [null, [Validators.required]],
             startFloorNumber: [null, [Validators.required]],
@@ -62,8 +64,17 @@ export class CreateTaskDeliveryComponent {
     }
 
     ngOnInit(): void {
-        this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
-            this.buildings = list
+        this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+                console.log('Authenticated')
+                this.authService.user$.subscribe((user) => {
+                    this.createDeliveryForm.controls['email'].setValue(user?.email)
+                })
+
+                this.buildingService.getBuildings().subscribe((list: BuildingDTO[]) => {
+                    this.buildings = list
+                })
+            }
         })
     }
 
@@ -188,20 +199,33 @@ export class CreateTaskDeliveryComponent {
         this.taskService.createDeliveryTask(dto).subscribe(
             (task: CreateDeliveryTaskDTO) => {
                 let alertMessage = `Task created successfully!`
+                alertMessage += `\nEmail: ${dto.email}`
+                alertMessage += `\nStart building: ${dto.startBuildingCode}`
+                alertMessage += `\nStart floor: ${dto.startFloorNumber}`
+                alertMessage += `\nStart room: ${dto.startRoom}`
+                alertMessage += `\nGoal building: ${dto.goalBuildingCode}`
+                alertMessage += `\nGoal floor: ${dto.goalFloorNumber}`
+                alertMessage += `\nGoal room: ${dto.goalRoom}`
+                alertMessage += `\nPickup contact name: ${dto.pickupContactName}`
+                alertMessage += `\nPickup contact phone: ${dto.pickupContactPhone}`
+                alertMessage += `\nDelivery contact name: ${dto.deliveryContactName}`
+                alertMessage += `\nDelivery contact phone: ${dto.deliveryContactPhone}`
+
+                if (description !== '') alertMessage += `\nDescription: ${description}`
 
                 alert(alertMessage)
 
-                // this.createSurveillanceForm.reset({
-                //     buildingCode: this.selectedBuilding,
-                //     description: '',
-                // })
+                this.createDeliveryForm.reset({
+                    email: this.createDeliveryForm.value.email,
+                    confirmationCode: this.generateConfirmationCode(),
+                })
             },
             (error) => {
                 alert(error.error)
-                // this.createFloorForm.reset({
-                //     buildingCode: this.selectedBuilding,
-                //     description: '',
-                // })
+                this.createDeliveryForm.reset({
+                    email: this.createDeliveryForm.value.email,
+                    confirmationCode: this.generateConfirmationCode(),
+                })
             },
         )
     }

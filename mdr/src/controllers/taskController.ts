@@ -1,11 +1,11 @@
 import config from '../../config'
 import { Inject, Service } from 'typedi'
+import { Request, Response, NextFunction } from 'express'
 import ITaskController from './IControllers/ITaskController'
 import ITaskService, {
     TaskErrorCode,
     TaskErrorResult,
 } from '../services/IServices/ITaskService'
-import { Request, Response, NextFunction } from 'express-serve-static-core'
 import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
 import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
@@ -149,11 +149,34 @@ export default class TaskController implements ITaskController {
         }
     }
 
+    async taskSequenceAlgorithms(_: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.taskSequenceAlgorithms()
+
+            if (result.isLeft()) {
+                const err = result.value as TaskErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            return res.json(result.value).status(200)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
     private resolveHttpCode(result: TaskErrorCode) {
         let ret: number
         switch (result) {
             case TaskErrorCode.BussinessRuleViolation:
                 ret = 422
+                break
+            case TaskErrorCode.NotFound:
+                ret = 404
+                break
+            case TaskErrorCode.AdapterFailure:
+                ret = 502
                 break
             default:
                 ret = 400

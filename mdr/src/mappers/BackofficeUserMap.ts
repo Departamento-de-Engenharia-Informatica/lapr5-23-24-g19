@@ -46,7 +46,6 @@ export class BackofficeUserMap extends Mapper<BackofficeUser> {
         const roleRepo = Container.get(config.repos.role.name) as IRoleRepo
         const role = await roleRepo.find(raw.role)
 
-
         const backofficeUser = BackofficeUser.create(
             {
                 email,

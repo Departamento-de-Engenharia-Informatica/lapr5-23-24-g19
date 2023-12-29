@@ -1,19 +1,19 @@
 @startuml
 autonumber
 
-participant ":JobApiController" as ctrl
+participant "APIController" as ctrl
 
 participant "dto:UpdatingJobDto" as dto
 
-participant ":JobService" as svc
+participant "Service" as svc
 
 participant "props:JobUpdateProps" as props
 
-participant ":JobRepository" as repo
+participant "Repository" as repo
 
 participant ":Job" as job
 
-participant ":JobMapper" as mapper
+participant "JobMapper" as mapper
 participant "jobDto:JobDto" as j_dto
 
 [-> ctrl : PATCH /jobs/{:id}

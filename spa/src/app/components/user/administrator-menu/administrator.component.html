@@ -1,0 +1,24 @@
+<section class="text-gray-400 bg-gray-900 body-font" style="margin-bottom: 20px">
+    <section
+        class="text-gray-400 body-font bg-gray-900"
+        style="display: flex; margin-left: 25%; margin-right: 25%"
+    >
+        <div class="top-menu">
+            <div>
+                <a [routerLink]="['create']">
+                    <button class="button-top-menu" id="create" type="button">
+                        Create backoffice user
+                    </button>
+                </a>
+            </div>
+            <div>
+                <a [routerLink]="['approve-reject-client']">
+                    <button class="button-top-menu" id="approveorreject" type="button">
+                        Approve or reject client
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+</section>
+<router-outlet></router-outlet>
