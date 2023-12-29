@@ -1,3 +1,5 @@
+import { IClientTaskDTO } from '../../dto/IClientTaskDTO'
+import { IClientTasksRequestDTO } from '../../dto/IClientTasksRequestDTO'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IRobotTasksDTO } from '../../dto/IRobotTasksDTO'
 import { IRobotTaskSequenceDTO } from '../../dto/IRobotTaskSequenceDTO'
@@ -14,4 +16,6 @@ export default interface IMdtAdapter {
 
     taskSequence(dto: IRobotTasksDTO): Promise<IRobotTaskSequenceDTO>
     getTaskSequenceAlgorithms(): Promise<ISequenceAlgorithmDTO[]>
+
+    getClientRequestedTasks(dto: IClientTasksRequestDTO): Promise<IClientTaskDTO[]>
 }

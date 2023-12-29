@@ -2,11 +2,7 @@
 const { expressjwt: jwt } = require('express-jwt')
 import jwksRsa from 'jwks-rsa'
 import config from '../../../config'
-import { GetVerificationKey } from 'express-jwt'
-import { expressJwtSecret } from 'jwks-rsa'
-import express, { Request, Response, NextFunction } from 'express'
-import * as jose from 'node-jose'
-import attachCurrentUser from './attachCurrentUser'
+import { Request, Response, NextFunction } from 'express'
 import Container from 'typedi'
 import IClientService from '../../services/IServices/IClientService'
 import IBackofficeUserService from '../../services/IServices/IBackofficeUserService'
@@ -115,6 +111,8 @@ export function isBackoffice(anyOfRoles: RolesEnum[]) {
     return async (req: AuthRequest, res: Response, next: NextFunction) => {
         const auth: { email: string; roles: string[] } = req.auth
 
+        console.log(`Role for user ${auth.email}: ${auth.roles}`)
+
         if (auth.roles.includes(RolesEnum.CLIENT)) {
             return res.status(403).json({ message: 'Forbidden' })
         }
@@ -130,6 +128,13 @@ export function isBackoffice(anyOfRoles: RolesEnum[]) {
             return res.status(403).json({ message: 'Forbidden' })
         }
 
+        return next()
+    }
+}
+
+export function requireReAuth() {
+    return async (req: AuthRequest, res: Response, next: NextFunction) => {
+        // TODO: re-auth
         return next()
     }
 }

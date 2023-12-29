@@ -13,10 +13,18 @@ import { IDeletedClientDTO } from '../dto/IDeletedClientDTO'
 import { IClientWithoutPasswordDTO } from '../dto/IClientWithoutPasswordDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
 import { IClientEmailDTO } from '../dto/IClientEmailDTO'
+import { IClientDataRequestDTO } from '../dto/IClientDataRequestDTO'
+import { IClientDataDTO } from '../dto/IClientDataDTO'
+import IArchiveService from '../services/IServices/IArchiveService'
+
+import * as fs from 'fs/promises'
 
 @Service()
 export default class ClientController implements IClientController {
-    constructor(@Inject(config.services.client.name) private service: IClientService) {}
+    constructor(
+        @Inject(config.services.client.name) private service: IClientService,
+        @Inject(config.services.archive.name) private archiveSvc: IArchiveService
+    ) { }
 
     async createClient(req: Request, res: Response, next: NextFunction) {
         try {
@@ -136,6 +144,38 @@ export default class ClientController implements IClientController {
 
             const message = result.value as IDeletedClientDTO
             return res.status(200).send(message)
+        } catch (e) {
+            return next(e)
+        }
+    }
+
+    async exportClientData(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto: IClientDataRequestDTO = { email: req.body.email }
+
+            const result = await this.service.getClientData(dto)
+
+            if (result.isLeft()) {
+                const err = result.value as ClientErrorResult
+                return res
+                    .status(this.resolveHttpCode(err.errorCode))
+                    .send(JSON.stringify(err.message))
+            }
+
+            const data = result.value as IClientDataDTO
+
+            const archivePath = await this.archiveSvc.createArchive(data, { workdirBase: dto.email })
+
+            return res.sendFile(archivePath, { root: './' }, async err => {
+                if (err) {
+                    console.error('Error sending ZIP file:', err)
+                    res.status(500).send('Internal Server Error')
+                } else {
+                    // cleanup archive
+                    await fs.unlink(archivePath)
+                    console.log('Temporary files cleaned up successfully')
+                }
+            })
         } catch (e) {
             return next(e)
         }

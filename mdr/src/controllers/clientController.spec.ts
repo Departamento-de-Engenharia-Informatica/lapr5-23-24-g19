@@ -10,6 +10,7 @@ import ClientController from './clientController'
 import sinon from 'sinon'
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
+import IArchiveService from '../services/IServices/IArchiveService'
 
 chai.use(sinonChai.default)
 
@@ -54,7 +55,7 @@ describe('Client controller Unit', () => {
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service)
+            const ctrl = new ClientController(<IClientService>service, {} as IArchiveService)
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
             // expect(res.status).to.have.been.calledOnceWith(422)
@@ -90,7 +91,7 @@ describe('Client controller Unit', () => {
                 },
             } as IClientService
 
-            const ctrl = new ClientController(<IClientService>service)
+            const ctrl = new ClientController(<IClientService>service, {} as IArchiveService)
             await ctrl.createClient(<Request>req, <Response>res, <NextFunction>next)
 
             // expect(res.status).to.have.been.calledOnceWith(201)

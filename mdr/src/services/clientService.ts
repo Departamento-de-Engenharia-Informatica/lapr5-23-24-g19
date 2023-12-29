@@ -28,13 +28,17 @@ import { IAuthUserDTO } from '../dto/IAuthUserDTO'
 import { IAssingRoleDTO } from '../dto/IAssignRoleDTO'
 import IUpdateClientStateDTO from '../dto/IUpdateClientStateDTO'
 import { IClientEmailDTO } from '../dto/IClientEmailDTO'
+import { IClientDataDTO } from '../dto/IClientDataDTO'
+import { IClientDataRequestDTO } from '../dto/IClientDataRequestDTO'
+import IMdtAdapter from './IRepos/IMdtRepo'
 
 @Service()
 export default class ClientService implements IClientService {
     constructor(
         @Inject(config.repos.client.name) private repo: IClientRepo,
         @Inject(config.repos.auth.name) private authRepo: IAuthRepo,
-    ) {}
+        @Inject(config.repos.mdt.name) private mdtAdapter: IMdtAdapter
+    ) { }
 
     async createClient(
         dto: IClientDTO,
@@ -257,6 +261,28 @@ export default class ClientService implements IClientService {
                     email: dto.email,
                 } as IDeletedClientDTO)
             }
+        } catch (e) {
+            return left({
+                errorCode: ClientErrorCode.BussinessRuleViolation,
+                message: e.message,
+            })
+        }
+    }
+
+    async getClientData(dto: IClientDataRequestDTO): Promise<Either<ClientErrorResult, IClientDataDTO>> {
+        try {
+            const client = await this.repo.find(Email.create(dto.email).getOrThrow())
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${dto.email}`,
+                })
+            }
+
+            const tasks = []
+                //await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
+
+            return right(ClientMap.toClientData(client, tasks))
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,

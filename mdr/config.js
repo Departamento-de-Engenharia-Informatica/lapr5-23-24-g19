@@ -217,6 +217,10 @@ export default {
     },
 
     services: {
+        archive: {
+            name: 'ZipArchiveService',
+            path: '../services/zipArchiveService',
+        },
         role: {
             name: 'RoleService',
             path: '../services/roleService',

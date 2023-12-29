@@ -5,6 +5,8 @@ import { ICreatedClientDTO } from '../../dto/ICreatedClientDTO'
 import { IDeletedClientDTO } from '../../dto/IDeletedClientDTO'
 import IUpdateClientStateDTO from '../../dto/IUpdateClientStateDTO'
 import { IClientEmailDTO } from '../../dto/IClientEmailDTO'
+import { IClientDataRequestDTO } from '../../dto/IClientDataRequestDTO'
+import { IClientDataDTO } from '../../dto/IClientDataDTO'
 
 export enum ClientErrorCode {
     NotFound,
@@ -36,4 +38,5 @@ export default interface IClientService {
     deleteClient(
         clientDTO: IClientEmailDTO,
     ): Promise<Either<ClientErrorResult, IDeletedClientDTO>>
+    getClientData(dto: IClientDataRequestDTO): Promise<Either<ClientErrorResult, IClientDataDTO>>
 }

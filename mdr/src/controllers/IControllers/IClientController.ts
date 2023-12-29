@@ -7,4 +7,6 @@ export default interface IClientController {
     getClientsByState(req: Request, res: Response, next: NextFunction)
     patchClient(req: Request, res: Response, next: NextFunction)
     deleteClient(req: Request, res: Response, next: NextFunction)
+
+    exportClientData(req: Request, res: Response, next: NextFunction)
 }
