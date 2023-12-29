@@ -16,7 +16,8 @@ import { ClientMap } from '../src/mappers/ClientMap'
 import IClientService from '../src/services/IServices/IClientService'
 import ClientController from '../src/controllers/clientController'
 import IArchiveService from '../src/services/IServices/IArchiveService'
-import {IClientEmailDTO} from "../src/dto/IClientEmailDTO";
+import { IClientEmailDTO } from '../src/dto/IClientEmailDTO'
+import { ClientStatus } from '../src/domain/user/client/status'
 
 describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
@@ -442,6 +443,164 @@ describe('Client controller:', () => {
 
             sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
             sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(404))
+        })
+    })
+
+    describe('updateClientState(): clientController + clientService integration test using spy on clientService', () => {
+        it('should not work with invalid state', async () => {
+            const email = 'alvarocampos@isep.ipp.pt'
+            const state = 'invalid'
+
+            const req: Partial<Request> = {}
+            req.body = {
+                email: email,
+                state: state,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'updateClientState')
+
+            const archiveSvcSpy = Container.get('ZipArchiveService') as IArchiveService
+
+            const ctrl = new ClientController(service, archiveSvcSpy)
+            await ctrl.updateClientState(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(400))
+        })
+
+        it('should be able to approve client', async () => {
+            const email = 'alvarocampos@isep.ipp.pt'
+            const state = 'approved'
+
+            const req: Partial<Request> = {}
+            req.body = {
+                email: email,
+                state: state,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            stubCreate(Email)
+            const repo = Container.get('ClientRepo') as IClientRepo
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+            } as Client)
+
+            sandbox.stub(authRepo, 'unblockUser').resolves()
+
+            sandbox.stub(repo, 'save').resolves({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+            } as Client)
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+                status: 'Approved',
+            })
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'updateClientState')
+
+            const archiveSvcSpy = Container.get('ZipArchiveService') as IArchiveService
+
+            const ctrl = new ClientController(service, archiveSvcSpy)
+            await ctrl.updateClientState(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                    state: req.body.state,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))
+        })
+
+        it('should be able to reject client', async () => {
+            const email = 'alvarocampos@isep.ipp.pt'
+            const state = 'rejected'
+
+            const req: Partial<Request> = {}
+            req.body = {
+                email: email,
+                state: state,
+            }
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = () => {}
+
+            stubCreate(Email)
+            const repo = Container.get('ClientRepo') as IClientRepo
+
+            sandbox.stub(repo, 'find').resolves({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+            } as Client)
+
+            sandbox.stub(repo, 'save').resolves({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+            } as Client)
+
+            sandbox.stub(ClientMap, 'toDTO').returns({
+                email: email as any,
+                name: 'Alvaro' as any,
+                phoneNumber: '912201029' as any,
+                vatNumber: 110220499 as any,
+                status: 'Rejected',
+            })
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'updateClientState')
+
+            const archiveSvcSpy = Container.get('ZipArchiveService') as IArchiveService
+
+            const ctrl = new ClientController(service, archiveSvcSpy)
+            await ctrl.updateClientState(<Request>req, <Response>res, <NextFunction>next)
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                    state: req.body.state,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))
         })
     })
 })
