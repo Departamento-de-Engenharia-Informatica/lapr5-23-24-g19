@@ -256,11 +256,12 @@ export default class ClientService implements IClientService {
 
             await this.authRepo.deleteUser(dto.email)
 
-            if (await this.repo.delete(client)) {
-                return right({
-                    email: dto.email,
-                } as IDeletedClientDTO)
-            }
+            await this.repo.delete(client)
+
+            return right({
+                email: dto.email,
+            } as IDeletedClientDTO)
+
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,

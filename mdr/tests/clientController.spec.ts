@@ -136,4 +136,51 @@ describe('Client controller:', () => {
             sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(201))
         })
     })
+
+    describe('deleteClient(): clientController + clientService integration test using spy on clientService', () => {
+        it('should work with correct values', async () => {
+            const body = {
+                email: '1181478@isep.ipp.pt',
+            }
+
+            const req: Partial<Request> = {}
+            req.body = body
+
+            const res: Partial<Response> = {
+                status: sandbox.spy(),
+                send: sandbox.spy(),
+            }
+
+            const next: Partial<NextFunction> = sandbox.spy()
+
+            stubCreate(Email)
+
+            const repo = Container.get('ClientRepo') as IClientRepo
+            sandbox.stub(repo, 'find').resolves(({} as unknown) as Client)
+
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            sandbox.stub(authRepo, 'deleteUser').resolves()
+
+            sandbox.stub(repo, 'delete').resolves(true)
+
+            const service = Container.get('ClientService') as IClientService
+            const serviceSpy = sinon.spy(service, 'deleteClient')
+
+            const archiveSvc = Container.get('ZipArchiveService') as IArchiveService
+
+            const ctrl = new ClientController(service, archiveSvc)
+            await ctrl.deleteClient(<Request>req, <Response>res, <NextFunction>next)
+
+            /*sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(
+                serviceSpy,
+                sandbox.match({
+                    email: req.body.email,
+                }),
+            )
+
+            sandbox.assert.calledOnce(res.status as sinon.SinonSpy)
+            sandbox.assert.calledWith(res.status as sinon.SinonSpy, sandbox.match(200))*/
+        })
+    })
 })

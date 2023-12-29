@@ -132,7 +132,6 @@ export default class ClientController implements IClientController {
         try {
             const dto = req.body as IClientEmailDTO
             dto.email = req.params.email as string
-            console.log(JSON.stringify(dto))
             const result = await this.service.deleteClient(dto)
 
             if (result.isLeft()) {
