@@ -1,0 +1,68 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "TaskController" as ctrl
+participant "dto:\nCreateSurveillanceDTO" as dto
+participant "TaskService" as svc
+
+participant "Mapper" as map
+participant "taskDto:\nTaskDto" as tDto
+participant "TaskRepo" as repo
+participant "FloorRepo" as floorRepo
+participant "MapStorage" as Storage
+
+[-> r: POST /task/surveillance
+    activate r
+        r -> ctrl : createSurveillanceTask(req,res,next)
+            activate ctrl
+                    ctrl -> dto ** : create()
+                    activate dto
+                    dto --> ctrl : dto
+                    deactivate dto
+                ctrl -> svc : createSurveillanceTask(dto)
+                activate svc
+                    svc -> floorRepo : findByCodeNumber(dto.buildingCode,dto.floorNumber)
+                    activate floorRepo
+                    alt floor does not exist
+                        svc --> ctrl : error
+                        ctrl --> r : response 422
+                        [<--r : 422: Unprocessable Content
+                    else floor found
+                        floorRepo --> svc : floor
+                    deactivate floorRepo
+                    svc -> Storage : get(floor)
+                        activate Storage
+                        alt map does not exist
+                                svc --> ctrl : error
+                                ctrl --> r : response 422
+                                [<--r : 422: Unprocessable Content
+                        else map exists
+                        Storage --> svc : map
+                        deactivate Storage
+                        svc -> map: toDto(dto,map.x,map.y)
+                        activate map
+                            map -> tDto** : create()
+                            activate tDto
+                                tDto --> map :dto
+                            deactivate tDto
+                            map --> svc : task
+                        deactivate map
+                    svc -> repo: createSurveillanceTask(dto)
+                        activate repo
+                            repo ->] : POST /task/surveillance
+                            repo <--] : task
+                            repo --> svc : task
+                        deactivate repo
+
+                    svc --> ctrl : dto
+                deactivate svc
+
+                ctrl --> r : 200
+            deactivate ctrl
+    [<--r: 200 OK
+deactivate r
+end
+end
+
+@enduml
