@@ -1,0 +1,40 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "SPA" as ui
+participant "MDR" as mdr
+participant "MDT" as mdt
+
+activate usr
+    usr -> ui : wants to list tasks based on a filter
+    activate ui
+        usr <-- ui: shows criterion
+        deactivate ui
+        usr -> ui: selects criteria
+        activate ui
+        usr <-- ui : asks for filter
+    deactivate ui
+        usr -> ui : provides filter
+
+        activate ui
+        ui -> mdr : GET /tasks?criteria={criteria}&filter={filter}
+        activate mdr
+            mdr -> mdt : /jobs?criteria={criteria}&filter={filter}
+            activate mdt
+                mdt --> mdr : 200: tasks
+            deactivate mdt
+
+            mdr --> ui : 200: tasks
+        deactivate mdr
+alt task(s) not found
+                ui --> usr : inform no tasks found
+
+else task(s) found
+        ui --> usr : shows tasks
+    deactivate ui
+deactivate usr
+end
+
+@enduml

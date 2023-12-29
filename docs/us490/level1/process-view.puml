@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "<<system>>\n RobDroneGo" as sys
+
+activate usr
+    usr -> sys : wants to list tasks based on a filter
+    activate sys
+        usr <-- sys : shows criterion
+    deactivate sys
+        usr -> sys : selects criteria
+    activate sys
+        usr <-- sys : asks for filter
+    deactivate sys
+        usr -> sys : provides filter
+    activate sys
+        alt task(s) not found
+            sys --> usr : inform no tasks found
+        else task(s) found
+        sys --> usr : shows tasks
+    deactivate sys
+deactivate usr
+end
+
+@enduml

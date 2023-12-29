@@ -1,0 +1,66 @@
+@startuml
+autonumber
+
+actor "Task Manager" as usr
+
+participant "HTML + CSS + JS" as view
+participant ":Controller" as ctrl
+
+participant ":TaskService" as svc
+
+participant "taskDTO:TaskDTO" as dto
+
+participant "HTTP Driver" as http
+
+
+activate usr
+    usr -> view : wants to list tasks based on a filter
+    activate view
+        usr <-- view: shows criterion
+        usr -> view: selects criteria
+        alt selects user
+            usr <-- view : asks for email
+        else selects type
+            usr <-- view : asks for type
+         else selects state
+            usr <-- view : asks for state
+            end
+    deactivate view
+        usr -> view : provides filter
+    activate view
+        view -> ctrl : onSubmit()
+        activate ctrl
+            ctrl -> svc : tasksByFilter(criteria,filter)
+
+            activate svc
+                svc -> http : GET {baseURL}/task?criteria={criteria}&filter={filter}
+
+                activate http
+                    http ->] : GET /jobs?criteria={criteria}&filter={filter}
+
+                    http <--] : tasks
+                    http --> svc : observable<tasks>
+                deactivate http
+
+                loop for each task
+                    svc --> dto** : create()
+                end
+
+                svc --> ctrl : tasks
+            deactivate svc
+
+            ctrl --> view : tasks
+        deactivate ctrl
+
+        alt tasks is empty
+            view --> usr : inform not tasks found
+        else tasks not empty
+            view --> usr : shows tasks & requests one
+        end
+    deactivate view
+deactivate usr
+
+
+
+@enduml
+
