@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Jobs.Filter;
 using DDDSample1.Domain.Jobs.Mapper;
@@ -18,13 +19,13 @@ namespace DDDSample1.Domain.Jobs
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJobRepository _repo;
-        private readonly PlanningAdapter _planning;
+        private readonly IPlanningAdapter _planning;
         private readonly ISequenceRepository _sequenceRepo;
 
         public JobService(
             IUnitOfWork unitOfWork,
             IJobRepository repo,
-            PlanningAdapter planning,
+            IPlanningAdapter planning,
             ISequenceRepository sequenceRepo
         )
         {

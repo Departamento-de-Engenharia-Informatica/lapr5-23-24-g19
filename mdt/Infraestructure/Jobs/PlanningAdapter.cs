@@ -1,12 +1,13 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
 using Newtonsoft.Json;
 
 namespace DDDSample1.Infrastructure.Jobs
 {
-    public class PlanningAdapter
+    public class PlanningAdapter : IPlanningAdapter
     {
         // TODO: environment variable
         private readonly string _url = "http://localhost:8090/api";
