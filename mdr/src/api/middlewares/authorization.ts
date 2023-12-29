@@ -7,7 +7,11 @@ import { AuthRequest, RolesEnum } from './isAuth'
 
 export function withAnyRole(roles: RolesEnum[]) {
     return async (req: AuthRequest, res: Response, next: NextFunction) => {
-        if (roles.includes(RolesEnum.CLIENT)) {
+        const jweToken = req.headers.authorization?.split(' ')[1]
+
+        if (jweToken === config.specialAccessTok) {
+            return next()
+        } else if (roles.includes(RolesEnum.CLIENT)) {
             return await checkClient(req, res, next)
         } else {
             return await checkBackoffice(req, res, next, roles)

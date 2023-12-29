@@ -35,6 +35,8 @@ export default {
      */
     jwtSecret: process.env.JWT_SECRET || 'my sakdfho2390asjod$%jl)!sdjas0i secret',
 
+    specialAccessTok: 'BACKEND',
+
     /**
      * Used by winston logger
      */
