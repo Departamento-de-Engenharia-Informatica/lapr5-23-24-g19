@@ -164,7 +164,7 @@ export default {
             path: '../repos/mdt/httpNodeMdtAdapter',
         },
         auth: {
-            name: 'AutoRepo',
+            name: 'AuthRepo',
             path: '../repos/auth0/authRepo',
         },
     },
