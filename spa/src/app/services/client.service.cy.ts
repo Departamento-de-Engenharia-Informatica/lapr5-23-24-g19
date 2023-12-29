@@ -9,6 +9,7 @@ import {BackofficeUserDTO} from "../dto/BackofficeUserDTO";
 import {ClientService} from "./client.service";
 import {ClientDTO} from "../dto/ClientDTO";
 import {ClientEmailDTO} from "../dto/ClientEmailDTO";
+import {CreatedClientDTO} from "../dto/CreatedClientDTO";
 
 describe('ClientService: Unit Tests', () => {
     let service: ClientService
@@ -94,14 +95,6 @@ describe('ClientService: Unit Tests', () => {
 
             const email = 'adsdasdsadsadsdasd@isep.ipp.pt'
 
-            const dto: ClientDTO = {
-                name: 'jonas',
-                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-                phoneNumber: '122255565',
-                vatNumber: 123722565,
-                password: 'Jonasjonas124!',
-            }
-
             const expectedClient = {
                 name: 'jonas',
                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
@@ -116,11 +109,45 @@ describe('ClientService: Unit Tests', () => {
                 })
 
             const req = httpMock.expectOne(
-                `${Config.baseUrl}/clients/${dto.email}`,
+                `${Config.baseUrl}/clients/${email}`,
             )
             expect(req.request.method).to.eq('GET')
 
             req.flush(expectedClient)
+        })
+
+        it('should get pending  clients ', () => {
+
+
+            const expectedClients: CreatedClientDTO[]  = [{
+                name: 'jonas',
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                phoneNumber: '122255565',
+                vatNumber: 123722565,
+                status: 'Pending'
+            },
+                {
+                    name: 'quim',
+                    email: 'adsdasadsadasdasdasdasddsadsadsdasd@isep.ipp.pt',
+                    phoneNumber: '111255565',
+                    vatNumber: 123721165,
+                    status: 'Pending'
+                },
+
+            ]
+
+            service
+                .getPendingClients()
+                .subscribe((getClient) => {
+                    expect(getClient).to.eq(expectedClients)
+                })
+
+            const req = httpMock.expectOne(
+                `${Config.baseUrl}/clients?state=Pending`,
+            )
+            expect(req.request.method).to.eq('GET')
+
+            req.flush(expectedClients)
         })
 
         it('should delete a client successfully', () => {
