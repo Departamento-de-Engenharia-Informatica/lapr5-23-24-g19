@@ -1,0 +1,87 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "Controller" as ctrl
+
+participant "requestDto:IClientDataRequestDTO" as dto_in
+
+participant "ClientService" as svc
+
+participant "ArchiveService" as zip
+participant "archiveDto:IArchivedClientDataDTO" as dto_out
+
+participant "ClientRepository" as repo
+participant "DB Driver" as db
+
+participant "ClientMap" as mapper
+participant "clientDataDto:ClientDataDTO" as dto
+
+participant "mdtRequestDto:IClientTasksRequestDTO" as dto_mdt_in
+
+participant "MdtAdapter" as mdt
+
+participant "MdtDriver" as http
+
+participant "clientTaskDTO:IClientTaskDTO" as dto_mdt_out
+
+
+[-> r : POST /clients/data
+activate r
+    r -> ctrl : exportClientData()
+    activate ctrl
+        ctrl --> dto_in** : create()
+
+        ctrl -> svc : getClentData(requestDto)
+        activate svc
+            svc -> repo : find(requestDto.email)
+            activate repo
+                repo -> db : findOne(email)
+                activate db
+                    db --> repo : client
+                deactivate db
+
+                repo --> svc : client
+            deactivate repo
+
+            svc --> dto_mdt_in** : create()
+            svc -> mdt : getClientRequestedTasks(mdtRequestDto)
+            activate mdt
+                mdt -> http : fetch(MDT_URL/jobs?client=mdtRequestDto.email)
+
+                activate http
+                    http ->] : GET /MDT_URL/jobs?client=email
+                    http <--] : clientTasks
+                    http --> mdt : clientTasks
+                deactivate http
+
+                loop for task in clientTasks
+                    mdt --> dto_mdt_out** : create()
+                end
+
+                mdt --> svc : clientTaskDto[]
+            deactivate mdt
+
+            svc -> mapper : toClientData(client, clientTasks)
+            activate mapper
+                mapper --> dto** : create()
+                mapper --> svc : clientDataDto
+            deactivate mapper
+            svc --> ctrl : clientDataDto
+        deactivate svc
+
+        ctrl -> zip : createArchive(clientDataDto)
+        activate zip
+            ' ?
+
+            zip --> dto_out** : create()
+            zip --> ctrl : archiveDto
+        deactivate zip
+
+        ctrl -> r : 200 : archiveDto
+    deactivate ctrl
+
+    [<-- r : 200: ok data
+deactivate r
+
+@enduml

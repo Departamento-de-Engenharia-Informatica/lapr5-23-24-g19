@@ -1,0 +1,14 @@
+@startuml
+
+actor "Client" as usr
+participant "<<system>>\nRobDroneGO" as sys
+
+activate usr
+    usr -> sys : wants to obtain a copy of their personal data
+
+    activate sys
+        sys --> usr : copy of the data
+    deactivate sys
+deactivate usr
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+autonumber
+
+participant "APIController" as ctrl
+
+participant "Service" as svc
+
+participant "Repository" as repo
+
+participant "JobMapper" as mapper
+participant "jobDto:JobDto" as j_dto
+
+[-> ctrl : GET /jobs?client=email
+
+activate ctrl
+    ctrl -> svc : GetClientJobs(clientEmail)
+    activate svc
+        svc -> repo : GetClientJobsAsync(clientEmail)
+
+        activate repo
+            repo --> svc : jobs
+        deactivate repo
+
+        svc -> mapper : toDTO(jobs)
+        activate mapper
+            loop job in jobs
+                mapper --> j_dto** : create()
+            end
+            mapper --> svc : jobDtos
+        deactivate mapper
+
+        svc --> ctrl : jobDtos
+    deactivate svc
+
+    [<-- ctrl : 200: jobDtos
+deactivate ctrl
+
+@enduml

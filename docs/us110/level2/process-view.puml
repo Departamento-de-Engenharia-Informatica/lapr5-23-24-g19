@@ -1,0 +1,36 @@
+@startuml
+
+actor "Client" as usr
+participant "SPA" as spa
+participant "MDR" as mdr
+participant "MDT" as mdt
+
+activate usr
+    usr -> spa : wants to obtain a copy\nof their personal data
+
+    activate spa
+        spa --> usr : request password
+    deactivate spa
+
+    usr -> spa : re-enters password
+    activate spa
+
+        spa -> mdr : POST /clients/data
+
+        activate mdr
+            mdr -> mdt : GET /jobs?client=email
+
+            activate mdt
+                mdt --> mdr : client's requested tasks
+            deactivate mdt
+
+            note right of mdr : client data is also fetched\nfrom within MDR
+
+            mdr --> spa : client data
+        deactivate mdr
+
+        spa --> usr : client data
+    deactivate spa
+deactivate usr
+
+@enduml

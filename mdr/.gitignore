@@ -7,6 +7,8 @@ node_modules/
 # Local FS-API root
 filesystem/
 
+temp-gdpr/
+
 # TypeScript
 *.tsbuildinfo
 
