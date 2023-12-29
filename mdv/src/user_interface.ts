@@ -100,16 +100,20 @@ export default class UserInterface extends GUI {
         const autFolder = campusFolder.addFolder('Automatic')
         autFolder.domElement.style.fontSize = fontSize
 
-        let robots: string[] = []
-        let tasks: number[] = []
+        let buildings1: string[] = []
+        let floors1: number[] = []
+        let floors2: number[] = []
 
         const options2 = {
-            robots: [],
-            // floor: [],
-            Simulate: function () {
-                const robots = optionsRobots.getValue()
-                // const floor = optionsFloors.getValue()
+            b1: [], b2: [], f1: [], f2: [],
+            x1: 0, y1: 0, // Coordinates for the first floor
+            x2: 0, y2: 0, // Coordinates for the second floor
 
+            Simulate: function () {
+                const b1 = optionsBuildings1.getValue()
+                const b2 = optionsBuildings2.getValue()
+                const f1 = optionsFloors1.getValue()
+                const f2 = optionsFloors2.getValue()
                 const examplePath: PathSegmentDTO[] = [
                     {
                         type: 'cell',
@@ -246,24 +250,55 @@ export default class UserInterface extends GUI {
                         y: 11
                     },
                 ];
-
-                if (robots && tasks) {
+                if (b1 && b2 && f1 && f2) {
                     thumbRaiser.simulate(examplePath)
-                } else {
-                    alert('Both building and floor should be selected')
                 }
             },
         }
 
-        const optionsRobots = autFolder.add(options2, 'robots', robots)
+        const optionsBuildings1 = autFolder.add(options, 'building1', buildings1)
+        const optionsFloors1 = autFolder.add(options2, 'floor1', floors1)
+        optionsBuildings1.onChange((val: string) => {
+            this.updateFloors(val).then((codes) => {
+                floors = codes
+                optionsFloors1.options(floors)
+                optionsFloors1.setValue('')
+            })
+        })
+        optionsFloors1.onChange(() => {
+            options2.x1 = 0
+            options2.y1 = 0
+        });
+        autFolder.add(options2, 'x1', 0, 30,1)
+        autFolder.add(options2, 'y1', 0, 30,1)
+        const optionsBuildings2 = autFolder.add(options2, 'building1', buildings)
+        const optionsFloors2 = autFolder.add(options2, 'floor1', floors2)
+        optionsBuildings2.onChange((val: string) => {
+            this.updateFloors(val).then((codes) => {
+                floors = codes
+                optionsFloors2.options(floors)
+                optionsFloors2.setValue('')
+            })
+        })
+        optionsFloors2.onChange(() => {
+            options2.x2 = 0
+            options2.y2 = 0
+        });
+        autFolder.add(options2, 'x2', 0, 30).step(1)
+        autFolder.add(options2, 'y2', 0, 30).step(1)
 
-        autFolder.add(options2, 'Simulate')
 
         autFolder.onOpenClose(async () => {
-            const codes = await this.updateRobots()
-            robots = codes
-            optionsRobots.options(robots)
+            const codes = await this.updateBuildings()
+            buildings1 = codes
+            optionsBuildings1.options(buildings1)
+            optionsBuildings1.setValue('')
+            optionsBuildings2.options(buildings1)
+            optionsBuildings2.setValue('')
+            optionsFloors1.setValue('')
+            optionsFloors2.setValue('')
         })
+        autFolder.add(options2, 'Simulate')
         autFolder.close()
 
         //SETTINGS
