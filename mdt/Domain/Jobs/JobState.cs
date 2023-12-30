@@ -40,13 +40,14 @@ namespace DDDSample1.Domain.Jobs
 
         public static JobStateEnum FromCode(int code)
         {
-            switch (code)
+            return code switch
             {
-                case 0:
-                    return JobStateEnum.PENDING;
-                default:
-                    throw new ArgumentException($"Invalid code: {code}", nameof(code));
-            }
+                0 => JobStateEnum.PENDING,
+                1 => JobStateEnum.APPROVED,
+                2 => JobStateEnum.REJECTED,
+                3 => JobStateEnum.PLANNED,
+                _ => throw new ArgumentException($"Invalid code: {code}", nameof(code)),
+            };
         }
     }
 }
