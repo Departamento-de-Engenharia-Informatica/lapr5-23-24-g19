@@ -10,7 +10,7 @@ participant "Repository" as repo
 participant "JobMapper" as mapper
 participant "jobDto:JobDto" as j_dto
 
-[-> ctrl : GET /jobs?client=email
+[-> ctrl : GET /jobs/filter/?filter=client&rule=email
 
 activate ctrl
     ctrl -> svc : GetClientJobs(clientEmail)

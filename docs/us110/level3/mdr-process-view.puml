@@ -47,10 +47,11 @@ activate r
             svc --> dto_mdt_in** : create()
             svc -> mdt : getClientRequestedTasks(mdtRequestDto)
             activate mdt
-                mdt -> http : fetch(MDT_URL/jobs?client=mdtRequestDto.email)
+                mdt -> http : fetch(MDT_URL/jobs/filter/?filter=client&rule=mdtRequestDto.email)
 
                 activate http
-                    http ->] : GET /MDT_URL/jobs?client=email
+                    http ->] : GET /MDT_URL/jobs/filter/?filter=client&rule=email
+                    note right of http : see US 490
                     http <--] : clientTasks
                     http --> mdt : clientTasks
                 deactivate http
