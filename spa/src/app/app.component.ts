@@ -88,7 +88,8 @@ export class AppComponent {
                                 // console.log("sub")
                                 // console.log(JSON.stringify(user))
                                 const u = user as unknown as UserDTO
-                                localStorage.setItem('USER_ROLES', u.roles[0])
+                                localStorage.setItem('USER_ROLES', u.roles.toString())
+                                console.log("Has roles: ",u.roles.toString())
                                 // alert(localStorage.getItem("USER_ROLES"))
                             },
                             (error) => {

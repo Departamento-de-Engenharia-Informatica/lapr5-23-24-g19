@@ -35,19 +35,15 @@ export class UserService {
     }
 
     hasRole(roles: RolesEnum[]): boolean {
-        const storedRoles = localStorage.getItem('USER_ROLES')?.toUpperCase()
-
-        // Check if storedRoles string contains any of the roles from the roles array
-        return roles.some((role) => storedRoles?.includes(RolesEnum[role]))
-        // console.log("============================")
-        // console.log(localStorage.getItem("USER_ROLES")?.toUpperCase())
-        // console.log(JSON.stringify(roles[0]))
-        // for(const role in roles){
-        //     // console.log(this.rolesValues[role])
-        //     if(localStorage.getItem("USER_ROLES")?.toUpperCase() === this.rolesValues[role])
-        //         return true
-        //     }
-        // return localStorage.getItem("USER_ROLES")?.toUpperCase() === this.rolesValues[0]
+        // Retrieve the roles from localStorage and split them into an array
+        const storedRolesString = localStorage.getItem('USER_ROLES');
+        const storedRoles = storedRolesString ? storedRolesString.split(',') : [];
+    
+        // Normalize roles for case-insensitive comparison
+        const normalizedStoredRoles = storedRoles.map(role => role.toUpperCase());
+    
+        // Check if any of the provided roles match the stored roles
+        return roles.some(role => normalizedStoredRoles.includes(RolesEnum[role].toUpperCase()));
     }
 }
 
