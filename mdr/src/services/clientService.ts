@@ -107,6 +107,13 @@ export default class ClientService implements IClientService {
             }
 
             const client = await this.repo.find(email)
+            if (!client) {
+                return left({
+                    errorCode: ClientErrorCode.NotFound,
+                    message: `User not found: ${email.value}`,
+                })
+            }
+
             switch (client.status) {
                 case ClientStatus.APPROVED:
                     return left({
