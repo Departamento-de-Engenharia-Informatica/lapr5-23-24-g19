@@ -1,0 +1,64 @@
+@startuml
+autonumber
+
+participant "APIController" as ctrl
+participant "FilterMapper" as mapper_in
+participant "dto:FilterDTO" as dto_in
+
+participant "Service" as svc
+
+participant "JobFilterFactory" as ctx
+participant "IJobFilterStrategy" as strat
+
+participant "Repository" as repo
+participant "DB Driver" as db
+
+participant "JobMapper" as mapper
+participant "jobDto:JobDto" as j_dto
+
+[-> ctrl : GET /jobs/filter/?filter={:filter}&rule={:rule}
+
+activate ctrl
+    ctrl -> mapper_in : toDTO(filter, rule)
+    activate mapper_in
+        mapper_in --> dto_in** : create()
+        mapper_in --> ctrl : filterDTO
+    deactivate mapper_in
+
+    alt bad filter/rule
+        [<-- ctrl : 400 : Bad Request
+    else valid filter and rule
+        ctrl -> svc : GetByFilter(filterDTO)
+        activate svc
+            svc -> ctx : GetFilterStrategy(filterDTO)
+            activate ctx
+                ctx --> strat** : create()
+                ctx --> svc : strategy
+            deactivate ctx
+
+            svc -> repo : Filter(strategy)
+            activate repo
+                repo --> db : Where(filter)
+                activate db
+                    db --> repo : jobs
+                deactivate db
+
+                repo --> svc : jobs
+            deactivate repo
+
+            svc -> mapper : toDTO(jobs)
+            activate mapper
+                loop job in jobs
+                    mapper --> j_dto** : create()
+                end
+                mapper --> svc : jobDtos
+            deactivate mapper
+
+            svc --> ctrl : jobDtos
+        deactivate svc
+
+        [<-- ctrl : 200: jobDtos
+    end
+deactivate ctrl
+
+@enduml

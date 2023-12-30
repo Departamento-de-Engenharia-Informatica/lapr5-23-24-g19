@@ -2,9 +2,9 @@ using System.Globalization;
 
 namespace DDDSample1.Domain.Jobs.Filter
 {
-    public class JobFilterContext
+    public class JobFilterFactory
     {
-        public static IJobFilterStrategy FilterStrategy(FilterDTO filterDTO)
+        public static IJobFilterStrategy GetFilterStrategy(FilterDTO filterDTO)
         {
             return filterDTO.Filter.ToUpper(CultureInfo.InvariantCulture) switch
             {

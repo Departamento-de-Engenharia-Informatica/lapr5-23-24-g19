@@ -92,22 +92,20 @@ namespace DDDSample1.Controllers
 
         // GET: api/jobs/filter/{filter}?rule=someRule
         [HttpGet("filter")]
-        // GET: api/jobs?filter=filter&rule=someRule
+        // GET: api/jobs/filter?filter={:filter}&rule={:rule}
         // [HttpGet], com parametros para filter e rule
-        public async Task<ActionResult<String>> GetByFilter(string filter, string rule)
+        public async Task<ActionResult<List<JobDto>>> GetByFilter(string filter, string rule)
         {
-            var dto = FilterMapper.ToDto(filter, rule);
-            if (dto == null)
+            try
             {
-                //TODO: better error message
-                return NotFound("Dto asdnull");
+                var dto = FilterMapper.ToDto(filter, rule);
+                var jobs = await _service.GetByFilter(dto);
+                return Ok(jobs);
             }
-            var jobs = await _service.GetByFilter(dto);
-            if (jobs == null)
+            catch (Exception e)
             {
-                return NotFound("Akshually not foound");
+                return BadRequest(e.Message);
             }
-            return Ok(jobs);
         }
 
         [HttpGet("")]

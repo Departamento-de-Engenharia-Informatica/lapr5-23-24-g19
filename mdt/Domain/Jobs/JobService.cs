@@ -60,7 +60,7 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<List<Job>> GetByFilter(FilterDTO dto)
         {
-            var strategy = JobFilterContext.FilterStrategy(dto);
+            var strategy = JobFilterFactory.GetFilterStrategy(dto);
             var jobs = await _repo.Filter(strategy);
             _ = await _unitOfWork.CommitAsync(); // ??
 
