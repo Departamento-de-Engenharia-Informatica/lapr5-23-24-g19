@@ -34,7 +34,7 @@ export default class ZipService implements IArchiveService {
 
             Object.entries(content).forEach(([service, data]) => {
                 const fileName = `${service}.json`
-                const fileContent = JSON.stringify(data)
+                const fileContent = JSON.stringify(data, null, 2)
                 archive.append(fileContent, { name: fileName })
             })
 
