@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 
 namespace DDDSample1.Domain.Jobs
@@ -12,7 +13,7 @@ namespace DDDSample1.Domain.Jobs
         {
             Console.WriteLine(rule);
 
-            switch (filter)
+            switch (filter.ToUpper(CultureInfo.InvariantCulture))
             {
                 case "STATE":
                     if (int.TryParse(rule, out int state))

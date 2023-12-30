@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Categories;
 using DDDSample1.Domain.Families;
 using DDDSample1.Domain.Jobs;
@@ -108,7 +109,7 @@ namespace DDDSample1
                     client.Timeout = TimeSpan.FromMinutes(5);
                 }
             );
-            services.AddTransient<PlanningAdapter>();
+            services.AddTransient<IPlanningAdapter, PlanningAdapter>();
         }
     }
 }
