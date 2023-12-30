@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DDDNetCore.Infraestructure.Jobs;
@@ -10,7 +9,6 @@ using DDDSample1.Domain.Jobs.Mapper;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Sequences;
 using DDDSample1.Domain.Shared;
-using DDDSample1.Infrastructure.Jobs;
 using DDDSample1.Util.Coordinates;
 
 namespace DDDSample1.Domain.Jobs
@@ -29,18 +27,20 @@ namespace DDDSample1.Domain.Jobs
             ISequenceRepository sequenceRepo
         )
         {
-            this._unitOfWork = unitOfWork;
-            this._repo = repo;
-            this._planning = planning;
-            this._sequenceRepo = sequenceRepo;
+            _unitOfWork = unitOfWork;
+            _repo = repo;
+            _planning = planning;
+            _sequenceRepo = sequenceRepo;
         }
 
-        public async Task<String> GetByIdAsync(String id)
+        public async Task<string> GetByIdAsync(string id)
         {
-            var job = await this._repo.GetByIdAsync(new JobId(id));
+            var job = await _repo.GetByIdAsync(new JobId(id));
 
             if (job == null)
+            {
                 return null;
+            }
 
             var options = new JsonSerializerOptions
             {
@@ -52,8 +52,8 @@ namespace DDDSample1.Domain.Jobs
 
         public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
-            await this._repo.AddAsync(JobMapper.ToDomain(dto));
-            await this._unitOfWork.CommitAsync();
+            await _repo.AddAsync(JobMapper.ToDomain(dto));
+            await _unitOfWork.CommitAsync();
 
             return dto;
         }
@@ -105,9 +105,11 @@ namespace DDDSample1.Domain.Jobs
                 {
                     var job = await _repo.GetByIdAsync(new JobId(t.id));
                     if (job.Status != JobStateEnum.APPROVED)
+                    {
                         throw new BusinessRuleValidationException(
                             $"Job {job.Id.Value} is not currently with the state of Approved"
                         );
+                    }
 
                     jobs.Add(job);
                 }

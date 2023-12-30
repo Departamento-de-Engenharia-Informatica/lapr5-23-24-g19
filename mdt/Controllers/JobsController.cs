@@ -20,9 +20,9 @@ namespace DDDSample1.Controllers
         }
 
         [HttpGet("status")]
-        public async Task<ActionResult<string>> Status()
+        public IActionResult Status()
         {
-            return Ok("Status ok");
+            return Ok();
         }
 
         // POST: api/Jobs
@@ -83,17 +83,8 @@ namespace DDDSample1.Controllers
             }
         }
 
-        // GET: api/jobs/non-approved
-        [HttpGet("non-approved")]
-        public async Task<ActionResult<JobDto[]>> GetNonApproved()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        // GET: api/jobs/filter/{filter}?rule=someRule
-        [HttpGet("filter")]
         // GET: api/jobs/filter?filter={:filter}&rule={:rule}
-        // [HttpGet], com parametros para filter e rule
+        [HttpGet("filter")]
         public async Task<ActionResult<List<JobDto>>> GetByFilter(string filter, string rule)
         {
             try
@@ -120,13 +111,6 @@ namespace DDDSample1.Controllers
             return Ok(jobs);
         }
 
-        // GET: api/jobs/approved-jobs-sequence
-        [HttpGet("approved-jobs-sequence")]
-        public async Task<ActionResult<JobDto[]>> GetApprovedJobsSequence()
-        {
-            throw new System.NotImplementedException();
-        }
-
         [HttpGet("sequence/algorithms")]
         public async Task<ActionResult<string[]>> GetJobSequenceAlgorithms()
         {
@@ -143,7 +127,6 @@ namespace DDDSample1.Controllers
                 };
             }
         }
-
 
         [HttpPatch("sequence")]
         public async Task<ActionResult<List<PlannedRobotTasksDTO>>> JobSequence([FromBody] RobotTasksDTO dto)
