@@ -11,7 +11,10 @@ export function withAnyRole(roles: RolesEnum[]) {
 
         if (jweToken === config.specialAccessTok) {
             return next()
-        } else if (roles.includes(RolesEnum.CLIENT)) {
+        } else if (
+            req.auth.roles.includes(RolesEnum.CLIENT)
+            && roles.includes(RolesEnum.CLIENT)
+        ) {
             return await checkClient(req, res, next)
         } else {
             return await checkBackoffice(req, res, next, roles)

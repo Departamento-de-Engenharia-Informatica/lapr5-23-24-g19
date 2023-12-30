@@ -16,6 +16,7 @@ import { AuthService } from '@auth0/auth0-angular'
 })
 export class ClientService {
     constructor(private http: HttpClient, private auth: AuthService) {}
+
     private getToken(): Observable<string> {
         return this.auth.getAccessTokenSilently().pipe(
             first(), // Take the first emitted value and complete the observable
@@ -24,11 +25,6 @@ export class ClientService {
                 return throwError(() => new Error('Unable to get authentication token.'))
             }),
         )
-    }
-
-    // TODO: change usages of _fakeToken() to getTokenObservable()
-    private _fakeToken() {
-        return of('aa')
     }
 
     private authHeaders(token: string): HttpHeaders {
