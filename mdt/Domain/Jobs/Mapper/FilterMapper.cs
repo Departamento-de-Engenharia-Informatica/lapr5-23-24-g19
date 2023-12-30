@@ -17,7 +17,7 @@ namespace DDDSample1.Domain.Jobs
             {
                 "STATE" when int.TryParse(rule, out int state) => new FilterDTO(filter, null, state, null),
                 "TYPE" when int.TryParse(rule, out int type) => new FilterDTO(filter, null, null, type),
-                "CLIENT" when rule.Length > 0 => new FilterDTO(filter, rule, null, null),
+                "CLIENT" => new FilterDTO(filter, rule, null, null),
                 _ => throw new ArgumentException($"Invalid filter/rule: {filter}/{rule}"),
             };
         }

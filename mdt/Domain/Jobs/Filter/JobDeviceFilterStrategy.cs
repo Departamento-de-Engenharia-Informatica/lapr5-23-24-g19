@@ -5,16 +5,17 @@ namespace DDDSample1.Domain.Jobs.Filter
 {
     public class JobDeviceFilterStrategy : IJobFilterStrategy
     {
-        private readonly JobTypeEnum taskType;
+        // private readonly JobTypeEnum taskType;
+        private readonly int taskType;
 
         public JobDeviceFilterStrategy(int taskType)
         {
-            this.taskType = JobType.FromCode(taskType);
+            this.taskType = taskType;//JobType.FromCode(taskType);
         }
 
         public Expression<Func<Job, bool>> GetFilterExpression()
         {
-            return j => j.JobType == taskType;
+            return j => ((int)j.JobType) == taskType;
         }
     }
 
