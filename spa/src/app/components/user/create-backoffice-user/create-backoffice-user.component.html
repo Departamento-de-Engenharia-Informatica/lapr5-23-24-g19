@@ -7,11 +7,7 @@
                 <div class="row">
                     <div>
                         <label for="name">Name:</label>
-                        <input
-                            id="name"
-                            type="text"
-                            formControlName="name"
-                        />
+                        <input id="name" type="text" formControlName="name" />
                     </div>
                 </div>
 
@@ -24,10 +20,7 @@
                             [(ngModel)]="form.value.role"
                             required
                         >
-                            <option
-                                *ngFor="let role of roleTypes"
-                                [value]="role"
-                            >
+                            <option *ngFor="let role of roleTypes" [value]="role">
                                 {{ role }}
                             </option>
                         </select>

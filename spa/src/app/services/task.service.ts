@@ -30,7 +30,7 @@ import { RobotSequenceDTO } from '../dto/RobotSequenceDTO'
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(private http: HttpClient, private auth: AuthService) { }
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()
@@ -97,14 +97,17 @@ export class TaskService {
 
     taskSequenceAlgorithms(): Observable<SequenceAlgorithmDTO[]> {
         return this._fakeToken().pipe(
-            switchMap(token =>
-                this.http.get<SequenceAlgorithmDTO[]>(`${Config.baseUrl}/task/sequence/algorithms`, {
-                    headers: this.authHeaders(token),
-                    observe: 'body',
-                    responseType: 'json',
-                })
+            switchMap((token) =>
+                this.http.get<SequenceAlgorithmDTO[]>(
+                    `${Config.baseUrl}/task/sequence/algorithms`,
+                    {
+                        headers: this.authHeaders(token),
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                ),
             ),
-            catchError((err) => throwError(() => err))
+            catchError((err) => throwError(() => err)),
         )
     }
 
@@ -115,15 +118,17 @@ export class TaskService {
                     `${Config.baseUrl}/task/sequence`,
                     JSON.stringify(dto),
                     {
-                        headers: this.authHeaders(token)
-                            .set('Content-Type', 'application/json'),
+                        headers: this.authHeaders(token).set(
+                            'Content-Type',
+                            'application/json',
+                        ),
                         observe: 'body',
                         responseType: 'json',
                     },
                 )
             }),
-            catchError((error) => throwError(() => error))
-        );
+            catchError((error) => throwError(() => error)),
+        )
         // return new Observable<TaskDTO[]>((observer) => {
         //     // this.getToken()
         //     //     .then((token) => {

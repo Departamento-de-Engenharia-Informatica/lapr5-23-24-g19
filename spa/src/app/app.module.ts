@@ -70,12 +70,12 @@ import { AuthModule, User } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
-import {AdministratorComponent} from "./components/user/administrator-menu/administrator.component";
-import {DeleteClientComponent} from "./components/user/delete-client/delete-client.component";
-import { UserService } from './services/user.service';
-import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
-import { GdprDataRequestComponent } from './components/user/gdpr-data-request/gdpr-data-request.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdministratorComponent } from './components/user/administrator-menu/administrator.component'
+import { DeleteClientComponent } from './components/user/delete-client/delete-client.component'
+import { UserService } from './services/user.service'
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
+import { GdprDataRequestComponent } from './components/user/gdpr-data-request/gdpr-data-request.component'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatDialogModule } from '@angular/material/dialog'
 
 @NgModule({
@@ -169,7 +169,7 @@ import { MatDialogModule } from '@angular/material/dialog'
         RobotRepo,
         BackofficeUserService,
         ClientService,
-        UserService
+        UserService,
     ],
     bootstrap: [AppComponent],
 })

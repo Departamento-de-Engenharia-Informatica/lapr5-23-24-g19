@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Observable } from 'rxjs'
 
-import {DeleteClientComponent} from "./delete-client.component";
-import {ClientService} from "../../../services/client.service";
-import {ClientEmailDTO} from "../../../dto/ClientEmailDTO";
-import {IClientWithoutPasswordDTO} from "../../../dto/IClientWithoutPasswordDTO";
-import {AuthService} from "@auth0/auth0-angular";
+import { DeleteClientComponent } from './delete-client.component'
+import { ClientService } from '../../../services/client.service'
+import { ClientEmailDTO } from '../../../dto/ClientEmailDTO'
+import { IClientWithoutPasswordDTO } from '../../../dto/IClientWithoutPasswordDTO'
+import { AuthService } from '@auth0/auth0-angular'
 
 describe('DeleteClientComponent: Unit Tests', () => {
     let clientServiceStub: Partial<ClientService>
@@ -19,26 +19,24 @@ describe('DeleteClientComponent: Unit Tests', () => {
         email: 'joaquimfontexxxxsxtxo@isep.ipp.pt',
     }
 
-    const client : IClientWithoutPasswordDTO = {
+    const client: IClientWithoutPasswordDTO = {
         name: 'quim',
         email: 'joaquimfontexxxxsxtxo@isep.ipp.pt',
         phoneNumber: '122319763',
-        vatNumber : 122389163,
+        vatNumber: 122389163,
     }
 
     beforeEach(() => {
-
         authServiceStub = {
-            isAuthenticated$: new Observable(subscriber => {
-                subscriber.next(true);
-                subscriber.complete();
+            isAuthenticated$: new Observable((subscriber) => {
+                subscriber.next(true)
+                subscriber.complete()
             }),
-            user$: new Observable(subscriber => {
-                subscriber.next({ email: 'joaquimfontexxxxsxtxo@isep.ipp.pt' });
-                subscriber.complete();
+            user$: new Observable((subscriber) => {
+                subscriber.next({ email: 'joaquimfontexxxxsxtxo@isep.ipp.pt' })
+                subscriber.complete()
             }),
-
-        };
+        }
 
         clientServiceStub = {
             getClient: function () {
@@ -56,13 +54,11 @@ describe('DeleteClientComponent: Unit Tests', () => {
             },
         }
 
-
-
         TestBed.configureTestingModule({
             declarations: [DeleteClientComponent],
             providers: [
-                { provide: ClientService, useValue: clientServiceStub  },
-                { provide: AuthService, useValue: authServiceStub  },
+                { provide: ClientService, useValue: clientServiceStub },
+                { provide: AuthService, useValue: authServiceStub },
             ],
         })
 
@@ -85,14 +81,9 @@ describe('DeleteClientComponent: Unit Tests', () => {
         const deleteClientSpy = cy.spy(component['clientService'], 'deleteClient')
         const alertSpy = cy.spy(window, 'alert')
 
-
-
         component.onSubmit()
 
         expect(deleteClientSpy).calledOnce
-        expect(alertSpy).calledWith(
-            `Deleted Account \nEmail: ${dtoEmailClient.email}`,
-        )
+        expect(alertSpy).calledWith(`Deleted Account \nEmail: ${dtoEmailClient.email}`)
     })
-
 })

@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Observable } from 'rxjs'
-import {ClientService} from "../../../services/client.service";
-import {CreateClientComponent} from "./create-client.component";
-import {CreatedClientDTO} from "../../../dto/CreatedClientDTO";
-
+import { ClientService } from '../../../services/client.service'
+import { CreateClientComponent } from './create-client.component'
+import { CreatedClientDTO } from '../../../dto/CreatedClientDTO'
 
 describe('CreateClientComponent: Unit Tests', () => {
     let clientServiceStub: Partial<ClientService>
@@ -15,7 +14,7 @@ describe('CreateClientComponent: Unit Tests', () => {
         name: 'quim',
         email: 'joaxxxo@isep.ipp.pt',
         phoneNumber: '122389763',
-        vatNumber : 122389763,
+        vatNumber: 122389763,
         status: 'Pending',
     }
 
@@ -31,9 +30,7 @@ describe('CreateClientComponent: Unit Tests', () => {
 
         TestBed.configureTestingModule({
             declarations: [CreateClientComponent],
-            providers: [
-                { provide: ClientService, useValue: clientServiceStub },
-            ],
+            providers: [{ provide: ClientService, useValue: clientServiceStub }],
         })
 
         fixture = TestBed.createComponent(CreateClientComponent)
@@ -54,7 +51,7 @@ describe('CreateClientComponent: Unit Tests', () => {
             name: 'quim',
             email: 'joaxxxo@isep.ipp.pt',
             phoneNumber: '122389763',
-            vatNumber : '122389763',
+            vatNumber: '122389763',
             password: 'Jonasjonas123!',
         })
 
@@ -69,7 +66,6 @@ describe('CreateClientComponent: Unit Tests', () => {
         expect(resetSpy).calledOnce
     })
 
-
     it('should reset form on successful client creation', () => {
         const alertSpy = cy.spy(window, 'alert')
         const resetSpy = cy.spy(component.form, 'reset')
@@ -78,7 +74,7 @@ describe('CreateClientComponent: Unit Tests', () => {
             name: 'quim',
             email: 'joaxxxo@isep.ipp.pt',
             phoneNumber: '122389763',
-            vatNumber : '122389763',
+            vatNumber: '122389763',
             password: 'Jonasjonas123!',
         })
 
@@ -90,6 +86,5 @@ describe('CreateClientComponent: Unit Tests', () => {
             `Created Client: \nName: ${client1.name}\nEmail: ${client1.email}\nPhoneNumber: ${client1.phoneNumber}\nVatNumber: ${client1.vatNumber}`,
         )
         expect(resetSpy).calledOnce
-
     })
 })

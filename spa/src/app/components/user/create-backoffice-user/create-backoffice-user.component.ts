@@ -4,12 +4,11 @@ import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { BackofficeUserDTO } from '../../../dto/BackofficeUserDTO'
 import { BackofficeUserService } from '../../../services/backofficeUser.service'
 
-
 enum RoleType {
     CAMPUS_MANAGER = 'Campus Manager',
     FLEET_MANAGER = 'Fleet Manager',
     TASK_MANAGER = 'Task Manager',
-    ADMINISTRATOR = 'Administrator'
+    ADMINISTRATOR = 'Administrator',
 }
 @Component({
     selector: 'app-create-backoffice-user',
@@ -17,7 +16,6 @@ enum RoleType {
     styleUrls: ['./create-backoffice-user.component.css'],
 })
 export class CreateBackofficeUserComponent {
-
     roleTypes = Object.values(RoleType)
     form: UntypedFormGroup
 

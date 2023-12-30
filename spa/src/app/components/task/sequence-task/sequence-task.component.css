@@ -16,7 +16,7 @@
 
 .building-card {
     border: 1px solid;
-    border-color:  var(--third-color);
+    border-color: var(--third-color);
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
@@ -148,38 +148,34 @@
     color: white;
 }
 
-
-
-
 .slider {
-  position: relative;
-  width: 50px;
-  height: 26px;
-  border-radius: 20px;
-  background-color: #ccc;
-  cursor: pointer;
+    position: relative;
+    width: 50px;
+    height: 26px;
+    border-radius: 20px;
+    background-color: #ccc;
+    cursor: pointer;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 2px;
-  bottom: 2px;
-  border-radius: 50%;
-  background-color: white;
-  transition: 0.4s;
+    position: absolute;
+    content: '';
+    height: 22px;
+    width: 22px;
+    left: 2px;
+    bottom: 2px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+    background-color: #2196f3;
 }
 
 input:checked + .slider:before {
-  transform: translateX(24px);
+    transform: translateX(24px);
 }
-
 
 .plan-card {
     color: #9ca3af !important;

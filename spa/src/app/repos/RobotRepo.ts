@@ -25,10 +25,7 @@ interface RobotDTO {
     providedIn: 'root',
 })
 export class RobotRepo {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()

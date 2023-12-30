@@ -10,7 +10,7 @@ import { RolesEnum } from 'src/app/services/user.service'
 export class ModulesComponent {
     rolesEnum = RolesEnum
 
-    constructor(public usr: UserService){
+    constructor(public usr: UserService) {
         console.log(JSON.stringify(this.rolesEnum))
     }
     clickVisualization() {

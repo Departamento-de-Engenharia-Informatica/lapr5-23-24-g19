@@ -12,12 +12,10 @@ import { IGeneralTaskDTO } from '../../../../../../mdr/src/dto/IGeneralTaskDTO'
     styleUrls: ['./filter.component.css'],
 })
 export class TasksFilterComponent {
-
     private allTasks: IGeneralTaskDTO[] = []
     tasks: IGeneralTaskDTO[] = []
-    TaskState = TaskState;
-    TaskType = TaskType;
-
+    TaskState = TaskState
+    TaskType = TaskType
 
     criterion: string[] = ['Client', 'Type', 'State']
     states = Object.values(TaskState)
@@ -26,7 +24,7 @@ export class TasksFilterComponent {
     filterForm: FormGroup = null as unknown as FormGroup
     criteria!: string
 
-    constructor(private formBuilder: FormBuilder, private service: TaskService) { }
+    constructor(private formBuilder: FormBuilder, private service: TaskService) {}
 
     ngOnInit() {
         this.filterForm = this.formBuilder.group({
@@ -81,7 +79,7 @@ export class TasksFilterComponent {
                 this.tasks = this.allTasks
             },
             (error) => {
-                alert("Tasks not found")
+                alert('Tasks not found')
                 this.allTasks = []
                 this.tasks = this.allTasks
             },

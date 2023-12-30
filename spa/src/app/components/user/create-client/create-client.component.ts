@@ -27,7 +27,7 @@ export class CreateClientComponent {
         this.isPrivacyPolicyAgreed = event.target.checked
     }
     submit() {
-        if (this.form.valid && this.isPrivacyPolicyAgreed ) {
+        if (this.form.valid && this.isPrivacyPolicyAgreed) {
             const dto: ClientDTO = {
                 name: this.form.value.name,
                 email: this.form.value.email,

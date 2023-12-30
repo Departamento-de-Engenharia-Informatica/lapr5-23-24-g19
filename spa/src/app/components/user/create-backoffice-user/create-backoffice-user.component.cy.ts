@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Observable } from 'rxjs'
-import {BackofficeUserService} from "../../../services/backofficeUser.service"
-import {CreateBackofficeUserComponent} from "./create-backoffice-user.component"
-import {CreatedBackofficeUserDTO} from "../../../dto/CreatedBackofficeUserDTO"
-
+import { BackofficeUserService } from '../../../services/backofficeUser.service'
+import { CreateBackofficeUserComponent } from './create-backoffice-user.component'
+import { CreatedBackofficeUserDTO } from '../../../dto/CreatedBackofficeUserDTO'
 
 describe('CreateBackofficeUserComponent: Unit Tests', () => {
     let backofficeUserServiceStub: Partial<BackofficeUserService>
@@ -45,7 +44,10 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
     })
 
     it('should create a backoffice user on form submission', () => {
-        const createBackofficeUserSpy = cy.spy(component['service'], 'createBackofficeUser')
+        const createBackofficeUserSpy = cy.spy(
+            component['service'],
+            'createBackofficeUser',
+        )
         const alertSpy = cy.spy(window, 'alert')
         const resetSpy = cy.spy(component.form, 'reset')
 
@@ -66,7 +68,6 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
         expect(resetSpy).calledOnce
     })
 
-
     it('should reset form on successful backoffice user creation', () => {
         const alertSpy = cy.spy(window, 'alert')
         const resetSpy = cy.spy(component.form, 'reset')
@@ -85,6 +86,5 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
             `Created Backoffice User: \nName: ${backofficeUser1.name}\nRole: ${backofficeUser1.role}\nEmail: ${backofficeUser1.email}\nPhoneNumber: ${backofficeUser1.phoneNumber}`,
         )
         expect(resetSpy).calledOnce
-
     })
 })

@@ -46,8 +46,8 @@ export class SequenceTaskComponent {
         this.service.getApprovedTasks().subscribe({
             next: (newTasks) => {
                 this.selectedTasks = newTasks
-                    .filter(t => this.tasks.includes(t))
-                    .map(t => t.id)
+                    .filter((t) => this.tasks.includes(t))
+                    .map((t) => t.id)
                 this.tasks = newTasks
             },
             error: (err) => {
@@ -125,8 +125,10 @@ export class SequenceTaskComponent {
 
     _planned: TaskDTO[] = []
     taskTypeFromId(taskId: TaskId): TaskType {
-        return this.tasks.find((t) => t.id === taskId)?.type
-            ?? this._planned.find((t) => t.id === taskId)!.type
+        return (
+            this.tasks.find((t) => t.id === taskId)?.type ??
+            this._planned.find((t) => t.id === taskId)!.type
+        )
     }
 
     collapsedCards: boolean[] = []

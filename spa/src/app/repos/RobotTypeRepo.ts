@@ -15,10 +15,7 @@ interface CreateRobotTypeDTO {
     providedIn: 'root',
 })
 export class RobotTypeRepo {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()

@@ -8,14 +8,14 @@ import { IClientWithoutPasswordDTO } from '../../../../mdr/src/dto/IClientWithou
 import { ICreatedClientDTO } from '../../../../mdr/src/dto/ICreatedClientDTO'
 import IUpdateClientStateDTO from '../../../../mdr/src/dto/IUpdateClientStateDTO'
 import { IEditClientDTO } from '../dto/IEditClientDTO'
-import { ClientEmailDTO } from "../dto/ClientEmailDTO";
+import { ClientEmailDTO } from '../dto/ClientEmailDTO'
 import { AuthService } from '@auth0/auth0-angular'
 
 @Injectable({
     providedIn: 'root',
 })
 export class ClientService {
-    constructor(private http: HttpClient, private auth: AuthService) { }
+    constructor(private http: HttpClient, private auth: AuthService) {}
     private getToken(): Observable<string> {
         return this.auth.getAccessTokenSilently().pipe(
             first(), // Take the first emitted value and complete the observable
@@ -37,7 +37,6 @@ export class ClientService {
         })
     }
 
-
     createClient(dto: ClientDTO): Observable<CreatedClientDTO> {
         return this.http.post<CreatedClientDTO>(
             `${Config.baseUrl}/clients`,
@@ -50,20 +49,23 @@ export class ClientService {
         )
     }
 
-    getClientData(dto: { email: string, password: string }) {
+    getClientData(dto: { email: string; password: string }) {
         return this.getToken().pipe(
             switchMap((token) =>
                 this.http.post<ArrayBuffer>(
                     `${Config.baseUrl}/clients/data`,
                     JSON.stringify(dto),
                     {
-                        headers: this.authHeaders(token)
-                            .set('Content-type', 'application/json'),
+                        headers: this.authHeaders(token).set(
+                            'Content-type',
+                            'application/json',
+                        ),
                         observe: 'body',
                         responseType: 'arraybuffer' as 'json',
-                    }
-                )),
-            catchError((err) => throwError(() => err))
+                    },
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
         )
     }
 
@@ -74,9 +76,9 @@ export class ClientService {
                     headers: this.authHeaders(token),
                     observe: 'body',
                     responseType: 'json',
-                })
+                }),
             ),
-            catchError((err) => throwError(() => err))
+            catchError((err) => throwError(() => err)),
         )
     }
 
@@ -118,10 +120,6 @@ export class ClientService {
     }
 
     deleteClient(dto: ClientEmailDTO): Observable<ClientEmailDTO> {
-
-        return this.http.delete<ClientEmailDTO>(
-            `${Config.baseUrl}/clients/${dto.email}`,
-
-        )
+        return this.http.delete<ClientEmailDTO>(`${Config.baseUrl}/clients/${dto.email}`)
     }
 }

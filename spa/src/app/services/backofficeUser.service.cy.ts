@@ -4,8 +4,8 @@ import {
     HttpTestingController,
 } from '@angular/common/http/testing'
 import { Config } from '../config'
-import {BackofficeUserService} from "./backofficeUser.service";
-import {BackofficeUserDTO} from "../dto/BackofficeUserDTO";
+import { BackofficeUserService } from './backofficeUser.service'
+import { BackofficeUserDTO } from '../dto/BackofficeUserDTO'
 
 describe('BackofficeUserService: Unit Tests', () => {
     let service: BackofficeUserService
@@ -27,7 +27,6 @@ describe('BackofficeUserService: Unit Tests', () => {
 
     describe('createBackofficeUser()', () => {
         it('should create a backoffice user successfully', () => {
-
             const dto: BackofficeUserDTO = {
                 name: 'jonas',
                 role: 'Fleet Manager',
@@ -36,7 +35,6 @@ describe('BackofficeUserService: Unit Tests', () => {
                 password: 'Jonasjonas124!',
             }
 
-
             const expectedBackofficeUser = {
                 name: 'jonas',
                 role: 'Fleet Manager',
@@ -44,15 +42,11 @@ describe('BackofficeUserService: Unit Tests', () => {
                 phoneNumber: '123755565',
             }
 
-            service
-                .createBackofficeUser(dto)
-                .subscribe((createdBackofficeUser) => {
-                    expect(createdBackofficeUser).to.eq(expectedBackofficeUser)
-                })
+            service.createBackofficeUser(dto).subscribe((createdBackofficeUser) => {
+                expect(createdBackofficeUser).to.eq(expectedBackofficeUser)
+            })
 
-            const req = httpMock.expectOne(
-                `${Config.baseUrl}/users-backoffice`,
-            )
+            const req = httpMock.expectOne(`${Config.baseUrl}/users-backoffice`)
             expect(req.request.method).to.eq('POST')
 
             req.flush(expectedBackofficeUser)
@@ -67,8 +61,6 @@ describe('BackofficeUserService: Unit Tests', () => {
                 password: 'Jonasjonas124!',
             }
 
-
-
             const errorMessage = 'Error creating backoffice user'
             const expectedError = new ErrorEvent(errorMessage)
 
@@ -78,14 +70,10 @@ describe('BackofficeUserService: Unit Tests', () => {
                 },
             })
 
-            const req = httpMock.expectOne(
-                `${Config.baseUrl}/users-backoffice`,
-            )
+            const req = httpMock.expectOne(`${Config.baseUrl}/users-backoffice`)
             expect(req.request.method).to.eq('POST')
 
             req.error(expectedError)
         })
     })
-
-
 })

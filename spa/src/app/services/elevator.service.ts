@@ -11,10 +11,7 @@ import { AuthService } from '@auth0/auth0-angular'
 
 @Injectable()
 export class ElevatorService {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()

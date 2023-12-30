@@ -10,7 +10,7 @@ import { TaskService } from 'src/app/services/task.service'
 })
 export class ApproveRejectTaskComponent {
     tasks: TaskDTO[]
-    TaskType = TaskType; // Expose the enum to the template
+    TaskType = TaskType // Expose the enum to the template
 
     constructor(private service: TaskService) {
         this.tasks = []

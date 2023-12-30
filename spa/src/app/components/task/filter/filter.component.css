@@ -34,13 +34,12 @@
 .building-card h2 {
     margin-bottom: 8px;
     white-space: nowrap;
-    overflow: hidden; 
+    overflow: hidden;
     text-overflow: ellipsis;
     color: var(--secondary-color);
-    cursor: pointer; 
+    cursor: pointer;
     transition: all 0.3s ease;
 }
-
 
 .building-card h2:hover {
     overflow: visible;

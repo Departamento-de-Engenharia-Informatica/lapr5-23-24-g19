@@ -23,14 +23,10 @@ import { Config } from './config'
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-
     title!: String
     isBackendUp!: boolean
 
-    constructor(
-        public auth: AuthService,
-        private http: HttpClient,
-    ) {
+    constructor(public auth: AuthService, private http: HttpClient) {
         this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
             if (isAuthenticated) {
                 this.auth.getAccessTokenSilently().subscribe((token) => {
@@ -92,14 +88,14 @@ export class AppComponent {
                                 // console.log("sub")
                                 // console.log(JSON.stringify(user))
                                 const u = user as unknown as UserDTO
-                                localStorage.setItem("USER_ROLES", u.roles[0])
+                                localStorage.setItem('USER_ROLES', u.roles[0])
                                 // alert(localStorage.getItem("USER_ROLES"))
                             },
                             (error) => {
                                 const errorMessage =
                                     error instanceof HttpErrorResponse
                                         ? error.error ||
-                                        `An unexpected error occurred: ${error.message}`
+                                          `An unexpected error occurred: ${error.message}`
                                         : 'An unexpected error occurred'
                                 observer.error(new Error(errorMessage))
                             },
@@ -117,6 +113,6 @@ export class AppComponent {
     }
     logout() {
         this.auth.logout()
-        localStorage.removeItem("USER_ROLES")
+        localStorage.removeItem('USER_ROLES')
     }
 }

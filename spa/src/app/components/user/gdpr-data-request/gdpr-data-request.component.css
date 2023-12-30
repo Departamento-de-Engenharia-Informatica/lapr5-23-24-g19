@@ -1,16 +1,15 @@
 .mat-dialog-container {
-  @apply flex flex-col items-center justify-center min-h-screen m-0;
+    @apply flex flex-col items-center justify-center min-h-screen m-0;
 }
 
 .mat-dialog-content {
-  @apply text-center;
+    @apply text-center;
 }
 
 /* .mat-dialog-actions { */
-  /* @apply justify-center mt-6; */
+/* @apply justify-center mt-6; */
 /* } */
 
-input[type="password"] {
-  @apply mt-4 p-2;
+input[type='password'] {
+    @apply mt-4 p-2;
 }
-

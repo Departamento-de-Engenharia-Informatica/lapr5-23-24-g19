@@ -48,8 +48,8 @@ import { AuthGuard } from '@auth0/auth0-angular'
 import { SequenceTaskComponent } from './components/task/sequence-task/sequence-task.component'
 import { ApproveRejectClientComponent } from './components/user/approve-reject-client/approve-reject-client.component'
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
-import { AdministratorComponent } from "./components/user/administrator-menu/administrator.component";
-import { DeleteClientComponent } from "./components/user/delete-client/delete-client.component";
+import { AdministratorComponent } from './components/user/administrator-menu/administrator.component'
+import { DeleteClientComponent } from './components/user/delete-client/delete-client.component'
 import { RoleAuthGuard } from './services/roleAuthGuard'
 import { RolesEnum } from './services/user.service'
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
@@ -57,8 +57,6 @@ import { UserProfileComponent } from './components/user/user-profile/user-profil
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent, title: 'Auth' },
-
-
 
     // { path: 'backoffice', component: CreateBackofficeUserComponent },
     //{ path: 'client', component: CreateClientComponent, title: 'User' },
@@ -70,10 +68,11 @@ export const routes: Routes = [
         title: 'Modules page',
     },
     {
-        path: 'campus', component: CampusComponent, title: 'Campus',
+        path: 'campus',
+        component: CampusComponent,
+        title: 'Campus',
         canActivate: [AuthGuard, RoleAuthGuard],
         data: { requiredRole: [RolesEnum.ADM, RolesEnum.CMP] },
-
     },
     {
         path: 'task',
@@ -429,4 +428,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

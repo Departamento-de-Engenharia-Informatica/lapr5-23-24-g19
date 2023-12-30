@@ -12,13 +12,25 @@
                             <div>
                                 {{ task.type }}
                             </div>
-                            <ng-container *ngIf="task.type === TaskType.DELIVERY" class="mt-2">
-                                ({{ task.location.startingPoint.buildingCode }}&ndash;{{ task.location.startingPoint.floorNumber }}
+                            <ng-container
+                                *ngIf="task.type === TaskType.DELIVERY"
+                                class="mt-2"
+                            >
+                                ({{ task.location.startingPoint.buildingCode }}&ndash;{{
+                                    task.location.startingPoint.floorNumber
+                                }}
                                 &rarr;
-                                {{ task.location.endingPoint.buildingCode }}&ndash;{{ task.location.endingPoint.floorNumber }})
+                                {{ task.location.endingPoint.buildingCode }}&ndash;{{
+                                    task.location.endingPoint.floorNumber
+                                }})
                             </ng-container>
-                            <ng-container *ngIf="task.type === TaskType.SURVEILLANCE" class="mt-2">
-                                ({{ task.location.startingPoint.buildingCode }}&ndash;{{ task.location.startingPoint.floorNumber }})
+                            <ng-container
+                                *ngIf="task.type === TaskType.SURVEILLANCE"
+                                class="mt-2"
+                            >
+                                ({{ task.location.startingPoint.buildingCode }}&ndash;{{
+                                    task.location.startingPoint.floorNumber
+                                }})
                             </ng-container>
                         </div>
                         <div class="dimension-box">

@@ -1,22 +1,12 @@
 <h2 class="page-title">Create Client</h2>
 <div>
     <div class="form-popup" id="myForm">
-
-        <form
-            [formGroup]="form"
-            (ngSubmit)="submit()"
-            enctype="multipart/form-data"
-        >
-
+        <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
             <div class="form-container">
                 <div class="row">
                     <div>
                         <label for="name">Name:</label>
-                        <input
-                            id="name"
-                            type="text"
-                            formControlName="name"
-                        />
+                        <input id="name" type="text" formControlName="name" />
                     </div>
                 </div>
 
@@ -76,11 +66,18 @@
                             class="form-checkbox h-5 w-5"
                             (change)="onPrivacyPolicyChange($event)"
                         />
-                        <label>Agree to our <a [routerLink]="['/privacy-policy']" class="text-blue-500" >Privacy Policy</a></label>
+                        <label
+                            >Agree to our
+                            <a [routerLink]="['/privacy-policy']" class="text-blue-500"
+                                >Privacy Policy</a
+                            ></label
+                        >
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="form.invalid || !isPrivacyPolicyAgreed">Submit</button>
+                <button type="submit" [disabled]="form.invalid || !isPrivacyPolicyAgreed">
+                    Submit
+                </button>
             </div>
         </form>
     </div>
