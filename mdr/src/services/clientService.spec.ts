@@ -18,6 +18,7 @@ import IClientRepo from './IRepos/IClientRepo'
 import IMdtAdapter from './IRepos/IMdtRepo'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { ClientMap } from '../mappers/ClientMap'
+import {IClientEmailDTO} from "../dto/IClientEmailDTO";
 
 describe('Client Service: Unit tests', () => {
     const sinon = createSandbox()
@@ -262,6 +263,27 @@ describe('Client Service: Unit tests', () => {
             const result = await service.patchClient(dto)
 
             expect(result.isRight()).to.be.true
+        })
+    })
+
+    describe('deleteClient()', () => {
+        it('should succeed with right parameters', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
+
+            sinon.stub(clientRepo, 'find').resolves(undefined)
+            sinon.stub(authRepo, 'deleteUser').resolves()
+            sinon.stub(clientRepo, 'delete').resolves(true)
+
+            const dto: IClientEmailDTO = {
+                email: 'hhf@isep.ipp.pt',
+            } as IClientEmailDTO
+
+            const service = new ClientService(clientRepo, authRepo, mdtAdapter)
+            const result = await service.deleteClient(dto)
+
+            expect(result.isLeft()).to.be.true
         })
     })
 })
