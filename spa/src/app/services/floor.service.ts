@@ -214,7 +214,7 @@ export class FloorService {
             this.getToken()
                 .then((token) => {
                     this.http
-                        .put<UpdateMapDTO>(
+                        .patch<UpdateMapDTO>(
                             `${Config.baseUrl}/buildings/${buildingCode}/floors/${floorNumber}/map`,
                             JSON.stringify(dto),
                             {

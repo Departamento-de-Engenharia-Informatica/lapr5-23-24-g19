@@ -87,11 +87,11 @@ export class UpdateMapComponent {
     }
 
     submitForm() {
-        const dto: UpdateMapDTO = {
-            map: JSON.parse(this.mapFile),
-        }
+        const dto: UpdateMapDTO = JSON.parse(this.mapFile)
 
-        console.log(this.mapFile)
+
+        console.log('mapFile', this.mapFile)
+        console.log('dto', dto)
         this.floorService
             .updateMap(
                 dto,
