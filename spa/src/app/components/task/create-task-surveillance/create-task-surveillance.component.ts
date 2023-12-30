@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '@auth0/auth0-angular'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
-import { CreateSurveillanceTaskDTO } from 'src/app/dto/CreateSurveillanceTaskDTO'
+import { CreateSurveillanceTaskDTO } from "../../../../../../mdr/src/dto/CreateSurveillanceTaskDTO"
 import { BuildingService } from 'src/app/services/building.service'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { TaskService } from 'src/app/services/task.service'

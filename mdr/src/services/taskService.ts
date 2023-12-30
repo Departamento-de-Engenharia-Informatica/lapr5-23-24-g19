@@ -1,8 +1,8 @@
 import { Inject, Service } from 'typedi'
 import { Either, left, right } from '../core/logic/Result'
 
-import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
-import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
+import { CreateDeliveryTaskDTO } from '../dto/CreateDeliveryTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
 import config from '../../config'
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'

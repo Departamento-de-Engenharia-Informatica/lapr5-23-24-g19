@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Observable, of } from 'rxjs'
 import { BuildingDTO } from 'src/app/dto/BuildingDTO'
-import { CreateSurveillanceTaskDTO } from 'src/app/dto/CreateSurveillanceTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../../../../../../mdr/src/dto/CreateSurveillanceTaskDTO'
 import { FloorAndBuildingDTO, FloorService } from 'src/app/services/floor.service'
 import { BuildingService } from 'src/app/services/building.service'
 import { TaskService } from 'src/app/services/task.service'

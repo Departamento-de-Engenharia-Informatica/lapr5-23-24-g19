@@ -6,8 +6,8 @@ import ITaskService, {
     TaskErrorCode,
     TaskErrorResult,
 } from '../services/IServices/ITaskService'
-import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
-import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
+import { CreateDeliveryTaskDTO } from '../dto/CreateDeliveryTaskDTO'
 import { IFilterDTO } from '../dto/IFilterDTO'
 import { IUpdateTaskDTO } from '../dto/IUpdateTaskDTO'
 import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'

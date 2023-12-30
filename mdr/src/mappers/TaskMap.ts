@@ -1,6 +1,6 @@
 import Container from 'typedi'
-import { CreateDeliveryTaskDTO } from '../../../spa/src/app/dto/CreateDeliveryTaskDTO'
-import { CreateSurveillanceTaskDTO } from '../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
+import { CreateDeliveryTaskDTO } from '../dto/CreateDeliveryTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../dto/CreateSurveillanceTaskDTO'
 import { BuildingCode } from '../domain/building/code'
 import { FloorNumber } from '../domain/floor/floorNumber'
 import { RoomName } from '../domain/room/roomName'

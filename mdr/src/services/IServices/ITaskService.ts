@@ -1,5 +1,5 @@
-import { CreateDeliveryTaskDTO } from '../../../../spa/src/app/dto/CreateDeliveryTaskDTO'
-import { CreateSurveillanceTaskDTO } from '../../../../spa/src/app/dto/CreateSurveillanceTaskDTO'
+import { CreateDeliveryTaskDTO } from '../../dto/CreateDeliveryTaskDTO'
+import { CreateSurveillanceTaskDTO } from '../../dto/CreateSurveillanceTaskDTO'
 import { Either } from '../../core/logic/Result'
 import { IFilterDTO } from '../../dto/IFilterDTO'
 import { IGeneralTaskDTO } from '../../dto/IGeneralTaskDTO'
