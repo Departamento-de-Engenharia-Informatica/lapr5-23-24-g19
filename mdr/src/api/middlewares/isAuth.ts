@@ -1,8 +1,12 @@
 // remove by JRT : import jwt from 'express-jwt';
 const { expressjwt: jwt } = require('express-jwt')
 import jwksRsa from 'jwks-rsa'
+import argon2 from 'argon2'
 import config from '../../../config'
 import { Request, Response, NextFunction } from 'express'
+import Container from 'typedi'
+import IClientRepo from '../../services/IRepos/IClientRepo'
+import { Email } from '../../domain/user/email'
 
 /**
  * We are assuming that the JWT will come in a header with the form
@@ -85,7 +89,22 @@ export type AuthRequest = Request & {
 
 export function requireReAuth() {
     return async (req: AuthRequest, res: Response, next: NextFunction) => {
-        // TODO: re-auth
+        const pwd = req.body.password
+
+        const repo = Container.get(config.repos.client.name) as IClientRepo
+        const client = await repo.find(Email.create(req.body.email).getOrThrow())
+
+        const pass = client._get_pwd()
+
+        if (
+            pass.isAlreadyHashed()
+                ? !await argon2.verify(pass.value, pwd)
+                : pass.value !== pwd
+        ) {
+            return res.status(403).send(JSON.stringify({ message: 'Bad Password' }))
+        }
+
+        req.body.password = undefined
         return next()
     }
 }

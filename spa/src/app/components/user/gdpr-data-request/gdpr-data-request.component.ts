@@ -39,12 +39,17 @@ export class GdprDataRequestComponent {
             )
             .subscribe({
                 next: (data) => {
-                    this.downloadFile(data)
+                    this.form.reset()
                     this.dialogRef.close()
+                    this.downloadFile(data)
                 },
                 error: (err) => {
+                    if (err.status === 403) {
+                        alert('Bad Password')
+                    } else {
+                        alert(err.statusText)
+                    }
                     console.error(JSON.stringify(err, null, 2))
-                    alert(JSON.stringify(err, null, 2))
                 },
             })
     }

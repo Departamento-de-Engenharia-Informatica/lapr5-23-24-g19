@@ -42,7 +42,7 @@ export default (app: Router) => {
         }),
         customJwtMiddleware,
         withAnyRole([RolesEnum.CLIENT]),
-        // requireReAuth(),
+        requireReAuth(),
         (req, res, next) => ctrl.exportClientData(req, res, next),
     )
 
