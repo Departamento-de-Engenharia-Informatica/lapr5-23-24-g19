@@ -53,7 +53,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         const res = await fetch(`${this.url}/jobs/filter?filter=${a}&rule=${dto.rule}`)
 
         if (!res.ok) {
-            return Promise.reject()
+            return Promise.reject(await res.text())
         }
 
         return await res.json()
@@ -116,16 +116,11 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
     async getClientRequestedTasks(
         dto: IClientTasksRequestDTO,
     ): Promise<IClientTaskDTO[]> {
-        const res = await fetch(`${this.url}/jobs?client=${dto.email}`)
 
-        if (!res.ok) {
-            return Promise.reject(await res.text())
-        }
-
-        const tasks = (await res.json()) as any[]
+        const tasks = (await this.getByFilter({ criteria: 'client', rule: dto.email })) as unknown as any[]
 
         const taskDtos = tasks.map((t) => {
-            const { JobId: _1, Email: _2, ...task } = t
+            const { id: _1, email: _2, ...task } = t
             return task as IClientTaskDTO
         })
 

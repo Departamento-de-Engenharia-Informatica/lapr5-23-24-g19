@@ -294,8 +294,7 @@ export default class ClientService implements IClientService {
                 })
             }
 
-            const tasks = []
-            //await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
+            const tasks = await this.mdtAdapter.getClientRequestedTasks({ email: dto.email })
 
             return right(ClientMap.toClientData(client, tasks))
         } catch (e) {
