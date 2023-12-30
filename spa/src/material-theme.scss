@@ -1,0 +1,14 @@
+@import '~@angular/material/theming';
+
+// @include mat-core();
+
+// Custom Colors
+$custom-primary: #111827;
+$custom-accent: #ffcc00;
+$custom-third: mat-palette($mat-red);
+
+// Create a dark version of the theme
+$custom-dark-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-third);
+
+// Apply the dark theme
+@include angular-material-theme($custom-dark-theme);

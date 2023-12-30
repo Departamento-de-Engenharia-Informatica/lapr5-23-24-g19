@@ -52,6 +52,7 @@ import { AdministratorComponent } from "./components/user/administrator-menu/adm
 import { DeleteClientComponent } from "./components/user/delete-client/delete-client.component";
 import { RoleAuthGuard } from './services/roleAuthGuard'
 import { RolesEnum } from './services/user.service'
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'modules', pathMatch: 'full' },
@@ -412,6 +413,14 @@ export const routes: Routes = [
         path: 'create-client',
         component: CreateClientComponent,
         title: 'create Client',
+    },
+
+    {
+        path: 'profile',
+        component: UserProfileComponent,
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.CLT] },
+        title: 'User profile',
     },
 
     { path: '**', component: PageNotFoundComponent },

@@ -45,7 +45,7 @@
                         </button>
                         <div class="dropdown-content">
                             <a [routerLink]="['auth']">LogIn</a>
-                            <a [routerLink]="['user']">Profile</a>
+                            <a [routerLink]="['profile']">Profile</a>
                             <a [routerLink]="['edit-client']">Edit profile</a>
                             <a [routerLink]="['delete-client']">Delete account</a>
                             <a *ngIf="auth.user$ | async as user" (click)="logout()">Log out</a>

@@ -67,3 +67,7 @@ button.primary {
     justify-content: space-around;
     flex-wrap: wrap;
 }
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/* @import './material-theme.css'; */
+

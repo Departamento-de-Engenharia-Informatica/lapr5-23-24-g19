@@ -1,0 +1,67 @@
+<section class="relative text-gray-400 body-font bg-gray-900">
+
+    <div class="container px-5 py-5 mx-auto flex flex-col">
+
+        <div class="flex flex-col p-8">
+            <!-- Flex Column: Avatar and User Info -->
+            <div class="flex flex-row items-center align-middle mb-8">
+                <!-- Left side: Avatar -->
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gray-300 rounded-full overflow-hidden">
+                        <!-- Replace the placeholder with the updated user icon SVG -->
+                        <svg class="w-full h-full text-gray-600" fill="currentColor" viewBox="0 0 448 512">
+                            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Right side: User Info -->
+                <div class="ml-8 flex-grow">
+                    <div class="mb-4">
+                        <p class="text-xl font-bold">{{ client?.name }}</p>
+                        <p class="text-gray-600">Email: {{ client?.email }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-gray-600">Phone Number: {{ client?.phoneNumber }}</p>
+                        <p class="text-gray-600">VAT Number: {{ client?.vatNumber }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flex Column: GDPR and Delete Account Sections -->
+            <div class="flex flex-col">
+                <!-- Soft Horizontal Divider for GDPR Section -->
+                <hr class="my-6 border-t border-gray-300">
+
+                <!-- GDPR Section -->
+                <div class="mb-6 p-4">
+                    <p class="mb-4">
+                    According to GDPR regulations, you can request a copy of your data by clicking the button below.
+                    </p>
+                    <button
+                        class="bg-blue-500 text-white px-4 py-2 rounded"
+                        (click)="openPasswordDialog()"
+                    >
+                        Request Data
+                    </button>
+                </div>
+
+                <!-- Hard Horizontal Divider for Delete Account Section -->
+                <hr class="my-6 border-t border-red-500">
+
+                <!-- Delete Account Section -->
+                <div class="mb-6 p-4">
+                    <p class="text-red-500 mb-4">
+                    Warning: Deleting your account is irreversible. Proceed with caution.
+                    </p>
+                    <button
+                        class="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

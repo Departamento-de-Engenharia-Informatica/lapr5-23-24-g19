@@ -72,7 +72,11 @@ import { ApproveRejectClientComponent } from './components/user/approve-reject-c
 import { ListPendingTasksComponent } from './components/task/list-pending-tasks/list-pending-tasks.component'
 import {AdministratorComponent} from "./components/user/administrator-menu/administrator.component";
 import {DeleteClientComponent} from "./components/user/delete-client/delete-client.component";
-import { UserService } from './services/user.service'
+import { UserService } from './services/user.service';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { GdprDataRequestComponent } from './components/user/gdpr-data-request/gdpr-data-request.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog'
 
 @NgModule({
     declarations: [
@@ -130,6 +134,8 @@ import { UserService } from './services/user.service'
         ListPendingTasksComponent,
         AdministratorComponent,
         DeleteClientComponent,
+        UserProfileComponent,
+        GdprDataRequestComponent,
     ],
     imports: [
         AuthModule.forRoot({
@@ -148,6 +154,8 @@ import { UserService } from './services/user.service'
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
     ],
     providers: [
         Document,
