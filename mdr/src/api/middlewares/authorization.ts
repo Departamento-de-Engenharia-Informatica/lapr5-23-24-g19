@@ -12,8 +12,8 @@ export function withAnyRole(roles: RolesEnum[]) {
         if (jweToken === config.specialAccessTok) {
             return next()
         } else if (
-            req.auth.roles.includes(RolesEnum.CLIENT)
-            && roles.includes(RolesEnum.CLIENT)
+            req.auth.roles.includes(RolesEnum.CLIENT) &&
+            roles.includes(RolesEnum.CLIENT)
         ) {
             return await checkClient(req, res, next)
         } else {
@@ -53,7 +53,7 @@ async function checkBackoffice(
     ) as IBackofficeUserService
 
     if (
-        !auth.roles.find((r) => anyOfRoles.includes(r as RolesEnum)) ||
+        !auth.roles.find(r => anyOfRoles.includes(r as RolesEnum)) ||
         !(await svc.getUser({ email: auth.email }))
     ) {
         return res.status(403).json({ message: 'Forbidden' })

@@ -30,7 +30,10 @@ import { RobotSequenceDTO } from '../dto/RobotSequenceDTO'
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(private http: HttpClient, private auth: AuthService) {}
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()
@@ -60,7 +63,7 @@ export class TaskService {
     }
 
     tasksOfState(state: TaskState): Observable<TaskDTO[]> {
-        return this._fakeToken().pipe(
+        return this.getTokenObservable().pipe(
             switchMap((token) =>
                 this.http.get<IGeneralTaskDTO[]>(
                     `${Config.baseUrl}/task?status=${state}`,
@@ -96,7 +99,7 @@ export class TaskService {
     }
 
     taskSequenceAlgorithms(): Observable<SequenceAlgorithmDTO[]> {
-        return this._fakeToken().pipe(
+        return this.getTokenObservable().pipe(
             switchMap((token) =>
                 this.http.get<SequenceAlgorithmDTO[]>(
                     `${Config.baseUrl}/task/sequence/algorithms`,
@@ -112,7 +115,7 @@ export class TaskService {
     }
 
     sequenceTasks(dto: ITaskAlgorithmDTO) {
-        return this._fakeToken().pipe(
+        return this.getTokenObservable().pipe(
             switchMap((token) => {
                 return this.http.patch<RobotSequenceDTO[]>(
                     `${Config.baseUrl}/task/sequence`,
@@ -319,7 +322,7 @@ export class TaskService {
     updateTask(dto: UpdateTaskDTO) {
         const { id: taskId, ...body } = dto
 
-        return this._fakeToken().pipe(
+        return this.getTokenObservable().pipe(
             switchMap((token) => {
                 const headers = this.authHeaders(token).set(
                     'Content-type',
@@ -336,9 +339,31 @@ export class TaskService {
     }
 
     getPendingTasks(): Observable<IGeneralTaskDTO[]> {
-        return this.http.get<[]>(`${Config.baseUrl}/task?status=Pending`, {
-            observe: 'body',
-            responseType: 'json',
+        // return this.http.get<[]>(`${Config.baseUrl}/task?status=Pending`, {
+        //     observe: 'body',
+        //     responseType: 'json',
+        // })
+        return new Observable<IGeneralTaskDTO[]>((observer) => {
+            this.getToken().then((token) => {
+                this.http
+                    .get<IGeneralTaskDTO[]>(`${Config.baseUrl}/task?status=Pending`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-type': 'application/json',
+                        },
+                        observe: 'body',
+                        responseType: 'json',
+                    })
+                    .subscribe(
+                        (tasks) => {
+                            observer.next(tasks)
+                            observer.complete()
+                        },
+                        (error) => {
+                            observer.error(error)
+                        },
+                    )
+            })
         })
     }
 

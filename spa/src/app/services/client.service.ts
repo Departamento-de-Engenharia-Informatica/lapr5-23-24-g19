@@ -15,7 +15,10 @@ import { AuthService } from '@auth0/auth0-angular'
     providedIn: 'root',
 })
 export class ClientService {
-    constructor(private http: HttpClient, private auth: AuthService) {}
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {}
 
     private getToken(): Observable<string> {
         return this.auth.getAccessTokenSilently().pipe(
@@ -79,21 +82,51 @@ export class ClientService {
     }
 
     getPendingClients(): Observable<ICreatedClientDTO[]> {
-        return this.http.get<ICreatedClientDTO[]>(
-            `${Config.baseUrl}/clients?state=Pending`,
+        // return this.http.get<ICreatedClientDTO[]>(
+        //     `${Config.baseUrl}/clients?state=Pending`,
+        // )
+        return this.getToken().pipe(
+            switchMap((token) =>
+                this.http.get<ICreatedClientDTO[]>(
+                    `${Config.baseUrl}/clients?state=Pending`,
+                    {
+                        headers: this.authHeaders(token),
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
         )
     }
 
     updateClientState(dto: IUpdateClientStateDTO): Observable<IClientWithoutPasswordDTO> {
         console.log(dto)
-        return this.http.patch<IClientWithoutPasswordDTO>(
-            `${Config.baseUrl}/clients`,
-            JSON.stringify(dto),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
+        // return this.http.patch<IClientWithoutPasswordDTO>(
+        //     `${Config.baseUrl}/clients`,
+        //     JSON.stringify(dto),
+        //     {
+        //         headers: { 'Content-type': 'application/json' },
+        //         observe: 'body',
+        //         responseType: 'json',
+        //     },
+        // )
+        return this.getToken().pipe(
+            switchMap((token) =>
+                this.http.patch<IClientWithoutPasswordDTO>(
+                    `${Config.baseUrl}/clients`,
+                    JSON.stringify(dto),
+                    {
+                        headers: this.authHeaders(token).set(
+                            'Content-type',
+                            'application/json',
+                        ),
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
         )
     }
 
@@ -104,18 +137,48 @@ export class ClientService {
             vatNumber: dto.vatNumber,
         }
 
-        return this.http.patch<IClientWithoutPasswordDTO>(
-            `${Config.baseUrl}/clients/${dto.email}`,
-            JSON.stringify(editClientDTO),
-            {
-                headers: { 'Content-type': 'application/json' },
-                observe: 'body',
-                responseType: 'json',
-            },
+        // return this.http.patch<IClientWithoutPasswordDTO>(
+        //     `${Config.baseUrl}/clients/${dto.email}`,
+        //     JSON.stringify(editClientDTO),
+        //     {
+        //         headers: { 'Content-type': 'application/json' },
+        //         observe: 'body',
+        //         responseType: 'json',
+        //     },
+        // )
+        return this.getToken().pipe(
+            switchMap((token) =>
+                this.http.patch<IClientWithoutPasswordDTO>(
+                    `${Config.baseUrl}/clients/${dto.email}`,
+                    JSON.stringify(editClientDTO),
+                    {
+                        headers: this.authHeaders(token).set(
+                            'Content-type',
+                            'application/json',
+                        ),
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
         )
     }
 
     deleteClient(dto: ClientEmailDTO): Observable<ClientEmailDTO> {
-        return this.http.delete<ClientEmailDTO>(`${Config.baseUrl}/clients/${dto.email}`)
+        // return this.http.delete<ClientEmailDTO>(`${Config.baseUrl}/clients/${dto.email}`)
+        return this.getToken().pipe(
+            switchMap((token) =>
+                this.http.delete<ClientEmailDTO>(
+                    `${Config.baseUrl}/clients/${dto.email}`,
+                    {
+                        headers: this.authHeaders(token),
+                        observe: 'body',
+                        responseType: 'json',
+                    },
+                ),
+            ),
+            catchError((err) => throwError(() => err)),
+        )
     }
 }
