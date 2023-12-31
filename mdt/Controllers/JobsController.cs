@@ -121,15 +121,14 @@ namespace DDDSample1.Controllers
             }
             catch (Exception e)
             {
-                return new ObjectResult(e.Message)
-                {
-                    StatusCode = 502,
-                };
+                return new ObjectResult(e.Message) { StatusCode = 502, };
             }
         }
 
         [HttpPatch("sequence")]
-        public async Task<ActionResult<List<PlannedRobotTasksDTO>>> JobSequence([FromBody] RobotTasksDTO dto)
+        public async Task<ActionResult<List<PlannedRobotTasksDTO>>> JobSequence(
+            [FromBody] RobotTasksDTO dto
+        )
         {
             try
             {
