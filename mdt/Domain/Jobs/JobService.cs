@@ -50,7 +50,7 @@ namespace DDDSample1.Domain.Jobs
             return JsonSerializer.Serialize(job, options);
         }
 
-        public async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
+        public virtual async Task<CreatingJobDto> AddAsync(CreatingJobDto dto)
         {
             await _repo.AddAsync(JobMapper.ToDomain(dto));
             await _unitOfWork.CommitAsync();
@@ -67,7 +67,7 @@ namespace DDDSample1.Domain.Jobs
             return jobs;
         }
 
-        public async Task<List<Job>> GetByStatus(string state)
+        public virtual async Task<List<Job>> GetByStatus(string state)
         {
             var jobs = await _repo.GetByState(JobState.FromString(state));
             _ = await _unitOfWork.CommitAsync(); // ??

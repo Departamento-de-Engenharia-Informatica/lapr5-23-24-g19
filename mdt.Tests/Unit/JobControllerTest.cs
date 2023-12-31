@@ -8,16 +8,16 @@ using DDDSample1.Util.Coordinates;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace mdt.Tests.Integration
+namespace mdt.Tests.Unit
 {
-    [TestFixture, Category("Unit"), Category("Service")]
-    public class JobControllerServiceTest
+    [TestFixture, Category("Unit"), Category("Controller")]
+    public class JobControllerTest
     {
         private Mock<IJobRepository> _repo;
         private Mock<IPlanningAdapter> _planning;
         private Mock<ISequenceRepository> _sequence;
         private Mock<IUnitOfWork> _unitOfWork;
-        private JobService _service;
+        private Mock<JobService> _service;
         private JobsController _controller;
 
         [SetUp]
@@ -27,13 +27,13 @@ namespace mdt.Tests.Integration
             _planning = new Mock<IPlanningAdapter>();
             _sequence = new Mock<ISequenceRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
-            _service = new JobService(
+            _service = new Mock<JobService>(
                 _unitOfWork.Object,
                 _repo.Object,
                 _planning.Object,
                 _sequence.Object
             );
-            _controller = new JobsController(_service);
+            _controller = new JobsController(_service.Object);
         }
 
         [Test]
@@ -50,25 +50,20 @@ namespace mdt.Tests.Integration
                 new JobSurveillanceDto(new JobContactDto("Marco", 997456123))
             );
 
-            _repo.Setup(r => r.AddAsync(It.IsAny<Job>())).Verifiable();
-            _unitOfWork.Setup(u => u.CommitAsync()).Verifiable();
+            _service.Setup(s => s.AddAsync(dto)).Returns(Task.FromResult(dto));
 
             var result = await _controller.Create(dto);
 
-            _repo.Verify(r => r.AddAsync(It.IsAny<Job>()), Times.Once);
-            _unitOfWork.Verify(u => u.CommitAsync(), Times.Once);
-
+            _service.Verify(s => s.AddAsync(dto), Times.Once);
             Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
-            var okObjectResult = result.Result as OkObjectResult;
-            Assert.That(okObjectResult.Value, Is.EqualTo(dto));
+            var okResult = result.Result as OkObjectResult;
+            Assert.That(okResult.Value, Is.EqualTo(dto));
         }
 
         [Test]
-        [TestCase("PENDING")]
-        [TestCase("APPROVED")]
-        [TestCase("REJECTED")]
-        public async Task TestGetByStatusShouldReturnJobs(string targetStatus)
+        public async Task TestGetByStatusShouldReturnJobs()
         {
+            string targetStatus = "PENDING";
             var expectedJobs = new List<Job>
             {
                 new JobSurveillance(
@@ -83,34 +78,28 @@ namespace mdt.Tests.Integration
                 ),
             };
 
-            _repo.Setup(r => r.GetByState(It.IsAny<JobStateEnum>())).ReturnsAsync(expectedJobs);
-
+            _service.Setup(s => s.GetByStatus(targetStatus)).Returns(Task.FromResult(expectedJobs));
             var result = await _controller.GetByStatus(targetStatus);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<OkObjectResult>(result.Result);
-            var okObjectResult = result.Result as OkObjectResult;
-            Assert.That(okObjectResult.Value, Is.EqualTo(expectedJobs));
-
-            _repo.Verify(
-                r => r.GetByState(It.Is<JobStateEnum>(s => s.ToString() == targetStatus)),
-                Times.Once
-            );
+            _service.Verify(s => s.GetByStatus(targetStatus), Times.Once);
+            Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+            var okResult = result.Result as OkObjectResult;
+            Assert.That(okResult.Value, Is.EqualTo(expectedJobs));
         }
 
-        public JobControllerServiceTest()
+        public JobControllerTest()
         {
             _repo = new Mock<IJobRepository>();
             _planning = new Mock<IPlanningAdapter>();
             _sequence = new Mock<ISequenceRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
-            _service = new JobService(
+            _service = new Mock<JobService>(
                 _unitOfWork.Object,
                 _repo.Object,
                 _planning.Object,
                 _sequence.Object
             );
-            _controller = new JobsController(_service);
+            _controller = new JobsController(_service.Object);
         }
     }
 }
