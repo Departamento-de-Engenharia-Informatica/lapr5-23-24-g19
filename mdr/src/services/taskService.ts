@@ -37,8 +37,9 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-        @Inject(config.strategies.taskDistribution.name) private taskDistribution: ITaskDistributionStrategy
-    ) { }
+        @Inject(config.strategies.taskDistribution.name)
+        private taskDistribution: ITaskDistributionStrategy,
+    ) {}
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -210,7 +211,9 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async updateTask(dto: IUpdateTaskDTO): Promise<Either<TaskErrorResult, IUpdatedTaskDTO>> {
+    async updateTask(
+        dto: IUpdateTaskDTO,
+    ): Promise<Either<TaskErrorResult, IUpdatedTaskDTO>> {
         try {
             const task = await this.repo.updateTask(dto)
             return right(task)
@@ -237,19 +240,19 @@ export default class TaskService implements ITaskService {
 
             const distributedTasks = this.taskDistribution.distribute(
                 [...dto.tasks],
-                robots
+                robots,
             )
 
             if (distributedTasks.isFailure) {
                 return left({
                     errorCode: TaskErrorCode.BussinessRuleViolation,
-                    message: distributedTasks.errorValue().toString()
+                    message: distributedTasks.errorValue().toString(),
                 })
             }
 
             const result: IRobotTasksDTO = {
                 Algorithm: dto.algorithm,
-                RobotTasks: distributedTasks.getValue()
+                RobotTasks: distributedTasks.getValue(),
             }
 
             const sequence = await this.repo.taskSequence(result)

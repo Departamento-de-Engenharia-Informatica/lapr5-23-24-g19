@@ -30,10 +30,7 @@ import { RobotSequenceDTO } from '../dto/RobotSequenceDTO'
     providedIn: 'root',
 })
 export class TaskService {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     async getToken(): Promise<string> {
         const tokenObservable = this.auth.getAccessTokenSilently()

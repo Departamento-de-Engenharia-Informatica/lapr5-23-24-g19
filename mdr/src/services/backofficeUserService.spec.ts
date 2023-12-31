@@ -31,15 +31,15 @@ describe('BackofficeUser Service: Unit tests', () => {
     beforeEach(() => {
         Container.reset()
 
-        const backofficeUserSchema = require('../persistence/schemas/backofficeUserSchema')
-            .default
+        const backofficeUserSchema =
+            require('../persistence/schemas/backofficeUserSchema').default
         Container.set('backofficeUserSchema', backofficeUserSchema)
 
         const roleSchema = require('../persistence/schemas/roleSchema').default
         Container.set('roleSchema', roleSchema)
 
-        const backofficeUserRepoClass = require('../repos/mongo/backofficeUserRepo')
-            .default
+        const backofficeUserRepoClass =
+            require('../repos/mongo/backofficeUserRepo').default
         const backofficeUserRepo = Container.get(backofficeUserRepoClass)
         Container.set('BackofficeUserRepo', backofficeUserRepo)
 
@@ -108,15 +108,14 @@ describe('BackofficeUser Service: Unit tests', () => {
             const roleRepo = Container.get('RoleRepo') as IRoleRepo
             const authRepo = Container.get('AuthRepo') as IAuthRepo
 
-
             sinon.stub(backofficeUserRepo, 'existsWithEmail').resolves(false)
             sinon
                 .stub(backofficeUserRepo, 'save')
-                .rejects(({} as unknown) as BackofficeUser)
+                .rejects({} as unknown as BackofficeUser)
 
             sinon
                 .stub(BackofficeUserMap, 'toDTO')
-                .returns(({} as unknown) as ICreatedBackofficeUserDTO)
+                .returns({} as unknown as ICreatedBackofficeUserDTO)
 
             sinon.stub(roleRepo, 'find').resolves()
 

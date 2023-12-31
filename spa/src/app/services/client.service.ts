@@ -15,10 +15,7 @@ import { AuthService } from '@auth0/auth0-angular'
     providedIn: 'root',
 })
 export class ClientService {
-    constructor(
-        private http: HttpClient,
-        private auth: AuthService,
-    ) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     private getToken(): Observable<string> {
         return this.auth.getAccessTokenSilently().pipe(

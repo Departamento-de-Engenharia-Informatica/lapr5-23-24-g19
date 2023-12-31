@@ -83,5 +83,7 @@ export default class Client extends AggregateRoot<Props> {
         this.props.status = newStatus
     }
 
-    _get_pwd() { return this.props.password }
+    _get_pwd() {
+        return this.props.password
+    }
 }

@@ -10,7 +10,7 @@ import { AuthService } from '@auth0/auth0-angular'
     providedIn: 'root',
 })
 export class BackofficeUserService {
-    constructor(private http: HttpClient, private auth: AuthService) { }
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     private getToken(): Observable<string> {
         return this.auth.getAccessTokenSilently().pipe(
@@ -30,18 +30,20 @@ export class BackofficeUserService {
 
     createBackofficeUser(dto: BackofficeUserDTO): Observable<CreatedBackofficeUserDTO> {
         return this.getToken().pipe(
-            switchMap(token =>
+            switchMap((token) =>
                 this.http.post<CreatedBackofficeUserDTO>(
                     `${Config.baseUrl}/users-backoffice`,
                     JSON.stringify(dto),
                     {
-                        headers: this.authHeaders(token)
-                            .set('Content-type', 'application/json'),
+                        headers: this.authHeaders(token).set(
+                            'Content-type',
+                            'application/json',
+                        ),
                         observe: 'body',
                         responseType: 'json',
                     },
-                )
-            )
+                ),
+            ),
         )
     }
 }

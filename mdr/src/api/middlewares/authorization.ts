@@ -53,7 +53,7 @@ async function checkBackoffice(
     ) as IBackofficeUserService
 
     if (
-        !auth.roles.find(r => anyOfRoles.includes(r as RolesEnum)) ||
+        !auth.roles.find((r) => anyOfRoles.includes(r as RolesEnum)) ||
         !(await svc.getUser({ email: auth.email }))
     ) {
         return res.status(403).json({ message: 'Forbidden' })

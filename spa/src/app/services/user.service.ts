@@ -36,14 +36,16 @@ export class UserService {
 
     hasRole(roles: RolesEnum[]): boolean {
         // Retrieve the roles from localStorage and split them into an array
-        const storedRolesString = localStorage.getItem('USER_ROLES');
-        const storedRoles = storedRolesString ? storedRolesString.split(',') : [];
-    
+        const storedRolesString = localStorage.getItem('USER_ROLES')
+        const storedRoles = storedRolesString ? storedRolesString.split(',') : []
+
         // Normalize roles for case-insensitive comparison
-        const normalizedStoredRoles = storedRoles.map(role => role.toUpperCase());
-    
+        const normalizedStoredRoles = storedRoles.map((role) => role.toUpperCase())
+
         // Check if any of the provided roles match the stored roles
-        return roles.some(role => normalizedStoredRoles.includes(RolesEnum[role].toUpperCase()));
+        return roles.some((role) =>
+            normalizedStoredRoles.includes(RolesEnum[role].toUpperCase()),
+        )
     }
 }
 

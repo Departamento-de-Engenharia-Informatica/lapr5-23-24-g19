@@ -18,7 +18,7 @@ import IClientRepo from './IRepos/IClientRepo'
 import IMdtAdapter from './IRepos/IMdtRepo'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { ClientMap } from '../mappers/ClientMap'
-import { IClientEmailDTO } from "../dto/IClientEmailDTO";
+import { IClientEmailDTO } from '../dto/IClientEmailDTO'
 import { IClientDataRequestDTO } from '../dto/IClientDataRequestDTO'
 import { ClientErrorCode, ClientErrorResult } from './IServices/IClientService'
 import { IClientTaskDTO } from '../dto/IClientTaskDTO'
@@ -88,9 +88,9 @@ describe('Client Service: Unit tests', () => {
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
             sinon.stub(clientRepo, 'existsWithEmail').resolves(false)
-            sinon.stub(clientRepo, 'save').resolves(({} as unknown) as Client)
+            sinon.stub(clientRepo, 'save').resolves({} as unknown as Client)
 
-            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+            sinon.stub(ClientMap, 'toDTO').returns({} as unknown as ICreatedClientDTO)
 
             sinon.stub(authRepo, 'createUser').resolves()
             sinon.stub(authRepo, 'assignRoleToUser').resolves()
@@ -298,7 +298,7 @@ describe('Client Service: Unit tests', () => {
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
             const dto: IClientDataRequestDTO = {
-                email: 'mzc@isep.ipp.pt'
+                email: 'mzc@isep.ipp.pt',
             }
 
             sinon.stub(clientRepo, 'find').resolves(null)
@@ -318,10 +318,12 @@ describe('Client Service: Unit tests', () => {
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
             const dto: IClientDataRequestDTO = {
-                email: 'mzc@isep.ipp.pt'
+                email: 'mzc@isep.ipp.pt',
             }
 
-            sinon.stub(clientRepo, 'find').resolves({ email: dto.email } as unknown as Client)
+            sinon
+                .stub(clientRepo, 'find')
+                .resolves({ email: dto.email } as unknown as Client)
 
             const errMsg = 'HTTP Request failed: Internal Server error'
             sinon.stub(mdtAdapter, 'getClientRequestedTasks').rejects({ message: errMsg })
@@ -341,7 +343,7 @@ describe('Client Service: Unit tests', () => {
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
             const dto: IClientDataRequestDTO = {
-                email: 'mzc@isep.ipp.pt'
+                email: 'mzc@isep.ipp.pt',
             }
 
             const client = {
@@ -357,27 +359,27 @@ describe('Client Service: Unit tests', () => {
             const mdtResponse: IClientTaskDTO[] = [
                 // {{{ mdt response data
                 {
-                    "surveillanceContact": {
-                        "name": "zuzu",
-                        "phoneNumber": 919191333
+                    surveillanceContact: {
+                        name: 'zuzu',
+                        phoneNumber: 919191333,
                     },
-                    "location": {
-                        "startingPoint": {
-                            "buildingCode": "A",
-                            "floorNumber": 1,
-                            "x": 4,
-                            "y": 14
+                    location: {
+                        startingPoint: {
+                            buildingCode: 'A',
+                            floorNumber: 1,
+                            x: 4,
+                            y: 14,
                         },
-                        "endingPoint": {
-                            "buildingCode": "A",
-                            "floorNumber": 1,
-                            "x": 4,
-                            "y": 14
-                        }
+                        endingPoint: {
+                            buildingCode: 'A',
+                            floorNumber: 1,
+                            x: 4,
+                            y: 14,
+                        },
                     },
-                    "status": 0,
-                    "jobType": 0
-                }
+                    status: 0,
+                    jobType: 0,
+                },
                 // }}}
             ]
 
@@ -386,8 +388,8 @@ describe('Client Service: Unit tests', () => {
             const clientData = {
                 accountData: { ...client },
                 requestedTasks: {
-                    tasks: [...mdtResponse]
-                }
+                    tasks: [...mdtResponse],
+                },
             }
             sinon.stub(ClientMap, 'toClientData').returns(clientData)
 

@@ -15,13 +15,7 @@ export default async ({ expressApp }) => {
         storage: config.storage,
     }
 
-    const keys = [
-        'strategies',
-        'controllers',
-        'repos',
-        'services',
-        'schemas'
-    ]
+    const keys = ['strategies', 'controllers', 'repos', 'services', 'schemas']
 
     for (let key of keys) {
         if (config[key] !== null && config[key] !== undefined) {

@@ -19,11 +19,11 @@ const { expect } = chai
 describe('Client controller Unit', () => {
     const sandbox = sinon.createSandbox()
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 
@@ -38,7 +38,7 @@ describe('Client controller Unit', () => {
             }
 
             const req: Partial<Request> = {}
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -75,7 +75,7 @@ describe('Client controller Unit', () => {
 
             const req: Partial<Request> = {}
 
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -113,7 +113,7 @@ describe('Client controller Unit', () => {
             }
 
             const req: Partial<Request> = {}
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),
@@ -135,7 +135,7 @@ describe('Client controller Unit', () => {
             }
 
             const req: Partial<Request> = {}
-            req.body = (body as unknown) as NodeJS.ReadableStream
+            req.body = body as unknown as NodeJS.ReadableStream
 
             const res: Partial<Response> = {
                 status: sandbox.stub().returnsThis(),

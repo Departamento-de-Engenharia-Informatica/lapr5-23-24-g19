@@ -72,7 +72,7 @@ describe('Client Service: Integration tests', () => {
             sinon.stub(authRepo, 'assignRoleToUser').resolves()
             sinon.stub(authRepo, 'blockUser').resolves()
 
-            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+            sinon.stub(ClientMap, 'toDTO').returns({} as unknown as ICreatedClientDTO)
 
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
@@ -85,7 +85,7 @@ describe('Client Service: Integration tests', () => {
         it('should succeed with right parameters', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
             sinon.stub(clientRepo, 'existsWithEmail').resolves(false)
-            sinon.stub(clientRepo, 'save').resolves(({} as unknown) as Client)
+            sinon.stub(clientRepo, 'save').resolves({} as unknown as Client)
 
             const dto: IClientDTO = {
                 email: 'mzc@isep.ipp.pt',
@@ -107,7 +107,7 @@ describe('Client Service: Integration tests', () => {
             sinon.stub(authRepo, 'assignRoleToUser').resolves()
             sinon.stub(authRepo, 'blockUser').resolves()
 
-            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+            sinon.stub(ClientMap, 'toDTO').returns({} as unknown as ICreatedClientDTO)
 
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
@@ -121,8 +121,8 @@ describe('Client Service: Integration tests', () => {
     describe('getClient(): service + domain tests', () => {
         it('should work with right parameters', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
-            sinon.stub(clientRepo, 'find').resolves(({} as unknown) as Client)
-            sinon.stub(ClientMap, 'toDTO').returns(({} as unknown) as ICreatedClientDTO)
+            sinon.stub(clientRepo, 'find').resolves({} as unknown as Client)
+            sinon.stub(ClientMap, 'toDTO').returns({} as unknown as ICreatedClientDTO)
 
             const authRepo = Container.get('AuthRepo') as IAuthRepo
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
@@ -159,7 +159,7 @@ describe('Client Service: Integration tests', () => {
     describe('deleteClient(): service + domain tests', () => {
         it('should work with right parameters', async () => {
             const clientRepo = Container.get('ClientRepo') as IClientRepo
-            sinon.stub(clientRepo, 'find').resolves(({} as unknown) as Client)
+            sinon.stub(clientRepo, 'find').resolves({} as unknown as Client)
 
             const dto: IClientEmailDTO = {
                 email: 'mzc@isep.ipp.pt',

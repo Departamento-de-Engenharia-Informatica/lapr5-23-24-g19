@@ -84,7 +84,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
             return Promise.reject(await res.text())
         }
 
-        return await res.json() as IUpdatedTaskDTO
+        return (await res.json()) as IUpdatedTaskDTO
     }
 
     async taskSequence(dto: IRobotTasksDTO): Promise<IRobotTaskSequenceDTO> {
@@ -117,8 +117,10 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
     async getClientRequestedTasks(
         dto: IClientTasksRequestDTO,
     ): Promise<IClientTaskDTO[]> {
-
-        const tasks = (await this.getByFilter({ criteria: 'client', rule: dto.email })) as unknown as any[]
+        const tasks = (await this.getByFilter({
+            criteria: 'client',
+            rule: dto.email,
+        })) as unknown as any[]
 
         const taskDtos = tasks.map((t) => {
             const { id: _1, email: _2, ...task } = t

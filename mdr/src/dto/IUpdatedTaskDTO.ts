@@ -50,4 +50,3 @@ export interface IUpdatedTaskDTO {
     }
     description?: string
 }
-

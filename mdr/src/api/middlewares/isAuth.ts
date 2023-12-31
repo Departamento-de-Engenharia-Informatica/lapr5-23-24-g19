@@ -64,16 +64,26 @@ export const checkJwt = jwt({
 })
 
 export function customJwtMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
-    checkJwt(req, res, err => {
+    checkJwt(req, res, (err) => {
         const jweToken = req.headers.authorization?.split(' ')[1]
 
-        if (jweToken != undefined && jweToken != null && jweToken != config.specialAccessTok) {
+        if (
+            jweToken != undefined &&
+            jweToken != null &&
+            jweToken != config.specialAccessTok
+        ) {
             if (err) {
                 console.error('JWT validation error:', err)
                 return res.status(err.status || 500).json({ error: err.message })
             }
-            req.auth.email = req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email']
-            req.auth.roles = req.auth['https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles']
+            req.auth.email =
+                req.auth[
+                    'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/email'
+                ]
+            req.auth.roles =
+                req.auth[
+                    'https://thepicklebaldev-wt48psyid1ra2e8l.us.auth0.comlwizard.com/roles'
+                ]
             console.log('User Email:', req.auth)
         }
         next()
@@ -98,7 +108,7 @@ export function requireReAuth() {
 
         if (
             pass.isAlreadyHashed()
-                ? !await argon2.verify(pass.value, pwd)
+                ? !(await argon2.verify(pass.value, pwd))
                 : pass.value !== pwd
         ) {
             return res.status(403).send(JSON.stringify({ message: 'Bad Password' }))

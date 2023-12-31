@@ -61,7 +61,7 @@ describe('BackofficeUser controller Unit', () => {
                 <NextFunction>next,
             )
 
-             expect(res.status).to.have.been.calledOnceWith(422)
+            expect(res.status).to.have.been.calledOnceWith(422)
         })
 
         it('should succeed to create with correct parameters', async () => {

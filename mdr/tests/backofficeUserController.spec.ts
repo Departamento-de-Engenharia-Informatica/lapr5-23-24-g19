@@ -23,7 +23,7 @@ describe('BackofficeUser controller:', () => {
         sandbox.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
     }
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
 
         const schema = require('../src/persistence/schemas/backofficeUserSchema').default
@@ -49,7 +49,7 @@ describe('BackofficeUser controller:', () => {
         Container.set('BackofficeUserService', service)
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 

@@ -166,7 +166,7 @@ export default class ClientController implements IClientController {
                 workdirBase: dto.email,
             })
 
-            return res.sendFile(archivePath, { root: './' }, async err => {
+            return res.sendFile(archivePath, { root: './' }, async (err) => {
                 if (err) {
                     console.error('Error sending ZIP file:', err)
                     res.status(500).send('Internal Server Error')

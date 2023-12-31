@@ -61,7 +61,6 @@ describe('Client Service: Unit tests', () => {
         let robotTypeRepo = Container.get(robotTypeRepoClass)
         Container.set('RobotTypeRepo', robotTypeRepo)
 
-
         let robotSchema = require('../persistence/schemas/robotSchema').default
         Container.set('robotSchema', robotSchema)
 
@@ -69,7 +68,8 @@ describe('Client Service: Unit tests', () => {
         let robotRepo = Container.get(robotRepoClass)
         Container.set('RobotRepo', robotRepo)
 
-        let distributionStrategyClass = require('../core/logic/taskDistribution/roundRobinDistribution').default
+        let distributionStrategyClass =
+            require('../core/logic/taskDistribution/roundRobinDistribution').default
         let distributionStrategy = Container.get(distributionStrategyClass)
         Container.set(config.strategies.taskDistribution.name, distributionStrategy)
 
@@ -80,30 +80,31 @@ describe('Client Service: Unit tests', () => {
 
     describe('taskSequence()', () => {
         it('should return TaskErrorResult when no robots are found', async () => {
-
             const mdt = Container.get(config.repos.mdt.name) as IMdtAdapter
             const storage = Container.get(config.storage.name) as IStorageFs
             const floors = Container.get(config.repos.floor.name) as IFloorRepo
             const rooms = Container.get(config.repos.room.name) as IRoomRepo
             const robots = Container.get(config.repos.robot.name) as IRobotRepo
-            const strategy = Container.get(config.strategies.taskDistribution.name) as ITaskDistributionStrategy
+            const strategy = Container.get(
+                config.strategies.taskDistribution.name,
+            ) as ITaskDistributionStrategy
 
             const dto: ITaskAlgorithmDTO = {
                 algorithm: 'permutations',
                 tasks: [{ id: 'task1', type: 'SURVEILLANCE' }],
-            };
+            }
 
             sinon.stub(robots, 'findAll').resolves([])
 
             const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
             const result = await svc.taskSequence(dto)
 
-            expect(result.isLeft()).to.be.true;
+            expect(result.isLeft()).to.be.true
 
             const err = result.value as TaskErrorResult
             expect(err.errorCode).to.equal(TaskErrorCode.NotFound)
             // expect(err.message).to.equal('No robots found');
-        });
+        })
 
         it('should return TaskErrorResult when task distribution fails', async () => {
             const mdt = Container.get(config.repos.mdt.name) as IMdtAdapter
@@ -111,17 +112,19 @@ describe('Client Service: Unit tests', () => {
             const floors = Container.get(config.repos.floor.name) as IFloorRepo
             const rooms = Container.get(config.repos.room.name) as IRoomRepo
             const robots = Container.get(config.repos.robot.name) as IRobotRepo
-            const strategy = Container.get(config.strategies.taskDistribution.name) as ITaskDistributionStrategy
+            const strategy = Container.get(
+                config.strategies.taskDistribution.name,
+            ) as ITaskDistributionStrategy
 
             const dto: ITaskAlgorithmDTO = {
                 algorithm: 'permutations',
                 tasks: [{ id: 'task1', type: 'SURVEILLANCE' }],
-            };
+            }
 
             sinon.stub(robots, 'findAll').resolves([
                 {
-                    type: { taskType: ['DELIVERY'] }
-                } as Robot
+                    type: { taskType: ['DELIVERY'] },
+                } as Robot,
             ])
 
             const errMsg = 'Error'
@@ -130,12 +133,12 @@ describe('Client Service: Unit tests', () => {
             const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
             const result = await svc.taskSequence(dto)
 
-            expect(result.isLeft()).to.be.true;
+            expect(result.isLeft()).to.be.true
 
             const err = result.value as TaskErrorResult
             expect(err.errorCode).to.equal(TaskErrorCode.BussinessRuleViolation)
-            expect(err.message).to.equal(errMsg);
-        });
+            expect(err.message).to.equal(errMsg)
+        })
 
         it('should return IRobotTaskSequenceDTO when tasks are successfully distributed', async () => {
             const mdt = Container.get(config.repos.mdt.name) as IMdtAdapter
@@ -143,38 +146,38 @@ describe('Client Service: Unit tests', () => {
             const floors = Container.get(config.repos.floor.name) as IFloorRepo
             const rooms = Container.get(config.repos.room.name) as IRoomRepo
             const robots = Container.get(config.repos.robot.name) as IRobotRepo
-            const strategy = Container.get(config.strategies.taskDistribution.name) as ITaskDistributionStrategy
+            const strategy = Container.get(
+                config.strategies.taskDistribution.name,
+            ) as ITaskDistributionStrategy
 
             const dto: ITaskAlgorithmDTO = {
                 algorithm: 'permutations',
                 tasks: [
                     { id: 'task1', type: 'SURVEILLANCE' },
                     { id: 'task2', type: 'SURVEILLANCE' },
-                    { id: 'task3', type: 'DELIVERY' }
+                    { id: 'task3', type: 'DELIVERY' },
                 ],
-            };
+            }
 
             sinon.stub(robots, 'findAll').resolves([
                 {
                     nickname: 'alfredo',
-                    type: { taskType: ['SURVEILLANCE'] }
+                    type: { taskType: ['SURVEILLANCE'] },
                 } as unknown as Robot,
                 {
                     nickname: 'maria',
-                    type: { taskType: ['DELIVERY'] }
-                } as unknown as Robot
+                    type: { taskType: ['DELIVERY'] },
+                } as unknown as Robot,
             ])
 
             sinon.stub(strategy, 'distribute').returns(
                 Result.ok({
                     ['alfredo']: [
                         { id: 'task1', type: 'SURVEILLANCE' },
-                        { id: 'task2', type: 'SURVEILLANCE' }
+                        { id: 'task2', type: 'SURVEILLANCE' },
                     ],
-                    ['maria']: [
-                        { id: 'task3', type: 'SURVEILLANCE' }
-                    ]
-                })
+                    ['maria']: [{ id: 'task3', type: 'SURVEILLANCE' }],
+                }),
             )
 
             const mdtReturnData = [
@@ -187,7 +190,7 @@ describe('Client Service: Unit tests', () => {
                             building: 'C',
                             floor: 2,
                             x: 14,
-                            y: 7
+                            y: 7,
                         },
                         order: [
                             {
@@ -195,30 +198,30 @@ describe('Client Service: Unit tests', () => {
                                     building: 'C',
                                     floor: 2,
                                     x: 12,
-                                    y: 2
+                                    y: 2,
                                 },
                                 end: {
                                     building: 'C',
                                     floor: 2,
                                     x: 12,
-                                    y: 12
+                                    y: 12,
                                 },
-                                taskId: 'task2'
+                                taskId: 'task2',
                             },
                             {
                                 start: {
                                     building: 'B',
                                     floor: 1,
                                     x: 3,
-                                    y: 11
+                                    y: 11,
                                 },
                                 end: {
                                     building: 'B',
                                     floor: 1,
                                     x: 3,
-                                    y: 11
+                                    y: 11,
                                 },
-                                taskId: 'task1'
+                                taskId: 'task1',
                             },
                         ],
                     },
@@ -231,7 +234,7 @@ describe('Client Service: Unit tests', () => {
                             building: 'D',
                             floor: 3,
                             x: 1,
-                            y: 17
+                            y: 17,
                         },
                         order: [
                             {
@@ -239,20 +242,20 @@ describe('Client Service: Unit tests', () => {
                                     building: 'C',
                                     floor: 1,
                                     x: 20,
-                                    y: 4
+                                    y: 4,
                                 },
                                 end: {
                                     building: 'D',
                                     floor: 3,
                                     x: 19,
-                                    y: 5
+                                    y: 5,
                                 },
-                                taskId: 'task3'
+                                taskId: 'task3',
                             },
                             ,
                         ],
                     },
-                }
+                },
                 // }}}
             ]
 
@@ -261,15 +264,14 @@ describe('Client Service: Unit tests', () => {
             const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
             const result = await svc.taskSequence(dto)
 
-            expect(result.isRight()).to.be.true;
+            expect(result.isRight()).to.be.true
             const res = result.value as IRobotTaskSequenceDTO
-            expect(res).to.be.an('array');
+            expect(res).to.be.an('array')
 
-            expect(res).to.have.lengthOf(mdtReturnData.length);
+            expect(res).to.have.lengthOf(mdtReturnData.length)
             expect(res).to.deep.equals(mdtReturnData)
         })
     })
-
 
     describe('taskSequenceAlgorithms()', () => {
         it('should retrieve task sequencing algorithms', async () => {
@@ -278,46 +280,46 @@ describe('Client Service: Unit tests', () => {
             const floors = Container.get(config.repos.floor.name) as IFloorRepo
             const rooms = Container.get(config.repos.room.name) as IRoomRepo
             const robots = Container.get(config.repos.robot.name) as IRobotRepo
-            const strategy = Container.get(config.strategies.taskDistribution.name) as ITaskDistributionStrategy
+            const strategy = Container.get(
+                config.strategies.taskDistribution.name,
+            ) as ITaskDistributionStrategy
 
-            const algorithms = [
-                'permutations',
-                'genetic',
-            ]
+            const algorithms = ['permutations', 'genetic']
 
             sinon.stub(mdt, 'getTaskSequenceAlgorithms').resolves(algorithms)
 
             const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
 
             const result = await svc.taskSequenceAlgorithms()
-            expect(result.isRight()).to.be.true;
+            expect(result.isRight()).to.be.true
             const res = result.value as ISequenceAlgorithmDTO[]
-            expect(res).to.be.an('array');
+            expect(res).to.be.an('array')
 
-            expect(res).to.have.lengthOf(algorithms.length);
+            expect(res).to.have.lengthOf(algorithms.length)
             expect(res).to.deep.equals(algorithms)
         }),
+            it('should error on adapter failure', async () => {
+                const mdt = Container.get(config.repos.mdt.name) as IMdtAdapter
+                const storage = Container.get(config.storage.name) as IStorageFs
+                const floors = Container.get(config.repos.floor.name) as IFloorRepo
+                const rooms = Container.get(config.repos.room.name) as IRoomRepo
+                const robots = Container.get(config.repos.robot.name) as IRobotRepo
+                const strategy = Container.get(
+                    config.strategies.taskDistribution.name,
+                ) as ITaskDistributionStrategy
 
-        it('should error on adapter failure', async () => {
-            const mdt = Container.get(config.repos.mdt.name) as IMdtAdapter
-            const storage = Container.get(config.storage.name) as IStorageFs
-            const floors = Container.get(config.repos.floor.name) as IFloorRepo
-            const rooms = Container.get(config.repos.room.name) as IRoomRepo
-            const robots = Container.get(config.repos.robot.name) as IRobotRepo
-            const strategy = Container.get(config.strategies.taskDistribution.name) as ITaskDistributionStrategy
+                const errMsg = 'Failure in HTTP Request: Bad Request'
+                sinon.stub(mdt, 'getTaskSequenceAlgorithms').rejects({ message: errMsg })
 
-            const errMsg = 'Failure in HTTP Request: Bad Request'
-            sinon.stub(mdt, 'getTaskSequenceAlgorithms').rejects({ message: errMsg })
+                const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
 
-            const svc = new TaskService(mdt, storage, floors, rooms, robots, strategy)
+                const result = await svc.taskSequenceAlgorithms()
+                expect(result.isLeft()).to.be.true
 
-            const result = await svc.taskSequenceAlgorithms()
-            expect(result.isLeft()).to.be.true;
+                const res = result.value as TaskErrorResult
 
-            const res = result.value as TaskErrorResult
-
-            expect(res.errorCode).to.equal(TaskErrorCode.AdapterFailure)
-            expect(res.message).to.equal(errMsg)
-        })
+                expect(res.errorCode).to.equal(TaskErrorCode.AdapterFailure)
+                expect(res.message).to.equal(errMsg)
+            })
     })
 })

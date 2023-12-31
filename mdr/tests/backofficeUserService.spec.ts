@@ -25,15 +25,15 @@ describe('Backoffice user Service: Integration tests', () => {
     beforeEach(() => {
         Container.reset()
 
-        const backofficeUserSchema = require('../src/persistence/schemas/backofficeUserSchema')
-            .default
+        const backofficeUserSchema =
+            require('../src/persistence/schemas/backofficeUserSchema').default
         Container.set('backofficeUserSchema', backofficeUserSchema)
 
         const roleSchema = require('../src/persistence/schemas/roleSchema').default
         Container.set('roleSchema', roleSchema)
 
-        const backofficeUserRepoClass = require('../src/repos/mongo/backofficeUserRepo')
-            .default
+        const backofficeUserRepoClass =
+            require('../src/repos/mongo/backofficeUserRepo').default
         const backofficeUserRepo = Container.get(backofficeUserRepoClass)
         Container.set('backofficeUserRepo', backofficeUserRepo)
 
@@ -96,11 +96,11 @@ describe('Backoffice user Service: Integration tests', () => {
             sinon.stub(backofficeUserRepo, 'existsWithEmail').resolves(false)
             sinon
                 .stub(backofficeUserRepo, 'save')
-                .resolves(({} as unknown) as BackofficeUser)
+                .resolves({} as unknown as BackofficeUser)
 
             sinon
                 .stub(BackofficeUserMap, 'toDTO')
-                .returns(({} as unknown) as ICreatedBackofficeUserDTO)
+                .returns({} as unknown as ICreatedBackofficeUserDTO)
 
             const dto: IBackofficeUserDTO = {
                 email: 'mzc@isep.ipp.pt',
@@ -112,7 +112,6 @@ describe('Backoffice user Service: Integration tests', () => {
 
             const roleRepo = Container.get('RoleRepo') as IRoleRepo
             sinon.stub(roleRepo, 'find').resolves(<Role>{ name: dto.role })
-
 
             const authRepo = Container.get('AuthRepo') as IAuthRepo
             sinon.stub(authRepo, 'createUser').resolves(

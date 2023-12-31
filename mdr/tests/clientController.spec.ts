@@ -28,14 +28,13 @@ import * as sinonChai from 'sinon-chai'
 chai.use(sinonChai.default)
 const { expect } = chai
 
-
 describe('Client controller:', () => {
     const sandbox = sinon.createSandbox()
     function stubCreate<K>(klass: K) {
         sandbox.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
     }
 
-    beforeEach(function() {
+    beforeEach(function () {
         Container.reset()
 
         const schema = require('../src/persistence/schemas/clientSchema').default
@@ -62,7 +61,7 @@ describe('Client controller:', () => {
         Container.set('ZipArchiveService', archiveService)
     })
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore()
     })
 
@@ -83,7 +82,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
 
@@ -167,7 +166,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
 
@@ -219,7 +218,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
 
@@ -281,7 +280,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             const repo = Container.get('ClientRepo') as IClientRepo
 
@@ -347,7 +346,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -425,7 +424,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -471,7 +470,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             const service = Container.get('ClientService') as IClientService
             const serviceSpy = sinon.spy(service, 'updateClientState')
@@ -500,7 +499,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -565,7 +564,7 @@ describe('Client controller:', () => {
                 status: sandbox.spy(),
             }
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
             const repo = Container.get('ClientRepo') as IClientRepo
@@ -621,19 +620,19 @@ describe('Client controller:', () => {
             const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
 
             const dto: IClientDataRequestDTO = {
-                email: 'mzc@isep.ipp.pt'
+                email: 'mzc@isep.ipp.pt',
             }
 
             const req: Partial<Request> = {}
             req.body = dto
 
             const res: Partial<Response> = {
-                sendFile: function() { }
+                sendFile: function () {},
             }
 
             const sendFileSpy = sinon.spy(res, 'sendFile')
 
-            const next: Partial<NextFunction> = () => { }
+            const next: Partial<NextFunction> = () => {}
 
             stubCreate(Email)
 
@@ -645,33 +644,32 @@ describe('Client controller:', () => {
                 status: 'Approved',
             }
 
-
             sandbox.stub(clientRepo, 'find').resolves(client as unknown as Client)
 
             const mdtResponse: IClientTaskDTO[] = [
                 // {{{ mdt response data
                 {
-                    "surveillanceContact": {
-                        "name": "zuzu",
-                        "phoneNumber": 919191333
+                    surveillanceContact: {
+                        name: 'zuzu',
+                        phoneNumber: 919191333,
                     },
-                    "location": {
-                        "startingPoint": {
-                            "buildingCode": "A",
-                            "floorNumber": 1,
-                            "x": 4,
-                            "y": 14
+                    location: {
+                        startingPoint: {
+                            buildingCode: 'A',
+                            floorNumber: 1,
+                            x: 4,
+                            y: 14,
                         },
-                        "endingPoint": {
-                            "buildingCode": "A",
-                            "floorNumber": 1,
-                            "x": 4,
-                            "y": 14
-                        }
+                        endingPoint: {
+                            buildingCode: 'A',
+                            floorNumber: 1,
+                            x: 4,
+                            y: 14,
+                        },
                     },
-                    "status": 0,
-                    "jobType": 0
-                }
+                    status: 0,
+                    jobType: 0,
+                },
                 // }}}
             ]
 
@@ -680,8 +678,8 @@ describe('Client controller:', () => {
             const clientData = {
                 accountData: { ...client },
                 requestedTasks: {
-                    tasks: [...mdtResponse]
-                }
+                    tasks: [...mdtResponse],
+                },
             }
             sandbox.stub(ClientMap, 'toClientData').returns(clientData)
 
@@ -699,7 +697,7 @@ describe('Client controller:', () => {
             sendFileSpy.calledWith(
                 sandbox.match(filePath),
                 sandbox.match({ root: './' }),
-                sandbox.match.func
+                sandbox.match.func,
             )
 
             expect(serviceSpy).to.have.been.calledOnce

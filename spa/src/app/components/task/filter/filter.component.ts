@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { CreateDeliveryTaskDTO } from "../../../../../../mdr/src/dto/CreateDeliveryTaskDTO"
+import { CreateDeliveryTaskDTO } from '../../../../../../mdr/src/dto/CreateDeliveryTaskDTO'
 import { FilterDTO } from 'src/app/dto/FilterDTO'
 import { TaskDTO, TaskState, TaskType } from 'src/app/dto/TaskDTO'
 import { TaskService } from 'src/app/services/task.service'
