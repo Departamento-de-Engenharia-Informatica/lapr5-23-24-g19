@@ -18,7 +18,11 @@ import IClientRepo from './IRepos/IClientRepo'
 import IMdtAdapter from './IRepos/IMdtRepo'
 import { ICreatedClientDTO } from '../dto/ICreatedClientDTO'
 import { ClientMap } from '../mappers/ClientMap'
-import {IClientEmailDTO} from "../dto/IClientEmailDTO";
+import { IClientEmailDTO } from "../dto/IClientEmailDTO";
+import { IClientDataRequestDTO } from '../dto/IClientDataRequestDTO'
+import { ClientErrorCode, ClientErrorResult } from './IServices/IClientService'
+import { IClientTaskDTO } from '../dto/IClientTaskDTO'
+import { IClientDataDTO } from '../dto/IClientDataDTO'
 
 describe('Client Service: Unit tests', () => {
     const sinon = createSandbox()
@@ -284,6 +288,116 @@ describe('Client Service: Unit tests', () => {
             const result = await service.deleteClient(dto)
 
             expect(result.isLeft()).to.be.true
+        })
+    })
+
+    describe('getClientData()', () => {
+        it('should fail if client does not exist', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
+
+            const dto: IClientDataRequestDTO = {
+                email: 'mzc@isep.ipp.pt'
+            }
+
+            sinon.stub(clientRepo, 'find').resolves(null)
+
+            const svc = new ClientService(clientRepo, authRepo, mdtAdapter)
+
+            const result = await svc.getClientData(dto)
+
+            expect(result.isLeft()).to.be.true
+            const err = result.value as ClientErrorResult
+            expect(err.errorCode).to.equal(ClientErrorCode.NotFound)
+        })
+
+        it('should fail on mdt adapter error', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
+
+            const dto: IClientDataRequestDTO = {
+                email: 'mzc@isep.ipp.pt'
+            }
+
+            sinon.stub(clientRepo, 'find').resolves({ email: dto.email } as unknown as Client)
+
+            const errMsg = 'HTTP Request failed: Internal Server error'
+            sinon.stub(mdtAdapter, 'getClientRequestedTasks').rejects({ message: errMsg })
+
+            const svc = new ClientService(clientRepo, authRepo, mdtAdapter)
+
+            const result = await svc.getClientData(dto)
+
+            expect(result.isLeft()).to.be.true
+            const err = result.value as ClientErrorResult
+            expect(err.errorCode).to.equal(ClientErrorCode.BussinessRuleViolation)
+            expect(err.message).to.equal(errMsg)
+        })
+        it('should succeed if client exist & mdt returns good response', async () => {
+            const clientRepo = Container.get('ClientRepo') as IClientRepo
+            const authRepo = Container.get('AuthRepo') as IAuthRepo
+            const mdtAdapter = Container.get('HttpMdtAdapter') as IMdtAdapter
+
+            const dto: IClientDataRequestDTO = {
+                email: 'mzc@isep.ipp.pt'
+            }
+
+            const client = {
+                email: 'mzc@isep.ipp.pt',
+                name: 'Maria Zulmira',
+                phoneNumber: '919355120',
+                vatNumber: '211492012',
+                status: 'Approved',
+            }
+
+            sinon.stub(clientRepo, 'find').resolves(client as unknown as Client)
+
+            const mdtResponse: IClientTaskDTO[] = [
+                // {{{ mdt response data
+                {
+                    "surveillanceContact": {
+                        "name": "zuzu",
+                        "phoneNumber": 919191333
+                    },
+                    "location": {
+                        "startingPoint": {
+                            "buildingCode": "A",
+                            "floorNumber": 1,
+                            "x": 4,
+                            "y": 14
+                        },
+                        "endingPoint": {
+                            "buildingCode": "A",
+                            "floorNumber": 1,
+                            "x": 4,
+                            "y": 14
+                        }
+                    },
+                    "status": 0,
+                    "jobType": 0
+                }
+                // }}}
+            ]
+
+            sinon.stub(mdtAdapter, 'getClientRequestedTasks').resolves()
+
+            const clientData = {
+                accountData: { ...client },
+                requestedTasks: {
+                    tasks: [...mdtResponse]
+                }
+            }
+            sinon.stub(ClientMap, 'toClientData').returns(clientData)
+
+            const svc = new ClientService(clientRepo, authRepo, mdtAdapter)
+
+            const result = await svc.getClientData(dto)
+
+            expect(result.isRight()).to.be.true
+            const res = result.value as IClientDataDTO
+            expect(res).to.deep.equal(clientData)
         })
     })
 })

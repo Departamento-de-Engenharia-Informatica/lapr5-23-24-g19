@@ -17,15 +17,14 @@ import { ITaskAlgorithmDTO } from '../dto/ITaskAlgorithmDTO'
 import { TaskErrorCode, TaskErrorResult } from './IServices/ITaskService'
 import Robot from '../domain/robot/Robot'
 import { IRobotTaskSequenceDTO } from '../dto/IRobotTaskSequenceDTO'
-import { floor } from 'lodash'
 import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
 describe('Client Service: Unit tests', () => {
     const sinon = createSandbox()
 
-    function stubCreate<K>(klass: K) {
-        sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
-    }
+    // function stubCreate<K>(klass: K) {
+    //     sinon.stub(klass, 'create' as keyof K).returns(Result.ok<K>({} as K))
+    // }
 
     beforeEach(() => {
         Container.reset()

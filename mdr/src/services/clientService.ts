@@ -300,7 +300,7 @@ export default class ClientService implements IClientService {
         } catch (e) {
             return left({
                 errorCode: ClientErrorCode.BussinessRuleViolation,
-                message: e.message,
+                message: e.message ?? e,
             })
         }
     }
