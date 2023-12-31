@@ -7,6 +7,12 @@ participant "Controller" as ctrl
 participant "dto:ITaskAlgorithmDTO" as dto_in
 
 participant "Service" as svc
+
+participant "RobotRepository" as r_repo
+participant "DB Driver" as db
+
+participant "ITaskDistributionStrategy" as strat
+
 participant "mdtDto:IRobotTasksDTO" as mdt_dto
 
 participant "MdtAdapter" as repo
@@ -22,6 +28,21 @@ activate r
 
         ctrl -> svc : taskSequence(dto)
         activate svc
+            svc -> r_repo : findAll()
+            activate r_repo
+                r_repo -> db : findAll()
+                activate db
+                    db --> r_repo : robots
+                deactivate db
+
+                r_repo --> svc : robots
+            deactivate r_repo
+
+            svc -> strat : distribute(dto.tasks, robots)
+            activate strat
+                strat --> svc : distribution
+            deactivate strat
+
             svc --> mdt_dto** : create()
 
             svc -> repo : taskSequence(mdtDto)
