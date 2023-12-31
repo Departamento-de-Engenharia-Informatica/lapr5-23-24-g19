@@ -156,22 +156,43 @@ namespace mdt.Tests.Unit
         [TestCase("CLIENT", "nsp@isep.ipp.pt", null, null)]
         [TestCase("CLIENT", "jpl@isep.ipp.pt", null, null)]
         public async Task GetByFilterWithClientFilterReturnsFilteredJobs(
-    string filter, string email, int? state, int? type)
+            string filter,
+            string email,
+            int? state,
+            int? type
+        )
         {
             // Arrange
             var filterDto = new FilterDTO(filter, email, state, type);
             var matchingJobs = new List<Job>
             {
-                new JobSurveillance(email, new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact("Andre Rocha", 997771123))
+                new JobSurveillance(
+                    email,
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact("Andre Rocha", 997771123)
+                )
             };
 
             var nonMatchingJobs = new List<Job>
             {
-                new JobSurveillance("_test2_@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact()),
-                new JobDelivery("_test3_@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact(), new JobContact(), new JobConfirmationCode(66633), "Test description")
+                new JobSurveillance(
+                    "_test2_@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                ),
+                new JobDelivery(
+                    "_test3_@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(66633),
+                    "Test description"
+                )
             };
 
-            _ = _repo.Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>())).ReturnsAsync(matchingJobs);
+            _ = _repo
+                .Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>()))
+                .ReturnsAsync(matchingJobs);
 
             // Act
             var result = await _service.GetByFilter(filterDto);
@@ -209,7 +230,9 @@ namespace mdt.Tests.Unit
         {
             var filterDto = new FilterDTO(filter, email, state, type);
 
-            _ = _repo.Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>())).ReturnsAsync(new List<Job>());
+            _ = _repo
+                .Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>()))
+                .ReturnsAsync(new List<Job>());
 
             var result = await _service.GetByFilter(filterDto);
 
@@ -225,20 +248,46 @@ namespace mdt.Tests.Unit
         [TestCase("TYPE", null, null, 0)]
         [TestCase("TYPE", null, null, 1)]
         public async Task GetByFilterWithTypeFilterReturnsFilteredJobs(
-            string filter, string email, int? state, int? type)
+            string filter,
+            string email,
+            int? state,
+            int? type
+        )
         {
             // Arrange
             var filterDto = new FilterDTO(filter, email, state, type);
             var deliveries = new List<Job>
             {
-                new JobDelivery("test1@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact(), new JobContact(), new JobConfirmationCode(42069), "Test description"),
-                new JobDelivery("test1@isep.ipp.pt", new JobLocation(new Coordinates("C", 2, 2, 3), new Coordinates("D", 2, 10, 14)), new JobContact(), new JobContact(), new JobConfirmationCode(43311), "Test description")
+                new JobDelivery(
+                    "test1@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(42069),
+                    "Test description"
+                ),
+                new JobDelivery(
+                    "test1@isep.ipp.pt",
+                    new JobLocation(new Coordinates("C", 2, 2, 3), new Coordinates("D", 2, 10, 14)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(43311),
+                    "Test description"
+                )
             };
 
             var surveillances = new List<Job>
             {
-                new JobSurveillance("test2@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact()),
-                new JobSurveillance("test3@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact())
+                new JobSurveillance(
+                    "test2@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                ),
+                new JobSurveillance(
+                    "test3@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                )
             };
 
             (var matchingJobs, var nonMatchingJobs) = type switch
@@ -248,7 +297,9 @@ namespace mdt.Tests.Unit
                 _ => throw new AssertionException("bad type"),
             };
 
-            _ = _repo.Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>())).ReturnsAsync(matchingJobs);
+            _ = _repo
+                .Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>()))
+                .ReturnsAsync(matchingJobs);
 
             // Act
             var result = await _service.GetByFilter(filterDto);
@@ -268,13 +319,21 @@ namespace mdt.Tests.Unit
 
         [TestCase("STATE", null, 1, null)]
         public async Task GetByFilterWithStateFilterReturnsFilteredJobs(
-            string filter, string email, int? state, int? type)
+            string filter,
+            string email,
+            int? state,
+            int? type
+        )
         {
             // Arrange
             var filterDto = new FilterDTO(filter, email, state, type);
 
             // Create a job with an initial state that allows transitioning to the desired state
-            var initialJob = new JobSurveillance("test1@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact());
+            var initialJob = new JobSurveillance(
+                "test1@isep.ipp.pt",
+                new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                new JobContact()
+            );
             _ = initialJob.Update(new JobUpdateProps { Status = JobStateEnum.APPROVED });
 
             var matchingJobs = new List<Job> { initialJob };
@@ -282,11 +341,24 @@ namespace mdt.Tests.Unit
             // Create non-matching jobs with various states
             var nonMatchingJobs = new List<Job>
             {
-                new JobSurveillance("test2@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact()),
-                new JobDelivery("test3@isep.ipp.pt", new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)), new JobContact(), new JobContact(), new JobConfirmationCode(33311), "Test description")
+                new JobSurveillance(
+                    "test2@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                ),
+                new JobDelivery(
+                    "test3@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(33311),
+                    "Test description"
+                )
             };
 
-            _ = _repo.Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>())).ReturnsAsync(matchingJobs);
+            _ = _repo
+                .Setup(repo => repo.Filter(It.IsAny<IJobFilterStrategy>()))
+                .ReturnsAsync(matchingJobs);
 
             // Act
             var result = await _service.GetByFilter(filterDto);
@@ -304,7 +376,186 @@ namespace mdt.Tests.Unit
             _unitOfWork.Verify(uow => uow.CommitAsync(), Times.Once);
         }
 
+        [Test]
+        public async Task TestJobSequenceShouldBeAbleToSequenceTasks()
+        {
+            var jobs = new List<Job>
+            {
+                new JobDelivery(
+                    "test1@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(42069),
+                    "Test description"
+                ),
+                new JobDelivery(
+                    "test2@isep.ipp.pt",
+                    new JobLocation(new Coordinates("C", 2, 2, 3), new Coordinates("D", 2, 10, 14)),
+                    new JobContact(),
+                    new JobContact(),
+                    new JobConfirmationCode(43311),
+                    "Test description"
+                ),
+                new JobSurveillance(
+                    "test3@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                ),
+                new JobSurveillance(
+                    "test4@isep.ipp.pt",
+                    new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                    new JobContact()
+                )
+            };
 
+            foreach (var j in jobs)
+            {
+                j.Update(new JobUpdateProps { Status = JobStateEnum.APPROVED });
+            }
+
+            var dto = new RobotTasksDTO
+            {
+                RobotTasks = new Dictionary<string, List<TaskIdsDTO>>
+                {
+                    {
+                        "Robot1",
+                        new List<TaskIdsDTO>
+                        {
+                            new TaskIdsDTO { id = jobs.ElementAt(0).Id.Value, type = "DELIVERY" },
+                            new TaskIdsDTO { id = jobs.ElementAt(1).Id.Value, type = "DELIVERY" },
+                            new TaskIdsDTO
+                            {
+                                id = jobs.ElementAt(2).Id.Value,
+                                type = "SURVEILLANCE"
+                            },
+                            new TaskIdsDTO
+                            {
+                                id = jobs.ElementAt(3).Id.Value,
+                                type = "SURVEILLANCE"
+                            }
+                        }
+                    }
+                },
+                Algorithm = "Genetic"
+            };
+
+            var taskSequenceDto = new TaskSequenceDto
+            {
+                cost = 42,
+                initialPosition = new Position
+                {
+                    building = "B",
+                    floor = 1,
+                    x = 2,
+                    y = 3
+                },
+                order = new List<TaskUnit>
+                {
+                    new TaskUnit
+                    {
+                        start = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        end = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        taskId = jobs.ElementAt(0).Id.Value
+                    },
+                    new TaskUnit
+                    {
+                        start = new Position
+                        {
+                            building = "C",
+                            floor = 2,
+                            x = 2,
+                            y = 3
+                        },
+                        end = new Position
+                        {
+                            building = "D",
+                            floor = 2,
+                            x = 10,
+                            y = 14
+                        },
+                        taskId = jobs.ElementAt(1).Id.Value
+                    },
+                    new TaskUnit
+                    {
+                        start = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        end = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        taskId = jobs.ElementAt(2).Id.Value
+                    },
+                    new TaskUnit
+                    {
+                        start = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        end = new Position
+                        {
+                            building = "B",
+                            floor = 1,
+                            x = 2,
+                            y = 3
+                        },
+                        taskId = jobs.ElementAt(3).Id.Value
+                    }
+                }
+            };
+
+            _planning
+                .Setup(planning => planning.ComputeSequence(It.IsAny<ComputeSequenceDto>()))
+                .ReturnsAsync(taskSequenceDto);
+
+            _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync((JobId jobId) => jobs.FirstOrDefault(j => j.Id == jobId));
+
+            _repo.Setup(repo => repo.Update(It.IsAny<Job>())).ReturnsAsync((Job job) => job);
+
+            _sequence.Setup(repo => repo.AddAsync(It.IsAny<Sequence>())).Verifiable();
+
+            var result = await _service.JobSequence(dto);
+
+            _repo.Verify(
+                repo => repo.GetByIdAsync(It.IsAny<JobId>()),
+                Times.Exactly(dto.RobotTasks["Robot1"].Count * 2)
+            );
+
+            _planning.Verify(
+                planning => planning.ComputeSequence(It.IsAny<ComputeSequenceDto>()),
+                Times.Once
+            );
+
+            _unitOfWork.Verify(
+                unitOfWork => unitOfWork.CommitAsync(),
+                Times.Exactly(dto.RobotTasks["Robot1"].Count + 1)
+            );
+        }
 
         // avoid 'might be null' warnings
         public JobServiceTest()

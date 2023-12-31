@@ -1,6 +1,7 @@
 using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Controllers;
 using DDDSample1.Domain.Jobs;
+using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Sequences;
 using DDDSample1.Domain.Shared;
@@ -85,6 +86,22 @@ namespace mdt.Tests.Unit
             Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
             var okResult = result.Result as OkObjectResult;
             Assert.That(okResult.Value, Is.EqualTo(expectedJobs));
+        }
+
+        [Test]
+        public async Task JobSequenceShouldReturnSequence()
+        {
+            var dto = new RobotTasksDTO();
+            var expectedSequence = new List<PlannedRobotTasksDTO>();
+
+            _service.Setup(x => x.JobSequence(dto)).ReturnsAsync(expectedSequence);
+
+            var result = await _controller.JobSequence(dto);
+
+            _service.Verify(x => x.JobSequence(dto), Times.Once);
+            Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+            var okResult = result.Result as OkObjectResult;
+            Assert.That(okResult.Value, Is.EqualTo(expectedSequence));
         }
 
         public JobControllerTest()

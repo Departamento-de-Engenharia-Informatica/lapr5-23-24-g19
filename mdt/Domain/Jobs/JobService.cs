@@ -94,7 +94,7 @@ namespace DDDSample1.Domain.Jobs
             return updatedJob;
         }
 
-        public async Task<List<PlannedRobotTasksDTO>> JobSequence(RobotTasksDTO dto)
+        public virtual async Task<List<PlannedRobotTasksDTO>> JobSequence(RobotTasksDTO dto)
         {
             var robotTasks = new List<PlannedRobotTasksDTO>();
 
