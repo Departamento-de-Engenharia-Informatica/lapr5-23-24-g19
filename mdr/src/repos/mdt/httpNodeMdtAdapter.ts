@@ -11,6 +11,7 @@ import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 import { IRobotTaskSequenceDTO } from '../../dto/IRobotTaskSequenceDTO'
 import { IClientTasksRequestDTO } from '../../dto/IClientTasksRequestDTO'
 import { IClientTaskDTO } from '../../dto/IClientTaskDTO'
+import { IUpdatedTaskDTO } from '../../dto/IUpdatedTaskDTO'
 
 @Service()
 export default class HttpNodeMdtAdapter implements IMdtAdapter {
@@ -69,7 +70,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
         return await res.json()
     }
 
-    async updateTask(dto: IUpdateTaskDTO): Promise<string> {
+    async updateTask(dto: IUpdateTaskDTO): Promise<IUpdatedTaskDTO> {
         const { id, ...body } = dto
         const res = await fetch(`${this.url}/jobs/${id}`, {
             method: 'PATCH',
@@ -83,7 +84,7 @@ export default class HttpNodeMdtAdapter implements IMdtAdapter {
             return Promise.reject(await res.text())
         }
 
-        return await res.json()
+        return await res.json() as IUpdatedTaskDTO
     }
 
     async taskSequence(dto: IRobotTasksDTO): Promise<IRobotTaskSequenceDTO> {

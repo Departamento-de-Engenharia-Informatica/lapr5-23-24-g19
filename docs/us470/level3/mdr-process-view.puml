@@ -1,0 +1,44 @@
+@startuml
+autonumber
+
+participant "Route" as r
+participant "TaskController" as ctrl
+participant "dto:IUpdateTaskDTO" as dto_in
+participant "TaskService" as svc
+
+participant "IMdtAdapter" as repo
+participant "MdtDriver" as http
+
+participant "updatedTask:IUpdatedTaskDTO" as dto_out
+
+[-> r:  PATCH /tasks/{:id}
+    activate r
+        r -> ctrl : updateTask(req,res,next)
+            activate ctrl
+                ctrl -> dto_in ** : create()
+                ctrl -> svc : updateTask(dto)
+
+                activate svc
+                    svc -> repo : updateTask(dto)
+
+                    activate repo
+                        repo -> http : fetch(MTD_URL/jobs/{:id})
+                        activate http
+                            http ->] : PATCH /MTD_URL/jobs/{:id}
+                            http <--] : updated task
+                            http --> repo : updated job
+                        deactivate http
+
+                        repo --> dto_out** : create()
+                        repo --> svc : updatedTask
+                    deactivate repo
+
+                    svc --> ctrl : updatedTask
+                deactivate svc
+
+                ctrl --> r : 200 updatedTask
+            deactivate ctrl
+    [<--r : 200 OK
+deactivate r
+
+@enduml

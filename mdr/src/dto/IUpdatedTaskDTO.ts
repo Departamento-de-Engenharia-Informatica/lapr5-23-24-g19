@@ -1,30 +1,15 @@
-//TODO: should use DomainID's
-
-// export interface RouteDTO{
-//     room1:{
-//         buildingCode: String
-//         floorNumber: number
-//         room: string
-//     }
-//     room2:{
-//         buildingCode: String
-//         floorNumber: number
-//         room: string
-//     }
-// }
-
-export enum TaskState {
+enum TaskState {
     PENDING = 'Pending',
     APPROVED = 'Approved',
     REJECTED = 'Rejected',
 }
 
-export enum TaskType {
+enum TaskType {
     SURVEILLANCE = 'Surveillance',
     DELIVERY = 'Delivery',
 }
 
-export interface TaskDTO {
+export interface IUpdatedTaskDTO {
     id: string
     state: TaskState
     type: TaskType
@@ -65,3 +50,4 @@ export interface TaskDTO {
     }
     description?: string
 }
+

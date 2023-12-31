@@ -8,6 +8,7 @@ import { ISequenceAlgorithmDTO } from '../../dto/ISequenceAlgorithmDTO'
 import { ITaskAlgorithmDTO } from '../../dto/ITaskAlgorithmDTO'
 import { ITaskTypeDTO } from '../../dto/ITaskTypeDTO'
 import { IUpdateTaskDTO } from '../../dto/IUpdateTaskDTO'
+import { IUpdatedTaskDTO } from '../../dto/IUpdatedTaskDTO'
 
 export enum TaskErrorCode {
     NotFound,
@@ -29,7 +30,7 @@ export default interface ITaskService {
     createDeliveryTask(
         dto: CreateDeliveryTaskDTO,
     ): Promise<Either<TaskErrorResult, String>>
-    updateTask(DTO: IUpdateTaskDTO): Promise<Either<TaskErrorResult, String>>
+    updateTask(DTO: IUpdateTaskDTO): Promise<Either<TaskErrorResult, IUpdatedTaskDTO>>
     getTypes(): Promise<Either<TaskErrorResult, ITaskTypeDTO[]>>
 
     taskSequence(

@@ -27,6 +27,7 @@ import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
 import { IRobotTaskSequenceDTO } from '../dto/IRobotTaskSequenceDTO'
 import ITaskDistributionStrategy from '../core/logic/taskDistribution/ITaskDistributionStrategy'
+import { IUpdatedTaskDTO } from '../dto/IUpdatedTaskDTO'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -209,7 +210,7 @@ export default class TaskService implements ITaskService {
         }
     }
 
-    async updateTask(dto: IUpdateTaskDTO): Promise<Either<TaskErrorResult, string>> {
+    async updateTask(dto: IUpdateTaskDTO): Promise<Either<TaskErrorResult, IUpdatedTaskDTO>> {
         try {
             const task = await this.repo.updateTask(dto)
             return right(task)
