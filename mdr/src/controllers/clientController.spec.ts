@@ -5,12 +5,12 @@ import { Request, NextFunction, Response } from 'express'
 import { Container } from 'typedi'
 import { left, right } from '../core/logic/Result'
 import IClientService from '../services/IServices/IClientService'
+import IArchiveService from '../services/IServices/IArchiveService'
 import ClientController from './clientController'
 
 import sinon from 'sinon'
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
-import IArchiveService from '../services/IServices/IArchiveService'
 
 chai.use(sinonChai.default)
 
