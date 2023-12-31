@@ -8,6 +8,7 @@ export default ({
     repos,
     services,
     storage,
+    strategies,
 }: {
     mongoConnection
     schemas: { name: string; schema: any }[]
@@ -15,6 +16,7 @@ export default ({
     repos: { name: string; path: string }[]
     services: { name: string; path: string }[]
     storage: { name: string; path: string; prefix: string }
+    strategies: { name: string; path: string }[]
 }) => {
     try {
         Container.set('logger', LoggerInstance)
@@ -23,6 +25,12 @@ export default ({
         let storageClass = require(storage.path).default
         let storageInstance = Container.get(storageClass)
         Container.set(storage.name, storageInstance)
+
+        strategies.forEach((m) => {
+            let stratClass = require(m.path).default
+            let stratInstance = Container.get(stratClass)
+            Container.set(m.name, stratInstance)
+        })
 
         /**
          * We are injecting the mongoose models into the DI container.

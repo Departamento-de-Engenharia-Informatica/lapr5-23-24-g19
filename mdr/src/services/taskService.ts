@@ -25,8 +25,8 @@ import { IRobotTasksDTO } from '../dto/IRobotTasksDTO'
 import { IGeneralTaskDTO } from '../dto/IGeneralTaskDTO'
 import { ISequenceAlgorithmDTO } from '../dto/ISequenceAlgorithmDTO'
 
-import { shuffle } from 'lodash'
 import { IRobotTaskSequenceDTO } from '../dto/IRobotTaskSequenceDTO'
+import ITaskDistributionStrategy from '../core/logic/taskDistribution/ITaskDistributionStrategy'
 
 @Service()
 export default class TaskService implements ITaskService {
@@ -36,7 +36,8 @@ export default class TaskService implements ITaskService {
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
         @Inject(config.repos.room.name) private roomRepo: IRoomRepo,
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-    ) {}
+        @Inject(config.strategies.taskDistribution.name) private taskDistribution: ITaskDistributionStrategy
+    ) { }
 
     async getByFilter(dto: IFilterDTO): Promise<Either<TaskErrorResult, String>> {
         try {
@@ -233,42 +234,21 @@ export default class TaskService implements ITaskService {
                 })
             }
 
-            const types = new Set(
-                dto.tasks.map((t) => TaskType.toType(t.type.toUpperCase())),
+            const distributedTasks = this.taskDistribution.distribute(
+                [...dto.tasks],
+                robots
             )
-            for (const t of types) {
-                if (!robots.find((r) => r.type.taskType.includes(t))) {
-                    return left({
-                        errorCode: TaskErrorCode.NotFound,
-                        message: `No robot to fulfill task of type ${TaskType.toString(
-                            t,
-                        )}`,
-                    })
-                }
+
+            if (distributedTasks.isFailure) {
+                return left({
+                    errorCode: TaskErrorCode.BussinessRuleViolation,
+                    message: distributedTasks.errorValue().toString()
+                })
             }
 
-            const tasks = [...dto.tasks]
             const result: IRobotTasksDTO = {
                 Algorithm: dto.algorithm,
-                RobotTasks: {},
-            }
-
-            const shuffledRobots = shuffle(robots)
-            while (tasks.length !== 0) {
-                shuffledRobots.forEach((r) => {
-                    if (
-                        tasks.length > 0 &&
-                        r.type.taskType.includes(
-                            TaskType.toType(tasks[0].type.toUpperCase()),
-                        )
-                    ) {
-                        if (!result.RobotTasks[r.nickname.value]) {
-                            result.RobotTasks[r.nickname.value] = []
-                        }
-
-                        result.RobotTasks[r.nickname.value].push(tasks.shift())
-                    }
-                })
+                RobotTasks: distributedTasks.getValue()
             }
 
             const sequence = await this.repo.taskSequence(result)
@@ -291,7 +271,7 @@ export default class TaskService implements ITaskService {
         } catch (e) {
             return left({
                 errorCode: TaskErrorCode.AdapterFailure,
-                message: e.message ?? e,
+                message: e?.message ?? e,
             })
         }
     }

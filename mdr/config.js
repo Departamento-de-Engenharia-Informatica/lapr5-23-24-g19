@@ -277,6 +277,13 @@ export default {
         },
     },
 
+    strategies: {
+        taskDistribution: {
+            name: 'RoundRobinDistribution',
+            path: '../core/logic/taskDistribution/roundRobinDistribution',
+        }
+    },
+
     storage: {
         name: 'NodeDiskStorage',
         path: '../fs/nodeDiskStorage',
