@@ -52,7 +52,13 @@ import {
 } from './lights'
 import Fog, { FogParameters } from './fog'
 import Camera, { CameraParameters } from './camera'
-import UserInterface, { CellSegmentDTO, ElevatorSegmentDTO, IPathDTO, PassageSegmentDTO, PathSegmentDTO } from './user_interface'
+import UserInterface, {
+    CellSegmentDTO,
+    ElevatorSegmentDTO,
+    IPathDTO,
+    PassageSegmentDTO,
+    PathSegmentDTO,
+} from './user_interface'
 import Elevator, { ElevatorParams } from './elevator.js'
 import { normalView } from 'three/examples/jsm/nodes/Nodes.js'
 import { ToonShaderHatching } from 'three/examples/jsm/Addons.js'
@@ -403,7 +409,6 @@ export type Mouse = {
 }
 
 export default class ThumbRaiser {
-
     public audio: Audio
     public cubeTexture: CubeTexture
     public maze: Maze
@@ -718,6 +723,17 @@ export default class ThumbRaiser {
         // this.passageMenu = new PassageMenu(b1, b2)
         // this.passageMenu.show()
         const pos = [b2.x, b2.y]
+        const notification = document.createElement('div')
+        notification.className = 'notification'
+        notification.innerHTML = `<span class="highlight">Changed from</span> <br><div class="info">Building: ${b1.building} <br>Floor: ${b1.floor}</div> <span class="highlight">to</span> <br><div class="info">Building: ${b2.building} <br>Floor: ${b2.floor}</div>`
+        document.body.appendChild(notification)
+
+        setTimeout(() => {
+            notification.style.opacity = '10'
+            setTimeout(() => {
+                document.body.removeChild(notification)
+            }, 1000)
+        }, 3000)
         Dispatcher.emit('change-map', b2.building, b2.floor, pos)
     }
 
@@ -1294,13 +1310,13 @@ export default class ThumbRaiser {
                                         this.miniMapCamera.viewport.width) *
                                         (this.miniMapCamera.orthographic.left -
                                             this.miniMapCamera.orthographic.right)) /
-                                    this.miniMapCamera.orthographic.zoom,
+                                        this.miniMapCamera.orthographic.zoom,
                                     0.0,
                                     ((mouseIncrement.y /
                                         this.miniMapCamera.viewport.height) *
                                         (this.miniMapCamera.orthographic.top -
                                             this.miniMapCamera.orthographic.bottom)) /
-                                    this.miniMapCamera.orthographic.zoom,
+                                        this.miniMapCamera.orthographic.zoom,
                                 )
                                 this.miniMapCamera.updateTarget(targetIncrement)
                             }
@@ -1432,7 +1448,7 @@ export default class ThumbRaiser {
                 this.activeViewCamera.activeProjection.remove(this.audio.listener)
                 this.activeViewCamera.setActiveProjection(
                     ['perspective', 'orthographic'][
-                    this.projection.options.selectedIndex
+                        this.projection.options.selectedIndex
                     ],
                 )
                 this.activeViewCamera.activeProjection.add(this.audio.listener)
@@ -1609,8 +1625,9 @@ export default class ThumbRaiser {
         const { building, floor } = params
 
         const mazeParams = {
-            url: `${import.meta.env.VITE_MDR_URL
-                }/buildings/${building}/floors/${floor}/map`,
+            url: `${
+                import.meta.env.VITE_MDR_URL
+            }/buildings/${building}/floors/${floor}/map`,
             startingPosition: params.position,
             startingDirection: params.direction,
             designCredits:
@@ -1642,7 +1659,7 @@ export default class ThumbRaiser {
         this.maze = new Maze(mazeParams, loader)
 
         this.update()
-        return this.maze;
+        return this.maze
     }
 
     update() {
@@ -1742,8 +1759,6 @@ export default class ThumbRaiser {
                     this.scene.scale,
                 )
                 this.scene.add(this.doorSet)
-
-
 
                 // Set the spotlight target
                 this.spotLight.target = this.player
@@ -1851,8 +1866,8 @@ export default class ThumbRaiser {
         } else {
             const initialPosition = this.player.position.clone()
             if (!this.maze?._lastPassage) {
-                    this.maze._lastPassage = initialPosition
-                }
+                this.maze._lastPassage = initialPosition
+            }
 
             // Update the model animations
             const deltaT = this.clock.getDelta()
@@ -2076,29 +2091,32 @@ export default class ThumbRaiser {
                 this.frame.children[0].material.color.set(this.miniMapCamera.frameColor)
                 this.renderer.render(this.frame, this.camera2D) // Render the frame
             }
-
         }
     }
 
     simulate(tasks: PathSegmentDTO[]) {
         ThumbRaiser.simulation = true
-        this.tweenPlayerMovementAndOrientation(this.player, tasks);
+        this.tweenPlayerMovementAndOrientation(this.player, tasks)
     }
 
-    tweenPlayerMovementAndOrientation(player: Player, path: PathSegmentDTO[], durationPerPoint: number = 2000): void {
-        let previousTween: TWEEN.Tween<any> | null = null;
+    tweenPlayerMovementAndOrientation(
+        player: Player,
+        path: PathSegmentDTO[],
+        durationPerPoint: number = 2000,
+    ): void {
+        let previousTween: TWEEN.Tween<any> | null = null
         const dto = path[0] as CellSegmentDTO
 
         //TODO: preciso de garantir que so continuo depois do mapa ser carregado?
         var lastPos: number[] = [dto.x, dto.y]
-        var startOrientationY = player.rotation.y;
+        var startOrientationY = player.rotation.y
         const maze = this.changeMap({
             building: dto.building,
             floor: dto.floor,
-            position: lastPos
+            position: lastPos,
         })
         maze.addEventListener('loaded', (event) => {
-            console.log("Loaded", path)
+            console.log('Loaded', path)
             this.animations.fadeToAction('Walking', 1)
 
             for (let i = 0; i < path.length; i++) {
@@ -2112,73 +2130,85 @@ export default class ThumbRaiser {
                     const endPosition = this.maze.cellToCartesian(currentPos)
 
                     const positionTween = new TWEEN.Tween(startPosition)
-                        .to({ x: endPosition.x, y: endPosition.y, z: endPosition.z }, durationPerPoint)
+                        .to(
+                            { x: endPosition.x, y: endPosition.y, z: endPosition.z },
+                            durationPerPoint,
+                        )
                         .onUpdate(() => {
                             player.position.copy(startPosition),
-                            this.animations.fadeToAction('Walking', 1)
+                                this.animations.fadeToAction('Walking', 1)
                         })
                         .onComplete(() => {
-                            console.log(this.maze.cartesianToCell(this.player.position),
-                            )
+                            console.log(this.maze.cartesianToCell(this.player.position))
                         })
 
-                    const directionVector = new THREE.Vector3().subVectors(endPosition, startPosition);
-                    const endOrientationY = Math.atan2(directionVector.x, directionVector.z);
+                    const directionVector = new THREE.Vector3().subVectors(
+                        endPosition,
+                        startPosition,
+                    )
+                    const endOrientationY = Math.atan2(
+                        directionVector.x,
+                        directionVector.z,
+                    )
 
-                    const twoPi = Math.PI * 2;
+                    const twoPi = Math.PI * 2
                     if (endOrientationY - startOrientationY > Math.PI) {
-                        startOrientationY += twoPi;
+                        startOrientationY += twoPi
                     } else if (startOrientationY - endOrientationY > Math.PI) {
-                        startOrientationY -= twoPi;
+                        startOrientationY -= twoPi
                     }
 
                     const orientationTween = new TWEEN.Tween({ y: startOrientationY })
                         .to({ y: endOrientationY }, 500)
                         .onUpdate((obj) => {
-                            player.rotation.y = obj.y;
+                            player.rotation.y = obj.y
                         })
 
                     // Chain tweens
                     if (previousTween) {
-                        previousTween.chain(orientationTween, positionTween);
+                        previousTween.chain(orientationTween, positionTween)
                     } else {
-                        orientationTween.start();
-                        positionTween.start();
+                        orientationTween.start()
+                        positionTween.start()
                     }
                     if (i === path.length - 1) {
                         positionTween.onComplete(() => {
                             // Transition to the final animation state (e.g., Idle)
                             ThumbRaiser.simulation = false
                             this.animations.actionFinished()
-                            this.animations.fadeToAction('Idle', 0.5);
-
-                        });
+                            this.animations.fadeToAction('Idle', 0.5)
+                        })
                     }
                     previousTween = positionTween
                     startOrientationY = endOrientationY
                     lastPos = currentPos
                 } else if (path[i].type === 'passage' || path[i].type === 'elevator') {
-                    const remainderPath = path.slice(i + 1);
+                    const remainderPath = path.slice(i + 1)
 
                     previousTween?.onComplete(() => {
                         if (path[i].type === 'passage') {
-                            this.tweenPlayerMovementAndOrientation(player, remainderPath, durationPerPoint);
+                            this.tweenPlayerMovementAndOrientation(
+                                player,
+                                remainderPath,
+                                durationPerPoint,
+                            )
                         } else if (path[i].type === 'elevator') {
-                            this.tweenPlayerMovementAndOrientation(player, remainderPath, durationPerPoint);
+                            this.tweenPlayerMovementAndOrientation(
+                                player,
+                                remainderPath,
+                                durationPerPoint,
+                            )
                         }
-                    });
-                    break;
+                    })
+                    break
                 }
-
             }
-        });
-
+        })
     }
-
 }
 export interface Task {
-    building: string;
-    floor: number;
-    x: number;
-    y: number;
+    building: string
+    floor: number
+    x: number
+    y: number
 }

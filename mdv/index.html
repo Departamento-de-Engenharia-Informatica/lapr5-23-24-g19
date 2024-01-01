@@ -143,6 +143,37 @@
             canvas {
                 display: block;
             }
+
+            .notification {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                background: linear-gradient(to right, #3d3f3f, #323232);
+                color: white;
+                border: 2px solid #000000;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(67, 65, 65, 0.2);
+                opacity: 1;
+                transition: opacity 1s ease-in-out;
+                font-family: Arial, sans-serif;
+                font-size: 1.2em;
+                text-align: center;
+            }
+
+            .notification .highlight {
+                font-size; 1.4em;
+                font-weight: bold;
+            }
+
+            .notification .info {
+                padding-top: 5px;
+            }
+
+            .notification strong {
+                font-weight: bold;
+            }
         </style>
     </head>
 
@@ -169,11 +200,7 @@
                             <input type="number" id="vertical" required />
                         </td>
                         <td>
-                            <input
-                                type="button"
-                                id="reset"
-                                value="Reset view"
-                            />
+                            <input type="button" id="reset" value="Reset view" />
                         </td>
                     </tr>
                     <tr>
@@ -181,9 +208,7 @@
                             Projection:
                             <select id="projection">
                                 <option value="perspective">Perspective</option>
-                                <option value="orthographic">
-                                    Orthographic
-                                </option>
+                                <option value="orthographic">Orthographic</option>
                             </select>
                         </td>
                         <td>
@@ -195,11 +220,7 @@
                             <input type="number" id="zoom" required />
                         </td>
                         <td>
-                            <input
-                                type="button"
-                                id="reset-all"
-                                value="Reset all views"
-                            />
+                            <input type="button" id="reset-all" value="Reset all views" />
                         </td>
                     </tr>
                 </table>
@@ -207,9 +228,7 @@
             <div id="mouse-help-panel">
                 <table class="mouse-help" id="mouse-help-table">
                     <tr>
-                        <th colspan="5" style="font-size: 2vmin">
-                            Help - Mouse
-                        </th>
+                        <th colspan="5" style="font-size: 2vmin">Help - Mouse</th>
                     </tr>
                     <tr>
                         <th>View</th>
@@ -258,14 +277,10 @@
             <div id="keyboard-help-panel">
                 <table class="keyboard-help" id="keyboard-help-table">
                     <tr>
-                        <th colspan="2" style="font-size: 2vmin">
-                            Help - Keyboard
-                        </th>
+                        <th colspan="2" style="font-size: 2vmin">Help - Keyboard</th>
                     </tr>
                     <tr>
-                        <th colspan="2" style="text-align: left">
-                            Set view mode
-                        </th>
+                        <th colspan="2" style="text-align: left">Set view mode</th>
                     </tr>
                     <tr>
                         <td></td>
@@ -347,9 +362,7 @@
                         <td>Fog</td>
                     </tr>
                     <tr>
-                        <th colspan="2" style="text-align: left">
-                            Move character
-                        </th>
+                        <th colspan="2" style="text-align: left">Move character</th>
                     </tr>
                     <tr>
                         <td></td>
@@ -368,9 +381,7 @@
                         <td>Walk / run (with shift key) forward</td>
                     </tr>
                     <tr>
-                        <th colspan="2" style="text-align: left">
-                            Emote character
-                        </th>
+                        <th colspan="2" style="text-align: left">Emote character</th>
                     </tr>
                     <tr>
                         <td></td>
