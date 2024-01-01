@@ -15,7 +15,7 @@
                     <a [routerLink]="['visualization']" class="mr-5 hover:text-white"
                         >Visualization</a
                     >
-                    <a [routerLink]="['users']" class="mr-5 hover:text-white">Users</a>
+                    <a [routerLink]="['admin']" class="mr-5 hover:text-white">Users</a>
                 </nav>
                 <a
                     [routerLink]="['modules']"
@@ -63,7 +63,7 @@
                     </svg>
                 </a>
                 <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-                    <div class="dropdown">
+                    <div *ngIf="auth.user$ | async as user" class="dropdown">
                         <button class="dropbtn mr-5 hover:text-white">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,6 @@
                             </svg>
                         </button>
                         <div class="dropdown-content">
-                            <a [routerLink]="['auth']">LogIn</a>
                             <a [routerLink]="['profile']">Profile</a>
                             <a [routerLink]="['edit-client']">Edit profile</a>
                             <a [routerLink]="['delete-client']">Delete account</a>

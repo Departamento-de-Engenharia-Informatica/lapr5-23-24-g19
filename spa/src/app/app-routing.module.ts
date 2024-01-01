@@ -53,13 +53,19 @@ import { DeleteClientComponent } from './components/user/delete-client/delete-cl
 import { RoleAuthGuard } from './services/roleAuthGuard'
 import { RolesEnum } from './services/user.service'
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
+import { LoginMenuComponent } from './components/login-menu/login-menu.component'
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'modules', pathMatch: 'full' },
+    { path: '', redirectTo: 'main', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent, title: 'Auth' },
 
     // { path: 'backoffice', component: CreateBackofficeUserComponent },
     //{ path: 'client', component: CreateClientComponent, title: 'User' },
+    {
+        path: 'main',
+        component: LoginMenuComponent,
+        title: 'Home',
+    },
 
     {
         path: 'modules',
@@ -78,8 +84,8 @@ export const routes: Routes = [
         path: 'task',
         component: TaskMenuComponent,
         title: 'Tasks',
-        // canActivate: [AuthGuard, RoleAuthGuard],
-        // data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
         children: [
             {
                 path: 'trace-route',
@@ -112,8 +118,8 @@ export const routes: Routes = [
             {
                 path: 'approve-reject',
                 component: ApproveRejectTaskComponent,
-                // canActivate: [AuthGuard, RoleAuthGuard],
-                // data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
+                canActivate: [AuthGuard, RoleAuthGuard],
+                data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
                 title: 'Approve/Reject task',
             },
             {
@@ -135,6 +141,9 @@ export const routes: Routes = [
     {
         path: 'visualization',
         component: Visualization3DComponent,
+        data: {
+            requiredRole: [RolesEnum.ADM, RolesEnum.FLM, RolesEnum.CMP, RolesEnum.TKM],
+        },
         title: '3d-visualization',
     },
     {
@@ -365,13 +374,14 @@ export const routes: Routes = [
     },
 
     {
-        path: 'users',
+        path: 'admin',
         component: AdministratorComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.ADM] },
         //title: 'Users'},
         children: [
             {
-                path: 'create',
+                path: 'create-backoffice',
                 component: CreateBackofficeUserComponent,
                 canActivate: [AuthGuard],
                 title: 'Create backoffice user',
@@ -393,19 +403,16 @@ export const routes: Routes = [
     {
         path: 'edit-client',
         component: EditClientComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.CLT] },
         title: 'Edit Client',
     },
     {
         path: 'delete-client',
         component: DeleteClientComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAuthGuard],
+        data: { requiredRole: [RolesEnum.CLT] },
         title: 'Delete Client',
-    },
-    {
-        path: 'approve-reject-client',
-        component: ApproveRejectClientComponent,
-        title: 'Approve/Reject Client',
     },
 
     {

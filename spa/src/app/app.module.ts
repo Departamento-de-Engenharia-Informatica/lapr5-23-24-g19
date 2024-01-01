@@ -76,7 +76,8 @@ import { UserService } from './services/user.service'
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
 import { GdprDataRequestComponent } from './components/user/gdpr-data-request/gdpr-data-request.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MatDialogModule } from '@angular/material/dialog'
+import { MatDialogModule } from '@angular/material/dialog';
+import { LoginMenuComponent } from './components/login-menu/login-menu.component'
 
 @NgModule({
     declarations: [
@@ -136,6 +137,7 @@ import { MatDialogModule } from '@angular/material/dialog'
         DeleteClientComponent,
         UserProfileComponent,
         GdprDataRequestComponent,
+        LoginMenuComponent,
     ],
     imports: [
         AuthModule.forRoot({

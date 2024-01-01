@@ -1,8 +1,8 @@
 <section class="text-gray-400 body-font bg-gray-900">
     <div class="container px-5 py-20 mx-auto">
         <div class="flex flex-wrap -m-4">
-            <div *ngIf="usr.hasRole([rolesEnum.CMP, rolesEnum.ADM])" class="feature-div">
-                <a [routerLink]="['../campus']">
+            <div class="feature-div">
+                <a [routerLink]="['../modules']">
                     <div class="module-border">
                         <div class="module">
                             <svg
@@ -21,16 +21,12 @@
                                 />
                             </svg>
                         </div>
-                        <h2 class="module-text">Campus</h2>
-                        <a>Learn More</a>
+                        <h2 class="module-text">Login</h2>
                     </div>
                 </a>
             </div>
-            <div
-                *ngIf="usr.hasRole([rolesEnum.TKM, rolesEnum.ADM, rolesEnum.CLT])"
-                class="feature-div"
-            >
-                <a [routerLink]="['../task']">
+            <div class="feature-div">
+                <a [routerLink]="['../create-client']">
                     <div class="module-border">
                         <div class="module">
                             <svg
@@ -49,68 +45,7 @@
                                 />
                             </svg>
                         </div>
-                        <h2 class="module-text">Tasks</h2>
-                        <a>Learn More</a>
-                    </div>
-                </a>
-            </div>
-            <div
-                *ngIf="
-                    usr.hasRole([
-                        rolesEnum.FLM,
-                        rolesEnum.CMP,
-                        rolesEnum.TKM,
-                        rolesEnum.ADM
-                    ])
-                "
-                class="feature-div"
-            >
-                <a [routerLink]="['../visualization']">
-                    <div class="module-border">
-                        <div class="module">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="1.25em"
-                                viewBox="0 0 512 512"
-                            >
-                                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                                <style>
-                                    svg {
-                                        fill: #ffcc00;
-                                    }
-                                </style>
-                                <path
-                                    d="M132.7 4.7l-64 64c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H208c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-64-64c-6.2-6.2-16.4-6.2-22.6 0zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H64zm96 96a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM80 400c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H112c-17.7 0-32-14.3-32-32V400zm192 0c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H304c-17.7 0-32-14.3-32-32V400zm32-128a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM356.7 91.3c6.2 6.2 16.4 6.2 22.6 0l64-64c4.6-4.6 5.9-11.5 3.5-17.4S438.5 0 432 0H304c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l64 64z"
-                                />
-                            </svg>
-                        </div>
-                        <h2 class="module-text">Visualization</h2>
-                        <a>Learn More</a>
-                    </div>
-                </a>
-            </div>
-            <div *ngIf="usr.hasRole([rolesEnum.FLM, rolesEnum.ADM])" class="feature-div">
-                <a [routerLink]="['../fleet']">
-                    <div class="module-border">
-                        <div class="module">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="1.25em"
-                                viewBox="0 0 512 512"
-                            >
-                                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                                <style>
-                                    svg {
-                                        fill: #ffcc00;
-                                    }
-                                </style>
-                                <path
-                                    d="M418.4 157.9c35.3-8.3 61.6-40 61.6-77.9c0-44.2-35.8-80-80-80c-43.4 0-78.7 34.5-80 77.5L136.2 151.1C121.7 136.8 101.9 128 80 128c-44.2 0-80 35.8-80 80s35.8 80 80 80c12.2 0 23.8-2.7 34.1-7.6L259.7 407.8c-2.4 7.6-3.7 15.8-3.7 24.2c0 44.2 35.8 80 80 80s80-35.8 80-80c0-27.7-14-52.1-35.4-66.4l37.8-207.7zM156.3 232.2c2.2-6.9 3.5-14.2 3.7-21.7l183.8-73.5c3.6 3.5 7.4 6.7 11.6 9.5L317.6 354.1c-5.5 1.3-10.8 3.1-15.8 5.5L156.3 232.2z"
-                                />
-                            </svg>
-                        </div>
-                        <h2 class="module-text">Fleet</h2>
-                        <a>Learn More</a>
+                        <h2 class="module-text">Create Client</h2>
                     </div>
                 </a>
             </div>
