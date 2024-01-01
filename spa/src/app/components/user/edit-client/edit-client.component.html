@@ -13,7 +13,7 @@
         <label for="name">Name:</label>
         <input
             type="text"
-            id="name"
+            id="clientName"
             formControlName="name"
             placeholder="{{ client.name }}"
         />
@@ -21,7 +21,7 @@
         <div>
             <label for="phoneNumber">Phone number:</label>
             <input
-                id="phoneNumber"
+                id="clientPhoneNumber"
                 formControlName="phoneNumber"
                 pattern="[0-9]{9}"
                 placeholder="{{ client.phoneNumber }}"
@@ -30,7 +30,7 @@
 
         <label for="vatNumber">VAT number:</label>
         <input
-            id="vatNumber"
+            id="clientVatNumber"
             formControlName="vatNumber"
             pattern="[0-9]{9}"
             placeholder="{{ client.vatNumber }}"
