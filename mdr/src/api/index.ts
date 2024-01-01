@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import auth from './routes/authRoute'
 // import user from './routes/userRoute'
-// import role from './routes/roleRoute'
+import role from './routes/roleRoute'
 
 import client from './routes/clientRoute'
 import backofficeUser from './routes/backofficeUserRoute'
@@ -17,7 +17,7 @@ export default () => {
     const app = Router()
 
     auth(app)
-    // role(app)
+    role(app)
     // user(app)
 
     backofficeUser(app)

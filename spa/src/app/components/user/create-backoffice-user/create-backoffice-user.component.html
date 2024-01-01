@@ -1,70 +1,240 @@
-<h2 class="page-title">Create Backoffice User</h2>
+<section class="text-gray-400 body-font bg-gray-900">
+    <h2 class="page-title">Register Backoffice User</h2>
 
-<div>
-    <div class="form-popup" id="myForm">
-        <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
-            <div class="form-container">
-                <div class="row">
-                    <div>
-                        <label for="name">Name:</label>
-                        <input id="name" type="text" formControlName="name" />
+    <div class="container px-5 py-5 mx-auto flex flex-col items-center">
+        <form
+            [formGroup]="form"
+            (ngSubmit)="submit()"
+            class="w-full max-w-md form-container"
+        >
+            <div class="mb-4 flex">
+                <div class="mr-2 w-1/2">
+                    <label
+                        for="username"
+                        class="block text-gray-400 text-sm font-bold mb-2"
+                    >
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        id="username"
+                        formControlName="name"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                    <div *ngIf="invalidField('name')" class="text-red-500 text-xs mt-1">
+                        <div *ngIf="form.get('name')?.hasError('required')">
+                            Name is required
+                        </div>
                     </div>
                 </div>
+                <div class="ml-2 w-1/2">
+                    <label for="role" class="block text-gray-400 text-sm font-bold mb-2"
+                        >Role</label
+                    >
+                    <select
+                        id="role"
+                        formControlName="role"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    >
+                        <option *ngFor="let role of roles" [value]="role.name">
+                            {{ role.name }}
+                        </option>
+                    </select>
+                    <div *ngIf="invalidField('role')" class="text-red-500 text-xs mt-1">
+                        <div *ngIf="form.get('role')?.hasError('required')">
+                            Role is required
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="row">
-                    <div>
-                        <label for="role">Role:</label>
-                        <select
-                            id="role"
-                            formControlName="role"
-                            [(ngModel)]="form.value.role"
-                            required
+            <div class="mb-4 flex">
+                <div class="mr-2 w-1/2">
+                    <label for="email" class="block text-gray-400 text-sm font-bold mb-2"
+                        >Email</label
+                    >
+                    <input
+                        type="email"
+                        id="email"
+                        formControlName="email"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                    <div
+                        *ngIf="
+                            form.get('email')?.invalid &&
+                            (form.get('email')?.dirty || form.get('email')?.touched)
+                        "
+                        class="text-red-500 text-xs mt-1"
+                    >
+                        <div *ngIf="form.get('email')?.hasError('required')">
+                            Email is required
+                        </div>
+                        <div *ngIf="form.get('email')?.hasError('email')">
+                            Invalid email format
+                        </div>
+                    </div>
+                </div>
+                <div class="ml-2 w-1/2">
+                    <label for="phone" class="block text-gray-400 text-sm font-bold mb-2"
+                        >Phone Number</label
+                    >
+                    <input
+                        type="tel"
+                        id="phone"
+                        formControlName="phoneNumber"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                    <div
+                        *ngIf="invalidField('phoneNumber')"
+                        class="text-red-500 text-xs mt-1"
+                    >
+                        <div *ngIf="form.get('phoneNumber')?.hasError('required')">
+                            Phone number is required
+                        </div>
+                        <div
+                            *ngIf="
+                                form.get('phoneNumber')?.hasError('minlength') ||
+                                form.get('phoneNumber')?.hasError('maxLength')
+                            "
                         >
-                            <option *ngFor="let role of roleTypes" [value]="role">
-                                {{ role }}
-                            </option>
-                        </select>
+                            Phone number must be 9 digits long
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div>
-                        <label for="email">Email:</label>
-                        <input
-                            id="email"
-                            pattern=".+@isep\.ipp\.pt$"
-                            type="text"
-                            formControlName="email"
-                        />
+            <div class="mb-4">
+                <label for="password" class="block text-gray-400 text-sm font-bold mb-2"
+                    >Password</label
+                >
+                <input
+                    type="password"
+                    id="password"
+                    formControlName="password"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                    required
+                />
+                <div *ngIf="invalidField('password')" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="form.get('password')?.hasError('required')">
+                        Password is required
+                    </div>
+                    <div *ngIf="form.get('password')?.hasError('minlength')">
+                        Password must be at least {{ pwdMinLength }} characters long
                     </div>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div>
-                        <label for="phoneNumber">Phone Number:</label>
-                        <input
-                            id="phoneNumber"
-                            pattern="[0-9]{9}"
-                            type="text"
-                            formControlName="phoneNumber"
-                        />
+            <div class="mb-4">
+                <label
+                    for="confirmPassword"
+                    class="block text-gray-400 text-sm font-bold mb-2"
+                    >Confirm Password</label
+                >
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+                    required
+                />
+                <div
+                    *ngIf="invalidField('confirmPassword')"
+                    class="text-red-500 text-xs mt-1"
+                >
+                    <div *ngIf="form.get('confirmPassword')?.hasError('required')">
+                        Confirm Password is required
+                    </div>
+                    <div
+                        *ngIf="
+                            form.get('confirmPassword')?.hasError('mismatch') &&
+                            form.get('confirmPassword')?.touched
+                        "
+                    >
+                        Passwords do not match
                     </div>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div>
-                        <label for="password">Password:</label>
-                        <input
-                            id="password"
-                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$"
-                            type="password"
-                            formControlName="password"
-                        />
-                    </div>
-                </div>
-
-                <button type="submit" [disabled]="form.invalid">Submit</button>
+            <div class="flex items-center justify-center">
+                <button
+                    type="submit"
+                    [disabled]="!form.valid"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                    Register
+                </button>
             </div>
         </form>
     </div>
-</div>
+</section>
+
+<!-- <div class="form-popup" id="myForm"> -->
+<!--     <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data"> -->
+<!--         <div class="form-container"> -->
+<!--             <div class="row"> -->
+<!--                 <div> -->
+<!--                     <label for="name">Name:</label> -->
+<!--                     <input id="name" type="text" formControlName="name" /> -->
+<!--                 </div> -->
+<!--             </div> -->
+
+<!--             <div class="row"> -->
+<!--                 <div> -->
+<!--                     <label for="role">Role:</label> -->
+<!--                     <select -->
+<!--                         id="role" -->
+<!--                         formControlName="role" -->
+<!--                         [(ngModel)]="form.value.role" -->
+<!--                         required -->
+<!--                         > -->
+<!--                         <option *ngFor="let role of roles" [value]="role"> -->
+<!--                         {{ role.name }} -->
+<!--                         </option> -->
+<!--                     </select> -->
+<!--                 </div> -->
+<!--             </div> -->
+
+<!--             <div class="row"> -->
+<!--                 <div> -->
+<!--                     <label for="email">Email:</label> -->
+<!--                     <input -->
+<!--                     id="email" -->
+<!--                     pattern=".+@isep\.ipp\.pt$" -->
+<!--                     type="text" -->
+<!--                     formControlName="email" -->
+<!--                     /> -->
+<!--                 </div> -->
+<!--             </div> -->
+
+<!--             <div class="row"> -->
+<!--                 <div> -->
+<!--                     <label for="phoneNumber">Phone Number:</label> -->
+<!--                     <input -->
+<!--                     id="phoneNumber" -->
+<!--                     pattern="[0-9]{9}" -->
+<!--                     type="text" -->
+<!--                     formControlName="phoneNumber" -->
+<!--                     /> -->
+<!--                 </div> -->
+<!--             </div> -->
+
+<!--             <div class="row"> -->
+<!--                 <div> -->
+<!--                     <label for="password">Password:</label> -->
+<!--                     <input -->
+<!--                     id="password" -->
+<!--                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$" -->
+<!--                     type="password" -->
+<!--                     formControlName="password" -->
+<!--                     /> -->
+<!--                 </div> -->
+<!--             </div> -->
+
+<!--             <button type="submit" [disabled]="form.invalid">Submit</button> -->
+<!--         </div> -->
+<!--     </form> -->
+<!-- </div> -->

@@ -57,14 +57,13 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
             email: 'joaquimfontesxtxo@isep.ipp.pt',
             phoneNumber: '123551265',
             password: 'Jonasjonas123!',
+            confirmPassword: 'Jonasjonas123!',
         })
 
         component.submit()
 
         expect(createBackofficeUserSpy).calledOnce
-        expect(alertSpy).calledWith(
-            `Created Backoffice User: \nName: ${backofficeUser1.name}\nRole: ${backofficeUser1.role}\nEmail: ${backofficeUser1.email}\nPhoneNumber: ${backofficeUser1.phoneNumber}`,
-        )
+        expect(alertSpy).calledWith('Created user with success')
         expect(resetSpy).calledOnce
     })
 
@@ -78,13 +77,12 @@ describe('CreateBackofficeUserComponent: Unit Tests', () => {
             email: 'joaquimfontesxtxo@isep.ipp.pt',
             phoneNumber: '123551265',
             password: 'Jonasjonas123!',
+            confirmPassword: 'Jonasjonas123!',
         })
 
         component.submit()
 
-        expect(alertSpy).calledWith(
-            `Created Backoffice User: \nName: ${backofficeUser1.name}\nRole: ${backofficeUser1.role}\nEmail: ${backofficeUser1.email}\nPhoneNumber: ${backofficeUser1.phoneNumber}`,
-        )
+        expect(alertSpy).calledWith('Error when creating user')
         expect(resetSpy).calledOnce
     })
 })

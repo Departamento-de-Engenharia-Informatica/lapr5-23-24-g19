@@ -6,6 +6,8 @@ import { BackofficeUserDTO } from '../dto/BackofficeUserDTO'
 import { CreatedBackofficeUserDTO } from '../dto/CreatedBackofficeUserDTO'
 import { AuthService } from '@auth0/auth0-angular'
 
+export type RoleDTO = { name: string }
+
 @Injectable({
     providedIn: 'root',
 })
@@ -26,6 +28,18 @@ export class BackofficeUserService {
         return new HttpHeaders({
             Authorization: `Bearer ${token}`,
         })
+    }
+
+    getRoles() {
+        return this.getToken().pipe(
+            switchMap((token) =>
+                this.http.get<RoleDTO[]>(`${Config.baseUrl}/roles`, {
+                    headers: this.authHeaders(token),
+                    observe: 'body',
+                    responseType: 'json',
+                }),
+            ),
+        )
     }
 
     createBackofficeUser(dto: BackofficeUserDTO): Observable<CreatedBackofficeUserDTO> {

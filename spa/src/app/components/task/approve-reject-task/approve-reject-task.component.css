@@ -55,6 +55,8 @@
     background-color: var(--third-color);
     border: 1px solid var(--secondary-color);
     border-radius: 4px;
+    /* display: flex; */
+    /* flex-direction: column; */
 }
 
 .dimension-label {
