@@ -28,7 +28,7 @@ export default (app: Router) => {
             }),
         }),
         customJwtMiddleware,
-        withAnyRole([RolesEnum.ADMIN]),
+        //withAnyRole([RolesEnum.ADMIN]),
         (req, res, next) => ctrl.createClient(req, res, next),
     )
 
