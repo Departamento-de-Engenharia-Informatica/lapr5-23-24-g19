@@ -53,6 +53,7 @@ describe('CreateClientComponent: Unit Tests', () => {
             phoneNumber: '122389763',
             vatNumber: '122389763',
             password: 'Jonasjonas123!',
+            confirmPassword: 'Jonasjonas123!',
         })
 
         component.isPrivacyPolicyAgreed = true
@@ -76,6 +77,7 @@ describe('CreateClientComponent: Unit Tests', () => {
             phoneNumber: '122389763',
             vatNumber: '122389763',
             password: 'Jonasjonas123!',
+            confirmPassword: 'Jonasjonas123!',
         })
 
         component.isPrivacyPolicyAgreed = true

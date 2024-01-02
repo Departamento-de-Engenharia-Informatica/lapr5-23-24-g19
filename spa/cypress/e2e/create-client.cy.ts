@@ -17,7 +17,7 @@
 
 describe('Client Form e2e tests', () => {
     beforeEach(() => {
-        
+
     })
 
     it('has the correct title', () => {
