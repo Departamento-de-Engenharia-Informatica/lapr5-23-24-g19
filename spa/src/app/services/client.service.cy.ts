@@ -32,7 +32,7 @@ describe('ClientService: Unit Tests', () => {
     })
 
     afterEach(() => {
-        httpMock?.verify()
+        httpMock.verify()
     })
 
     describe('Client()', () => {
