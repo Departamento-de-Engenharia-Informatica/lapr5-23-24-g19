@@ -117,6 +117,7 @@
                     formControlName="password"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
                     required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$"
                 />
                 <div *ngIf="invalidField('password')" class="text-red-500 text-xs mt-1">
                     <div *ngIf="form.get('password')?.hasError('required')">
@@ -124,6 +125,9 @@
                     </div>
                     <div *ngIf="form.get('password')?.hasError('minlength')">
                         Password must be at least {{ pwdMinLength }} characters long
+                    </div>
+                    <div *ngIf="form.get('password')?.hasError('pattern')" class="text-red-500 text-xs mt-1">
+                        Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.
                     </div>
                 </div>
             </div>

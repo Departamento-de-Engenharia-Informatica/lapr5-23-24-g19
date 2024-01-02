@@ -65,7 +65,7 @@ describe('Backoffice user Form e2e tests', () => {
         const role = 'Fleet Manager'
         const email = 'joaquimfontesxto@isep.ipp.pt'
         const phoneNumber = '123781265'
-        const password = 'Passw0rd!F'
+        const password = 'Passw0rd!Fx'
 
         cy.wait('@getRoles');
 

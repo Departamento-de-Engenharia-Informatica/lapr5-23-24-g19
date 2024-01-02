@@ -33,7 +33,11 @@ export class CreateBackofficeUserComponent {
             ],
             password: [
                 null,
-                [Validators.required, Validators.minLength(this.pwdMinLength)],
+                [
+                    Validators.required,
+                    Validators.minLength(this.pwdMinLength),
+                    Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{10,}$')
+                ],
             ],
             confirmPassword: [null, [Validators.required, this.passwordMatchValidator()]],
         })
