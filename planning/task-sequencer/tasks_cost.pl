@@ -24,7 +24,6 @@ calculate_and_assert_task_costs([Task|Rest],List) :-
     robot(Robot),
     calculate_assert_robot_task(Robot,Task),
     calculate_assert_task_robot(Robot,Task),
-    % write('out'),
 
     % continuar a calcular para o resto das tarefas
     calculate_and_assert_task_costs(Rest,List).
@@ -51,13 +50,15 @@ assert_task_costs(Task, [Other | Rest], [Cost | Costs]) :-
     assert_task_costs(Task, Rest, Costs).
 
 calculate_assert_robot_task(Robot,Task) :-
-    (pos(B,F,X,Y), _) = Robot,
+    % (pos(B,F,X,Y), _) = Robot,
+    (B,F,X,Y) = Robot,
     (start(B2, F2, X2, Y2), _, _) = Task,
     compute_path((B, F, X, Y), (B2, F2, X2, Y2), _, Cost), !,
     assertz(tasks_cost(Robot, Task, Cost)).
 
 calculate_assert_task_robot(Robot,Task) :-
-    (pos(B,F,X,Y), _) = Robot,
+    % (pos(B,F,X,Y), _) = Robot,
+    (B,F,X,Y) = Robot,
     (_, end(B2, F2, X2, Y2), _) = Task,
     compute_path((B2, F2, X2, Y2),(B, F, X, Y), _, Cost), !,
     assertz(tasks_cost(Task, Robot, Cost)).

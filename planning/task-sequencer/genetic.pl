@@ -34,7 +34,7 @@ update_start_limit :-
     asserta(start_time(CurrentTime)).
 
 
-gera(Robot,TasksList,Res) :-
+gera(Robot,TasksList,(Cost,Res)) :-
 	% inicializa as variaveis necessarias
 	inicializa_env,
 	% incializa o nº de tasks
@@ -57,7 +57,7 @@ gera(Robot,TasksList,Res) :-
 	gera_geracao(0,NG,PopOrd,R),!,
 	reverse(R,L),
 	[H|_]= L,
-	[Res|_] = H.
+	[Res*Cost|_] = H.
 	% TODO: pass cost to a variable instead of *V
 	% write_res(Res).
 
@@ -65,13 +65,11 @@ gera(Robot,TasksList,Res) :-
 gera_geracao(G,G,_,[]):-!.
 
 gera_geracao(N, G, Pop, [NextGen|Res]) :-
-
 	start_time(StartTime),
 	time_limit(TimeLimit),
 
 	% TODO: CHECK, stop conditions:/  Terminar o programa se retornar verdadeiro??
-	verifica_tempo_limite(StartTime, TimeLimit),
-	
+	% verifica_tempo_limite(StartTime, TimeLimit),
 
 	% Permutação aleatória da população, para o cruzamento ser entre individuos diferentes
 	random_permutation(Pop, PermutedPop),
@@ -98,23 +96,15 @@ gera_geracao(N, G, Pop, [NextGen|Res]) :-
 
 	gera_geracao(N1, G, NextGen,Res).
 
-% RELATORIO FIM
-
-
-
 write_res([]).
 write_res([X|Res]):-
 	nl,write('Res= '),write(X),nl,nl,
 	write_res(Res).
 
-%CHECKED
-
-%Relatorio
 gera_populacao(TasksList, Pop):-
 	populacao(TamPop),
 	length(TasksList,NumT),
 	gera_populacao(TamPop,TasksList,NumT,Pop).
-
 
 % gerar a população de acordo com as tarefas fornecidas
 gera_populacao(0,_,_,[]):-!.
@@ -151,13 +141,14 @@ avalia_populacao([Ind|Rest],[Ind*V|Rest1]):-
 	[H|_]= Ind,
 	tasks_cost(Robot,H,V1),
 	avalia(Ind,V2),
-	[_|T]= Ind,
+	ultimo_elemento(Ind,T),
 	tasks_cost(Robot,T,V3),
 	V is V1 + V2 + V3,
 	avalia_populacao(Rest,Rest1).
 
+ultimo_elemento([X], X).
+ultimo_elemento([_|T], X) :- ultimo_elemento(T, X).
 
-%RELATORIO
 % caso base: existe apenas 1 elemento na lista
 avalia([_],0).
 
@@ -165,7 +156,6 @@ avalia([T,H |Rest], V):-
 	tasks_cost(T,H,V1),
     avalia([H | Rest], VRest),
     V is V1 + VRest.
-%RELATORIO FIM
 
 
 % FIX: returing multiple orders
@@ -187,10 +177,9 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
-%Relatorio
 selecao_elitista(CombinedPopOrd, Pop, ElitistSelection) :-
 	length(Pop,L),
-    P is round(0.6 * L),  % Exemplo: 30% de N
+    P is round(0.6 * L),  % Exemplo: 60% de N
     take_best(P, CombinedPopOrd, ElitistSelection).
 
 % retirar os primeiros N elementos
@@ -237,27 +226,6 @@ verifica_tempo_limite(StartTime, TimeLimit) :-
     ElapsedTime is CurrentTime - StartTime,
     ElapsedTime < TimeLimit.
 
-%Relatorio FIM
-
-% TODO:Estabilização da População: Encerrar o algoritmo se a população permanecer inalterada durante um número G de gerações consecutivas. A estabilização é mais provável em seleções puramente elitistas, mas é importante observar que mesmo populações estáveis podem sofrer alterações devido a cruzamentos e mutações diferentes.
-% % Avaliar a população atual
-% avalia_populacao(Pop, PopAv),
-% ordena_populacao(PopAv, PopAvOrd),
-% PopAvOrd = [BestInd*BestEval|_],
-% % Verificar o limite de avaliação
-% (BestEval =< EvalLimit -> (write('Solução com avaliação desejada encontrada.'), nl, !) ; true),
-% % Verificar o limite de gerações
-% (N < G -> true ; (write('Número máximo de gerações atingido.'), nl, !)),
-
-% verifica_avaliacao_limite(Pop, EvalLimit) :-
-%     avalia_populacao(Pop, PopAv),
-%     ordena_populacao(PopAv, [BestInd*BestEval|_]),
-%     BestEval =< EvalLimit.
-
-
-
-%ALGAV
-
 gerar_pontos_cruzamento(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
@@ -270,7 +238,6 @@ gerar_pontos_cruzamento1(P1,P2):-
 	((P11<P21,!,P1=P11,P2=P21);(P1=P21,P2=P11)).
 gerar_pontos_cruzamento1(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
-
 
 
 % combina dois progenitores gerando dois individuos novos
@@ -388,122 +355,3 @@ mutacao23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	P1 is P-1,
 	mutacao23(G1,P1,Ind,G2,NInd).
-
-% facts for each cost between tasks
-% tasks_cost(T1,T2,Cost)
-
-% parameterizacao
-% env variables
-inicializa:-
-    write('\33\[2J'), %limpar o terminal
-    write('Numero de novas Geracoes: '),read(NG),
-    (retract(geracoes(_));true), asserta(geracoes(NG)),
-
-	write('Dimensao da Populacao: '),read(DP),
-	(retract(populacao(_));true), asserta(populacao(DP)),
-
-	write('Probabilidade de Cruzamento (%):'), read(P1),
-	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
-
-	write('Probabilidade de Mutacao (%):'), read(P2),
-	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
-
-		
-% gera:-
-% 	inicializa,
-% 	gera_populacao(Pop),
-% 	write('Pop='),write(Pop),nl,
-% 	avalia_populacao(Pop,PopAv),
-% 	write('PopAvaliada='),write(PopAv),nl,
-% 	ordena_populacao(PopAv,PopOrd),
-% 	geracoes(NG),
-% 	gera_geracao(0,NG,PopOrd).
-
-% gera(TasksList):-
-% 	inicializa_env,
-
-% 	length(TasksList,NumT),
-% 	(retract(tasks(_)),!;true),
-%     asserta(tasks(NumT)),
-
-% 	% initialize task-task-cost facts
-% 	generate_tasks(TasksList),
-
-% 	% set start time
-%     update_start_limit,
-
-% 	% gerar primeira populacao
-% 	gera_populacao(TasksList, Pop),
-
-% 	%avalia a primeira populacao
-% 	% write('Pop='),write(Pop),nl,
-% 	avalia_populacao(Pop,PopAv),
-	
-% 	% ordena a primeira populacao de acordo com o valor de avaliação
-% 	% write('PopAvaliada='),write(PopAv),nl,
-% 	ordena_populacao(PopAv,PopOrd),
-
-% 	geracoes(NG),
-%     update_start_limit,
-% 	gera_geracao(0,NG,PopOrd).
-
-% gera_geracao(G,G,Pop):-!,
-% 	write('Geracao '), write(G), write(':'), nl, write(Pop), nl.
-
-% gera_geracao(N, G, Pop) :-
-
-% 	start_time(StartTime),
-% 	time_limit(TimeLimit),
-% 	%FIX: Terminar o programa se retornar verdadeiro
-% 	verifica_tempo_limite(StartTime, TimeLimit),
-
-% 	% TODO: CHECK, did not understand :/
-% 	% Estabilização da População: Encerrar o algoritmo se a população permanecer inalterada durante um número G de gerações consecutivas. A estabilização é mais provável em seleções puramente elitistas, mas é importante observar que mesmo populações estáveis podem sofrer alterações devido a cruzamentos e mutações diferentes.
-%     % % Avaliar a população atual
-%     % avalia_populacao(Pop, PopAv),
-%     % ordena_populacao(PopAv, PopAvOrd),
-%     % PopAvOrd = [BestInd*BestEval|_],
-%     % % Verificar o limite de avaliação
-%     % (BestEval =< EvalLimit -> (write('Solução com avaliação desejada encontrada.'), nl, !) ; true),
-%     % % Verificar o limite de gerações
-%     % (N < G -> true ; (write('Número máximo de gerações atingido.'), nl, !)),
-
-% 	% Permutação aleatória da população
-	
-% 	random_permutation(Pop, PermutedPop),
-%     % Cruzar e mutar a população
-% 	% combina dois progenitores gerando dois individuos novos
-%     cruzamento(PermutedPop, NPop1),
-%     mutacao(NPop1, NPop),
-
-%     % % Avaliar e combina populações atual e nova
-%     % avalia_populacao(Pop, PopAv),
-%     % avalia_populacao(NPop, NPopAv),
-%     % append(PopAv, NPopAv, CombinedPop),
-%     % ordena_populacao(CombinedPop, CombinedPopOrd),
-% 	avalia_e_combina_populacoes(PermutedPop,NPop,CombinedPopOrd),
-
-%     % Seleção elitista : preserva os 20% melhores da população antiga
-%     % P is round(0.3 * length(Pop)),  % Exemplo: 30% de N
-%     % take_best(P, CombinedPopOrd, ElitistSelection),
-
-% 	selecao_elitista(CombinedPopOrd,PermutedPop,ElitistSelection),
-
-%     % % Preparar para seleção não-elitista
-%     % subtract(CombinedPopOrd, ElitistSelection, Remaining),
-%     % maplist(apply_random_factor, Remaining, RandomizedRemaining),
-%     % ordena_populacao(RandomizedRemaining, SortedRemaining),
-
-%     % % Seleção não-elitista
-%     % length(ElitistSelection, ElitistCount),
-%     % NP is length(Pop) - ElitistCount,
-%     % take_best(NP, SortedRemaining, NonElitistSelection),
-% 	selecao_nao_elitista(CombinedPopOrd,ElitistSelection,PermutedPop,NonElitistSelection),
-
-% % Formar a próxima geração
-% append(ElitistSelection, NonElitistSelection, NextGen),
-% N1 is N + 1,
-% gera_geracao(N1, G, NextGen).
-
