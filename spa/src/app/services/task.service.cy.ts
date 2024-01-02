@@ -7,8 +7,8 @@ import {
 import { UpdateTaskDTO } from '../dto/UpdateTaskDTO'
 import { TaskDTO, TaskState } from '../dto/TaskDTO'
 import { Config } from '../config'
-import {AuthService} from "@auth0/auth0-angular";
-import {of} from "rxjs";
+import { AuthService } from "@auth0/auth0-angular";
+import { of } from "rxjs";
 
 describe('Task Service Unit Testing', () => {
     let service: TaskService
@@ -19,7 +19,7 @@ describe('Task Service Unit Testing', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [TaskService,{ provide: AuthService, useValue: authMock }],
+            providers: [TaskService, { provide: AuthService, useValue: authMock }],
             imports: [HttpClientTestingModule],
         })
 

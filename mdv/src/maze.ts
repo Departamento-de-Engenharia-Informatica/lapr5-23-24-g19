@@ -212,7 +212,7 @@ export default class Maze extends THREE.Group {
         Object.assign(this, new THREE.EventDispatcher());
 
     }
-    
+
 
     private async loadLobby() {
         const description = await new ThreeLoader().load<MapFile>(lobbyURI)
@@ -264,7 +264,7 @@ export default class Maze extends THREE.Group {
         offsets: number[],
         orientation: number,
         position: THREE.Vector3,
-        delta: Position,
+        delta: position,
         radius: number,
         name: string,
     ) {
@@ -306,7 +306,7 @@ export default class Maze extends THREE.Group {
         offsets: number[],
         orientation: number,
         position: THREE.Vector3,
-        delta: Position,
+        delta: position,
         radius: number,
         name: string,
     ) {
@@ -497,13 +497,6 @@ export default class Maze extends THREE.Group {
         const indices = this.cartesianToCell(position)
         const row = indices[0]
         const column = indices[1]
-        // console.log(row);
-        // console.log(thumbRaiser.maze.doorSet.doors)
-        // console.log(thumbRaiser.maze.doorSet)
-        // if(thumbRaiser.maze.doorSet.doors.length>0){
-        // console.log("not null")
-        // }
-        // this.doorSet.doors.forEach((d) => {
         doors.forEach((d) => {
             const doorIndices = this.cartesianToCell(d.position)
             const radius = 1
