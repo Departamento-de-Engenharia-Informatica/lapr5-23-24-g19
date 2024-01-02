@@ -1,151 +1,157 @@
-// import { TestBed } from '@angular/core/testing'
-// import {
-//     HttpClientTestingModule,
-//     HttpTestingController,
-// } from '@angular/common/http/testing'
-// import { Config } from '../config'
-// import { BackofficeUserService } from './backofficeUser.service'
-// import { BackofficeUserDTO } from '../dto/BackofficeUserDTO'
-// import { ClientService } from './client.service'
-// import { ClientDTO } from '../dto/ClientDTO'
-// import { ClientEmailDTO } from '../dto/ClientEmailDTO'
-// import { CreatedClientDTO } from '../dto/CreatedClientDTO'
+import { TestBed } from '@angular/core/testing'
+import {
+    HttpClientTestingModule,
+    HttpTestingController,
+} from '@angular/common/http/testing'
+import { Config } from '../config'
+import { BackofficeUserService } from './backofficeUser.service'
+import { BackofficeUserDTO } from '../dto/BackofficeUserDTO'
+import { ClientService } from './client.service'
+import { ClientDTO } from '../dto/ClientDTO'
+import { ClientEmailDTO } from '../dto/ClientEmailDTO'
+import { CreatedClientDTO } from '../dto/CreatedClientDTO'
+import {AuthService} from "@auth0/auth0-angular";
+import {of} from "rxjs";
 
-// describe('ClientService: Unit Tests', () => {
-//     let service: ClientService
-//     let httpMock: HttpTestingController
+describe('ClientService: Unit Tests', () => {
+    let service: ClientService
+    let httpMock: HttpTestingController
 
-//     beforeEach(() => {
-//         TestBed.configureTestingModule({
-//             imports: [HttpClientTestingModule],
-//             providers: [ClientService],
-//         })
+    const authMock = {
+        getAccessTokenSilently: () => of('mock-token'), // Returns a mock token
+    };
 
-//         service = TestBed.inject(ClientService)
-//         httpMock = TestBed.inject(HttpTestingController)
-//     })
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [ClientService,{ provide: AuthService, useValue: authMock }],
+        })
 
-//     afterEach(() => {
-//         httpMock.verify()
-//     })
+        service = TestBed.inject(ClientService)
+        httpMock = TestBed.inject(HttpTestingController)
+    })
 
-//     describe('createClient()', () => {
-//         it('should create a client successfully', () => {
-//             const dto: ClientDTO = {
-//                 name: 'jonas',
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//                 phoneNumber: '122255565',
-//                 vatNumber: 123722565,
-//                 password: 'Jonasjonas124!',
-//             }
+    afterEach(() => {
+        httpMock?.verify()
+    })
 
-//             const expectedClient = {
-//                 name: 'jonas',
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//                 phoneNumber: '122255565',
-//                 vatNumber: 123722565,
-//                 status: 'Pending',
-//             }
+    describe('createClient()', () => {
+        it('should create a client successfully', () => {
+            const dto: ClientDTO = {
+                name: 'jonas',
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                phoneNumber: '122255565',
+                vatNumber: 123722565,
+                password: 'Jonasjonas124!',
+            }
 
-//             service.createClient(dto).subscribe((createdClient) => {
-//                 expect(createdClient).to.eq(expectedClient)
-//             })
+            const expectedClient = {
+                name: 'jonas',
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                phoneNumber: '122255565',
+                vatNumber: 123722565,
+                status: 'Pending',
+            }
 
-//             const req = httpMock.expectOne(`${Config.baseUrl}/clients`)
-//             expect(req.request.method).to.eq('POST')
+            service.createClient(dto).subscribe((createdClient) => {
+                expect(createdClient).to.eq(expectedClient)
+            })
 
-//             req.flush(expectedClient)
-//         })
+            const req = httpMock.expectOne(`${Config.baseUrl}/clients`)
+            expect(req.request.method).to.eq('POST')
 
-//         it('should handle an error when creating a client user', () => {
-//             const dto: ClientDTO = {
-//                 name: 'jonas',
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//                 phoneNumber: '122255565',
-//                 vatNumber: 123722565,
-//                 password: 'Jonasjonas124!',
-//             }
+            req.flush(expectedClient)
+        })
 
-//             const errorMessage = 'Error creating client'
-//             const expectedError = new ErrorEvent(errorMessage)
+        it('should handle an error when creating a client user', () => {
+            const dto: ClientDTO = {
+                name: 'jonas',
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                phoneNumber: '122255565',
+                vatNumber: 123722565,
+                password: 'Jonasjonas124!',
+            }
 
-//             service.createClient(dto).subscribe({
-//                 error: (error) => {
-//                     expect(error.message).to.eq(errorMessage)
-//                 },
-//             })
+            const errorMessage = 'Error creating client'
+            const expectedError = new ErrorEvent(errorMessage)
 
-//             const req = httpMock.expectOne(`${Config.baseUrl}/clients`)
-//             expect(req.request.method).to.eq('POST')
+            service.createClient(dto).subscribe({
+                error: (error) => {
+                    expect(error.message).to.eq(errorMessage)
+                },
+            })
 
-//             req.error(expectedError)
-//         })
+            const req = httpMock.expectOne(`${Config.baseUrl}/clients`)
+            expect(req.request.method).to.eq('POST')
 
-//         it('should get a client successfully', () => {
-//             const email = 'adsdasdsadsadsdasd@isep.ipp.pt'
+            req.error(expectedError)
+        })
 
-//             const expectedClient = {
-//                 name: 'jonas',
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//                 phoneNumber: '122255565',
-//                 vatNumber: 123722565,
-//             }
+        it('should get a client successfully', () => {
+            const email = 'adsdasdsadsadsdasd@isep.ipp.pt'
 
-//             service.getClient(email).subscribe((getClient) => {
-//                 expect(getClient).to.eq(expectedClient)
-//             })
+            const expectedClient = {
+                name: 'jonas',
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                phoneNumber: '122255565',
+                vatNumber: 123722565,
+            }
 
-//             const req = httpMock.expectOne(`${Config.baseUrl}/clients/${email}`)
-//             expect(req.request.method).to.eq('GET')
+            service.getClient(email).subscribe((getClient) => {
+                expect(getClient).to.eq(expectedClient)
+            })
 
-//             req.flush(expectedClient)
-//         })
+            const req = httpMock.expectOne(`${Config.baseUrl}/clients/${email}`)
+            expect(req.request.method).to.eq('GET')
 
-//         it('should get pending  clients ', () => {
-//             const expectedClients: CreatedClientDTO[] = [
-//                 {
-//                     name: 'jonas',
-//                     email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//                     phoneNumber: '122255565',
-//                     vatNumber: 123722565,
-//                     status: 'Pending',
-//                 },
-//                 {
-//                     name: 'quim',
-//                     email: 'adsdasadsadasdasdasdasddsadsadsdasd@isep.ipp.pt',
-//                     phoneNumber: '111255565',
-//                     vatNumber: 123721165,
-//                     status: 'Pending',
-//                 },
-//             ]
+            req.flush(expectedClient)
+        })
 
-//             service.getPendingClients().subscribe((getClient) => {
-//                 expect(getClient).to.eq(expectedClients)
-//             })
+        it('should get pending  clients ', () => {
+            const expectedClients: CreatedClientDTO[] = [
+                {
+                    name: 'jonas',
+                    email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+                    phoneNumber: '122255565',
+                    vatNumber: 123722565,
+                    status: 'Pending',
+                },
+                {
+                    name: 'quim',
+                    email: 'adsdasadsadasdasdasdasddsadsadsdasd@isep.ipp.pt',
+                    phoneNumber: '111255565',
+                    vatNumber: 123721165,
+                    status: 'Pending',
+                },
+            ]
 
-//             const req = httpMock.expectOne(`${Config.baseUrl}/clients?state=Pending`)
-//             expect(req.request.method).to.eq('GET')
+            service.getPendingClients().subscribe((getClient) => {
+                expect(getClient).to.eq(expectedClients)
+            })
 
-//             req.flush(expectedClients)
-//         })
+            const req = httpMock.expectOne(`${Config.baseUrl}/clients?state=Pending`)
+            expect(req.request.method).to.eq('GET')
 
-//         it('should delete a client successfully', () => {
-//             const dto: ClientEmailDTO = {
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//             }
+            req.flush(expectedClients)
+        })
 
-//             const expectedClient = {
-//                 email: 'adsdasdsadsadsdasd@isep.ipp.pt',
-//             }
+        it('should delete a client successfully', () => {
+            const dto: ClientEmailDTO = {
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+            }
 
-//             service.deleteClient(dto).subscribe((deletedClient) => {
-//                 expect(deletedClient).to.eq(expectedClient)
-//             })
+            const expectedClient = {
+                email: 'adsdasdsadsadsdasd@isep.ipp.pt',
+            }
 
-//             const req = httpMock.expectOne(`${Config.baseUrl}/clients/${dto.email}`)
-//             expect(req.request.method).to.eq('DELETE')
+            service.deleteClient(dto).subscribe((deletedClient) => {
+                expect(deletedClient).to.eq(expectedClient)
+            })
 
-//             req.flush(expectedClient)
-//         })
-//     })
-// })
+            const req = httpMock.expectOne(`${Config.baseUrl}/clients/${dto.email}`)
+            expect(req.request.method).to.eq('DELETE')
+
+            req.flush(expectedClient)
+        })
+    })
+})
