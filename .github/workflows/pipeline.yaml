@@ -58,3 +58,22 @@ jobs:
           cd spa
           npm install
           npm run build
+          
+  mdt_build:
+    name: MDT build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0'
+
+      - name: MDT Build
+        run: |
+          cd mdt
+          dotnet restore
+          dotnet build
