@@ -103,6 +103,27 @@ namespace mdt.Tests.Unit
             Assert.That(okResult.Value, Is.EqualTo(expectedSequence));
         }
 
+        [Test]
+        public async Task UpdateJobFailsIfJobNotFound()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+
+            var errMsg = "Job not found";
+            _ = _service
+                .Setup(svc => svc.UpdateJob(dto))
+                .Throws(() => new NotFoundException(errMsg));
+
+            var result = await _controller.Update(dto.JobId, dto);
+            Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+
+            var notFoundResult = result.Result as NotFoundObjectResult;
+            Assert.That(notFoundResult?.Value, Is.EqualTo(errMsg));
+        }
+
         public JobControllerTest()
         {
             _repo = new Mock<IJobRepository>();

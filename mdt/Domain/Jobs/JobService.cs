@@ -74,7 +74,7 @@ namespace DDDSample1.Domain.Jobs
             return jobs;
         }
 
-        public async Task<Job> UpdateJob(UpdatingJobDto dto)
+        public virtual async Task<Job> UpdateJob(UpdatingJobDto dto)
         {
             var job = await _repo.GetByIdAsync(new JobId(dto.JobId));
 

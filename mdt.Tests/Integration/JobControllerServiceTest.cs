@@ -10,7 +10,7 @@ using Moq;
 
 namespace mdt.Tests.Integration
 {
-    [TestFixture, Category("Unit"), Category("Service")]
+    [TestFixture, Category("Integration"), Category("Service")]
     public class JobControllerServiceTest
     {
         private Mock<IJobRepository> _repo;
@@ -287,6 +287,82 @@ namespace mdt.Tests.Integration
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             var okObjectResult = result.Result as OkObjectResult;
             Assert.That(okObjectResult.Value, Is.InstanceOf<List<PlannedRobotTasksDTO>>());
+        }
+
+        [Test]
+        public async Task UpdateJobSucceedsWithRightParameters()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+
+            var job = new JobDelivery(
+                                                         "test1@isep.ipp.pt",
+                                                         new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                                                         new JobContact(),
+                                                         new JobContact(),
+                                                         new JobConfirmationCode(42069),
+                                                         "Test description"
+                                                        );
+
+            _ = _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync(job);
+            _ = _repo
+                .Setup(repo => repo.Update(It.IsAny<Job>()))
+                .ReturnsAsync(job);
+
+
+            var result = await _controller.Update(dto.JobId, dto);
+
+            _repo.Verify(repo => repo.GetByIdAsync(It.Is<JobId>(id => id.Value == dto.JobId)), Times.Once);
+            _repo.Verify(repo => repo.Update(It.Is<Job>(j => j.Email == job.Email)), Times.Once);
+            _unitOfWork.Verify(uow => uow.CommitAsync(), Times.Once);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+            var okObjectResult = result.Result as OkObjectResult;
+            Assert.That(okObjectResult?.Value, Is.InstanceOf<Job>());
+
+            var value = okObjectResult!.Value as Job;
+            Assert.Multiple(() =>
+            {
+                Assert.That(value?.Email, Is.EqualTo(job.Email));
+                Assert.That(value?.Status, Is.EqualTo(JobStateEnum.APPROVED));
+            });
+        }
+
+        [Test]
+        public async Task UpdateJobFailsIfBusinessRulesAreBroken()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+            var job = new JobDelivery(
+                                                         "test1@isep.ipp.pt",
+                                                         new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                                                         new JobContact(),
+                                                         new JobContact(),
+                                                         new JobConfirmationCode(42069),
+                                                         "Test description"
+                                                        ).Update(new JobUpdateProps { Status = JobStateEnum.REJECTED });
+
+
+            _ = _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync(job);
+            _ = _repo
+                .Setup(repo => repo.Update(It.IsAny<Job>()))
+                .ReturnsAsync(job);
+
+            var result = await _controller.Update(dto.JobId, dto);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
         public JobControllerServiceTest()
