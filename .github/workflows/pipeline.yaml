@@ -77,3 +77,22 @@ jobs:
           cd mdt
           dotnet restore
           dotnet build
+          
+  mdt_test:
+    name: MDT Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0'
+
+      - name: Restore and Test .NET Project
+        run: |
+          cd mdt.Tests
+          dotnet restore
+          dotnet test
