@@ -35,7 +35,7 @@ describe('ClientService: Unit Tests', () => {
         httpMock?.verify()
     })
 
-    describe('createClient()', () => {
+    describe('Client()', () => {
         it('should create a client successfully', () => {
             const dto: ClientDTO = {
                 name: 'jonas',
