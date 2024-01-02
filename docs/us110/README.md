@@ -27,11 +27,13 @@ As a system user, I intend to retrieve a copy of my personal data.
 
 -   [SPA Logical View](../general-purpose/level3/ui-logical-view.svg)
 -   [MDR Logical View](../general-purpose/level3/mdr-logical-view.svg)
+- [ MDT Logical View ](../general-purpose/level3/mdt-logical-view.svg)
 
 #### Implementation Views
 
 -   [SPA Implementation View](../general-purpose/level3/ui-implementation-view.svg)
 -   [MDR Implementation View](../general-purpose/level3/mdr-implementation-view.svg)
+- [MDT Implementation View](../general-purpose/level3/mdt-implementation-view.svg)
 
 #### Process Views
 
