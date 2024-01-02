@@ -25,7 +25,7 @@ describe('Approve reject client e2e tests', () => {
         }).as('getClients')
         window.localStorage.setItem('USER_ROLES', 'ADM')
 
-        cy.visit('/users' + '/approve-reject-client')
+        cy.visit('/admin' + '/approve-reject-client')
         const log = Cypress.log({
             displayName: 'AUTH0 LOGIN',
             message: [`🔐 Authenticating | ${Cypress.env('auth_username')}`],

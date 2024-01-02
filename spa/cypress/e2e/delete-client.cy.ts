@@ -17,8 +17,7 @@ function loginViaAuth0Ui(username: string, password: string) {
 
 describe('Delete client Form e2e tests', () => {
     beforeEach(() => {
-
-        window.localStorage.setItem('USER_ROLES', 'ADM')
+        window.localStorage.setItem('USER_ROLES', 'CLT')
         cy.visit('/delete-client')
 
         const log = Cypress.log({
@@ -40,7 +39,6 @@ describe('Delete client Form e2e tests', () => {
     })
 
     it('should delete the client account', () => {
-
         cy.intercept('POST', 'http://localhost:4000/api/clients', {
             statusCode: 201,
             body: {
@@ -54,7 +52,6 @@ describe('Delete client Form e2e tests', () => {
 
         const email = 'e2e-testing@isep.ipp.pt'
 
-
         cy.intercept('DELETE', 'http://localhost:4000/clients/e2e-testing@isep.ipp.pt', {
             statusCode: 201,
             body: {
@@ -62,9 +59,6 @@ describe('Delete client Form e2e tests', () => {
             },
         }).as('deleteClient')
 
-
         cy.get('button[type="submit"]').click()
-
-
     })
 })
