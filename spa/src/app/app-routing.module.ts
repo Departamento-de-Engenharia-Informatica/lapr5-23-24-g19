@@ -54,6 +54,7 @@ import { RoleAuthGuard } from './services/roleAuthGuard'
 import { RolesEnum } from './services/user.service'
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component'
 import { LoginMenuComponent } from './components/login-menu/login-menu.component'
+import { CreateTaskComponent } from './components/task/create-task/create-task.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -88,6 +89,29 @@ export const routes: Routes = [
         data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM, RolesEnum.CLT] },
         children: [
             {
+                path: 'create',
+                component: CreateTaskComponent,
+                canActivate: [AuthGuard, RoleAuthGuard],
+                title: 'Create Task',
+                data: { requiredRole: [RolesEnum.ADM,RolesEnum.CLT] },
+                children: [
+                    {
+                        path: 'surveillance',
+                        component: CreateTaskSurveillanceComponent,
+                        canActivate: [AuthGuard, RoleAuthGuard],
+                        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
+                        title: 'Create surveillance task',
+                    },
+                    {
+                        path: 'delivery',
+                        component: CreateTaskDeliveryComponent,
+                        canActivate: [AuthGuard, RoleAuthGuard],
+                        data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
+                        title: 'Create delivery task',
+                    },
+                ]
+            },
+            {
                 path: 'trace-route',
                 component: TraceRouteComponent,
                 canActivate: [AuthGuard, RoleAuthGuard],
@@ -100,20 +124,6 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, RoleAuthGuard],
                 data: { requiredRole: [RolesEnum.ADM, RolesEnum.TKM] },
                 title: 'List pending tasks',
-            },
-            {
-                path: 'create-task-surveillance',
-                component: CreateTaskSurveillanceComponent,
-                canActivate: [AuthGuard, RoleAuthGuard],
-                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
-                title: 'Create surveillance task',
-            },
-            {
-                path: 'create-task-delivery',
-                component: CreateTaskDeliveryComponent,
-                canActivate: [AuthGuard, RoleAuthGuard],
-                data: { requiredRole: [RolesEnum.ADM, RolesEnum.CLT] },
-                title: 'Create delivery task',
             },
             {
                 path: 'approve-reject',
@@ -435,4 +445,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

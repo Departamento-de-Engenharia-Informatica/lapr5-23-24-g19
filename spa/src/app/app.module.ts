@@ -77,7 +77,8 @@ import { UserProfileComponent } from './components/user/user-profile/user-profil
 import { GdprDataRequestComponent } from './components/user/gdpr-data-request/gdpr-data-request.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatDialogModule } from '@angular/material/dialog';
-import { LoginMenuComponent } from './components/login-menu/login-menu.component'
+import { LoginMenuComponent } from './components/login-menu/login-menu.component';
+import { CreateTaskComponent } from './components/task/create-task/create-task.component'
 
 @NgModule({
     declarations: [
@@ -138,6 +139,7 @@ import { LoginMenuComponent } from './components/login-menu/login-menu.component
         UserProfileComponent,
         GdprDataRequestComponent,
         LoginMenuComponent,
+        CreateTaskComponent,
     ],
     imports: [
         AuthModule.forRoot({

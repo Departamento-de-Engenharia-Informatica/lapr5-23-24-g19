@@ -1,73 +1,43 @@
 <section class="text-gray-400 body-font bg-gray-900">
-    <div class="container px-5 py-20 mx-auto">
+    <h2 class="page-title">Filter Tasks </h2>
+    <div class="container px-5 py-5 mx-auto">
         <!-- TODO: make this pretty -->
-        <div
-            class="relative w-full"
-            style="width: 75%; position: relative; margin-left: auto; margin-right: auto"
-        >
+        <div class="relative w-full" style="width: 75%; position: relative; margin-left: auto; margin-right: auto">
             <div>
-                <form
-                    [formGroup]="filterForm"
-                    (ngSubmit)="onSubmit()"
-                    style="
+                <form [formGroup]="filterForm" (ngSubmit)="onSubmit()" style="
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         margin-bottom: 10px;
-                    "
-                >
-                    <div
-                        style="display: flex; justify-content: space-between; width: 100%"
-                    >
+                    ">
+                    <div style="display: flex; justify-content: space-between; width: 100%">
                         <div class="criteria">
                             <label for="criteria">Select criteria</label>
-                            <select
-                                id="criteria"
-                                formControlName="criteria"
-                                [(ngModel)]="criteria"
-                            >
+                            <select id="criteria" formControlName="criteria" [(ngModel)]="criteria">
                                 <option *ngFor="let crit of criterion" [value]="crit">
                                     {{ crit }}
                                 </option>
                             </select>
                         </div>
 
-                        <div
-                            *ngIf="
+                        <div *ngIf="
                                 filterForm.value.criteria !== 'Client' &&
                                 filterForm.value.criteria !== 'State' &&
                                 filterForm.value.criteria !== 'Type'
-                            "
-                            style="flex: 1; margin-left: 10px; margin-top: 22px"
-                        >
-                            <input
-                                [readonly]="true"
-                                id="rule"
-                                type="text"
-                                formControlName="rule"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            />
+                            " style="flex: 1; margin-left: 10px; margin-top: 22px">
+                            <input [readonly]="true" id="rule" type="text" formControlName="rule"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
 
                         <!-- Email Input Field -->
-                        <div
-                            *ngIf="filterForm.value.criteria === 'Client'"
-                            style="flex: 1; margin-left: 10px"
-                        >
+                        <div *ngIf="filterForm.value.criteria === 'Client'" style="flex: 1; margin-left: 10px">
                             <label for="rule">Email:</label>
-                            <input
-                                id="rule"
-                                type="email"
-                                formControlName="rule"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            />
+                            <input id="rule" type="email" formControlName="rule"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
 
                         <!-- State Dropdown Field -->
-                        <div
-                            *ngIf="filterForm.value.criteria === 'State'"
-                            class="criteria"
-                        >
+                        <div *ngIf="filterForm.value.criteria === 'State'" class="criteria">
                             <label for="rule">State:</label>
                             <select id="rule" formControlName="rule" class="input-style">
                                 <option *ngFor="let state of states" [value]="state">
@@ -77,10 +47,7 @@
                         </div>
 
                         <!-- Type Dropdown Field -->
-                        <div
-                            *ngIf="filterForm.value.criteria === 'Type'"
-                            class="criteria"
-                        >
+                        <div *ngIf="filterForm.value.criteria === 'Type'" class="criteria">
                             <label for="rule">Type:</label>
                             <select id="rule" formControlName="rule" class="input-style">
                                 <option *ngFor="let type of types" [value]="type">
@@ -88,64 +55,59 @@
                                 </option>
                             </select>
                         </div>
-                        <button type="submit" [disabled]="filterForm.invalid">
+                        <button class="button-submit" type="submit" [disabled]="filterForm.invalid">
                             Submit
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-
-        <div class="relative">
-            <div
-                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-            >
-                <svg
-                    class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                </svg>
-            </div>
-
-            <input
-                (input)="filter($event)"
-                placeholder="Search building"
-                type="text"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-        </div>
     </div>
 
     <div class="building-list">
-        <div *ngFor="let task of tasks" class="building-card">
-            <!-- <p>{{ task.confirmationCode }}</p> -->
-            <div>
-                <h2>{{ task.id.value }}</h2>
-                <h2>{{ task.email }}</h2>
-                <!-- <h2 [title]="task.id">Task</h2> -->
-                <div class="dimension-box">
-                    <span class="dimension-label">Status</span>
-                    {{ states[task.status] }}
-                </div>
-                <!-- <div class="dimension-box">
-                    <span class="dimension-label">Requested by</span>
-                    {{ task.requesterEmail }}
-                </div> -->
-                <div class="dimension-box">
-                    <span class="dimension-label">Task type</span>
-                    {{ types[task.jobType] }}
+        <ng-container *ngIf="tasks.length; else noTasks">
+            <div *ngFor="let task of tasks" class="building-card">
+                <div>
+                    <h2 [title]="task.id">Task</h2>
+                    <div class="dimension-box">
+                        <span class="dimension-label">Type</span>
+                        <div *ngIf="task.jobType === 0">Surveillance</div>
+                        <div *ngIf="task.jobType === 1">Delivery</div>
+                    </div>
+                    <div class="dimension-box">
+                        <span class="dimension-label">Requested by</span>
+                        {{ task.email }}
+                    </div>
+                    <div class="dimension-box">
+                        <span class="dimension-label">Requester Name</span>
+                        {{
+                        task.surveillanceContact?.name || task.pickupContact?.name
+                        }}
+                    </div>
+                    <button class="dimension-box" (click)="showDetails(task)">
+                        <span class="dimension-label">Details</span>
+                    </button>
                 </div>
             </div>
-        </div>
+        </ng-container>
+
     </div>
+    <ng-template #noTasks>
+        <div class="mb-4 space-y-2 items-center justify-center align-middle flex flex-col">
+            <div>
+                <svg fill="#9ca3af" width="200px" height="200px" viewBox="0 0 32 32" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M26.693 23.878h-4.43l-0.042-0.076c0.016-2.709 1.069-5.48 3.069-7.666 1.495-1.633 2.623-3.783 3.202-5.918l-2.573-1.556 2.388-0.431-2.706-1.61 3.253-0.552c-0.326-2.442-1.8-4.25-4.828-4.25-2.955 0.574-11.374 0.749-15.729 0.185-0.552-0.18-1.108-0.285-1.651-0.304-0.004-0.001-0.008-0.002-0.012-0.003 0.002 0.001 0.005 0.002 0.007 0.003-1.416-0.047-2.738 0.501-3.647 1.882-1.263 1.919 0.082 5.213 3.046 5.213 0.167 0 0.32-0.009 0.46-0.026v0.023h3.702c-0.56 2.257-1.949 4.767-3.557 7.296-0.135 0.212-0.266 0.429-0.393 0.649l2.177 2.23-3.511 0.588c-2.042 5.364-1.711 11.361 3.013 11.361v-0l0.489 0.003v0.007h5.349v-0.010h14.097c4.25 0 4.833-7.039-1.171-7.039zM14.134 27.263c-0-0.029-0.001-0.059-0.002-0.089 0.001 0.030 0.002 0.059 0.002 0.089zM13.997 26.144c0.001 0.004 0.001 0.007 0.002 0.011-0.001-0.004-0.001-0.007-0.002-0.011-0.168-0.741-0.649-1.358-1.278-1.755h0c0.629 0.398 1.11 1.015 1.278 1.755zM14.128 27.071c-0.001-0.030-0.003-0.060-0.005-0.090 0.002 0.030 0.004 0.060 0.005 0.090zM14.114 26.871c-0.003-0.030-0.006-0.060-0.009-0.090 0.003 0.030 0.006 0.060 0.009 0.090zM14.090 26.662c-0.004-0.029-0.008-0.058-0.012-0.087 0.005 0.029 0.008 0.058 0.012 0.087zM14.055 26.439c-0.005-0.025-0.008-0.050-0.013-0.076 0.005 0.026 0.009 0.051 0.013 0.076zM7.393 8.433c0.876-0.746-0.036-2.509-1.085-3.976h3.617c0.605 1.167 0.667 2.514 0.358 3.976h-2.89zM10.181 24.754c1.618-0.538 3.452 0.49 3.816 2.094 0.062 0.274 0.102 0.533 0.122 0.778 0.002-0.026 0.004-0.052 0.005-0.078-0.040 0.579-0.212 1.061-0.488 1.459h-0.032c-0.031 0.044-0.063 0.087-0.096 0.128l0.050-0.022c-0.463 0.605-1.173 1.009-2.018 1.27h-0.878l0.043-0.019c-0.925-0-1.988-0.087-1.988-0.087 1.373-0.022 1.964-0.603 2.19-1.269-0.978 0.355-2.020-0.284-2.348-1.227-0.443-1.273 0.391-2.618 1.622-3.027zM14.132 27.362c-0.001 0.029-0.001 0.058-0.002 0.086 0.001-0.028 0.001-0.057 0.002-0.086zM13.563 29.108c0.025-0.033 0.049-0.066 0.073-0.099-0.023 0.034-0.048 0.067-0.073 0.099z">
+                    </path>
+
+                    <line x1="25.899" y1="6.101" x2="6.101" y2="25.899" stroke="#4b5563" stroke-width="2" />
+                    <circle cx="16" cy="16" r="14" stroke="#4b5563" stroke-width="2" fill="none" />
+                </svg>
+            </div>
+            <div class="text-center">
+                <p>Tasks not found for the provided filter.</p>
+            </div>
+        </div>
+    </ng-template>
 </section>

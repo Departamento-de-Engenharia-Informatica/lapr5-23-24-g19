@@ -1,0 +1,50 @@
+.page-title {
+    @apply text-2xl font-bold text-white text-center my-16;
+    margin-right: 1%;
+}
+.header {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1%;
+}
+
+.dropdown-top-menu {
+    padding: 0.5em 1em;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    font-size: 1em;
+    cursor: pointer;
+    
+    /* width: 50%; */
+    margin: 0 auto;
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex-direction: column;
+}
+
+* {
+    box-sizing: border-box;
+}
+.criteria {
+
+}
+
+.dropdown-top-menu label {
+    margin-bottom: 4px;
+    color: var(--secondary-color);
+}
+
+.dropdown-top-menu select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+}

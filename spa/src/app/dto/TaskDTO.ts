@@ -17,6 +17,7 @@ export enum TaskState {
     PENDING = 'Pending',
     APPROVED = 'Approved',
     REJECTED = 'Rejected',
+    PLANNED = 'Planned',
 }
 
 export enum TaskType {

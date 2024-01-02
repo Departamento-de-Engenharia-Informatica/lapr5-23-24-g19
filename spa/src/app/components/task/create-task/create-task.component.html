@@ -1,0 +1,28 @@
+<!-- <h2 class="page-title">Create Task</h2>
+<div class="header">
+    <div>
+        <a [routerLink]="['surveillance']">
+            <button class="button-top-menu" id="create-task-surveillance" type="button">
+                Create Surveillance Task
+            </button>
+        </a>
+    </div>
+    <div>
+        <a [routerLink]="['delivery']">
+            <button class="button-top-menu" id="create-task-delivery" type="button">
+                Create Delivery Task
+            </button>
+        </a>
+    </div>
+</div>
+<router-outlet></router-outlet> -->
+
+
+<div class="header"><h2 class="page-title">Create Task of type </h2>
+    <select class="dropdown-top-menu" id="task-type-dropdown" (change)="onTaskTypeChange($event)" >
+        <option value="" disabled selected>Select Task Type</option>
+        <option value="surveillance">Surveillance</option>
+        <option value="delivery">Delivery</option>
+    </select>
+</div>
+<router-outlet></router-outlet>

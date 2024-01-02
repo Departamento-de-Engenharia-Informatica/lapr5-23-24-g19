@@ -11,7 +11,7 @@
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
-    width: 200px;
+    width: 250px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: var(--primary-color);
@@ -23,29 +23,27 @@
 /*     color: var(--secondary-color); */
 /* } */
 
-/* .building-card h2 {
+.building-card h2 {
     margin-bottom: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: bold;
     font-size: larger;
     color: var(--secondary-color);
-} */
-.building-card h2 {
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--secondary-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.building-card h2:hover {
-    overflow: visible;
+.building-card p {
+    color: var(--secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 3em;
+}
+
+.building-card p:hover {
     white-space: normal;
-    cursor: default;
-    max-height: none;
+    overflow: visible;
+    text-overflow: inherit;
 }
 .building-card p {
     color: var(--secondary-color);
@@ -86,16 +84,28 @@
     border: 2px solid rgb(218, 62, 62);
 }
 
-button {
+.button-submit {
     padding: 10px 20px;
     background-color: var(--third-color);
     color: var(--secondary-color);
-    height: 45px;
+    height: 40px;
     border: none;
     border-radius: 4px;
     margin: 0 auto;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 23px;
+    display: block;
+}
+.button {
+    padding: 10px 20px;
+    background-color: var(--third-color);
+    color: var(--secondary-color);
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-left: 20px;
+    margin-top: 23px;
     display: block;
 }
 

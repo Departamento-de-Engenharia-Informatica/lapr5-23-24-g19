@@ -68,5 +68,9 @@ button.primary {
     flex-wrap: wrap;
 }
 
+.page-title {
+    @apply text-2xl font-bold text-white text-center my-16;
+    margin-right: 1%;
+}
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 /* @import './material-theme.css'; */
