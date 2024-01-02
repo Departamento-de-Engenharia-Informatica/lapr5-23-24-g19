@@ -54,12 +54,11 @@ describe('Backoffice user Form e2e tests', () => {
 
         cy.intercept('GET', 'http://localhost:4000/api/roles', {
             body: [
-                { name: 'Fleet Manager'}
+                { name: 'Campus Manager' },
+                { name: 'Task Manager' },
+                { name: 'Fleet Manager' }
             ],
         }).as('getRoles')
-
-
-
 
         const name = 'quim'
         const role = 'Fleet Manager'
@@ -91,5 +90,40 @@ describe('Backoffice user Form e2e tests', () => {
         cy.get('button[type="submit"]').click()
         cy.wait('@createBackofficeUser')
 
+        cy.on('window:alert', (text) => {
+            expect(text).to.contain('Created user with success')
+        })
+    })
+
+    it('shouldn\'t allow creation if passwords do not match', () => {
+
+        cy.intercept('GET', 'http://localhost:4000/api/roles', {
+            body: [
+                { name: 'Campus Manager' },
+                { name: 'Task Manager' },
+                { name: 'Fleet Manager' }
+            ],
+        }).as('getRoles')
+
+        const name = 'quim'
+        const role = 'Fleet Manager'
+        const email = 'joaquimfontesxto@isep.ipp.pt'
+        const phoneNumber = '123781265'
+        const password = 'Passw0rd!Fx'
+
+        cy.wait('@getRoles');
+
+        cy.get('#role').select(role)
+        cy.get('#username').type(name)
+        cy.get('#email').type(email)
+        cy.get('#phone').type(phoneNumber)
+        cy.get('#password').type(password)
+        cy.get('#confirmPassword').type(password+'11111')
+
+        cy.get('button[type="submit"]').click()
+
+        cy.on('window:alert', (text) => {
+            expect(text).to.contain('Passwords do not match')
+        })
     })
 })
