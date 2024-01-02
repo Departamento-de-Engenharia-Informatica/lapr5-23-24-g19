@@ -9,28 +9,6 @@ on:
       - master
 
 jobs:
-  lint_and_test:
-    name: Linting and Testing
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: MDR Lint and Test
-        run: |
-          cd mdr
-          npm install
-          npm run lint:fix
-          npm test
-
-      - name: SPA Test
-        run: |
-          cd spa
-          npm install
-          npm run start & npx cypress run
-          npx cypress run --component
-
   mdr_build:
     name: MDR Build
     runs-on: ubuntu-latest
@@ -44,6 +22,21 @@ jobs:
           cd mdr
           npm install
           npm run build
+          
+  mdr_test:
+    name: MDR Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: MDR Test
+        run: |
+          cd mdr
+          npm install
+          npm run lint:fix
+          npm test
 
   spa_build:
     name: SPA Build
@@ -59,8 +52,23 @@ jobs:
           npm install
           npm run build
           
+  spa_test:
+    name: SPA Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: SPA Testing
+        run: |
+          cd spa
+          npm install
+          npm run start & npx cypress run
+          npx cypress run --component  
+          
   mdt_build:
-    name: MDT build
+    name: MDT Build
     runs-on: ubuntu-latest
 
     steps:
@@ -91,7 +99,7 @@ jobs:
         with:
           dotnet-version: '6.0'
 
-      - name: Restore and Test .NET Project
+      - name: MDT Testing
         run: |
           cd mdt.Tests
           dotnet restore
