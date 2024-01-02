@@ -556,6 +556,87 @@ namespace mdt.Tests.Unit
             );
         }
 
+        [Test]
+        public async Task UpdateJobSucceedsWithRigthParameters()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+            var job = new JobDelivery(
+                                                         "test1@isep.ipp.pt",
+                                                         new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                                                         new JobContact(),
+                                                         new JobContact(),
+                                                         new JobConfirmationCode(42069),
+                                                         "Test description"
+                                                        );
+
+
+            _ = _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync(job);
+            _ = _repo
+                .Setup(repo => repo.Update(It.IsAny<Job>()))
+                .ReturnsAsync(job);
+
+            var result = await _service.UpdateJob(dto);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Status, Is.EqualTo(JobStateEnum.APPROVED));
+
+            // // Verify interactions
+            _repo.Verify(repo => repo.GetByIdAsync(It.Is<JobId>(id => id.Value == dto.JobId)), Times.Once);
+            _repo.Verify(repo => repo.Update(It.Is<Job>(j => j.Email == job.Email)), Times.Once);
+            _unitOfWork.Verify(uow => uow.CommitAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task UpdateJobFailsIfBusinessRulesAreBroken()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+            var job = new JobDelivery(
+                                                         "test1@isep.ipp.pt",
+                                                         new JobLocation(new Coordinates("B", 1, 2, 3), new Coordinates("B", 1, 2, 3)),
+                                                         new JobContact(),
+                                                         new JobContact(),
+                                                         new JobConfirmationCode(42069),
+                                                         "Test description"
+                                                        ).Update(new JobUpdateProps { Status = JobStateEnum.REJECTED });
+
+
+            _ = _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync(job);
+            _ = _repo
+                .Setup(repo => repo.Update(It.IsAny<Job>()))
+                .ReturnsAsync(job);
+
+            Assert.ThrowsAsync<BusinessRuleValidationException>(async () => await _service.UpdateJob(dto));
+        }
+
+        [Test]
+        public async Task UpdateJobFailsIfJobNotFound()
+        {
+            var dto = new UpdatingJobDto
+            {
+                JobId = "01268906-2204-459d-8e86-335839f4e413",
+                JobStatus = "Approved"
+            };
+
+            _ = _repo
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<JobId>()))
+                .ReturnsAsync(() => null);
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await _service.UpdateJob(dto));
+        }
+
         // avoid 'might be null' warnings
         public JobServiceTest()
         {
@@ -572,3 +653,4 @@ namespace mdt.Tests.Unit
         }
     }
 }
+
