@@ -59,15 +59,57 @@ describe('Approve reject client e2e tests', () => {
         cy.get('.building-card').should('contain.text', 'Alberto Caeiro')
     })
 
-    // it('should be able to click approve client', () => {
-    //     cy.intercept('GET', 'http://localhost:4000/api/clients?state=Pending', {
-    //         body: [{ email: 'ricardo@isep.ipp.pt', name: 'Ricardo Reis' }],
-    //     }).as('getClients')
-    //     cy.wait('@getClients')
-    //
-    //     cy.get('.building-card').should('exist')
-    //     cy.get('.building-card').should('contain.text', 'ricardo@isep.ipp.pt')
-    //     cy.get('.building-card').should('contain.text', 'Ricardo Reis')
-    //     cy.get('button').and('have.attr', 'title', 'Approve Client')
-    // })
+    it('should be able to click approve client', () => {
+        cy.intercept('GET', 'http://localhost:4000/api/clients?state=Pending', {
+            body: [{ email: 'ricardo@isep.ipp.pt', name: 'Ricardo Reis' }],
+        }).as('getClients')
+        cy.wait('@getClients')
+
+        cy.intercept('PATCH', 'http://localhost:4000/api/clients', {
+            body: {
+                body: { email: 'ricardo@isep.ipp.pt', name: 'Ricardo Reis' },
+            },
+        }).as('updateClient')
+
+        cy.get('.building-card').should('exist')
+        cy.get('.building-card').should('contain.text', 'ricardo@isep.ipp.pt')
+        cy.get('.building-card').should('contain.text', 'Ricardo Reis')
+
+        cy.intercept('GET', 'http://localhost:4000/api/clients?state=Pending', {
+            body: [],
+        }).as('getClients')
+
+        cy.get('#approve').click()
+        cy.wait('@updateClient')
+        cy.wait('@getClients')
+
+        cy.get('.building-card').should('not.exist')
+    })
+
+    it('should be able to click reject client', () => {
+        cy.intercept('GET', 'http://localhost:4000/api/clients?state=Pending', {
+            body: [{ email: 'ricardo@isep.ipp.pt', name: 'Ricardo Reis' }],
+        }).as('getClients')
+        cy.wait('@getClients')
+
+        cy.intercept('PATCH', 'http://localhost:4000/api/clients', {
+            body: {
+                body: { email: 'ricardo@isep.ipp.pt', name: 'Ricardo Reis' },
+            },
+        }).as('updateClient')
+
+        cy.get('.building-card').should('exist')
+        cy.get('.building-card').should('contain.text', 'ricardo@isep.ipp.pt')
+        cy.get('.building-card').should('contain.text', 'Ricardo Reis')
+
+        cy.intercept('GET', 'http://localhost:4000/api/clients?state=Pending', {
+            body: [],
+        }).as('getClients')
+
+        cy.get('#reject').click()
+        cy.wait('@updateClient')
+        cy.wait('@getClients')
+
+        cy.get('.building-card').should('not.exist')
+    })
 })

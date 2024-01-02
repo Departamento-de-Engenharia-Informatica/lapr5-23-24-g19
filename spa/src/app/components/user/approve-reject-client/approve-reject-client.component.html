@@ -20,6 +20,7 @@
                     <div class="flex justify-center align-middle items-center space-x-4">
                         <button
                             class="approve-reject bg-green-500 hover:bg-green-800 border-green-500"
+                            id="approve"
                             title="Approve Client"
                             (click)="approveClient(client.email)"
                         >
@@ -41,6 +42,7 @@
 
                         <button
                             class="approve-reject bg-red-500 hover:bg-red-800 border-red-500"
+                            id="reject"
                             title="Reject Client"
                             (click)="rejectClient(client.email)"
                         >
