@@ -1,17 +1,11 @@
 using System;
 using System.Net.Http;
 using DDDNetCore.Infraestructure.Jobs;
-using DDDSample1.Domain.Categories;
-using DDDSample1.Domain.Families;
 using DDDSample1.Domain.Jobs;
-using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Sequences;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Infrastructure;
-using DDDSample1.Infrastructure.Categories;
-using DDDSample1.Infrastructure.Families;
 using DDDSample1.Infrastructure.Jobs;
-using DDDSample1.Infrastructure.Products;
 using DDDSample1.Infrastructure.Sequences;
 using DDDSample1.Infrastructure.Shared;
 using Microsoft.AspNetCore.Builder;

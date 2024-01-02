@@ -6,7 +6,6 @@ using DDDNetCore.Infraestructure.Jobs;
 using DDDSample1.Domain.Jobs.DTO;
 using DDDSample1.Domain.Jobs.Filter;
 using DDDSample1.Domain.Jobs.Mapper;
-using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Sequences;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Util.Coordinates;

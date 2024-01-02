@@ -4,23 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Jobs;
 using DDDSample1.Domain.Jobs.Filter;
-using DDDSample1.Domain.Products;
 using DDDSample1.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace DDDSample1.Infrastructure.Families
+namespace DDDSample1.Infrastructure.Jobs
 {
     public class JobRepository : BaseRepository<Job, JobId>, IJobRepository
     {
-
-        public JobRepository(RobDroneDBContext context) : base(context.Jobs)
-        {
-
-        }
+        public JobRepository(RobDroneDBContext context)
+            : base(context.Jobs) { }
 
         public async Task<List<Job>> GetByType(JobTypeEnum type)
         {
-            return await _objs.Where(x => type.Equals(x.JobType)).ToListAsync(); ;
+            return await _objs.Where(x => type.Equals(x.JobType)).ToListAsync();
+            ;
         }
 
         public async Task<List<Job>> GetByTypes(JobTypeEnum[] types)
