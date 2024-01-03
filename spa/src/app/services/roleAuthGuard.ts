@@ -14,7 +14,10 @@ import { RolesEnum } from '../services/user.service'
     providedIn: 'root',
 })
 export class RoleAuthGuard implements CanActivate {
-    constructor(private userService: UserService, private router: Router) {}
+    constructor(
+        private userService: UserService,
+        private router: Router,
+    ) {}
 
     canActivate(
         route: ActivatedRouteSnapshot,
@@ -26,7 +29,7 @@ export class RoleAuthGuard implements CanActivate {
             return true
         } else {
             alert('Not authorized to perform this action')
-            this.router.navigate(['/unauthorized'])
+            // this.router.navigate(['/unauthorized'])
             return false
         }
     }
