@@ -1,22 +1,43 @@
-<h2 class="page-title">Delete Client Account</h2>
-<form
-    *ngIf="(auth.isAuthenticated$ | async) && email.length != 0"
-    (ngSubmit)="onSubmit()"
-    enctype="multipart/form-data"
->
-    <div class="dimension-box">
-        <span class="dimension-label">{{ email }}</span>
-    </div>
+<!-- <h2 class="page-title">Delete Client Account</h2> -->
+<!-- <form -->
+<!--     *ngIf="(auth.isAuthenticated$ | async) && email.length != 0" -->
+<!--     (ngSubmit)="onSubmit()" -->
+<!--     enctype="multipart/form-data" -->
+<!-- > -->
+<!--     <div class="dimension-box"> -->
+<!--         <span class="dimension-label">{{ email }}</span> -->
+<!--     </div> -->
 
-    <div>
-        <button type="submit">Delete Account</button>
+<!--     <div> -->
+<!--         <button type="submit">Delete Account</button> -->
+<!--     </div> -->
+<!-- </form> -->
+
+<!-- <div *ngIf="!(auth.isAuthenticated$ | async)"> -->
+<!--     <h2 class="page-title">Not logged in</h2> -->
+<!-- </div> -->
+
+<!-- <div *ngIf="(auth.isAuthenticated$ | async) && email.length == 0"> -->
+<!--     <h2 class="page-title">Not logged in as a Client</h2> -->
+<!-- </div> -->
+
+<h2 mat-dialog-title class="text-center">Password Verification</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content class="text-center">
+        <p class="px-2">Please re-enter your password to continue:</p>
+        <!-- Add your password input field here -->
+        <input
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+            class="mt-4 p-2"
+        />
+    </div>
+    <div
+        mat-dialog-actions
+        class="flex flex-row items-center !px-16 !justify-between mt-6 space-x-4"
+    >
+        <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+        <button mat-button type="submit" [disabled]="!form.valid">Submit</button>
     </div>
 </form>
-
-<div *ngIf="!(auth.isAuthenticated$ | async)">
-    <h2 class="page-title">Not logged in</h2>
-</div>
-
-<div *ngIf="(auth.isAuthenticated$ | async) && email.length == 0">
-    <h2 class="page-title">Not logged in as a Client</h2>
-</div>

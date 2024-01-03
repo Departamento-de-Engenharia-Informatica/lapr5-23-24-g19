@@ -5,6 +5,7 @@ import { ClientService } from 'src/app/services/client.service'
 import { AuthService } from '@auth0/auth0-angular'
 import { switchMap } from 'rxjs'
 import { IClientWithoutPasswordDTO as ClientDTO } from '../../../../../../mdr/src/dto/IClientWithoutPasswordDTO'
+import { DeleteClientComponent } from '../delete-client/delete-client.component'
 
 @Component({
     selector: 'app-user-profile',
@@ -34,6 +35,14 @@ export class UserProfileComponent {
 
     openPasswordDialog(): void {
         this.dialog.open(GdprDataRequestComponent, {
+            width: '300px',
+            autoFocus: false,
+        })
+    }
+
+
+    openDeleteDialog() {
+        this.dialog.open(DeleteClientComponent, {
             width: '300px',
             autoFocus: false,
         })

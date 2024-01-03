@@ -9,27 +9,27 @@ export default class UserInterface extends GUI {
     constructor(private thumbRaiser: ThumbRaiser, private loader: Loader) {
         super()
 
-        const audioCallback = function (enabled: boolean) {
+        const audioCallback = function(enabled: boolean) {
             if (!enabled) {
                 thumbRaiser.audio.stopAll()
             }
         }
 
-        const textureCallback = function (options, name) {
+        const textureCallback = function(options, name) {
             thumbRaiser.cubeTexture = new CubeTexture(
                 thumbRaiser.cubeTexturesParameters.skyboxes[options.indexOf(name)],
             )
             thumbRaiser.buildCreditsPanel()
         }
 
-        const createEmoteCallback = function (animations, name) {
-            callbacks[name] = function () {
+        const createEmoteCallback = function(animations, name) {
+            callbacks[name] = function() {
                 animations.fadeToAction(name, 0.2)
             }
             emotesFolder.add(callbacks, name)
         }
 
-        const positionCallback = function (light, distance, orientation) {
+        const positionCallback = function(light, distance, orientation) {
             const position = light.orientationToPosition(distance, orientation)
             light.position.set(position.x, position.y, position.z)
         }
@@ -57,7 +57,7 @@ export default class UserInterface extends GUI {
         const options = {
             building: [],
             floor: [],
-            Travel: function () {
+            Travel: function() {
                 const building = optionsBuildings.getValue()
                 const floor = optionsFloors.getValue()
                 if (newMap !== '' && building && floor) {
@@ -109,7 +109,7 @@ export default class UserInterface extends GUI {
             x1: 0, y1: 0, // Coordinates for the first floor
             x2: 0, y2: 0, // Coordinates for the second floor
 
-            Simulate: function () {
+            Simulate: function() {
                 const b1 = optionsBuildings1.getValue()
                 const b2 = optionsBuildings2.getValue()
                 const f1 = optionsFloors1.getValue()
@@ -168,6 +168,20 @@ export default class UserInterface extends GUI {
                         type: 'cell',
                         building: 'A',
                         floor: 1,
+                        x: 4,
+                        y: 19
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
+                        x: 4,
+                        y: 20
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 1,
                         x: 2,
                         y: 21
                     },
@@ -175,65 +189,128 @@ export default class UserInterface extends GUI {
                         type: 'elevator',
                         frombuilding: 'A',
                         fromfloor: 1,
+                        tobuilding: 'A',
+                        tofloor: 2,
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 2,
+                        x: 1,
+                        y: 20
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 2,
+                        x: 2,
+                        y: 20
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 2,
+                        x: 3,
+                        y: 20
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 2,
+                        x: 4,
+                        y: 20
+                    },
+                    {
+                        type: 'cell',
+                        building: 'A',
+                        floor: 2,
+                        x: 4,
+                        y: 21
+                    },
+                    {
+                        type: 'elevator',
+                        frombuilding: 'A',
+                        fromfloor: 2,
                         tobuilding: 'B',
-                        tofloor: 1,
+                        tofloor: 2,
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
+                        floor: 2,
+                        x: 4,
+                        y: 1
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 2,
+                        x: 5,
+                        y: 1
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 2,
                         x: 6,
-                        y: 19
+                        y: 1
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 5,
-                        y: 18
+                        floor: 2,
+                        x: 7,
+                        y: 1
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 5,
-                        y: 17
+                        floor: 2,
+                        x: 8,
+                        y: 1
+                    },
+                    {
+                        type: 'cell',
+                        building: 'B',
+                        floor: 2,
+                        x: 8,
+                        y: 2
                     },
 
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 5,
-                        y: 16
+                        floor: 2,
+                        x: 8,
+                        y: 3
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 4,
-                        y: 16
+                        floor: 2,
+                        x: 8,
+                        y: 4
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 4,
-                        y: 15
+                        floor: 2,
+                        x: 8,
+                        y: 6
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 4,
-                        y: 14
+                        floor: 2,
+                        x: 7,
+                        y: 6
                     },
                     {
                         type: 'cell',
                         building: 'B',
-                        floor: 1,
-                        x: 4,
-                        y: 13
+                        floor: 2,
+                        x: 6,
+                        y: 6
                     },
                     {
                         type: 'cell',
@@ -250,6 +327,7 @@ export default class UserInterface extends GUI {
                         y: 11
                     },
                 ];
+
                 if (b1 && b2 && f1 && f2) {
                     thumbRaiser.simulate(examplePath)
                 }
@@ -269,8 +347,8 @@ export default class UserInterface extends GUI {
             options2.x1 = 0
             options2.y1 = 0
         });
-        autFolder.add(options2, 'x1', 0, 30,1)
-        autFolder.add(options2, 'y1', 0, 30,1)
+        autFolder.add(options2, 'x1', 0, 30, 1)
+        autFolder.add(options2, 'y1', 0, 30, 1)
         const optionsBuildings2 = autFolder.add(options2, 'building1', buildings)
         const optionsFloors2 = autFolder.add(options2, 'floor1', floors2)
         optionsBuildings2.onChange((val: string) => {
